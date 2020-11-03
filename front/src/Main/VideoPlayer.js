@@ -28,7 +28,7 @@ class VideoPlayer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      url: 'https://www.youtube.com/watch?v=YE7VzlLtp-4',
+      url: '',
       controls: true,
       played: 0.3,
       duration: 0,
@@ -41,6 +41,11 @@ class VideoPlayer extends React.Component {
       playbackRate: 1.0,
       loop: false
     };
+    if(props.url==null){
+      this.state.url = 'https://www.youtube.com/watch?v=YE7VzlLtp-4'
+    }else{
+      this.state.url = props.url
+    }
   }
 
   onProgress = prog => {

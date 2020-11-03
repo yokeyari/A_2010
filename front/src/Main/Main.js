@@ -6,7 +6,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import VideoPlayer from "./VideoPlayer";
 import MemoList from './Memo/MemoList';
 import WriteMemoForm from './Memo/WriteMemoForm';
-import { timeContext } from './context/time-context'
+import { timeContext } from './context/time-context';
+import Title from './Memo/Titile'
 
 import * as MemoAPI from './LocalApi';
 const useStyles = makeStyles((theme) => ({
@@ -18,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-function Main() {
+function Main(props) {
   const classes = useStyles();
   const [memos, setMemos] = useState([]);
   const [reloader, setReloader] = useState(0);
@@ -47,6 +48,11 @@ function Main() {
     withUpdate(MemoAPI.submitNewMemo(memo));
   }
 
+  function handleChangeTitle(title) {
+    // post server
+  }
+
+
   return (
     <div className="Main"　>
 
@@ -54,7 +60,7 @@ function Main() {
         {/* <timeContext.Provider value={{ time, setTime }}> */}
         <Grid container className={classes.grid}　>
           <Grid item className={classes.grid}>
-            <VideoPlayer className="" players={{ player, setPlayer }} />
+            <VideoPlayer className="" url={props.url} players={{ player, setPlayer }} />
           </Grid>
           <Grid item className={classes.grid}>
             <MemoList
@@ -63,6 +69,9 @@ function Main() {
               onDelete={handleDelete}
               player={player}
             />
+          </Grid>
+          <Grid item>
+            <Title title={props.title}/>
           </Grid>
           <Grid item>
             <WriteMemoForm onSubmit={handleSubmit} player={player} />
