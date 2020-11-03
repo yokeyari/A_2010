@@ -39,7 +39,7 @@ async function deleteData(url) {
 
 
 //memoのapiクラス
-class MemoDetaSource {
+export class MemoDetaSource {
   constructor() {
     this.API_URL = SERVER_URL + "memos";
   }
