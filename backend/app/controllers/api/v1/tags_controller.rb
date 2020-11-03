@@ -40,7 +40,7 @@ class Api::V1::TagsController < ApplicationController
     keywords = tagging(@page)
     
     # 保存に失敗した時を想定していない
-    tags = keywords.each {|keyword| Tag.create(page_id: params[:page_id], text: keyword, is_automated: true)}
+    tags = keywords.map {|keyword| Tag.create(page_id: params[:page_id], text: keyword, is_automated: true)}
     render json: {tags: tags}, status: :ok
   end
 
