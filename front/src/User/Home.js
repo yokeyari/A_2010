@@ -1,8 +1,6 @@
 import Button from '@material-ui/core/Button';
 import React, { useEffect, useState } from 'react';
 
-
-
 import * as PageAPI from '../Main/LocalApi';
 import User from './User';
 //import './User.css';

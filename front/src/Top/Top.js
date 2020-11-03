@@ -1,22 +1,19 @@
-import "./Top.css";
 import React from "react";
 
-class Top extends React.Component {
-  constructor(){
-    super();
-    this.state= {}
-  }
-  render(){
-    return (
-      <div className="Top">
-        <div className="Top-form">
-          <h2>Login</h2>
-          <input value="email"/>
-          <input value="password"/>
-        </div>
-      </div>
-    );
-  }
+import Login from './Login';
+import Promotion from './Promotion';
+import "./Login.css";
+
+function Top() {
+
+  return (
+    <div>
+      <Login/>
+      <Promotion/>
+    </div>
+  );
 }
+
+
 
 export default Top;

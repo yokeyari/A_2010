@@ -140,7 +140,7 @@ class VideoPlayer extends React.Component {
           muted={muted}
 
           // width='60%'
-          // height='60%'
+          //height='60%'
           playing={playing}
           onProgress={this.onProgress}
           onPause={this.handlePause}

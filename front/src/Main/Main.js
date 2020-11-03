@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
-
+import Grid from '@material-ui/core/Grid';
 import "./Main.css";
+import { makeStyles } from '@material-ui/core/styles';
 // import Memo from "./Memo/Memo";
 import VideoPlayer from "./VideoPlayer";
 import MemoList from './Memo/MemoList';
@@ -8,13 +9,22 @@ import WriteMemoForm from './Memo/WriteMemoForm';
 import { timeContext } from './context/time-context'
 
 import * as MemoAPI from './LocalApi';
+const useStyles = makeStyles((theme) => ({
+  grid: {
+    flexGrow: 1,
+    maxHeight: '50vh',
+    //overflow:'auto'
+  }
+}));
+
 
 function Main() {
+  const classes = useStyles();
   const [memos, setMemos] = useState([]);
   const [reloader, setReloader] = useState(0);
   const [player, setPlayer] = useState({
-    time:0,
-    player:null
+    time: 0,
+    player: null
   });
   // const timeContext = React.createContext(0)
 
@@ -38,18 +48,26 @@ function Main() {
   }
 
   return (
-    <div className="Main">
+    <div className="Main"　>
 
-      <main className="Main-main">
+      <main className="Main-main" style={{ backgroundColor: "#e7ecec", }}>
         {/* <timeContext.Provider value={{ time, setTime }}> */}
-          <VideoPlayer className="" players={{player,setPlayer}}/>
-          <WriteMemoForm onSubmit={handleSubmit} player={player}/>
-          <MemoList
-            memos={memos}
-            onChange={handleChange}
-            onDelete={handleDelete}
-            player={player}
-          />
+        <Grid container className={classes.grid}　>
+          <Grid item className={classes.grid}>
+            <VideoPlayer className="" players={{ player, setPlayer }} />
+          </Grid>
+          <Grid item className={classes.grid}>
+            <MemoList
+              memos={memos}
+              onChange={handleChange}
+              onDelete={handleDelete}
+              player={player}
+            />
+          </Grid>
+          <Grid item>
+            <WriteMemoForm onSubmit={handleSubmit} player={player} />
+          </Grid>
+        </Grid>
         {/* </timeContext.Provider> */}
       </main>
     </div>
