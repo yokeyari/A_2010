@@ -13,29 +13,36 @@ const useStyles = makeStyles((theme) => ({
   },
 }
 ));
+
+
 function MemoList(props) {
   const classes = useStyles();
   const player = props.player;
-  console.log("memos",props.memos)
-  console.log("memos_Length",props.memos.length)
-  if(props.memos.length===0){
+  if (props.memos.length === 0) {
     return "Loading";
   }
+
+  // const TextArea = (
+  //   <TextField value={props.title}></TextField>
+  // )
+
   return (
-    <Card className={classes.card}>
-      {
-        props.memos.map(memo =>
-          (<MemoComponent
-            key={memo.id.toString()}
-            memo={memo}
-            onChange={props.onChange}
-            onDelete={props.onDelete}
-            player={player}
-          />)
+    <>
+      <Card className={classes.card}>
+        {
+          props.memos.map(memo =>
+            (<MemoComponent
+              key={memo.id.toString()}
+              memo={memo}
+              onChange={props.onChange}
+              onDelete={props.onDelete}
+              player={player}
+            />)
+          )
+        }
+      </Card>
+    </>
         )
-      }
-    </Card>
-  )
-}
+        }
 
 export default MemoList;

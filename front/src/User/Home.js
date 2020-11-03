@@ -1,18 +1,21 @@
 import Button from '@material-ui/core/Button';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 
 import * as PageAPI from '../Main/LocalApi';
 import User from './User';
 //import './User.css';
 import PageList from './PageList';
 import SearchForm from './SeachForm';
+import UserInfoContext from '../context'
 
+import NewPage from '../NewPage/NewPage';
 
 function Home(props) {
   const [state, setState] = useState({ search_word: "", pages: [] });
+  const { userInfo, setUserInfo } = useContext(UserInfoContext);
 
   const loadPages = () => {
-    PageAPI.fetchMemos().then(json => {setState({ ...state, pages: json }) })
+    PageAPI.fetchMemos().then(json => { setState({ ...state, pages: json }) })
   }
 
   useEffect(() => {
@@ -27,17 +30,19 @@ function Home(props) {
     setState({ ...state, search_word: text })
   }
 
-  const handleSeach = ()=>{
+  const handleSeach = () => {
     // サーチしてwithUpdateする．
 
   }
 
   return (
-    <div className="User-Top" >
-     
-        <SearchForm onChange={handleChangeSeachForm} search_word={state.search_word}　onClick={handleSeach} />
+    <div className="User-Top">
+      <h2 className="User-name">Welcome {userInfo.user_id}!</h2>
+      <SearchForm onChange={handleChangeSeachForm} search_word={state.search_word} onClick={handleSeach} />
+      <NewPage />
       <PageList pages={state.pages} />
     </div>
+
   );
 }
 
@@ -115,7 +120,7 @@ export default Home
       {/* newpage 用,TODO:routing 
       </Button>;
     */}
- {/*<div className="search-bar" >*/}
-        {/*<h2 className="User-name">Welcome {"user"}!</h2>
+{/*<div className="search-bar" >*/ }
+{/*<h2 className="User-name">Welcome {"user"}!</h2>
         {newPageButton}*/}
-        {/*</div>*/}
+{/*</div>*/ }
