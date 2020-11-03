@@ -33,9 +33,11 @@ function Home(props) {
   }
 
   return (
-    <div className="User-Top" >
+    <div className="User-Top">
+     {/*className="User-To"*/}
+     <h2 className="User-name">Welcome {"user"}!</h2>
+      {/*<SearchForm onChange={handleChangeSeachForm} search_word={state.search_word}　onClick={handleSeach} />*/}
      
-        <SearchForm onChange={handleChangeSeachForm} search_word={state.search_word}　onClick={handleSeach} />
       <PageList pages={state.pages} />
     </div>
   );

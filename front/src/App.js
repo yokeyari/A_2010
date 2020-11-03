@@ -6,13 +6,16 @@ import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import Main from './Main/Main';
 import Top from './Top/Top';
 import Home from './User/Home';
-
-
+import Footer from './Footer';
+import Header from './Header';
 function App() {
   return (
-    <div >
-      <Router>
+    <div>
+      {/*<Router>*/}
+        <Header /> 
+         {/*
       <div>
+       
         <header className="App-header">
           <Link to='/main' className="header-link">
             <img src={logo} className="header-logo" alt="memotube" />
@@ -28,15 +31,17 @@ function App() {
         <Route exact path='/home' component={Home}/>
         <Route path='/login' component={Top}/>
         <Route path='/main' component={Main}/>
-      </div>
+        </div>*/}
 
       <div>
+        {/*}
         <footer className="App-footer">
           <h3>Memotube</h3>
           <p>made by "Yokei-na-kotomade"</p>
-        </footer>
+  </footer>*/}
+        <Footer />
       </div>
-      </Router>
+      {/*</Router>*/}
     </div>
   );
 }

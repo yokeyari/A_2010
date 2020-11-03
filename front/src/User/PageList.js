@@ -28,11 +28,12 @@ const useStyles = makeStyles((theme) => ({
 
   grid:{
     minWitdh: 500, 
-    maxHeight: '60vh', 
-    overflow: 'auto' ,
+    //maxHeight: '60vh', 
+    //overflow: 'auto' ,
     padding: '10px',
     //backgroundColor: "#008080" ,
     //backgroundColor:"#4169e1"
+    //困ったらここを解除してどこがgridになっているかを確認
   },
 
   input: {
@@ -49,7 +50,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 export default function PageList(props){
-  const pages=[{ id: 0, title: "2nd single", img: "http://img.youtube.com/vi/qsureA57fEo/mqdefault.jpg" }, { id: 1, title: "面白い動画", img: "http://img.youtube.com/vi/HxKEgjUBDAs/mqdefault.jpg" }, { id: 2, title: "test3", img: "http://img.youtube.com/vi/cIrp_dfNbVs/mqdefault.jpg" }, { id: 4, title: "org", img: "./logo.svg" },
+  const pages=[{ id: 0, title: "2nd single", img: "http://img.youtube.com/vi/qsureA57fEo/mqdefault.jpg" }, { id: 1, title: "面白い動画", img: "http://img.youtube.com/vi/HxKEgjUBDAs/mqdefault.jpg" }, { id: 2, title: "test3", img: "http://img.youtube.com/vi/cIrp_dfNbVs/mqdefault.jpg" }, { id: 4, title: "org", img: "./logo.svg" }
+  ,
   { id: 5, title: "お気に入り", img: "http://img.youtube.com/vi/HxKEgjUBDAs/mqdefault.jpg" }, { id: 6, title: "微分", img: "http://img.youtube.com/vi/HxKEgjUBDAs/mqdefault.jpg" }, { id: 7, title: "lalala", img: "" }, { id: 7, title: "lalala", img: "" }, { id: 7, title: "lalala", img: "" }];
   //この定数はデバッグのために作ったので、実際は消してください
   //
