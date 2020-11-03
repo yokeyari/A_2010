@@ -1,0 +1,63 @@
+import React, {useState, useEffect} from 'react';
+import SavedList from './SavedList';
+
+function Memo() {
+  const [second, setSecond] = useState("");
+  const [memo, setMemo] = useState("");
+  const [savedSecondList, setSavedSecondList] = useState([]);
+  const [savedMemoList, setSavedMemoList] = useState([]);
+  const [inputWarning, setInputWarning] = useState("");
+
+  function updateList(list, value) {
+    var tmp = list.slice(0, list.length);
+    tmp.push(value);
+    return tmp;
+  }
+  function zip(...arrays) {
+    const length = Math.min(...(arrays.map(arr => arr.length)))
+    return new Array(length).fill().map((_, i) => arrays.map(arr => arr[i]))
+  }
+
+  function handleSave() {
+    const pIsecond = parseInt(second);
+      if ((pIsecond || pIsecond===0) && pIsecond>=0) {
+        setSavedSecondList(updateList(savedSecondList, pIsecond));
+        setSavedMemoList(updateList(savedMemoList, memo));
+        fetch("http://localhost:3001/memos", {
+          method: "POST",
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({second: pIsecond, memo: memo})
+        });
+        setSecond("");
+        setMemo("");
+      } else {
+        setInputWarning((<p>Only positive integer</p>));
+        setTimeout(()=>{setInputWarning("")}, 1000);
+      }
+  }
+
+  return (
+    <div className="Main-memo">
+        <p>Input Time</p>
+        <input 
+          onChange={(event)=>{setSecond(event.target.value)}}
+          value={second}
+          placeholder="Input positive integer"
+        />
+        {inputWarning}
+        <p>Input Memo</p>
+        <textarea
+          onChange={(event)=>{setMemo(event.target.value)}}
+          value={memo}
+          placeholder="Input Memo"
+        />
+        <button onClick={()=>{handleSave()}}>Save Memo</button>
+        <SavedList/>
+    </div>
+  );
+}
+
+export default Memo;

@@ -1,0 +1,56 @@
+.App {
+
+}
+.App-header {
+  background-color: #ffffff;
+  min-height: 70px;
+  width:100%;
+  align-items: center; /* 縦方向中央揃え */
+  font-size: calc(10px + 2vmin);
+  color: white;
+  position:fixed;
+  z-index:10;
+  border: 1px rgba(221, 211, 211, 0.8) solid;
+
+}
+
+.header-logo {
+  height: 10vh;
+  float:left;
+}
+
+.App-login{
+  display:inline-block;
+  width: 80px;
+  color:white;
+  text-align: center;
+  background-color:lightgray;
+  float:right;
+  margin-right:3vh;
+  line-height: 10vh;
+}
+
+.App-footer{
+  height:80px;
+  background-color: gainsboro;
+  padding:5%;
+  text-align: end;
+  
+
+
+}
+
+@media (prefers-reduced-motion: no-preference) {/*
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+*/}
+
+@keyframes App-logo-spin {/*
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+*/}
