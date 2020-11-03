@@ -59,25 +59,23 @@ function Main(props) {
 
       <main className="Main-main" style={{ backgroundColor: "#e7ecec", }}>
         {/* <timeContext.Provider value={{ time, setTime }}> */}
+        <Grid item>
+        {/* todo いい感じの場所とデザインに．
+        あとタイトルを更新できるように */}
+            <NewPage />
+            <Title title={props.title} />
+          </Grid>
         <Grid container className={classes.grid}　>
-
           <Grid item className={classes.grid}>
             <VideoPlayer className="" url={props.url} players={{ player, setPlayer }} />
           </Grid>
           <Grid item className={classes.grid}>
-            <NewPage />
             <MemoList
               memos={memos}
               onChange={handleChange}
               onDelete={handleDelete}
               player={player}
             />
-          </Grid>
-          <Grid item>
-            <Title title={props.title} />
-          </Grid>
-          <Grid item>
-            <WriteMemoForm onSubmit={handleSubmit} player={player} />
           </Grid>
           <Grid item className={classes.grid}>
             <WriteMemoForm onSubmit={handleSubmit} player={player} />
