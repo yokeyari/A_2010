@@ -7,6 +7,7 @@ import User from './User';
 import PageList from './PageList';
 import SearchForm from './SeachForm';
 
+import NewPage from '../NewPage/NewPage';
 
 function Home(props) {
   const [state, setState] = useState({ search_word: "", pages: [] });
@@ -32,24 +33,14 @@ function Home(props) {
 
   }
 
-
-  const newPageButton =
-    <Button id="New">
-      <a href='/home'>New</a>
-      {/* newpage 用,TODO:routing */}
-    </Button>;
-
-
   return (
     <div className="User-Top">
-      <div className="search-bar">
-        <h2 className="User-name">Welcome {"user"}!</h2>
-        {newPageButton}
-        <SearchForm onChange={handleChangeSeachForm} search_word={state.search_word}　onClick={handleSeach} />
-      </div>
-
+      <h2 className="User-name">Welcome {"user"}!</h2>
+      <SearchForm onChange={handleChangeSeachForm} search_word={state.search_word}　onClick={handleSeach} />
+      <NewPage/>
       <PageList pages={state.pages} />
     </div>
+  
   );
 }
 

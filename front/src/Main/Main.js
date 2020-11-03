@@ -7,6 +7,7 @@ import VideoPlayer from "./VideoPlayer";
 import MemoList from './Memo/MemoList';
 import WriteMemoForm from './Memo/WriteMemoForm';
 import { timeContext } from './context/time-context'
+import NewPage from '../NewPage/NewPage';
 
 import * as MemoAPI from './LocalApi';
 const useStyles = makeStyles((theme) => ({
@@ -57,6 +58,7 @@ function Main() {
             <VideoPlayer className="" players={{ player, setPlayer }} />
           </Grid>
           <Grid item className={classes.grid}>
+            <NewPage/>
             <MemoList
               memos={memos}
               onChange={handleChange}
