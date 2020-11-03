@@ -11,6 +11,8 @@ import SearchIcon from '@material-ui/icons/Search';
 import DirectionsIcon from '@material-ui/icons/Directions';
 import CreateIcon from '@material-ui/icons/Create';
 
+import NewPage from './../NewPage/NewPage'
+
 const useStyles = makeStyles((theme) => ({
   root: {
     //margin: '',
@@ -23,11 +25,11 @@ const useStyles = makeStyles((theme) => ({
 
   },
   box: {
-    backgroundColor: "#87CEFA" ,
+    backgroundColor: "#87CEFA",
     padding: '2px 4px',
     display: 'flex',
     //justify: 'flex-end',
-    marginLeft:'auto',
+    marginLeft: 'auto',
     alignItems: 'center',
     //justifyContent: 'right',
   },
@@ -64,42 +66,40 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SearchForm(props) {
-  const classes=useStyles();
+  const classes = useStyles();
   /*const seachField = <TextField
     type="text"
     value={props.search_word}
     onChange={(e) => { props.onChange(e.target.value) }}
   />;*/
-  
+
   const seachButton = <Button onClick={props.onClick}>検索</Button>;
   return (
     <div>
       {/*{seachField}*/}
       {/*{seachButton}*/}
-      
-          <Box className={classes.box}>
-          <h2 className="User-name">Welcome {"user"}!</h2>
-            <Paper style={{ float: 'right' }} >
-              <InputBase
-                width="50%"
-                className={classes.input}
-                placeholder="Search Memos"
-                inputProps={{ 'aria-label': 'search memos' }}
 
-              />
-              <IconButton type="submit" className={classes.iconButton} aria-label="search">
-                <SearchIcon />
-              </IconButton>
-            </Paper>
-            <Button style={{ float: 'right' }} variant="contained" color="primary" size="small" startIcon={<CreateIcon />} >
-              <a href='./main'>New</a>
-              </Button>
+      <Box className={classes.box}>
+        <h2 className="User-name">Welcome {"user"}!</h2>
+        <Paper style={{ float: 'right' }} >
+          <InputBase
+            width="50%"
+            className={classes.input}
+            placeholder="Search Memos"
+            inputProps={{ 'aria-label': 'search memos' }}
 
-          </Box>
+          />
+          <IconButton type="submit" className={classes.iconButton} aria-label="search">
+            <SearchIcon />
+          </IconButton>
+        </Paper>
+        <NewPage style={{ float: 'right' }}/>
+
+      </Box>
     </div>
   )
 }
-      {/*<FormControl className={classes.formControl} >
+{/*<FormControl className={classes.formControl} >
               <Select
                 placeholder="タグ検索"
 

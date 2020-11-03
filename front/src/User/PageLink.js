@@ -49,24 +49,23 @@ export default function PageLink(props) {
   const classes = useStyles();
   return (
     <Card className={classes.card}>
-      {page.id}
-    <CardActionArea>
-      {/* CardActionAreaでクリックするとidに基づいてメモページに飛べるようにしたい */}
-      <CardMedia
-        className={classes.media}
-        //component="img"
-        image={page.img}
-        title="サムネ"
-      />
-      <CardContent>
-        <Typography gutterBottom variant="h5" component="h2">
-          タイトル:{page.title}
-        </Typography>
-        <Typography variant="body2" color="textSecondary" component="p">
-          メモの最初の1~2個{page.body}
-        </Typography>
-      </CardContent>
-    </CardActionArea>
-  </Card>
+      <CardActionArea>
+        {/* CardActionAreaでクリックするとidに基づいてメモページに飛べるようにしたい */}
+        <CardMedia
+          className={classes.media}
+          //component="img"
+          image={page.img}
+          title="サムネ"
+        />
+        <CardContent>
+          <Typography gutterBottom variant="h5" component="h2">
+            {page.title}
+          </Typography>
+          <Typography variant="body2" color="textSecondary" component="p">
+            メモの最初の1~2個{page.body}
+          </Typography>
+        </CardContent>
+      </CardActionArea>
+    </Card>
   )
 }

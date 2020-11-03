@@ -1,28 +1,29 @@
 import React from 'react';
 import Modal from '@material-ui/core/Modal';
-
+import CreateIcon from '@material-ui/icons/Create';
 import New from './PageForm';
+import { Button } from '@material-ui/core';
 
-function NewPage (){
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const modalStyle = {
-    top: '60%',
-    left: '60%',
-    margin: '30vh 20vh',
+function NewPage() {
+	const [open, setOpen] = React.useState(false);
+	const handleOpen = () => {
+		setOpen(true);
 	};
-	
-	return(
+	const handleClose = () => {
+		setOpen(false);
+	};
+
+	const modalStyle = {
+		top: '60%',
+		left: '60%',
+		margin: '30vh 20vh',
+	};
+
+	return (
 		<div className="Create-NewPage-Modal">
-			<button type="button" onClick={handleOpen}>
-				New Memo
-			</button>
+			<Button variant="contained" color="primary" size="small" startIcon={<CreateIcon />} onClick={handleOpen}>
+				New memo
+			</Button>
 
 			<Modal
 				open={open}
@@ -30,12 +31,12 @@ function NewPage (){
 				aria-labelledby="simple-modal-title"
 				aria-describedby="simple-modal-description"
 			>
-				<div style={modalStyle}> 
+				<div style={modalStyle}>
 					<h2 id="">Create New memo</h2>
-					<New/>
+					<New />
 				</div>
 			</Modal>
-	</div>
+		</div>
 	);
 }
 export default NewPage;

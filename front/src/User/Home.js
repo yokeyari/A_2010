@@ -1,7 +1,17 @@
 import Button from '@material-ui/core/Button';
 import React, { useContext, useEffect, useState } from 'react';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  useRouteMatch,
+  useParams
+} from "react-router-dom";
+
 
 import * as PageAPI from '../Main/LocalApi';
+import {PageDataSource} from './../Main/ProductionApi'
 import User from './User';
 //import './User.css';
 import PageList from './PageList';
@@ -10,15 +20,23 @@ import UserInfoContext from '../context'
 
 import NewPage from '../NewPage/NewPage';
 
-function Home(props) {
+
+function Home() {
   const [state, setState] = useState({ search_word: "", pages: [] });
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
 
+  const {user_id} = useParams();
+  const user = {id:user_id}
+  // 今は認証しない
+  // todo 認証
+
   const loadPages = () => {
     PageAPI.fetchMemos().then(json => { setState({ ...state, pages: json }) })
+    PageDataSource.getPageIndex(user)
   }
 
   useEffect(() => {
+    setUserInfo(user)
     loadPages();
   }, []);
 
@@ -37,9 +55,9 @@ function Home(props) {
 
   return (
     <div className="User-Top">
-      <h2 className="User-name">Welcome {userInfo.user_id}!</h2>
+      <h2 className="User-name">Welcome {userInfo.id}!</h2>
       <SearchForm onChange={handleChangeSeachForm} search_word={state.search_word} onClick={handleSeach} />
-      <NewPage />
+      {/* <NewPage /> */}
       <PageList pages={state.pages} />
     </div>
 

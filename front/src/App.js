@@ -1,6 +1,6 @@
 import logo from './logo.png';
 import './App.css';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
 
 
 import Main from './Main/Main';
@@ -11,15 +11,15 @@ import UserInfoContext from './context';
 
 function App() {
   const [userInfo, setUserInfo] = useState({
-    user_id: "user_id",
+    id: "user_id",
     thema: "normal"
     // token?
   })
 
- 
+
   return (
     <div>
-      <UserInfoContext.Provider value={{userInfo,setUserInfo}}>
+      <UserInfoContext.Provider value={{ userInfo, setUserInfo }}>
         <Router>
           <div>
             <header className="App-header">
@@ -33,9 +33,14 @@ function App() {
           </div>
 
           <div>
-            <Route exact path='/' component={Home} />
-            <Route path='/login' component={Top} />
-            <Route path='/main' component={Main} />
+            <Switch>
+              <Route exact path='/' component={Top} />
+              <Route exact path='/login' component={Top} />
+              <Route exact path='/:user_id/' component={Home} />
+              <Route exact path='/:user_id/home' component={Home} />
+              <Route path='/:user_id/:page_id' component={Main} /> 
+            </Switch>
+
           </div>
 
           <div>

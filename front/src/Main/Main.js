@@ -6,7 +6,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import VideoPlayer from "./VideoPlayer";
 import MemoList from './Memo/MemoList';
 import WriteMemoForm from './Memo/WriteMemoForm';
-import { timeContext } from './context/time-context'
 import NewPage from '../NewPage/NewPage';
 import Title from './Memo/Titile'
 
