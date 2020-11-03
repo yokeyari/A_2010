@@ -5,7 +5,7 @@ class Api::V1::PagesController < ApplicationController
   # メモページ一覧とメモ一覧を返す
   def index
     # メモは最初の2つだけ返す
-    pages_list = @user.pages.map {|page| page.attributes.merge(memos: page.memos[0,2])}
+    pages_list = @user.pages.map {|page| page.attributes.merge(tags: page.tags, memos: page.memos[0,2])}
     render json: {pages: pages_list}, status: 200
   end
 
