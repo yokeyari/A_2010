@@ -5,7 +5,11 @@ const API_URL = SERVER_URL + "memos";
 export async function fetchMemos() {
   const res = await fetch(API_URL);
   const json = await res.json();
-  console.log(json);
+  console.log("rec json",json);
+  if(json=={}){
+    console.log("is error handle")
+    return([])
+  }
   return json;
 
 }

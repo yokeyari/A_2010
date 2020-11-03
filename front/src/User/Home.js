@@ -32,22 +32,10 @@ function Home(props) {
 
   }
 
-
-  const newPageButton =
-    <Button id="New">
-      <a href='/home'>New</a>
-      {/* newpage 用,TODO:routing */}
-    </Button>;
-
-
   return (
-    <div className="User-Top">
-      <div className="search-bar">
-        <h2 className="User-name">Welcome {"user"}!</h2>
-        {newPageButton}
+    <div className="User-Top" >
+     
         <SearchForm onChange={handleChangeSeachForm} search_word={state.search_word}　onClick={handleSeach} />
-      </div>
-
       <PageList pages={state.pages} />
     </div>
   );
@@ -121,3 +109,13 @@ function Home(props) {
 // }
 
 export default Home
+{/*  const newPageButton =
+    <Button id="New">
+      <a href='/home'>New</a>
+      {/* newpage 用,TODO:routing 
+      </Button>;
+    */}
+ {/*<div className="search-bar" >*/}
+        {/*<h2 className="User-name">Welcome {"user"}!</h2>
+        {newPageButton}*/}
+        {/*</div>*/}

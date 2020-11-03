@@ -1,8 +1,8 @@
 .User-Top{
   padding:12vh;
-  width:80%;
+  width:90%;
   height:65vh;
-  background-color:#ffffff;
+  background-color: #e7ecec;
 }
 
 @media (prefers-reduced-motion: no-preference) {/*

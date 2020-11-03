@@ -10,7 +10,7 @@ import Home from './User/Home';
 
 function App() {
   return (
-    <div>
+    <div >
       <Router>
       <div>
         <header className="App-header">

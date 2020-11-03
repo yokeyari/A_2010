@@ -48,15 +48,16 @@ function Main() {
   }
 
   return (
-    <div className="Main"　>
+    <div className="Main" 　>
 
       <main className="Main-main" style={{ backgroundColor: "#e7ecec", }}>
         {/* <timeContext.Provider value={{ time, setTime }}> */}
         <Grid container className={classes.grid}　>
+        
           <Grid item className={classes.grid}>
-            <VideoPlayer className="" players={{ player, setPlayer }} />
+            <VideoPlayer className="" players={{ player, setPlayer }} />   
           </Grid>
-          <Grid item className={classes.grid}>
+          <Grid item className={classes.grid} >
             <MemoList
               memos={memos}
               onChange={handleChange}
@@ -64,10 +65,11 @@ function Main() {
               player={player}
             />
           </Grid>
-          <Grid item>
-            <WriteMemoForm onSubmit={handleSubmit} player={player} />
           </Grid>
-        </Grid>
+          <Grid item className={classes.grid}>
+          <WriteMemoForm onSubmit={handleSubmit} player={player} />
+          </Grid>
+          
         {/* </timeContext.Provider> */}
       </main>
     </div>

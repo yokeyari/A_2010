@@ -16,6 +16,8 @@ const useStyles = makeStyles((theme) => ({
 function MemoList(props) {
   const classes = useStyles();
   const player = props.player;
+  console.log("memos",props.memos)
+  console.log("memos_Length",props.memos.length)
   if(props.memos.length===0){
     return "Loading";
   }
