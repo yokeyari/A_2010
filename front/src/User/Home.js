@@ -1,15 +1,17 @@
 import Button from '@material-ui/core/Button';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 
 import * as PageAPI from '../Main/LocalApi';
 import User from './User';
 //import './User.css';
 import PageList from './PageList';
 import SearchForm from './SeachForm';
+import UserInfoContext from '../context'
 
 
 function Home(props) {
   const [state, setState] = useState({ search_word: "", pages: [] });
+  const {userInfo,setUserInfo} = useContext(UserInfoContext);
 
   const loadPages = () => {
     PageAPI.fetchMemos().then(json => {setState({ ...state, pages: json }) })
@@ -43,7 +45,7 @@ function Home(props) {
   return (
     <div className="User-Top">
       <div className="search-bar">
-        <h2 className="User-name">Welcome {"user"}!</h2>
+        <h2 className="User-name">Welcome {userInfo.user_id}!</h2>
         {newPageButton}
         <SearchForm onChange={handleChangeSeachForm} search_word={state.search_word}　onClick={handleSeach} />
       </div>
