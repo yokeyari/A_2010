@@ -19,19 +19,23 @@ import MemoList from './Memo/MemoList';
 import WriteMemoForm from './Memo/WriteMemoForm';
 import NewPage from '../NewPage/NewPage';
 import Title from './Memo/Titile'
+import Loading from '../Loading';
 
 //import * as MemoAPI from './LocalApi';
-import {MemoDataSource} from './ProductionApi';
+import { MemoDataSource, PageDataSource } from './ProductionApi';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-      padding:'2vh 1vw',
-      width:'100%',
-      height:'70%',
-      //backgroundColor:"#ffffff",
-      backgroundColor: "#e7ecec", 
+    padding: '2vh 1vw',
+    width: '100%',
+    height: '70%',
+    //backgroundColor:"#ffffff",
+    backgroundColor: "#e7ecec",
   }
 }));
+
+const MemoAPI = new MemoDataSource();
+const pageDataSource = new PageDataSource();
 
 
 function Main(props) {
@@ -42,16 +46,30 @@ function Main(props) {
     time: 0,
     player: null
   });
-  const { user_id,page_id } = useParams();
+  const [page, setPage] = useState({ page: { title: "", url: "" }, tags: [] });
+  const { user_id, page_id } = useParams();
+  const [isLoading, segtIsLoading] = useState(false);
   // console.log(useParams())
-  const MemoAPI = new MemoDataSource();
-  
-  
+
+
   //const page_id = page.page_id;
 
   useEffect(() => {
     MemoAPI.getMemoIndex(page_id).then(json => { setMemos(json) })
   }, [reloader])
+
+  useEffect(() => {
+    // ここでタイトルなどの読み込み
+    segtIsLoading(true);
+    pageDataSource.getPage(page_id).then(json => {
+      json.json().then(json => {
+        segtIsLoading(false);
+        setPage({ ...json });
+        console.log(page)
+      }
+      )
+    })
+  }, [])
 
   function withUpdate(fun) {
     fun.then(() => setReloader(reloader + 1));
@@ -65,7 +83,7 @@ function Main(props) {
   }
 
   function handleSubmit(memo) {
-    withUpdate(MemoAPI.createMemo(memo,page_id));
+    withUpdate(MemoAPI.createMemo(memo, page_id));
   }
 
   function handleChangeTitle(title) {
@@ -75,28 +93,29 @@ function Main(props) {
 
   return (
     <div className="Main">
-
+      <Loading open={isLoading}>
+      </Loading>
       <main className={classes.root}>
         {/* <timeContext.Provider value={{ time, setTime }}> */}
         <Grid item>
           {/* todo いい感じの場所とデザインに．
         あとタイトルを更新できるように */}
           {/*<NewPage />*/}
-          <Title title={props.title} />
+          <Title title={page.page.title} />
         </Grid>
 
-        <Grid container className ={classes.grid} direction="row">
-        <Grid item className={classes.grid} >
-        <Grid container className={classes.grid}　direction="column">
-          <Grid item>
-            <VideoPlayer className="" url={props.url} players={{ player, setPlayer }} />
+        <Grid container className={classes.grid} direction="row">
+          <Grid item className={classes.grid} >
+            <Grid container className={classes.grid} direction="column">
+              <Grid item>
+                <VideoPlayer className="" url={page.page.url} players={{ player, setPlayer }} />
+              </Grid>
+              <Grid item>
+                <WriteMemoForm onSubmit={handleSubmit} player={player} />
+              </Grid>
+            </Grid>
           </Grid>
-          <Grid item>
-          <WriteMemoForm onSubmit={handleSubmit} player={player} />
-          </Grid>
-        </Grid>
-        </Grid>
-        <Grid item >
+          <Grid item >
             <MemoList
               memos={memos}
               onChange={handleChange}

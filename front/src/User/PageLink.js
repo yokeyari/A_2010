@@ -70,24 +70,27 @@ export default function PageLink(props) {
   const page = props.page;
   const classes = useStyles();
 
+
   const handleClick = () => {
-    setState({...state,isLoading:true});
-    pageDataSource.getPage(page.id)
-      .then(res => {
-        if (res.statusText == "OK") {
-          res.json()
-            .then(page => {
-              // console.log("getPage", page.page);
-              setState({ to: `/${userInfo.id}/${page.page.id}`, isLoaded: true,isLoading:false });
-              // props.onClose();
-            })
-        } else {
-          // ここにページが読み込めなかったときの処理
-        }
-      });
+    setState({to: `/${userInfo.id}/${page.id}`, isLoaded: true,isLoading:false })
   }
 
-
+  // const handleClick = () => {
+  //   setState({...state,isLoading:true});
+  //   pageDataSource.getPage(page.id)
+  //     .then(res => {
+  //       if (res.statusText == "OK") {
+  //         res.json()
+  //           .then(page => {
+  //             // console.log("getPage", page.page);
+  //             setState({ to: `/${userInfo.id}/${page.page.id}`, isLoaded: true,isLoading:false });
+  //             // props.onClose();
+  //           })
+  //       } else {
+  //         // ここにページが読み込めなかったときの処理
+  //       }
+  //     });
+  // }
 
 
 
@@ -112,6 +115,7 @@ export default function PageLink(props) {
             <Typography variant="body2" color="textSecondary" component="p">
               {page.url}
             メモの最初の1~2個{page.body}
+            {/* TODO ここらへんにタグ */}
             </Typography>
           </CardContent>
         </CardActionArea>
