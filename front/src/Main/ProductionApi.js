@@ -1,4 +1,5 @@
 const SERVER_URL = "https://movie-rails.herokuapp.com/api/v1/";
+//const SERVER_URL = "https://movie-rails-cors-test.herokuapp.com/api/v1/";
 
 async function createData(body, url) {
   const res = await fetch(url, {
