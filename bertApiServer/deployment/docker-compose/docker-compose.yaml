@@ -1,0 +1,38 @@
+version: "3.7"  # composeファイルのバージョン
+services:       # コンテナを定義
+    app-server:
+        container_name: app-server  # コンテナの名称
+        build:
+            context: ../../         # docker buildするときのパス、このファイルのあるところからの相対パス
+            dockerfile: deployment/dockerfiles/app-server/Dockerfile # contextのパスから指定
+        networks:                   # 属するネットワークの設定
+            my_host_network:        # 後述のmy_host_networkに属する
+                aliases:
+                    - uwsgi-server  # my_host_network上ではこのエイリアスでコンテナを指定可能
+        expose:
+            - 9876                  # このポートをLISTEN状態にする
+        restart: always             # サービス再起動ポリシー
+
+    web-server:
+        container_name: web-server
+        build:
+            context: ../../
+            dockerfile: deployment/dockerfiles/web-server/Dockerfile
+        networks:
+            my_host_network:
+                aliases:
+                    - nginx-server
+        ports:
+            - 9090:9123
+        depends_on:         # 依存関係を指定。web-serverの起動より前にapp-serverを起動するようになる
+            - app-server
+        restart: always
+
+# ネットワークの設定
+# ホストPC上での複数コンテナ起動のため、overlayではなくbridgeを使用
+networks:
+    my_host_network:
+        name: my-nginx-network
+        driver: bridge
+        ipam:
+            driver: default
