@@ -1,20 +1,36 @@
 class Api::V1::UsersController < ApplicationController
   before_action :find_user, only: [:update, :destroy]
 
-  # ユーザーが存在するか
   def login
     user = User.find_by(email: params[:email])
-    if user.nil?
-      render status: :not_found
+    if user && user.authenticate(params[:password])
+      session[:user_id] = user.id # セッションに記録
+      p session[:user_id]
+      render json: {user: user}, status: :ok
     else
-      render json: {user: user}, status: 200
+      render status: :bad_request
+    end
+  end
+
+  def logout
+    session.delete(:user_id)
+    render status: :ok
+  end
+
+  def logged_in?
+    p session[:user_id]
+    if current_user
+      render json: {user: @current_user}, status: :ok
+    else
+      render body: "b", status: :unauthorized
     end
   end
 
   # ユーザーの作成
   def create
     begin
-      user = User.create!(params.permit(:name, :email))
+      user = User.create!(params.permit(:name, :email, :password, :password_confirmation))
+      session[:user_id] = user.id
       render json: {user: user}, status: :ok
     rescue => e
       render json: {error: e.record.errors.full_messages}, status: :bad_request
@@ -33,6 +49,12 @@ class Api::V1::UsersController < ApplicationController
   # ユーザーの削除
   def destroy
     @user.destroy
+    session.delete(:user_id)
     render status: :ok
+  end
+
+  private
+  def current_user
+    @current_user ||= User.find_by(id: session[:user_id])
   end
 end
