@@ -4,7 +4,7 @@ import MemoComponent from './MemoComponent'
 import Card from '@material-ui/core/Card'
 const useStyles = makeStyles((theme) => ({
   card: {
-    width: '40vw',
+    //width: '30vw',
     maxHeight: '50vh',
     overflow: 'auto',
     //margin: theme.spacing(2),
