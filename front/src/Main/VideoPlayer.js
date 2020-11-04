@@ -21,6 +21,17 @@ import EditIcon from '@material-ui/icons/Edit';
 import Box from '@material-ui/core/Box';
 
 
+const useStyles = (theme) => ({
+  video: {
+    //width: '30vw',
+    maxHeight: '60vh',
+    overflow: 'auto',
+    margin: theme.spacing(1),
+   // padding: theme.spacing(0),
+    //backgroundColor:"#ffffff",
+  },
+}
+);
 
 
 
@@ -110,6 +121,7 @@ class VideoPlayer extends React.Component {
 
     const seekBar = (
       <input
+        style={{minWidth:'100%'}}
         type='range' min={0} max={0.999999} step='any'
         value={this.state.played}
         onMouseDown={this.handleSeekMouseDown}
@@ -132,9 +144,9 @@ class VideoPlayer extends React.Component {
 
   render() {
     const { url, playing, controls, light, volume, muted, loop, played, loaded, duration, playbackRate, pip } = this.state
-
+    const {classes}=this.props;
     return (
-      <div className='Main-video'>
+      <div className={classes.video}>
         <ReactPlayer
           className='react-player'
           url={url}
@@ -144,8 +156,9 @@ class VideoPlayer extends React.Component {
           volume={volume}
           muted={muted}
 
-          //width='60vw'
-          //height='60'
+          //width = '60vw'
+          minWidth='800px'
+          //height='60%'
           playing={playing}
           onProgress={this.onProgress}
           onPause={this.handlePause}
@@ -188,4 +201,4 @@ class VideoPlayer extends React.Component {
 
 // }
 
-export default VideoPlayer;
+export default withStyles(useStyles)(VideoPlayer);
