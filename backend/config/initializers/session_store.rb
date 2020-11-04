@@ -1,1 +1,1 @@
-Rails.application.config.session_store :cookie_store, key: '_hogehuga_session', domain: :all
+Rails.application.config.session_store :cookie_store, key: '_movie-rails', domain: :all
