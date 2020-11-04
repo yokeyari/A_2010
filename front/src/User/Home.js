@@ -6,7 +6,7 @@ import {
   Route,
   Link,
   useRouteMatch,
-  useParams
+  useParams,
 } from "react-router-dom";
 
 
@@ -20,6 +20,7 @@ import UserInfoContext from '../context'
 
 import NewPage from '../NewPage/NewPage';
 
+const pageDataSource = new PageDataSource();
 
 function Home() {
   const [state, setState] = useState({ search_word: "", pages: [] });
@@ -31,12 +32,12 @@ function Home() {
   // todo 認証
 
   const loadPages = () => {
-    PageAPI.fetchMemos().then(json => { setState({ ...state, pages: json }) })
-    PageDataSource.getPageIndex(user)
+    // PageAPI.fetchMemos().then(json => { setState({ ...state, pages: json }) })
+    pageDataSource.getPageIndex(user).then(res=>{setState({...state , pages:res.pages})})
   }
 
   useEffect(() => {
-    setUserInfo(user)
+    setUserInfo(user);
     loadPages();
   }, []);
 

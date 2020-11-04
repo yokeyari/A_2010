@@ -4,10 +4,11 @@ import MemoComponent from './MemoComponent'
 import Card from '@material-ui/core/Card'
 const useStyles = makeStyles((theme) => ({
   card: {
-    //width: '30vw',
-    maxHeight: '40vh',
+    width: '40vw',
+    maxHeight: '50vh',
     overflow: 'auto',
-    margin: theme.spacing(2),
+    //margin: theme.spacing(2),
+    margin: '10px 10px 10px 5vw',
     padding: theme.spacing(2),
     //backgroundColor:"#D2B48C",
   },

@@ -8,9 +8,9 @@ const useStyles = makeStyles((theme) => ({
     //width: '30vw',
     maxHeight: '40vh',
     overflow: 'auto',
-    margin: theme.spacing(2),
-    padding: theme.spacing(2),
-    //backgroundColor:"#D2B48C",
+    margin: theme.spacing(1),
+    padding: theme.spacing(0),
+    backgroundColor:"#ffffff",
   },
 }
 ));
@@ -19,8 +19,23 @@ export default function Title(props) {
   const classes = useStyles();
 
   return (
-    <Card className={classes.card}>
-      <TextField value={props.title}></TextField>
-    </Card>
+    
+      <TextField className={classes.card}
+      value={props.title}
+      fullWidth
+      placeholder="メモのタイトルを入力してください"
+      variant="outlined"
+      //variant="filled"
+      inputProps={{
+        style: {fontSize: 40} 
+      }}
+      >
+
+      </TextField>
+      
+    
   )
 }
+{/*<Card className={classes.card}>*/}
+{/*</Card>*/}
+
