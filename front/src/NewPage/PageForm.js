@@ -8,10 +8,11 @@ import TextField from '@material-ui/core/TextField';
 import Card from '@material-ui/core/Card';
 import { CardActions } from "@material-ui/core";
 import { BrowserRouter as Router, Route, Link, Redirect, useHistory } from 'react-router-dom';
-
+import { trackPromise } from "react-promise-tracker";
 
 import { PageDataSource } from "./../Main/ProductionApi";
 import UserInfoContext from "../context";
+import { Transition } from "../Transition";
 
 const pageDataSource = new PageDataSource();
 
@@ -47,22 +48,33 @@ function validateURL(url) {
 
 
 export default function NewPageForm(props) {
+	const [state,setState] = useState({
+		url:"",
+		title:"",
+		page:{
+			
+		}
+		,isLoaded:false
+	})
+	// const [url, setUrl] = useState("");
+	// const [title, setTitle] = useState("");
 	const { userInfo, setUserInfo } = useContext(UserInfoContext);
-	const [url, setUrl] = useState("");
-	const [title, setTitle] = useState("");
+
 	const classes = useStyles();
+
+
+
 	const handleClick = () => {
-		if (!validateURL(url)) {
+		if (!validateURL(state.url)) {
 			console.error("not support url");
 			return false;
 		}
-		// props.onSubmit({ url, title });
-		// setText("");
 
-		pageDataSource.createPage({ url, title, user_id: userInfo.id }).then(res => {
+		pageDataSource.createPage({ url:state.url, title:state.title, user_id: userInfo.id }).then(res => {
 			if (res.statusText == "OK") {
 				res.json().then(page => {
-					console.log(page);
+					console.log("getPage",page.page);
+					setState({...state,page:page.page,isLoaded:true});
 					// {useHistory().push(`/${userInfo.id}/${page.id}`)}
 					// <Redirect to={} />
 					// コールバックにはHook使えないので，ローディング中にレンダーして，遷移するComponentoが必要だ．
@@ -75,27 +87,32 @@ export default function NewPageForm(props) {
 	}
 
 	return (
-		<Card>
-			<h2 id="">Create New memo</h2>
-			<div>
-				<TextField type="text" id="memo-input" className={classes.root}
-					label="URL"
-					placeholder="http://??????????"
-					multiline
-					onChange={e => setUrl(e.target.value)} value={url} />
-				<TextField type="text" id="memo-input" className={classes.root}
-					label="Title"
-					placeholder="Introduction of memotube"
-					multiline
-					onChange={e => setTitle(e.target.value)} value={title} />
+		<div>
+			<Card>
+				<h2 id="">Create New memo</h2>
+				<div>
+					<TextField type="text" id="memo-input" className={classes.root}
+						label="URL"
+						placeholder="http://??????????"
+						multiline
+						onChange={e =>{ setState({...state,url:e.target.value})}} value={state.url} />
+					<TextField type="text" id="memo-input" className={classes.root}
+						label="Title"
+						placeholder="Introduction of memotube"
+						multiline
+						onChange={e => {setState({...state,title:e.target.value})}} value={state.title} />
 
-				<Button className={classes.button} id="submit"
-					variant="contained" color="primary" endIcon={<SendIcon />}
-					onClick={handleClick}
-				>submit
-				</Button>
-
-			</div>
-		</Card>
+					<Transition component={
+						state.isLoaded ? <Redirect to={`/${userInfo.id}/${state.page.id}`}/> :null
+					}>
+						<Button className={classes.button} id="submit"
+							variant="contained" color="primary" endIcon={<SendIcon />}
+							onClick={handleClick}>
+							submit
+						</Button>
+					</Transition>
+				</div>
+			</Card>
+		</div>
 	)
 }

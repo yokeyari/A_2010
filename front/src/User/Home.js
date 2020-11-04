@@ -37,7 +37,7 @@ function Home() {
   }
 
   useEffect(() => {
-    setUserInfo(user)
+    setUserInfo(user);
     loadPages();
   }, []);
 
