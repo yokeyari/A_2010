@@ -7,6 +7,15 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
+import { trackPromise } from "react-promise-tracker"
+
+
+import UserInfoContext from "../context";
+import Transition from "../Transition";
+import { PageDataSource } from "../Main/ProductionApi";
+
+const pageDataSource = new PageDataSource();
+
 const useStyles = makeStyles((theme) => ({
   root: {
     //margin: '',
@@ -44,29 +53,69 @@ const useStyles = makeStyles((theme) => ({
     margin: 4,
   },
 }));
+
+
+
 export default function PageLink(props) {
+  const [state, setState] = React.useState({
+    url: "",
+    title: "",
+    to: "",
+    isLoaded: false,
+    isLoading: false
+  })
+  // const [url, setUrl] = useState("");
+  // const [title, setTitle] = useState("");
+  const { userInfo } = React.useContext(UserInfoContext);
   const page = props.page;
   const classes = useStyles();
+
+  const handleClick = () => {
+    setState({...state,isLoading:true});
+    pageDataSource.getPage(page.id)
+      .then(res => {
+        if (res.statusText == "OK") {
+          res.json()
+            .then(page => {
+              // console.log("getPage", page.page);
+              setState({ to: `/${userInfo.id}/${page.page.id}`, isLoaded: true,isLoading:false });
+              // props.onClose();
+            })
+        } else {
+          // ここにページが読み込めなかったときの処理
+        }
+      });
+  }
+
+
+
+
+
+
   return (
-    <Card className={classes.card}>
-      <CardActionArea>
-        {/* CardActionAreaでクリックするとidに基づいてメモページに飛べるようにしたい */}
-        <CardMedia
-          className={classes.media}
-          //component="img"
-          image={page.img}
-          title="サムネ"
-        />
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="h2">
-            {page.title}
-          </Typography>
-          <Typography variant="body2" color="textSecondary" component="p">
-            {page.url}
+    <>
+      <Transition to={state.to} ok={state.isLoaded} isLoading={state.isLoading}>
+
+      </Transition>
+      <Card className={classes.card}>
+        <CardActionArea onClick={handleClick}>
+          <CardMedia
+            className={classes.media}
+            //component="img"
+            image={page.img}
+            title="サムネ"
+          />
+          <CardContent>
+            <Typography gutterBottom variant="h5" component="h2">
+              {page.title}
+            </Typography>
+            <Typography variant="body2" color="textSecondary" component="p">
+              {page.url}
             メモの最初の1~2個{page.body}
-          </Typography>
-        </CardContent>
-      </CardActionArea>
-    </Card>
+            </Typography>
+          </CardContent>
+        </CardActionArea>
+      </Card>
+    </>
   )
 }
