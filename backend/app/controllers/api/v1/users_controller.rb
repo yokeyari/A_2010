@@ -1,11 +1,11 @@
 class Api::V1::UsersController < ApplicationController
+  include ActionController::Cookies
   before_action :find_user, only: [:update, :destroy]
 
   def login
     user = User.find_by(email: params[:email])
     if user && user.authenticate(params[:password])
-      session[:user_id] = user.id # セッションに記録
-      p session[:user_id]
+      cookies[:user_id] = user.id # セッションに記録
       render json: {user: user}, status: :ok
     else
       render status: :bad_request
@@ -18,7 +18,6 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def logged_in?
-    p session[:user_id]
     if current_user
       render json: {user: @current_user}, status: :ok
     else
@@ -55,6 +54,6 @@ class Api::V1::UsersController < ApplicationController
 
   private
   def current_user
-    @current_user ||= User.find_by(id: session[:user_id])
+    @current_user ||= User.find_by(id: cookies[:user_id])
   end
 end
