@@ -6,7 +6,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import VideoPlayer from "./VideoPlayer";
 import MemoList from './Memo/MemoList';
 import WriteMemoForm from './Memo/WriteMemoForm';
-import { timeContext } from './context/time-context'
+import NewPage from '../NewPage/NewPage';
+import Title from './Memo/Titile'
 
 import * as MemoAPI from './LocalApi';
 const useStyles = makeStyles((theme) => ({
@@ -18,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-function Main() {
+function Main(props) {
   const classes = useStyles();
   const [memos, setMemos] = useState([]);
   const [reloader, setReloader] = useState(0);
@@ -47,17 +48,27 @@ function Main() {
     withUpdate(MemoAPI.submitNewMemo(memo));
   }
 
+  function handleChangeTitle(title) {
+    // post server
+  }
+
+
   return (
     <div className="Main" 　>
 
       <main className="Main-main" style={{ backgroundColor: "#e7ecec", }}>
         {/* <timeContext.Provider value={{ time, setTime }}> */}
+        <Grid item>
+          {/* todo いい感じの場所とデザインに．
+        あとタイトルを更新できるように */}
+          <NewPage />
+          <Title title={props.title} />
+        </Grid>
         <Grid container className={classes.grid}　>
-        
           <Grid item className={classes.grid}>
-            <VideoPlayer className="" players={{ player, setPlayer }} />   
+            <VideoPlayer className="" url={props.url} players={{ player, setPlayer }} />
           </Grid>
-          <Grid item className={classes.grid} >
+          <Grid item className={classes.grid}>
             <MemoList
               memos={memos}
               onChange={handleChange}
@@ -65,11 +76,11 @@ function Main() {
               player={player}
             />
           </Grid>
-          </Grid>
           <Grid item className={classes.grid}>
-          <WriteMemoForm onSubmit={handleSubmit} player={player} />
+            <WriteMemoForm onSubmit={handleSubmit} player={player} />
           </Grid>
-          
+        </Grid>
+
         {/* </timeContext.Provider> */}
       </main>
     </div>

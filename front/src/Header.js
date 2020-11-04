@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useContext } from "react";
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import logo from './logo.png';
@@ -20,10 +20,8 @@ import SearchForm from './User/SeachForm';
 //import { MemoryRouter as Router } from "react-router";
 //import { Link as RouterLink } from "react-router-dom";
 
-import Main from './Main/Main';
-import Top from './Top/Top';
-import Home from './User/Home';
-import { MenuList } from "@material-ui/core";
+
+import UserInfoContext from './context'
 const StyledMenu = withStyles({
   paper: {
     border: "1px solid #d3d4d5"
@@ -62,11 +60,14 @@ const useStyles = makeStyles((theme) => ({
 export default function Header(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [state, setState] = useState({ search_word: "", pages: [] });
+  const { userInfo, setUserInfo } = useContext(UserInfoContext);
+
+
   const handleChangeSeachForm = (text) => {
     setState({ ...state, search_word: text })
   }
 
-  const handleSeach = ()=>{
+  const handleSeach = () => {
     // サーチしてwithUpdateする．
 
   }
@@ -78,73 +79,70 @@ export default function Header(props) {
     setAnchorEl(null);
   };
   const classes = useStyles();
+
+
   return (
-    <Router>
-    <AppBar position="static" className={classes.root}>
-      <Toolbar>
-        <IconButton variant="contained" onClick={handleClick} edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-          <MenuIcon />
-        </IconButton>
-        <StyledMenu
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={handleClose}
-        >
-        <Link to="/home" >
+    <>
+      <AppBar position="static" className={classes.root}>
+        <Toolbar>
+          <IconButton variant="contained" onClick={handleClick} edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+            <MenuIcon />
+          </IconButton>
+          <StyledMenu
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={handleClose}
+          >
+            <Link to={`/${userInfo.id}/home`} >
               <MenuItem button onClick={handleClose}>
                 <ListItemIcon>
-                  <PersonIcon/>
+                  <PersonIcon />
                 </ListItemIcon>
-                <ListItemText primary="ユーザーページ"  />
+                <ListItemText primary="ユーザーページ" />
               </MenuItem>
             </Link>
-            <Link to="/main" >
+            <Link to={`/${userInfo.id}/main`}>
               <MenuItem button onClick={handleClose}>
                 <ListItemIcon>
-                <MovieIcon/>
+                  <MovieIcon />
                 </ListItemIcon>
                 <ListItemText primary="動画メモページ" />
               </MenuItem>
             </Link>
-        </StyledMenu>
-        
-        <Button  component={Link} to='/main'>
-          <img src={logo} className="header-logo" alt="memotube" />
-        </Button>
-        <SearchForm onChange={handleChangeSeachForm} search_word={state.search_word}　onClick={handleSeach} />
-        
-        <Button color="inherit" component={Link} to='/login' className={classes.login}>Login</Button>
-      </Toolbar>
-    </AppBar>
-    <div>
-        <Route exact path='/home' component={Home}/>
-        <Route path='/login' component={Top}/>
-        <Route path='/main' component={Main}/>
-        </div>
-    </Router>
+          </StyledMenu>
+
+          <Button component={Link} to={`/${userInfo.id}/home`}>
+            <img src={logo} className="header-logo" alt="memotube" />
+          </Button>
+          <SearchForm onChange={handleChangeSeachForm} search_word={state.search_word} onClick={handleSeach} />
+
+          <Button color="inherit" component={Link} to='/login' className={classes.login}>Login</Button>
+        </Toolbar>
+      </AppBar>
+    </>
   );
 }
 
 
 
-    /*<div className="Top">
-      <div className="Top-form">
-        <h2>Login</h2>
-        <input value="email"/>
-        <input value="password"/>
-      </div>
-    </div>*/
-    /*<header className="App-header">
-      <a
-        className="header-link"
-        href="/home"
-      >
-        <img src={logo} className="header-logo" alt="memotube"/>
-      </a>
-      <a href="/login"  className="App-login">
-          Login
-      </a>
-    </header>*/
-    {/*<Button component={Link} to='/home'>
+/*<div className="Top">
+  <div className="Top-form">
+    <h2>Login</h2>
+    <input value="email"/>
+    <input value="password"/>
+  </div>
+</div>*/
+/*<header className="App-header">
+  <a
+    className="header-link"
+    href="/home"
+  >
+    <img src={logo} className="header-logo" alt="memotube"/>
+  </a>
+  <a href="/login"  className="App-login">
+      Login
+  </a>
+</header>*/
+{/*<Button component={Link} to='/home'>
           User
   </Button>*/}

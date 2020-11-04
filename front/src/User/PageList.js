@@ -8,6 +8,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 
 import PageLink from './PageLink'
+import { Button } from '@material-ui/core';
 const useStyles = makeStyles((theme) => ({
   root: {
     //margin: '',
@@ -50,11 +51,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 export default function PageList(props){
-  const pages=[{ id: 0, title: "2nd single", img: "http://img.youtube.com/vi/qsureA57fEo/mqdefault.jpg" }, { id: 1, title: "面白い動画", img: "http://img.youtube.com/vi/HxKEgjUBDAs/mqdefault.jpg" }, { id: 2, title: "test3", img: "http://img.youtube.com/vi/cIrp_dfNbVs/mqdefault.jpg" }, { id: 4, title: "org", img: "./logo.svg" }
-  ,
-  { id: 5, title: "お気に入り", img: "http://img.youtube.com/vi/HxKEgjUBDAs/mqdefault.jpg" }, { id: 6, title: "微分", img: "http://img.youtube.com/vi/HxKEgjUBDAs/mqdefault.jpg" }, { id: 7, title: "lalala", img: "" }, { id: 7, title: "lalala", img: "" }, { id: 7, title: "lalala", img: "" }];
+  const demo_pages=[{ id: 100, title: "2nd single", img: "http://img.youtube.com/vi/qsureA57fEo/mqdefault.jpg" }, { id: 101, title: "面白い動画", img: "http://img.youtube.com/vi/HxKEgjUBDAs/mqdefault.jpg" }, { id: 112, title: "test3", img: "http://img.youtube.com/vi/cIrp_dfNbVs/mqdefault.jpg" }, { id: 114, title: "org", img: "./logo.svg" },
+  { id: 115, title: "お気に入り", img: "http://img.youtube.com/vi/HxKEgjUBDAs/mqdefault.jpg" }, { id: 116, title: "微分", img: "http://img.youtube.com/vi/HxKEgjUBDAs/mqdefault.jpg" }, { id: 117, title: "lalala", img: "" }];
   //この定数はデバッグのために作ったので、実際は消してください
-  //
+
+  const pages = [...props.pages,...demo_pages];
+  
   const classes=useStyles();
   //デバッグのためにprops.pages->pagesに書き換えたので、本番は戻してください
   const render_pages = pages.map(page=>{
