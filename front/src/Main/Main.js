@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Grid from '@material-ui/core/Grid';
+import Box from '@material-ui/core/Box'
 import "./Main.css";
 import { makeStyles } from '@material-ui/core/styles';
 // import Memo from "./Memo/Memo";
@@ -11,10 +12,12 @@ import Title from './Memo/Titile'
 
 import * as MemoAPI from './LocalApi';
 const useStyles = makeStyles((theme) => ({
-  grid: {
-    flexGrow: 1,
-    maxHeight: '50vh',
-    //overflow:'auto'
+  root: {
+      padding:'2vh 1vw',
+      width:'100%',
+      height:'70%',
+      //backgroundColor:"#ffffff",
+      backgroundColor: "#e7ecec", 
   }
 }));
 
@@ -54,21 +57,29 @@ function Main(props) {
 
 
   return (
-    <div className="Main" 　>
+    <div className="Main">
 
-      <main className="Main-main" style={{ backgroundColor: "#e7ecec", }}>
+      <main className={classes.root}>
         {/* <timeContext.Provider value={{ time, setTime }}> */}
         <Grid item>
           {/* todo いい感じの場所とデザインに．
         あとタイトルを更新できるように */}
-          <NewPage />
+          {/*<NewPage />*/}
           <Title title={props.title} />
         </Grid>
-        <Grid container className={classes.grid}　>
-          <Grid item className={classes.grid}>
+
+        <Grid container className ={classes.grid} direction="row">
+        <Grid item className={classes.grid} >
+        <Grid container className={classes.grid}　direction="column">
+          <Grid item>
             <VideoPlayer className="" url={props.url} players={{ player, setPlayer }} />
           </Grid>
-          <Grid item className={classes.grid}>
+          <Grid item>
+          <WriteMemoForm onSubmit={handleSubmit} player={player} />
+          </Grid>
+        </Grid>
+        </Grid>
+        <Grid item >
             <MemoList
               memos={memos}
               onChange={handleChange}
@@ -76,11 +87,7 @@ function Main(props) {
               player={player}
             />
           </Grid>
-          <Grid item className={classes.grid}>
-            <WriteMemoForm onSubmit={handleSubmit} player={player} />
-          </Grid>
         </Grid>
-
         {/* </timeContext.Provider> */}
       </main>
     </div>

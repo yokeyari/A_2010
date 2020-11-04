@@ -58,14 +58,14 @@ export class MemoDetaSource {
 
   //メモの新規作成
   async createMemo(memo) {
-    const res = createData({ text: memo.text, time: memo.time },
+    const res = createData({ text: memo.body, time: memo.time },
       this.API_URL + `?page_id=${memo.page_id}`);
     return res;
   }
 
   //メモの更新
   async updateMemo(memo) {
-    const res = updateData({ text: memo.text, time: memo.time },
+    const res = updateData({ text: memo.body, time: memo.time },
       this.API_URL + '/' + memo.id);
     return res;
   }
