@@ -32,7 +32,7 @@ function NewPage() {
 				aria-describedby="simple-modal-description"
 			>
 				<div style={modalStyle}>
-					<NewPageForm />
+					<NewPageForm onClose={handleClose}/>
 				</div>
 			</Modal>
 		</div>

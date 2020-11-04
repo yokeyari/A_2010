@@ -7,12 +7,11 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Card from '@material-ui/core/Card';
 import { CardActions } from "@material-ui/core";
-import { BrowserRouter as Router, Route, Link, Redirect, useHistory,withRouter } from 'react-router-dom';
 import { trackPromise } from "react-promise-tracker";
 
 import { PageDataSource } from "./../Main/ProductionApi";
 import UserInfoContext from "../context";
-import { Transition } from "../Transition";
+import Transition from "../Transition";
 
 const pageDataSource = new PageDataSource();
 
@@ -48,17 +47,15 @@ function validateURL(url) {
 
 
 export default function NewPageForm(props) {
-	const [state,setState] = useState({
-		url:"",
-		title:"",
-		page:{
-			
-		}
-		,isLoaded:false
+	const [state, setState] = useState({
+		url: "",
+		title: "",
+		to: "",
+		isLoaded: false
 	})
 	// const [url, setUrl] = useState("");
 	// const [title, setTitle] = useState("");
-	const { userInfo, setUserInfo } = useContext(UserInfoContext);
+	const { userInfo } = useContext(UserInfoContext);
 
 	const classes = useStyles();
 
@@ -70,20 +67,20 @@ export default function NewPageForm(props) {
 			return false;
 		}
 
-		pageDataSource.createPage({ url:state.url, title:state.title, user_id: userInfo.id }).then(res => {
-			if (res.statusText == "OK") {
-				res.json().then(page => {
-					console.log("getPage",page.page);
-					setState({...state,page:page.page,isLoaded:true});
-					// {useHistory().push(`/${userInfo.id}/${page.id}`)}
-					// <Redirect to={} />
-					// コールバックにはHook使えないので，ローディング中にレンダーして，遷移するComponentoが必要だ．
-				})
-			} else {
-				// ここにページが作れなかったときの処理
-			}
-		});
-
+		trackPromise(
+			pageDataSource.createPage({ url: state.url, title: state.title, user_id: userInfo.id })
+				.then(res => {
+					if (res.statusText == "OK") {
+						res.json()
+							.then(page => {
+								// console.log("getPage", page.page);
+								setState({ ...state, to: `/${userInfo.id}/${page.page.id}`, isLoaded: true });
+								props.onClose();
+							})
+					} else {
+						// ここにページが作れなかったときの処理
+					}
+				}));
 	}
 
 	return (
@@ -95,16 +92,14 @@ export default function NewPageForm(props) {
 						label="URL"
 						placeholder="http://??????????"
 						multiline
-						onChange={e =>{ setState({...state,url:e.target.value})}} value={state.url} />
+						onChange={e => { setState({ ...state, url: e.target.value }) }} value={state.url} />
 					<TextField type="text" id="memo-input" className={classes.root}
 						label="Title"
 						placeholder="Introduction of memotube"
 						multiline
-						onChange={e => {setState({...state,title:e.target.value})}} value={state.title} />
+						onChange={e => { setState({ ...state, title: e.target.value }) }} value={state.title} />
 
-					<Transition component={
-						state.isLoaded ? <Redirect to={`/${userInfo.id}/${state.page.id}`}/> :null
-					}>
+					<Transition to={state.to} ok={state.isLoaded}>
 						<Button className={classes.button} id="submit"
 							variant="contained" color="primary" endIcon={<SendIcon />}
 							onClick={handleClick}>
