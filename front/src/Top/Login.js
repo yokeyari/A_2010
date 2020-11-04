@@ -47,7 +47,6 @@ export default function Login() {
     <div className="Login">
       <div className="Login-form">
         <h1>Login</h1>
-<<<<<<< HEAD
         mail address
         <TextField required id="standard-required" label="Required" defaultValue="e-mail" value={email} onChange={(e) => { setEmail(e.target.value) }} />
         <TextField
@@ -62,15 +61,6 @@ export default function Login() {
             <Button id="submit" variant="contained" onClick={handleLogin}>submit</Button>
         </Transition>
 
-=======
-        <input value="email" /><br/>
-        <input value="password" /><br/>
-        
-        <Link to='/:user_id/'>
-          <button id="submit" variant="contained" >submit</button>
-        </Link>
-        
->>>>>>> master
       </div>
     </div>
   );
