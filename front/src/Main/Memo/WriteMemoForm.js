@@ -36,7 +36,7 @@ function WriteMemoForm(props) {
   const player = props.player;
   const classes = useStyles();
   const handleOnclick = () => {
-    props.onSubmit({body:text,time:player.time});
+    props.onSubmit({text:text,time:player.time});
     setText("");
   }
   const deleteMemo = () => {

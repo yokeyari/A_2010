@@ -2,6 +2,8 @@ Rails.application.routes.draw do
   namespace 'api' do
     namespace 'v1' do
       post 'users/login', to: 'users#login'
+      get 'users', to: 'users#index'
+      get 'users/:user_id', to: 'users#show'
       post 'users', to: 'users#create'
       patch 'users/:user_id', to: 'users#update'
       delete 'users/:user_id', to: 'users#destroy'

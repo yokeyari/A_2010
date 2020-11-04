@@ -1,5 +1,5 @@
 class Api::V1::UsersController < ApplicationController
-  before_action :find_user, only: [:update, :destroy]
+  before_action :find_user, only: [:show, :update, :destroy]
 
   # ユーザーが存在するか
   def login
@@ -9,6 +9,15 @@ class Api::V1::UsersController < ApplicationController
     else
       render json: {user: user}, status: 200
     end
+  end
+
+  # ユーザー1覧
+  def index
+    render json: {users: User.all}, status: :ok
+  end
+
+  def show
+    render json: {user: @user}, status: :ok
   end
 
   # ユーザーの作成
