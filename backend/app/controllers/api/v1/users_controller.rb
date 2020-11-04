@@ -21,7 +21,7 @@ class Api::V1::UsersController < ApplicationController
     if current_user
       render json: {user: @current_user}, status: :ok
     else
-      render body: "b", status: :unauthorized
+      render status: :unauthorized
     end
   end
 
