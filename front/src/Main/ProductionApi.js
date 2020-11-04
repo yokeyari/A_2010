@@ -98,6 +98,13 @@ export class UserDataSource {
     //res.status 成功200, 失敗400
   }
 
+  async getUser(user_id) {
+    const res = await fetch(this.API_URL+'/'+user_id);
+    return res;
+    //成功 200 {"user":user}
+    //失敗：404
+  }
+
   //userの新規作成
   async createUser(user) {
     const res = createData({name: user.name, email: user.email},
@@ -139,7 +146,7 @@ export class PageDataSource {
 
   //pageの取得
   async getPage(page_id) {
-    const res = await fetch(this.API_URL+`?page_id=${page_id}`);
+    const res = await fetch(this.API_URL+'/'+page_id);
     return res;
     //成功 200 {"page": page,  "keywords": xxxx配列}
     //失敗：404
