@@ -29,11 +29,12 @@ const useStyles = makeStyles((theme) => ({
 
   grid:{
     minWitdh: 500, 
-    maxHeight: '60vh', 
-    overflow: 'auto' ,
+    //maxHeight: '60vh', 
+    //overflow: 'auto' ,
     padding: '10px',
     //backgroundColor: "#008080" ,
     //backgroundColor:"#4169e1"
+    //困ったらここを解除してどこがgridになっているかを確認
   },
 
   input: {

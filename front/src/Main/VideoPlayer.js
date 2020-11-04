@@ -144,8 +144,8 @@ class VideoPlayer extends React.Component {
           volume={volume}
           muted={muted}
 
-          // width='60%'
-          //height='60%'
+          //width='60vw'
+          //height='60'
           playing={playing}
           onProgress={this.onProgress}
           onPause={this.handlePause}

@@ -25,11 +25,12 @@ const useStyles = makeStyles((theme) => ({
 
   },
   box: {
-    backgroundColor: "#87CEFA",
-    padding: '2px 4px',
-    display: 'flex',
+    //backgroundColor: "#87CEFA" ,
+    padding: '5vh 2vw',
+    //display: 'flex',
     //justify: 'flex-end',
     marginLeft: 'auto',
+    marginRight: 'auto',
     alignItems: 'center',
     //justifyContent: 'right',
   },
@@ -47,21 +48,8 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(1),
     //padding: theme.spacing(2),
   },
-  media: {
-    //height: 140,
-    paddingTop: '56.25%'
-  },
-  input: {
-    marginLeft: theme.spacing(3),
-    flex: 1,
-    //maxWidth:400
-  },
   iconButton: {
     padding: 10,
-  },
-  divider: {
-    height: 28,
-    margin: 4,
   },
 }));
 
@@ -76,10 +64,29 @@ export default function SearchForm(props) {
   const seachButton = <Button onClick={props.onClick}>検索</Button>;
   return (
     <div>
+
+
+      <Box className={classes.box}>
+        {/*<h2 className="User-name">Welcome {"user"}!</h2>*/}
+        <Paper>
+          <TextField
+            type="text"
+            value={props.search_word}
+            placeholder="Search Memos"
+            onChange={(e) => { props.onChange(e.target.value) }}
+          />
+          <IconButton type="submit" className={classes.iconButton} onClick={props.onClick} aria-label="search">
+            <SearchIcon />
+          </IconButton>
+          <NewPage style={{ float: 'right' }} />
+        </Paper>
+
+
+      </Box>
       {/*{seachField}*/}
       {/*{seachButton}*/}
 
-      <Box className={classes.box}>
+      {/* <Box className={classes.box}>
         <h2 className="User-name">Welcome {"user"}!</h2>
         <Paper style={{ float: 'right' }} >
           <InputBase
@@ -93,9 +100,7 @@ export default function SearchForm(props) {
             <SearchIcon />
           </IconButton>
         </Paper>
-        <NewPage style={{ float: 'right' }}/>
-
-      </Box>
+      </Box> */}
     </div>
   )
 }
@@ -108,3 +113,6 @@ export default function SearchForm(props) {
                 options={tags}
               />
   </FormControl>*/}
+
+{/*{seachField}*/ }
+{/*{seachButton}*/ }

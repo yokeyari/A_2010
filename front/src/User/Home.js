@@ -11,7 +11,7 @@ import {
 
 
 import * as PageAPI from '../Main/LocalApi';
-import {PageDataSource} from './../Main/ProductionApi'
+import { PageDataSource } from './../Main/ProductionApi'
 import User from './User';
 //import './User.css';
 import PageList from './PageList';
@@ -26,8 +26,8 @@ function Home() {
   const [state, setState] = useState({ search_word: "", pages: [] });
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
 
-  const {user_id} = useParams();
-  const user = {id:user_id}
+  const { user_id } = useParams();
+  const user = { id: user_id }
   // 今は認証しない
   // todo 認証
 
@@ -56,9 +56,10 @@ function Home() {
 
   return (
     <div className="User-Top">
-      <h2 className="User-name">Welcome {userInfo.id}!</h2>
-      <SearchForm onChange={handleChangeSeachForm} search_word={state.search_word} onClick={handleSeach} />
-      {/* <NewPage /> */}
+      {/*className="User-To"*/}
+      <h2 className="User-name">Welcome {"user"}!</h2>
+      {/*<SearchForm onChange={handleChangeSeachForm} search_word={state.search_word}　onClick={handleSeach} />*/}
+
       <PageList pages={state.pages} />
     </div>
 
