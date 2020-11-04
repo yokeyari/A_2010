@@ -1,6 +1,6 @@
 class Api::V1::UsersController < ApplicationController
   include ActionController::Cookies
-  before_action :find_user, only: [:update, :destroy]
+  before_action :find_user, only: [:show, :update, :destroy]
 
   def login
     user = User.find_by(email: params[:email])
@@ -23,6 +23,15 @@ class Api::V1::UsersController < ApplicationController
     else
       render status: :unauthorized
     end
+  end
+
+  # ユーザー1覧
+  def index
+    render json: {users: User.all}, status: :ok
+  end
+
+  def show
+    render json: {user: @user}, status: :ok
   end
 
   # ユーザーの作成
