@@ -93,7 +93,7 @@ export default function Header(props) {
             open={Boolean(anchorEl)}
             onClose={handleClose}
           >
-            <Link to={`/${userInfo.id}/home`} >
+            <Link to={`/${userInfo.id}`} >
               <MenuItem button onClick={handleClose}>
                 <ListItemIcon>
                   <PersonIcon />
@@ -101,7 +101,7 @@ export default function Header(props) {
                 <ListItemText primary="ユーザーページ" />
               </MenuItem>
             </Link>
-            <Link to={`/${userInfo.id}/main`}>
+            <Link to={`/${userInfo.id}/:page_id`}>
               <MenuItem button onClick={handleClose}>
                 <ListItemIcon>
                   <MovieIcon />
@@ -111,7 +111,7 @@ export default function Header(props) {
             </Link>
           </StyledMenu>
 
-          <Button component={Link} to={`/${userInfo.id}/home`}>
+          <Button component={Link} to={`/${userInfo.id}`}>
             <img src={logo} className="header-logo" alt="memotube" />
           </Button>
           <SearchForm onChange={handleChangeSeachForm} search_word={state.search_word} onClick={handleSeach} />

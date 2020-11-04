@@ -57,7 +57,7 @@ function New (props) {
                 multiline
                 onChange={e=>setText(e.target.value)} value={text}/>
       
-			<Link to='/main'>
+			<Link to='/:user_id/:page_id'>
 				<Button className={classes.button} id="submit" 
 								variant="contained" color="primary" endIcon={<SendIcon/>} 
 								// onClick={handleOnclick}

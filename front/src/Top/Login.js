@@ -2,9 +2,9 @@ import "./Login.css";
 import React from "react";
 
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import UserDataSource from '../Main/ProductionApi';
 
 export default function Login() {
-
 
   return (
     <div className="Login">
@@ -13,7 +13,7 @@ export default function Login() {
         <input value="email" /><br/>
         <input value="password" /><br/>
         
-        <Link to='/'>
+        <Link to='/:user_id/'>
           <button id="submit" variant="contained" >submit</button>
         </Link>
         
