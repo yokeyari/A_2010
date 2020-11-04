@@ -7,7 +7,7 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Card from '@material-ui/core/Card';
 import { CardActions } from "@material-ui/core";
-import { BrowserRouter as Router, Route, Link, Redirect, useHistory } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Link, Redirect, useHistory,withRouter } from 'react-router-dom';
 import { trackPromise } from "react-promise-tracker";
 
 import { PageDataSource } from "./../Main/ProductionApi";
