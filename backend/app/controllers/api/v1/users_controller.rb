@@ -32,7 +32,7 @@ class Api::V1::UsersController < ApplicationController
 
   # ユーザーのupdate
   def update
-    if @user.update(params.permit(:name))
+    if @user.update(params.permit(:name, :email))
       render json: {user: @user}, status: :ok
     else
       render json: {error: @user.errors.full_messages}, status: :bad_request
