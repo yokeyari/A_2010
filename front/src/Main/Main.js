@@ -1,6 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box'
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  useRouteMatch,
+  useParams,
+} from "react-router-dom";
+
+
 import "./Main.css";
 import { makeStyles } from '@material-ui/core/styles';
 // import Memo from "./Memo/Memo";
@@ -25,7 +35,6 @@ const useStyles = makeStyles((theme) => ({
 
 
 function Main(props) {
-  const MemoAPI = new MemoDataSource();
   const classes = useStyles();
   const [memos, setMemos] = useState([]);
   const [reloader, setReloader] = useState(0);
@@ -33,10 +42,11 @@ function Main(props) {
     time: 0,
     player: null
   });
-  // const timeContext = React.createContext(0)
+  const { user_id,page_id } = useParams();
+  // console.log(useParams())
+  const MemoAPI = new MemoDataSource();
   
-  // あとでId渡すようにする
-  const page_id =1;
+  
   //const page_id = page.page_id;
 
   useEffect(() => {
