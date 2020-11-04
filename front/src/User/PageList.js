@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
   },
 
   grid:{
-    minWitdh: 500, 
+    minWitdh: 600, 
     //maxHeight: '60vh', 
     //overflow: 'auto' ,
     padding: '10px',

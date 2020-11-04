@@ -1,7 +1,7 @@
 import React from 'react';
 import Modal from '@material-ui/core/Modal';
 import CreateIcon from '@material-ui/icons/Create';
-import New from './PageForm';
+import NewPageForm from './PageForm';
 import { Button } from '@material-ui/core';
 
 function NewPage() {
@@ -16,7 +16,7 @@ function NewPage() {
 	const modalStyle = {
 		top: '60%',
 		left: '60%',
-		margin: '30vh 20vh',
+		margin: '20vh 20vh',
 	};
 
 	return (
@@ -32,8 +32,7 @@ function NewPage() {
 				aria-describedby="simple-modal-description"
 			>
 				<div style={modalStyle}>
-					<h2 id="">Create New memo</h2>
-					<New />
+					<NewPageForm onClose={handleClose}/>
 				</div>
 			</Modal>
 		</div>
