@@ -83,7 +83,7 @@ export default function Header(props) {
 
   return (
     <>
-      <AppBar position="static" className={classes.root}>
+      <AppBar color="default" position="static" className={classes.root}>
         <Toolbar>
           <IconButton variant="contained" onClick={handleClick} edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
             <MenuIcon />
@@ -102,7 +102,7 @@ export default function Header(props) {
               </MenuItem>
             </Link>
             <Link to={`/${userInfo.id}/main`}>
-              <MenuItem button onClick={handleClose}>
+              <MenuItem Button onClick={handleClose}>
                 <ListItemIcon>
                   <MovieIcon />
                 </ListItemIcon>

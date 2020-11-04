@@ -46,6 +46,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 export default function PageLink(props) {
   const page = props.page;
+  const img = props.img
   const classes = useStyles();
   return (
     <Card className={classes.card}>
@@ -54,8 +55,8 @@ export default function PageLink(props) {
         <CardMedia
           className={classes.media}
           //component="img"
-          image={page.img}
-          title="サムネ"
+          image={img}
+          title="動画のサムネイル"
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">
