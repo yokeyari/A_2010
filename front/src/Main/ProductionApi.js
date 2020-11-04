@@ -84,18 +84,30 @@ export class UserDataSource {
   }
 
   //userのログイン
-    async loginUser(user) {
+  async loginUser(user) {
     const res = await fetch(this.API_URL + '/login', {
       method: "POST",
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ email: user.email })
+      body: JSON.stringify({ email: user.email, password: user.password })
     })
     return res;
     //res.json 成功{"user":user}
     //res.status 成功200, 失敗400
+  }
+
+  async checkLoggedInUser(user) {
+    const res = await fetch(this.API_URL+'/logged_in');
+    return res;
+    //成功 200
+    //失敗 401
+  }
+
+  async logoutUser(user) {
+    const res = await fetch(this.API_URL+'/logout');
+    //成功 200
   }
 
   async getUser(user_id) {
@@ -106,8 +118,8 @@ export class UserDataSource {
   }
 
   //userの新規作成
-    async createUser(user) {
-    const res = createData({ name: user.name, email: user.email },
+    async createUser(user, password_confirmation) {
+    const res = createData({ name: user.name, email: user.email, password:user.password, password_confirmation: password_confirmation },
       this.API_URL)
     return res;
   }
