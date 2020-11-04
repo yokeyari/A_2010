@@ -63,6 +63,7 @@ export default function PageLink(props) {
             {page.title}
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
+            {page.url}
             メモの最初の1~2個{page.body}
           </Typography>
         </CardContent>

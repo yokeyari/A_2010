@@ -60,8 +60,8 @@ class VideoPlayer extends React.Component {
   }
 
   onProgress = prog => {
-    console.log('onProgress', prog)
-    console.log('this state', this.state)
+    // console.log('onProgress', prog)
+    // console.log('this state', this.state)
     // We only want to update time slider if we are not currently seeking
     if (!this.state.seeking) {
       this.setState(prog);
@@ -105,7 +105,7 @@ class VideoPlayer extends React.Component {
   }
 
   ref = player => {
-    console.log('set ref',player);
+    // console.log('set ref',player);
     this.player = player
     this.props.players.setPlayer({...this.props.players.player,player:{player}})
   }

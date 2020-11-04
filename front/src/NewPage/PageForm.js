@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 
 import SendIcon from '@material-ui/icons/Send';
@@ -7,19 +7,24 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Card from '@material-ui/core/Card';
 import { CardActions } from "@material-ui/core";
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import { trackPromise } from "react-promise-tracker";
 
+import { PageDataSource } from "./../Main/ProductionApi";
+import UserInfoContext from "../context";
+import Transition from "../Transition";
+
+const pageDataSource = new PageDataSource();
 
 const useStyles = makeStyles((theme) => ({
 	root: {
-		minWidth:300,
+		minWidth: 300,
 		//flexGrow: 1,
 		maxHeight: 500,
 		overflow: 'auto',
 		margin: theme.spacing(1),
 		textAlign: 'left',
 		//backgroundColor: "#ADD8E6"
-		
+
 	},
 	card: {
 		maxWidth: 600,
@@ -29,45 +34,80 @@ const useStyles = makeStyles((theme) => ({
 		padding: theme.spacing(2),
 		//backgroundColor:"#D2B48C",
 	},
-	button :{
-		marginLeft:'auto',
+	button: {
+		marginLeft: 'auto',
 	}
 }
 ));
 
-function New (props) {
-	const [text, setText] = useState("");
-  const classes = useStyles();
-  const handleOnclick = () => {
-    props.onSubmit({body:text});
-    setText("");
-	}
-	
-	return(
-		<Card>
-		<div>
-			<TextField type="text" id="memo-input" className={classes.root} 
-                label="Title"
-                placeholder="Introduction of memotube"
-                multiline
-                onChange={e=>setText(e.target.value)} value={text}/>
-      <TextField type="text" id="memo-input" className={classes.root} 
-                label="URL"
-                placeholder="http://??????????"
-                multiline
-                onChange={e=>setText(e.target.value)} value={text}/>
-      
-			<Link to='/main'>
-				<Button className={classes.button} id="submit" 
-								variant="contained" color="primary" endIcon={<SendIcon/>} 
-								// onClick={handleOnclick}
-								>submit
-				</Button>
-			</Link>
-		
-		</div>
-		</Card>
-	)
+function validateURL(url) {
+
+	return true;
 }
 
-export default New;
+
+export default function NewPageForm(props) {
+	const [state, setState] = useState({
+		url: "",
+		title: "",
+		to: "",
+		isLoaded: false
+	})
+	// const [url, setUrl] = useState("");
+	// const [title, setTitle] = useState("");
+	const { userInfo } = useContext(UserInfoContext);
+
+	const classes = useStyles();
+
+
+
+	const handleClick = () => {
+		if (!validateURL(state.url)) {
+			console.error("not support url");
+			return false;
+		}
+
+		trackPromise(
+			pageDataSource.createPage({ url: state.url, title: state.title, user_id: userInfo.id })
+				.then(res => {
+					if (res.statusText == "OK") {
+						res.json()
+							.then(page => {
+								// console.log("getPage", page.page);
+								setState({ ...state, to: `/${userInfo.id}/${page.page.id}`, isLoaded: true });
+								props.onClose();
+							})
+					} else {
+						// ここにページが作れなかったときの処理
+					}
+				}));
+	}
+
+	return (
+		<div>
+			<Card>
+				<h2 id="">Create New memo</h2>
+				<div>
+					<TextField type="text" id="memo-input" className={classes.root}
+						label="URL"
+						placeholder="http://??????????"
+						multiline
+						onChange={e => { setState({ ...state, url: e.target.value }) }} value={state.url} />
+					<TextField type="text" id="memo-input" className={classes.root}
+						label="Title"
+						placeholder="Introduction of memotube"
+						multiline
+						onChange={e => { setState({ ...state, title: e.target.value }) }} value={state.title} />
+
+					<Transition to={state.to} ok={state.isLoaded}>
+						<Button className={classes.button} id="submit"
+							variant="contained" color="primary" endIcon={<SendIcon />}
+							onClick={handleClick}>
+							submit
+						</Button>
+					</Transition>
+				</div>
+			</Card>
+		</div>
+	)
+}
