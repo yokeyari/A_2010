@@ -9,7 +9,9 @@ import WriteMemoForm from './Memo/WriteMemoForm';
 import NewPage from '../NewPage/NewPage';
 import Title from './Memo/Titile'
 
-import * as MemoAPI from './LocalApi';
+//import * as MemoAPI from './LocalApi';
+import {MemoDataSource} from './ProductionApi';
+
 const useStyles = makeStyles((theme) => ({
   grid: {
     flexGrow: 1,
@@ -20,6 +22,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 function Main(props) {
+  const MemoAPI = new MemoDataSource();
   const classes = useStyles();
   const [memos, setMemos] = useState([]);
   const [reloader, setReloader] = useState(0);
@@ -28,9 +31,13 @@ function Main(props) {
     player: null
   });
   // const timeContext = React.createContext(0)
+  
+  // あとでId渡すようにする
+  const page_id =1;
+  //const page_id = page.page_id;
 
   useEffect(() => {
-    MemoAPI.fetchMemos().then(json => { setMemos(json) })
+    MemoAPI.getMemoIndex(page_id).then(json => { setMemos(json) })
   }, [reloader])
 
   function withUpdate(fun) {
@@ -41,11 +48,11 @@ function Main(props) {
     withUpdate(MemoAPI.deleteMemo(memo));
   }
   function handleChange(memo) {
-    withUpdate(MemoAPI.editMemo(memo));
+    withUpdate(MemoAPI.updateMemo(memo));
   }
 
   function handleSubmit(memo) {
-    withUpdate(MemoAPI.submitNewMemo(memo));
+    withUpdate(MemoAPI.createMemo(memo,page_id));
   }
 
   function handleChangeTitle(title) {
