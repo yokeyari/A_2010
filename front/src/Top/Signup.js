@@ -14,6 +14,7 @@ const userDataSource = new UserDataSource();
 export default function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordRetype, setPasswordRetype] = useState("");
   const [state, setState] = React.useState({
     to: "",
     isLoaded: false,
@@ -54,14 +55,14 @@ export default function Signup() {
           label="Password"
           type="password"
           // autoComplete="current-password"
-          value={password} onChange={(e) => setPassword({...password,p1:e.target.value})}
+          value={password} onChange={(e) => setPassword(e.target.value) }
         />
         <TextField
           id="standard-password-input"
           label="Retype Password"
           type="password"
           // autoComplete="current-password"
-          value={password} onChange={(e) => setPassword({...password,p2:e.target.value})}
+          value={passwordRetype} onChange={(e) => setPasswordRetype(e.target.value) }
         />
 
         <Transition to={state.to} ok={state.isLoaded} isLoading={state.isLoading}>
