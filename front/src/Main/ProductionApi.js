@@ -137,9 +137,17 @@ export class UserDataSource {
   }
 
   //userの新規作成
-    async createUser(user, password_confirmation) {
-    const res = createData({ name: user.name, email: user.email, password:user.password, password_confirmation: password_confirmation },
+  async createUser(name, email, password, password_confirmation) {
+    const res = createData({ name: name, email: email, password:password, password_confirmation: password_confirmation },
       this.API_URL)
+    // const res = createData({ name: "aaaaa", email: "cfffdsk@ddd.com", password:"aaaaaa", password_confirmation: "aaaaaa" },
+    //   this.API_URL)
+    console.log('apiのレスポンス1');
+    res.then(res=>res.status).then(console.log);
+    console.log('apiのレスポンス2');
+    res.then(res => res.json())
+    .then(console.log)
+    .catch(console.log(res.error));
     return res;
   }
 

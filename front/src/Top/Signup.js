@@ -12,6 +12,7 @@ import transitions from "@material-ui/core/styles/transitions";
 const userDataSource = new UserDataSource();
 
 export default function Signup() {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordRetype, setPasswordRetype] = useState("");
@@ -26,9 +27,18 @@ export default function Signup() {
     if (true) {
       // 本当はここにバリデーションをつける？ 
       setState({ ...state, isLoading: true });
-      userDataSource.loginUser({ email, password })
+      // userDataSource.createUser({ name, email, password, passwordRetype })
+      // デバッグ用で入力を直接指定しているはずなのに
+      // 0: "Password can't be blank"
+      // 1: "Password is too short (minimum is 6 characters)"
+      // 2: "Name can't be blank"
+      // 3: "Email can't be blank"
+      // 4: "Email is invalid"
+      // のエラーが返ってくる (出来なかった1)
+      userDataSource.createUser({ name:"hogeh", email:"hhb@cccc.com", password:"aaaaaa", password_confirmation:"aaaaaa" })
         .then(res => {
-          if (res.statusText == "OK") {
+          if (res.status == 200) {
+            // resがとれない (出来なかった2)
             res.json()
               .then(user => {
                 // console.log("getPage", page.page);
@@ -36,7 +46,7 @@ export default function Signup() {
                 // props.onClose();
               })
           } else {
-            // TODOここにログインできなかったときの処理
+            // TODOここにサインアップできなかったときの処理
             setState({ ...state, isLoading: false, isLoaded: false })
             // TODOいい感じの表示をしたい
           }
@@ -45,11 +55,14 @@ export default function Signup() {
   }
 
   return (
-    <div className="Login">
-      <div className="Login-form">
+    <div className="Signup">
+      <div className="Signup-form">
         <h1>Signup</h1>
-        mail address
+        <p>name</p>
+        <TextField required id="standard-required" label="Required" defaultValue="name" value={name} onChange={(e) => { setName(e.target.value) }} />
+        <p>mail address</p>
         <TextField required id="standard-required" label="Required" defaultValue="e-mail" value={email} onChange={(e) => { setEmail(e.target.value) }} />
+        <p>password</p>
         <TextField
           id="standard-password-input"
           label="Password"
@@ -57,6 +70,7 @@ export default function Signup() {
           // autoComplete="current-password"
           value={password} onChange={(e) => setPassword(e.target.value) }
         />
+        <p>retype password</p>
         <TextField
           id="standard-password-input"
           label="Retype Password"
