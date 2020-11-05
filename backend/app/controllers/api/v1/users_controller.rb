@@ -1,5 +1,4 @@
 class Api::V1::UsersController < ApplicationController
-  include ActionController::Cookies
   before_action :logged_in?, except: [:login, :create]
   before_action :find_user, only: [:show, :update, :destroy]
 
