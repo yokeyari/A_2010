@@ -56,7 +56,7 @@ const useStyles = makeStyles((theme) => ({
     //backgroundColor:"#191970",
     //color:"#696969"
     //backgroundColor:"#cd853f"
-    backgroundColor: "#7cfc00",
+    backgroundColor: "#4F5D75",
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -129,7 +129,7 @@ export default function Header(props) {
 
           <Button component={Link} to={`/${userInfo.id}`}>
             <img src={logo} className="header-logo" alt="memotube" />
-          </Button>
+        </Button>
           <SearchForm className={classes.search_make} onChange={handleChangeSeachForm} search_word={state.search_word} onClick={handleSeach} />
           <NewPage className={classes.search_make} />
           <Button color="inherit" component={Link} to='/login' className={classes.login}>Login</Button>
