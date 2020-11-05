@@ -1,7 +1,7 @@
 # Permit cross origin
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
     allow do
-      origins "*"
+      origins 'https://localhost:3000'
 
       resource "*",
         headers: :any,

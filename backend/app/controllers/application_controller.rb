@@ -32,4 +32,8 @@ class ApplicationController < ActionController::API
     http.start {|h| res = h.request(req)}
     res
   end
+
+  def logged_in?
+    render status: :unauthorized if current_user.nil?
+  end
 end

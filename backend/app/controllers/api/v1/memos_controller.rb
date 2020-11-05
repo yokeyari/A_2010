@@ -1,4 +1,5 @@
 class Api::V1::MemosController < ApplicationController
+  before_action :logged_in?
   before_action :find_page, only: [:index]
   before_action :find_memo, only: [:update, :destroy]
 

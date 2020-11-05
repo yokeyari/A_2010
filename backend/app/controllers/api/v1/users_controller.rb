@@ -1,28 +1,23 @@
 class Api::V1::UsersController < ApplicationController
   include ActionController::Cookies
+  before_action :logged_in?, except: [:login, :create]
   before_action :find_user, only: [:show, :update, :destroy]
 
   def login
-    user = User.find_by(email: params[:email])
-    if user && user.authenticate(params[:password])
+    user = User.find_by(email: params[:email].downcase)
+    if user.nil?
+      render status: :bad_request
+    elsif user.authenticate(params[:password])
       cookies[:user_id] = user.id # セッションに記録
       render json: {user: user}, status: :ok
     else
-      render status: :bad_request
+      render status: :not_acceptable
     end
   end
 
   def logout
     cookies.delete(:user_id)
     render status: :ok
-  end
-
-  def logged_in?
-    if current_user
-      render json: {user: @current_user}, status: :ok
-    else
-      render status: :unauthorized
-    end
   end
 
   # ユーザー1覧

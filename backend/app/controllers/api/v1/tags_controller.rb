@@ -1,4 +1,5 @@
 class Api::V1::TagsController < ApplicationController
+  before_action :logged_in?
   before_action :find_page, only: [:index, :automate]
   before_action :find_tag, only: [:destroy, :update]
 
@@ -10,7 +11,7 @@ class Api::V1::TagsController < ApplicationController
   # タグを作成する
   def create
     begin
-      tag = Tag.create!(params.permit(:page_id, :text).merge(is_automated: false))
+      tag = Tag.create!(params.permit(:page_id, :text))
       render json: {tag: tag}, status: 200
     rescue => e # 作成できない場合
       render json: {error: e.record.errors.full_messages}, status: :bad_request

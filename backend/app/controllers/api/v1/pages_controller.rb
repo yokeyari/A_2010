@@ -1,4 +1,5 @@
 class Api::V1::PagesController < ApplicationController
+  before_action :logged_in?
   before_action :find_user, only: [:index]
   before_action :find_page, only: [:show, :update, :destroy]
 
@@ -6,7 +7,7 @@ class Api::V1::PagesController < ApplicationController
   def index
     # メモは最初の2つだけ返す
     pages_list = @user.pages.map {|page| page.attributes.merge(tags: page.tags, memos: page.memos[0,2])}
-    render json: {pages: pages_list}, status: 200
+    render json: {pages: pages_list}, status: :ok
   end
 
   # 1つのページの表示
