@@ -13,7 +13,7 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def logout
-    session.delete(:user_id)
+    cookies.delete(:user_id)
     render status: :ok
   end
 
@@ -38,7 +38,7 @@ class Api::V1::UsersController < ApplicationController
   def create
     begin
       user = User.create!(params.permit(:name, :email, :password, :password_confirmation))
-      session[:user_id] = user.id
+      cookies[:user_id] = user.id
       render json: {user: user}, status: :ok
     rescue => e
       render json: {error: e.record.errors.full_messages}, status: :bad_request
@@ -57,7 +57,7 @@ class Api::V1::UsersController < ApplicationController
   # ユーザーの削除
   def destroy
     @user.destroy
-    session.delete(:user_id)
+    cookies.delete(:user_id)
     render status: :ok
   end
 
