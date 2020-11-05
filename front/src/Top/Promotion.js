@@ -5,7 +5,7 @@ import "./Login.css";
 function Promotion() {
 
   return (
-      <div className="Login-prm">
+      <div className="Login-prom">
 			<h2>What's memotube?</h2>
 			<p>
 				ex)<br/>
@@ -15,6 +15,7 @@ function Promotion() {
 			<video>
 				<p>Demo movie</p>
 			</video>
+			<h2>Let's try it !!</h2>
 			<p>
 				皆さんもさっそくLoginしてmemotubeを使い始めましょう!
 			</p>
