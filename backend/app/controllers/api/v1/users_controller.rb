@@ -1,6 +1,7 @@
 class Api::V1::UsersController < ApplicationController
-  before_action :logged_in?, except: [:login, :create]
+  #before_action :logged_in?, except: [:login, :create]
   before_action :find_user, only: [:show, :update, :destroy]
+  before_action :logged_in?, only: [:show]
 
   def login
     user = User.find_by(email: params[:email].downcase)

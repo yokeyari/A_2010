@@ -1,5 +1,5 @@
 class Api::V1::PagesController < ApplicationController
-  before_action :logged_in?
+  #before_action :logged_in?
   before_action :find_user, only: [:index]
   before_action :find_page, only: [:show, :update, :destroy]
 
