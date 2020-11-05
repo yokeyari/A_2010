@@ -55,8 +55,9 @@ const useStyles = makeStyles((theme) => ({
     //margin: theme.spacing(1),
     //backgroundColor:"#191970",
     //color:"#696969"
-    //backgroundColor:"#cd853f"
-    backgroundColor:"#7cfc00",
+    //backgroundColor:"#00ff7f"
+    //backgroundColor:"#7cfc00",
+    backgroundColor:"4F5D75" //青っぽい黒でいい感じ
   },
   menuButton: {
     marginRight: theme.spacing(2),

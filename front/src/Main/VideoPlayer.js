@@ -24,7 +24,7 @@ import Box from '@material-ui/core/Box';
 const useStyles = (theme) => ({
   video: {
     //width: '30vw',
-    maxHeight: '60vh',
+    //maxHeight: '60vh',
     overflow: 'auto',
     margin: theme.spacing(1),
    // padding: theme.spacing(0),

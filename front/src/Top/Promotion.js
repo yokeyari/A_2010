@@ -5,7 +5,7 @@ import "./Login.css";
 function Promotion() {
 
   return (
-      <div className="Login-prom">
+      <div className="Login-prm">
 			<h2>What's memotube?</h2>
 			<p>
 				ex)<br/>
