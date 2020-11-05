@@ -20,6 +20,8 @@ import WriteMemoForm from './Memo/WriteMemoForm';
 import NewPage from '../NewPage/NewPage';
 import Title from './Memo/Titile'
 import Loading from '../Loading';
+import TagList from './Tag/TagList';
+import TagForm from './Tag/TagForm';
 
 //import * as MemoAPI from './LocalApi';
 import { MemoDataSource, PageDataSource } from './ProductionApi';
@@ -107,6 +109,13 @@ function Main(props) {
         <Grid container className={classes.grid} direction="row">
           <Grid item className={classes.grid} >
             <Grid container className={classes.grid} direction="column">
+              <Grid item>
+                {/* TO DO: タグの作成・閲覧・自動生成ボダンのコンポーネント */}
+                <TagList tags={page.tags} withUpdate={withUpdate} />
+              </Grid>
+              <Grid>
+                <TagForm page_id={page.page.id} withUpdate={withUpdate}/>
+              </Grid>
               <Grid item>
                 <VideoPlayer className="" url={page.page.url} players={{ player, setPlayer }} />
               </Grid>
