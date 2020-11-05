@@ -1,4 +1,4 @@
-import React, { useState,useContext } from "react";
+import React, { useState, useContext } from "react";
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import logo from './memotubelogo.png';
@@ -64,9 +64,8 @@ const useStyles = makeStyles((theme) => ({
   },
   login: {
     marginLeft: 'auto',
-    
   },
-  search_make:{
+  search_make: {
     marginLeft: 'auto',
     //marginRight: 'auto'
   },
@@ -131,10 +130,11 @@ export default function Header(props) {
 
           <Button component={Link} to={`/${userInfo.id}`}>
             <img src={logo} className="header-logo" alt="memotube" />
-          </Button>
+        </Button>
           <SearchForm className={classes.search_make} onChange={handleChangeSeachForm} search_word={state.search_word} onClick={handleSeach} />
-          <NewPage className={classes.search_make}/>
+          <NewPage className={classes.search_make} />
           <Button color="inherit" component={Link} to='/login' className={classes.login}>Login</Button>
+          <Button color="inherit" component={Link} to='/signup' className={classes.login}>Singup</Button>
         </Toolbar>
       </AppBar>
     </div>

@@ -24,6 +24,10 @@ function MemoList(props) {
     return "Loading";
   }
 
+  const memos = props.memos.memos.sort((a,b)=>{
+    return a.time - b.time
+  })
+
   // const TextArea = (
   //   <TextField value={props.title}></TextField>
   // )
@@ -32,7 +36,7 @@ function MemoList(props) {
     <>
       <Card className={classes.card}>
         {
-          props.memos.memos.map(memo =>
+          memos.map(memo =>
             (<MemoComponent
               key={memo.id.toString()}
               memo={memo}

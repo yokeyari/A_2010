@@ -78,6 +78,7 @@ export default function Login() {
       setState({...state,isLoading:true});
       userDataSource.loginUser({ email, password })
         .then(res => {
+          console.log(res)
           if (res.statusText == "OK") {
             res.json()
               .then(user => {

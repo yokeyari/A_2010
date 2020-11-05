@@ -13,11 +13,21 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Hidden from '@material-ui/core/Hidden';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  useRouteMatch,
+  useParams,
+} from "react-router-dom";
+
 
 import Login from './Login';
 import Promotion from './Promotion';
 import "./Login.css";
-import {UserDataSource} from '../Main/ProductionApi';
+import { UserDataSource } from '../Main/ProductionApi';
+import Signup from "./Signup";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -27,12 +37,12 @@ const useStyles = makeStyles((theme) => ({
     //backgroundImage: 'url(https://source.unsplash.com/random)',
     backgroundRepeat: 'no-repeat',
     //backgroundColor:
-      //theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
-    backgroundColor:"#87cefa",
-    
-      backgroundSize: 'cover',
+    //theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
+    backgroundColor: "#87cefa",
+
+    backgroundSize: 'cover',
     backgroundPosition: 'center',
-    Color:"#ffffff"
+    Color: "#ffffff"
   },
   paper: {
     margin: theme.spacing(8, 4),
@@ -55,29 +65,37 @@ const useStyles = makeStyles((theme) => ({
 
 function Top() {
   const classes = useStyles();
+  // console.log(useRouteMatch());
+  const path = useRouteMatch().path;
+
   const UserAPI = new UserDataSource();
-  
+
   // UserAPI.loginUser(user)
   // UserAPI.createUser(user)
   // UserAPI.updateUser(user)
   // UserAPI.deleteUser(user)
   // UserAPI.getUser(user_id)
 
-
   return (
     <div>
-       <Grid container component="main" className={classes.root}>
-      <CssBaseline />
-      <Hidden xsDown>
-      <Grid item xs={false} sm={4} md={7} className={classes.image} >
-        <Promotion/>
+      <Grid container component="main" className={classes.root}>
+        <CssBaseline />
+        <Hidden xsDown>
+          <Grid item xs={false} sm={4} md={7} className={classes.image} >
+            <Promotion />
+          </Grid>
+        </Hidden>
+        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+          {path == "/login" ?
+            <Login />
+            :
+            <Signup />
+          }
+        </Grid>
       </Grid>
-      </Hidden>
-      <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-        <Login />
-      </Grid>
-    </Grid>
-      
+
+
+      <Promotion />
     </div>
   );
 }

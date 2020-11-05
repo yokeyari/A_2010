@@ -8,7 +8,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 
 import PageLink from './PageLink'
-import { Button } from '@material-ui/core';
+import { Button, responsiveFontSizes } from '@material-ui/core';
 const useStyles = makeStyles((theme) => ({
   root: {
     //margin: '',
@@ -55,7 +55,16 @@ export default function PageList(props){
   { id: 115, title: "お気に入り", url: "" }, { id: 116, title: "微分", url: "http://img.youtube.com/vi/HxKEgjUBDAs/mqdefault.jpg" }, { id: 117, title: "lalala", url: "saa" }];
   //この定数はデバッグのために作ったので、実際は消してください
 
-  const pages = [...props.pages,...demo_pages];
+  let pages = props.pages;
+  // const pages = [...props.pages,...demo_pages];
+  if(pages==null){
+    pages = [];
+  }else{
+    pages.sort((a,b)=>{
+      return b.id - a.id
+    })
+  }
+
   //props.pagesにpagesじゃなくてmemoが入ってる？
   //多分最新verは解決してた
   //const pages = demo_pages;

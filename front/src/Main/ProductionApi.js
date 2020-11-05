@@ -1,9 +1,13 @@
+// import axios from 'axios';
+
 const SERVER_URL = "https://movie-rails.herokuapp.com/api/v1/";
-//const SERVER_URL = "https://movie-rails-cors-test.herokuapp.com/api/v1/";
+//const SERVER_URL = "https://movie-rails-cors-test.herokuapp.com/api/v1/"
 
 async function createData(body, url) {
   const res = await fetch(url, {
     method: "POST",
+    credentials: 'include', //クレデンシャルを含める指定
+    mode: 'cors',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
@@ -20,6 +24,8 @@ async function createData(body, url) {
 async function updateData(body, url) {
   const res = await fetch(url, {
     method: "PATCH",
+    credentials: 'include', //クレデンシャルを含める指定
+    mode: 'cors',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
@@ -33,7 +39,9 @@ async function updateData(body, url) {
 
 async function deleteData(url) {
   const res = await fetch(url, {
-    method: "DELETE"
+    method: "DELETE",
+    credentials: 'include', //クレデンシャルを含める指定
+    mode: 'cors',
   });
   return res;
   //res.status: 成功200, 失敗404
@@ -48,7 +56,10 @@ export class MemoDataSource {
 
   //ページidに対応するメモの取得
   async getMemoIndex(page_id) {
-    const res = await fetch(this.API_URL + `?page_id=${page_id}`);
+    const res = await fetch(this.API_URL + `?page_id=${page_id}`, {
+      credentials: 'include', //クレデンシャルを含める指定
+      mode: 'cors',
+    });
     try {
       const json = await res.json(); //メモが空の時例外
       console.log(json);
@@ -59,7 +70,7 @@ export class MemoDataSource {
   }
 
   //メモの新規作成
-  async createMemo(memo,page_id) {
+  async createMemo(memo, page_id) {
     const res = createData({ text: memo.text, time: memo.time },
       this.API_URL + `?page_id=${page_id}`);
     return res;
@@ -86,9 +97,21 @@ export class UserDataSource {
   }
 
   //userのログイン
+  // async loginUser(user) {
+  //   const res = await axios.post(this.API_URL + '/login', {
+  //     email: user.email, password: user.password
+  //   }, {
+  //     withCredentials: true
+  //   });
+  //   console.log(res);
+  //   return res;
+  // }
+  // }
   async loginUser(user) {
     const res = await fetch(this.API_URL + '/login', {
       method: "POST",
+      credentials: 'include', //クレデンシャルを含める指定
+      mode: 'cors',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
@@ -101,40 +124,46 @@ export class UserDataSource {
   }
 
   async checkLoggedInUser(user) {
-    const res = await fetch(this.API_URL+'/logged_in');
+    const res = await fetch(this.API_URL + '/logged_in');
     return res;
     //成功 200
     //失敗 401
   }
 
   async logoutUser(user) {
-    const res = await fetch(this.API_URL+'/logout');
+    const res = await fetch(this.API_URL + '/logout', {
+      credentials: 'include', //クレデンシャルを含める指定
+      mode: 'cors',
+    });
     //成功 200
   }
 
   async getUser(user_id) {
-    const res = await fetch(this.API_URL+'/'+user_id);
+    const res = await fetch(this.API_URL + '/' + user_id, {
+      credentials: 'include', //クレデンシャルを含める指定
+      mode: 'cors',
+    });
     return res;
     //成功 200 {"user":user}
     //失敗：404
   }
 
   //userの新規作成
-    async createUser(user, password_confirmation) {
-    const res = createData({ name: user.name, email: user.email, password:user.password, password_confirmation: password_confirmation },
+  async createUser(user, password_confirmation) {
+    const res = createData({ name: user.name, email: user.email, password: user.password, password_confirmation: password_confirmation },
       this.API_URL)
     return res;
   }
 
   //userの更新
-    async updateUser(user) {
+  async updateUser(user) {
     const res = updateData({ name: user.name, email: user.email },
       this.API_URL + '/' + user.id);
     return res;
   }
 
   //userの削除
-    async deleteUser(user) {
+  async deleteUser(user) {
     const res = deleteData(this.API_URL + '/' + user.id);
     return res;
   }
@@ -147,8 +176,11 @@ export class PageDataSource {
   }
 
   //userに対応するpageのindex
-    async getPageIndex(user) {
-    const res = await fetch(this.API_URL + `?user_id=${user.id}`);
+  async getPageIndex(user) {
+    const res = await fetch(this.API_URL + `?user_id=${user.id}`, {
+      credentials: 'include', //クレデンシャルを含める指定
+      mode: 'cors',
+    });
     try {
       const json = await res.json(); //ページが空の時例外
       console.log(json);
@@ -160,27 +192,30 @@ export class PageDataSource {
 
   //pageの取得
   async getPage(page_id) {
-    const res = await fetch(this.API_URL+'/'+page_id);
+    const res = await fetch(this.API_URL + '/' + page_id, {
+      credentials: 'include', //クレデンシャルを含める指定
+      mode: 'cors',
+    });
     return res;
-    //成功 200 {"page": page,  "keywords": xxxx配列}
+    //成功 200 {"page": page,  "tags": xxxx配列}
     //失敗：404
   }
 
-    async createPage(page) {
+  async createPage(page) {
     const res = createData({ url: page.url, title: page.title },
       this.API_URL + `?user_id=${page.user_id}`);
     return res;
   }
 
   //pageの更新
-    async updatePage(page) {
+  async updatePage(page) {
     const res = updateData({ url: page.url, title: page.url },
       this.API_URL + '/' + page.id);
     return res;
   }
 
   //pageの削除
-    async deletePage(page) {
+  async deletePage(page) {
     const res = deleteData(this.API_URL + '/' + page.id);
     return res;
   }
@@ -193,37 +228,43 @@ export class TagDataSource {
   }
 
   //自動tagの生成
-    async createAutomatedTag(page_id) {
-    const res = await fetch(this.API_URL + `/automate?page_id=${page_id}`);
+  async createAutomatedTag(page_id) {
+    const res = await fetch(this.API_URL + `/automate?page_id=${page_id}`, {
+      credentials: 'include', //クレデンシャルを含める指定
+      mode: 'cors',
+    });
     return res;
     //成功 200 {"tags": tagの配列}
     //失敗 404，500
   }
 
   //tag一覧の取得
-    async getTagIndex(page_id) {
-    const res = await fetch(this.API_URL + `?page_id=${page_id}`);
+  async getTagIndex(page_id) {
+    const res = await fetch(this.API_URL + `?page_id=${page_id}`, {
+      credentials: 'include', //クレデンシャルを含める指定
+      mode: 'cors',
+    });
     return res;
     //成功 200 {"tags": tagの配列}
     //失敗 404
   }
 
   //手動tagの追加
-    async createManualTag(tag) {
-    const res = createData({ text: tag.text },
-      this.API_URL + `?page_id=${tag.page_id}`);
+  async createManualTag(text, page_id) {
+    const res = createData({ text: text },
+      this.API_URL + `?page_id=${page_id}`);
     return res;
   }
 
   //手動タグの更新
-    async updateManualTag(tag) {
+  async updateManualTag(tag) {
     const res = updateData({ text: tag.text },
       this.API_URL + '/' + tag.id);
     return res;
   }
 
   //タグの削除
-    async deleteTag(tag) {
+  async deleteTag(tag) {
     const res = deleteData(this.API_URL + '/' + tag.id);
     return res;
   }

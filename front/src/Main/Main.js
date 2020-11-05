@@ -20,9 +20,11 @@ import WriteMemoForm from './Memo/WriteMemoForm';
 import NewPage from '../NewPage/NewPage';
 import Title from './Memo/Titile'
 import Loading from '../Loading';
+import TagList from './Tag/TagList';
+import TagForm from './Tag/TagForm';
 
 //import * as MemoAPI from './LocalApi';
-import { MemoDataSource, PageDataSource } from './ProductionApi';
+import { MemoDataSource, PageDataSource, TagDataSource } from './ProductionApi';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -55,7 +57,17 @@ function Main(props) {
   //const page_id = page.page_id;
 
   useEffect(() => {
-    MemoAPI.getMemoIndex(page_id).then(json => { setMemos(json) })
+    MemoAPI.getMemoIndex(page_id).then(json => { 
+      setMemos(json) 
+      //これがないとメモ以外が即座に更新されない
+      pageDataSource.getPage(page_id).then(json => {
+        json.json().then(json => {
+          segtIsLoading(false);
+          setPage({ ...json });
+        }
+        )
+      })
+    })
   }, [reloader])
 
   useEffect(() => {
@@ -98,24 +110,29 @@ function Main(props) {
       <main className={classes.root}>
         {/* <timeContext.Provider value={{ time, setTime }}> */}
         <Grid item>
-          {/* todo いい感じの場所とデザインに．
-        あとタイトルを更新できるように */}
-          {/*<NewPage />*/}
           <Title title={page.page.title} />
         </Grid>
+        <Grid container className={classes.grid} direction="row">
+          <Grid item>
+            <TagList tags={page.tags} withUpdate={withUpdate} />
+          </Grid>
+          <Grid item>
+            <TagForm page_id={page.page.id} withUpdate={withUpdate} />
+          </Grid>
+        </Grid>
 
-        <Grid container className ={classes.grid} direction="row">
-        <Grid item xs={10} md={6}>
-        <Grid container className={classes.grid}　direction="column">
-          <Grid item>
-            <VideoPlayer className="" url={page.page.url} players={{ player, setPlayer }} />
+        <Grid container className={classes.grid} direction="row">
+          <Grid item xs={10} md={6}>
+            <Grid container className={classes.grid} direction="column">
+              <Grid item>
+                <VideoPlayer className="" url={page.page.url} players={{ player, setPlayer }} />
+              </Grid>
+              <Grid item>
+                <WriteMemoForm onSubmit={handleSubmit} player={player} />
+              </Grid>
+            </Grid>
           </Grid>
-          <Grid item>
-          <WriteMemoForm onSubmit={handleSubmit} player={player} />
-          </Grid>
-        </Grid>
-        </Grid>
-        <Grid item xs={10} md={6}>
+          <Grid item xs={10} md={6}>
             <MemoList
               memos={memos}
               onChange={handleChange}
