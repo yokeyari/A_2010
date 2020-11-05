@@ -1,4 +1,4 @@
-import axios from 'axios';
+// import axios from 'axios';
 
 const SERVER_URL = "https://movie-rails.herokuapp.com/api/v1/";
 //const SERVER_URL = "https://movie-rails-cors-test.herokuapp.com/api/v1/"
