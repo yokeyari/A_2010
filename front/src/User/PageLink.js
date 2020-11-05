@@ -8,6 +8,8 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 import { trackPromise } from "react-promise-tracker"
+import DeleteIcon from '@material-ui/icons/Delete';
+import Button from '@material-ui/core/Button';
 
 
 import UserInfoContext from "../context";
@@ -120,6 +122,7 @@ export default function PageLink(props) {
             </Typography>
           </CardContent>
         </CardActionArea>
+        <Button className="delete" color="secondary" startIcon={<DeleteIcon />} onClick={() => { }}></Button>
       </Card>
     </>
   )
