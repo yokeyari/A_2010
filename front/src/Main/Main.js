@@ -105,26 +105,25 @@ function Main(props) {
           {/*<NewPage />*/}
           <Title title={page.page.title} />
         </Grid>
-
-        <Grid container className={classes.grid} direction="row">
-          <Grid item className={classes.grid} >
-            <Grid container className={classes.grid} direction="column">
-              <Grid item>
-                {/* TO DO: タグの作成・閲覧・自動生成ボダンのコンポーネント */}
-                <TagList tags={page.tags} withUpdate={withUpdate} />
-              </Grid>
-              <Grid>
-                <TagForm page_id={page.page.id} withUpdate={withUpdate}/>
-              </Grid>
-              <Grid item>
-                <VideoPlayer className="" url={page.page.url} players={{ player, setPlayer }} />
-              </Grid>
-              <Grid item>
-                <WriteMemoForm onSubmit={handleSubmit} player={player} />
-              </Grid>
-            </Grid>
+        <Grid item>
+        　<TagList tags={page.tags} withUpdate={withUpdate} />
+        </Grid>
+        <Grid>
+          <TagForm page_id={page.page.id} withUpdate={withUpdate}/>
+        </Grid>
+    
+        <Grid container className ={classes.grid} direction="row">
+        <Grid item xs={10} md={6}>
+        <Grid container className={classes.grid}　direction="column">
+          <Grid item>
+            <VideoPlayer className="" url={page.page.url} players={{ player, setPlayer }} />
           </Grid>
-          <Grid item >
+          <Grid item>
+          <WriteMemoForm onSubmit={handleSubmit} player={player} />
+          </Grid>
+        </Grid>
+        </Grid>
+        <Grid item xs={10} md={6}>
             <MemoList
               memos={memos}
               onChange={handleChange}

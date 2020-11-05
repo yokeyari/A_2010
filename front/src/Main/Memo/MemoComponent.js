@@ -20,8 +20,8 @@ const useStyles = makeStyles((theme) => ({
   card: {
     //Width: "600px",
     margin: theme.spacing(1),
-    backgroundColor: "#EEEEEE",
-    color: "#0000ff",
+    //backgroundColor: "#EEEEEE",
+    //color: "#0000ff",
     //padding: theme.spacing(2),
   },
 }

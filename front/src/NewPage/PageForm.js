@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-
+import CreateIcon from '@material-ui/icons/Create';
 import SendIcon from '@material-ui/icons/Send';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Button from '@material-ui/core/Button';
@@ -101,9 +101,9 @@ export default function NewPageForm(props) {
 
 					<Transition to={state.to} ok={state.isLoaded}>
 						<Button className={classes.button} id="submit"
-							variant="contained" color="primary" endIcon={<SendIcon />}
+							variant="contained" color="primary" endIcon={<CreateIcon />}
 							onClick={handleClick}>
-							submit
+							作成
 						</Button>
 					</Transition>
 				</div>
