@@ -1,4 +1,5 @@
 const SERVER_URL = "https://movie-rails.herokuapp.com/api/v1/";
+//const SERVER_URL = "https://movie-rails-cors-test.herokuapp.com/api/v1/";
 
 async function createData(body, url) {
   const res = await fetch(url, {
@@ -15,6 +16,7 @@ async function createData(body, url) {
   //res.status: 成功200, 失敗400
 }
 
+// To do 使えるようにする
 async function updateData(body, url) {
   const res = await fetch(url, {
     method: "PATCH",
@@ -39,7 +41,7 @@ async function deleteData(url) {
 
 
 //memoのapiクラス
-export class MemoDetaSource {
+export class MemoDataSource {
   API_URL = SERVER_URL + "memos";
   constructor() {
   }
@@ -57,9 +59,9 @@ export class MemoDetaSource {
   }
 
   //メモの新規作成
-  async createMemo(memo) {
+  async createMemo(memo,page_id) {
     const res = createData({ text: memo.text, time: memo.time },
-      this.API_URL + `?page_id=${memo.page_id}`);
+      this.API_URL + `?page_id=${page_id}`);
     return res;
   }
 
@@ -84,18 +86,30 @@ export class UserDataSource {
   }
 
   //userのログイン
-    async loginUser(user) {
+  async loginUser(user) {
     const res = await fetch(this.API_URL + '/login', {
       method: "POST",
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ email: user.email })
+      body: JSON.stringify({ email: user.email, password: user.password })
     })
     return res;
     //res.json 成功{"user":user}
     //res.status 成功200, 失敗400
+  }
+
+  async checkLoggedInUser(user) {
+    const res = await fetch(this.API_URL+'/logged_in');
+    return res;
+    //成功 200
+    //失敗 401
+  }
+
+  async logoutUser(user) {
+    const res = await fetch(this.API_URL+'/logout');
+    //成功 200
   }
 
   async getUser(user_id) {
@@ -106,8 +120,8 @@ export class UserDataSource {
   }
 
   //userの新規作成
-    async createUser(user) {
-    const res = createData({ name: user.name, email: user.email },
+    async createUser(user, password_confirmation) {
+    const res = createData({ name: user.name, email: user.email, password:user.password, password_confirmation: password_confirmation },
       this.API_URL)
     return res;
   }

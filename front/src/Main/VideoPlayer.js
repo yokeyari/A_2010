@@ -52,10 +52,12 @@ class VideoPlayer extends React.Component {
       playbackRate: 1.0,
       loop: false
     };
-    if(props.url==null){
-      this.state.url = 'https://www.youtube.com/watch?v=YE7VzlLtp-4'
+  }
+
+  componentWillReceiveProps(nextProps){
+    if(nextProps.url==null){
     }else{
-      this.state.url = props.url
+      this.setState({...this.state,url:nextProps.url});
     }
   }
 
@@ -143,7 +145,7 @@ class VideoPlayer extends React.Component {
 
 
   render() {
-    const { url, playing, controls, light, volume, muted, loop, played, loaded, duration, playbackRate, pip } = this.state
+    const { url,playing, controls, light, volume, muted, loop, played, loaded, duration, playbackRate, pip } = this.state;
     const {classes}=this.props;
     return (
       <div className={classes.video}>

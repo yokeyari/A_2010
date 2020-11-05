@@ -29,12 +29,12 @@ const useStyles = makeStyles((theme) => ({
 function MemoComponent(props){
   const classes = useStyles();
   const [isEditMode, setEditMode] = useState(false);
-  const [text,setText] = useState(props.memo.body)
+  const [text,setText] = useState(props.memo.text)
   const memo = props.memo
   const player = props.player
   
   const endEditMode = ()=>{
-    props.onChange({...memo,body:text});
+    props.onChange({...memo,text:text});
     setEditMode(false);
   }
 
@@ -49,7 +49,7 @@ function MemoComponent(props){
       multiline
       type="text" id="memo-input" className="" onChange={(e) => setText(e.target.value)} value={text}/>
     :
-      memo.body;
+      memo.text;
   return (
     //<div className="Post-memos" key={memo.id}>
     <Card className={classes.card} key={memo.id}>
@@ -59,7 +59,7 @@ function MemoComponent(props){
       </CardActions>
       <CardActions>
       {isEditMode ? 
-       <Button className="edit" startIcon={<DoneIcon />}onClick={() => {endEditMode()} }>done</Button>:
+        <Button className="edit" startIcon={<DoneIcon />}onClick={() => {endEditMode()} }>done</Button>:
         <Button className="edit" color="primary" startIcon={<EditIcon />} onClick={() => { setEditMode(true) }}>edit</Button>}
       <Button className="delete" color="secondary" startIcon={<DeleteIcon />} onClick={() => { props.onDelete(memo) }}>delete</Button>
       </CardActions>
