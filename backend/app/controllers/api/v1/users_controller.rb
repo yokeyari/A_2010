@@ -1,44 +1,20 @@
 class Api::V1::UsersController < ApplicationController
-  include ActionController::Cookies
-  before_action :find_user, only: [:show, :update, :destroy]
+  before_action :find_user, only: [:update, :destroy]
 
+  # ユーザーが存在するか
   def login
     user = User.find_by(email: params[:email])
-    if user && user.authenticate(params[:password])
-      cookies[:user_id] = user.id # セッションに記録
-      render json: {user: user}, status: :ok
+    if user.nil?
+      render status: :not_found
     else
-      render status: :bad_request
+      render json: {user: user}, status: 200
     end
-  end
-
-  def logout
-    session.delete(:user_id)
-    render status: :ok
-  end
-
-  def logged_in?
-    if current_user
-      render json: {user: @current_user}, status: :ok
-    else
-      render status: :unauthorized
-    end
-  end
-
-  # ユーザー1覧
-  def index
-    render json: {users: User.all}, status: :ok
-  end
-
-  def show
-    render json: {user: @user}, status: :ok
   end
 
   # ユーザーの作成
   def create
     begin
-      user = User.create!(params.permit(:name, :email, :password, :password_confirmation))
-      session[:user_id] = user.id
+      user = User.create!(params.permit(:name, :email))
       render json: {user: user}, status: :ok
     rescue => e
       render json: {error: e.record.errors.full_messages}, status: :bad_request
@@ -47,7 +23,7 @@ class Api::V1::UsersController < ApplicationController
 
   # ユーザーのupdate
   def update
-    if @user.update(params.permit(:name, :email))
+    if @user.update(params.permit(:name))
       render json: {user: @user}, status: :ok
     else
       render json: {error: @user.errors.full_messages}, status: :bad_request
@@ -57,12 +33,6 @@ class Api::V1::UsersController < ApplicationController
   # ユーザーの削除
   def destroy
     @user.destroy
-    session.delete(:user_id)
     render status: :ok
-  end
-
-  private
-  def current_user
-    @current_user ||= User.find_by(id: cookies[:user_id])
   end
 end

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import MemoComponent from './MemoComponent'
 import Card from '@material-ui/core/Card'
-
 const useStyles = makeStyles((theme) => ({
   card: {
     //width: '30vw',
@@ -20,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
 function MemoList(props) {
   const classes = useStyles();
   const player = props.player;
-    if (props.memos.length === 0) {
+  if (props.memos.length === 0) {
     return "Loading";
   }
 
@@ -32,7 +31,7 @@ function MemoList(props) {
     <>
       <Card className={classes.card}>
         {
-          props.memos.memos.map(memo =>
+          props.memos.map(memo =>
             (<MemoComponent
               key={memo.id.toString()}
               memo={memo}

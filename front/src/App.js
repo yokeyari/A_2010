@@ -28,9 +28,11 @@ function App() {
           <Switch>
             <Route exact path='/' component={Top} />
             <Route exact path='/login' component={Top} />
-            <Route exact path='/:user_id' component={Home} />
+            <Route exact path='/:user_id/' component={Home} />
+            <Route exact path='/:user_id/home' component={Home} />
             <Route path='/:user_id/:page_id' component={Main} />
           </Switch>
+
 
           <Footer />
           
