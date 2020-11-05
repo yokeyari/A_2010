@@ -17,7 +17,7 @@ import Signup from "./Signup";
 
 function Top() {
   // console.log(useRouteMatch());
-  const path = useRouteMatch();
+  const path = useRouteMatch().path;
 
   const UserAPI = new UserDataSource();
 
