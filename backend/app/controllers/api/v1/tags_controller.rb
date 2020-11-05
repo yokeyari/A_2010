@@ -38,7 +38,7 @@ class Api::V1::TagsController < ApplicationController
   # 自動タグを取得し、データベース中の自動タグを更新する
   def automate
     @page.tags.where(is_automated: true).destroy_all # 自動タグを全消去する
-    keywords = tagging(@page)
+    keywords = tagging(@page)[0, 3]
     
     # 保存に失敗した時を想定していない
     tags = keywords.map {|keyword| Tag.create(page_id: params[:page_id], text: keyword, is_automated: true)}

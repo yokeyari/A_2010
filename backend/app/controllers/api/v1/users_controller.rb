@@ -1,14 +1,13 @@
 class Api::V1::UsersController < ApplicationController
-  #before_action :logged_in?, except: [:login, :create]
+  before_action :token_check, only: [:show]
   before_action :find_user, only: [:show, :update, :destroy]
-  before_action :logged_in?, only: [:show]
 
   def login
     user = User.find_by(email: params[:email].downcase)
     if user.nil?
       render status: :bad_request
     elsif user.authenticate(params[:password])
-      session[:user_id] = user.id # セッションに記録
+      #session[:user_id] = user.id # セッションに記録
       render json: {user: user}, status: :ok
     else
       render status: :not_acceptable
@@ -16,7 +15,8 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def logout
-    session.delete(:user_id)
+    #session.delete(:user_id)
+    User.find(params[:user_id]).regenerate_token
     render status: :ok
   end
 
@@ -33,7 +33,7 @@ class Api::V1::UsersController < ApplicationController
   def create
     begin
       user = User.create!(params.permit(:name, :email, :password, :password_confirmation))
-      session[:user_id] = user.id
+      #session[:user_id] = user.id
       render json: {user: user}, status: :ok
     rescue => e
       render json: {error: e.record.errors.full_messages}, status: :bad_request
