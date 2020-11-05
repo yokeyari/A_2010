@@ -158,8 +158,8 @@ class VideoPlayer extends React.Component {
           volume={volume}
           muted={muted}
 
-          //width = '60vw'
-          minWidth='800px'
+          width = '100%'
+          //minWidth='800px'
           //height='60%'
           playing={playing}
           onProgress={this.onProgress}
