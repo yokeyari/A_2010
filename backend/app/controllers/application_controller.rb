@@ -33,6 +33,10 @@ class ApplicationController < ActionController::API
     res
   end
 
+  def current_user
+    @current_user ||= User.find_by(id: cookies[:user_id])
+  end
+
   def logged_in?
     render status: :unauthorized if current_user.nil?
   end

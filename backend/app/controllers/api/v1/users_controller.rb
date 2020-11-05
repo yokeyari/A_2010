@@ -55,9 +55,4 @@ class Api::V1::UsersController < ApplicationController
     cookies.delete(:user_id)
     render status: :ok
   end
-
-  private
-  def current_user
-    @current_user ||= User.find_by(id: cookies[:user_id])
-  end
 end
