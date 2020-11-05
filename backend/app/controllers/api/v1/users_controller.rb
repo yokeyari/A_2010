@@ -8,7 +8,7 @@ class Api::V1::UsersController < ApplicationController
     if user.nil?
       render status: :bad_request
     elsif user.authenticate(params[:password])
-      cookies[:user_id] = user.id # セッションに記録
+      session[:user_id] = user.id # セッションに記録
       render json: {user: user}, status: :ok
     else
       render status: :not_acceptable
@@ -16,7 +16,7 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def logout
-    cookies.delete(:user_id)
+    session.delete(:user_id)
     render status: :ok
   end
 
@@ -33,7 +33,7 @@ class Api::V1::UsersController < ApplicationController
   def create
     begin
       user = User.create!(params.permit(:name, :email, :password, :password_confirmation))
-      cookies[:user_id] = user.id
+      session[:user_id] = user.id
       render json: {user: user}, status: :ok
     rescue => e
       render json: {error: e.record.errors.full_messages}, status: :bad_request
@@ -52,7 +52,7 @@ class Api::V1::UsersController < ApplicationController
   # ユーザーの削除
   def destroy
     @user.destroy
-    cookies.delete(:user_id)
+    session.delete(:user_id)
     render status: :ok
   end
 end
