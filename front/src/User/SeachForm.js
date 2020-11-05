@@ -1,7 +1,7 @@
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import React from 'react';
-import { fade,makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Paper from '@material-ui/core/Paper';
 import InputBase from '@material-ui/core/InputBase';
@@ -16,28 +16,23 @@ import NewPage from './../NewPage/NewPage'
 const useStyles = makeStyles((theme) => ({
   root: {
     //margin: '',
-    //transition: theme.transitions.create('width'),
-    padding: '5px 2px',
+    padding: '2px 4px',
     display: 'flex',
+    justify: 'flex-end',
     alignItems: 'center',
     justifyContent: 'right',
     //width: 400,
 
   },
-
-  search: {
-    position: 'relative',
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: fade(theme.palette.common.white, 0.15),
-    '&:hover': {
-      backgroundColor: fade(theme.palette.common.white, 0.15),
-    },
-    marginLeft: 0,
-    width: '100%',
-    [theme.breakpoints.up('sm')]: {
-      marginLeft: theme.spacing(1),
-      width: 'auto',
-    },
+  box: {
+    //backgroundColor: "#87CEFA" ,
+    padding: '5vh 2vw',
+    //display: 'flex',
+    //justify: 'flex-end',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    alignItems: 'center',
+    //justifyContent: 'right',
   },
   formControl: {
     margin: theme.spacing(),
@@ -45,25 +40,16 @@ const useStyles = makeStyles((theme) => ({
     float: 'right',
     minWidth: 120,
   },
+  card: {
+    //maxWidth: 2000,
+    //width: "23%",
+    width: '23vw',
+    height: "20%",
+    margin: theme.spacing(1),
+    //padding: theme.spacing(2),
+  },
   iconButton: {
     padding: 10,
-  },
-
-  inputRoot: {
-    color: 'inherit',
-  },
-  inputInput: {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
-    transition: theme.transitions.create('width'),
-    width: '100%',
-    [theme.breakpoints.up('sm')]: {
-      width: '12ch',
-      '&:focus': {
-        width: '20ch',
-      },
-    },
   },
 }));
 
@@ -79,33 +65,24 @@ export default function SearchForm(props) {
   return (
     <div>
 
-      {/*<Box className={classes.box}>*/}
+
+      <Box className={classes.box}>
         {/*<h2 className="User-name">Welcome {"user"}!</h2>*/}
-        <div className={classes.search}>
-        {/*<Paper className={classes.root}>*/}
-        
-          <InputBase
+        <Paper>
+          <TextField
             type="text"
             value={props.search_word}
             placeholder="Search Memos"
             onChange={(e) => { props.onChange(e.target.value) }}
-            classes={{
-              root: classes.inputRoot,
-              input: classes.inputInput,
-            }}
-            variant="filled"
           />
-          
-          <IconButton size="large" type="submit" className={classes.iconButton} onClick={props.onClick} aria-label="search">
+          <IconButton type="submit" className={classes.iconButton} onClick={props.onClick} aria-label="search">
             <SearchIcon />
           </IconButton>
-          {/*</Paper>*/}
-          </div>
-          {/*<NewPage style={{ float: 'right' }} />*/}
-       
+          <NewPage style={{ float: 'right' }} />
+        </Paper>
 
 
-      {/*</Box>*/}
+      </Box>
       {/*{seachField}*/}
       {/*{seachButton}*/}
 
@@ -124,7 +101,6 @@ export default function SearchForm(props) {
           </IconButton>
         </Paper>
       </Box> */}
-    
     </div>
   )
 }

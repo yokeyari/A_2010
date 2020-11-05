@@ -1,7 +1,7 @@
 import React, { useState,useContext } from "react";
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
-import logo from './memotubelogo.png';
+import logo from './logo.png';
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import List from '@material-ui/core/List';
@@ -17,19 +17,11 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchForm from './User/SeachForm';
-import SearchIcon from '@material-ui/icons/Search';
-import { createMuiTheme } from '@material-ui/core/styles';
-import purple from '@material-ui/core/colors/purple';
-import { ThemeProvider } from '@material-ui/styles';
-import NewPage from './NewPage/NewPage'
 //import { MemoryRouter as Router } from "react-router";
 //import { Link as RouterLink } from "react-router-dom";
 
 
 import UserInfoContext from './context'
-
-
-
 const StyledMenu = withStyles({
   paper: {
     border: "1px solid #d3d4d5"
@@ -52,22 +44,13 @@ const StyledMenu = withStyles({
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    //margin: theme.spacing(1),
-    //backgroundColor:"#191970",
-    //color:"#696969"
-    //backgroundColor:"#cd853f"
-    backgroundColor:"#7cfc00",
+    //margin: theme.spacing(1)
   },
   menuButton: {
     marginRight: theme.spacing(2),
   },
   login: {
-    marginLeft: 'auto',
-    
-  },
-  search_make:{
-    marginLeft: 'auto',
-    //marginRight: 'auto'
+    marginLeft: 'auto'
   },
   title: {
     flexGrow: 1,
@@ -99,8 +82,8 @@ export default function Header(props) {
 
 
   return (
-    <div className={classes.root}>
-      <AppBar className={classes.root} color="default" position="static" >
+    <>
+      <AppBar color="default" position="static" className={classes.root}>
         <Toolbar>
           <IconButton variant="contained" onClick={handleClick} edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
             <MenuIcon />
@@ -131,12 +114,12 @@ export default function Header(props) {
           <Button component={Link} to={`/${userInfo.id}`}>
             <img src={logo} className="header-logo" alt="memotube" />
           </Button>
-          <SearchForm className={classes.search_make} onChange={handleChangeSeachForm} search_word={state.search_word} onClick={handleSeach} />
-          <NewPage className={classes.search_make}/>
+          <SearchForm onChange={handleChangeSeachForm} search_word={state.search_word} onClick={handleSeach} />
+
           <Button color="inherit" component={Link} to='/login' className={classes.login}>Login</Button>
         </Toolbar>
       </AppBar>
-    </div>
+    </>
   );
 }
 

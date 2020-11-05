@@ -105,7 +105,7 @@ function Main(props) {
         </Grid>
 
         <Grid container className ={classes.grid} direction="row">
-        <Grid item xs={10} md={6}>
+        <Grid item className={classes.grid} >
         <Grid container className={classes.grid}　direction="column">
           <Grid item>
             <VideoPlayer className="" url={props.url} players={{ player, setPlayer }} />
@@ -115,7 +115,7 @@ function Main(props) {
           </Grid>
         </Grid>
         </Grid>
-        <Grid item xs={10} md={6}>
+        <Grid item >
             <MemoList
               memos={memos}
               onChange={handleChange}

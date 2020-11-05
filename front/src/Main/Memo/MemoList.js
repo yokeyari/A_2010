@@ -5,7 +5,7 @@ import Card from '@material-ui/core/Card'
 
 const useStyles = makeStyles((theme) => ({
   card: {
-    //width: '30vw',
+    width: '40vw',
     maxHeight: '50vh',
     overflow: 'auto',
     //margin: theme.spacing(2),

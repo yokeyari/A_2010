@@ -55,10 +55,9 @@ export default function PageList(props){
   { id: 115, title: "お気に入り", url: "" }, { id: 116, title: "微分", url: "http://img.youtube.com/vi/HxKEgjUBDAs/mqdefault.jpg" }, { id: 117, title: "lalala", url: "saa" }];
   //この定数はデバッグのために作ったので、実際は消してください
 
-  const pages = [...props.pages,...demo_pages];
+  //const pages = [...props.pages,...demo_pages];
   //props.pagesにpagesじゃなくてmemoが入ってる？
-  //多分最新verは解決してた
-  //const pages = demo_pages;
+const pages = demo_pages;
   const classes=useStyles();
   //デバッグのためにprops.pages->pagesに書き換えたので、本番は戻してください
   const render_pages = pages.map(page=>{
