@@ -194,6 +194,7 @@ export class PageDataSource {
       return json; //{"page_list": (page, "memos": (memoの配列でサイズ2未満)  の配列)}
     } catch (err) {
       //例外時の処理とreturn
+      console.log("no pages");
     }
   }
 

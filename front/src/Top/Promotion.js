@@ -15,6 +15,7 @@ function Promotion() {
 			<video>
 				<p>Demo movie</p>
 			</video>
+			<h2>Let's try it !!</h2>
 			<p>
 				皆さんもさっそくLoginしてmemotubeを使い始めましょう!
 			</p>
