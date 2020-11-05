@@ -51,21 +51,32 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 export default function PageList(props){
-  const demo_pages=[{ id: 100, title: "2nd single", img: "http://img.youtube.com/vi/qsureA57fEo/mqdefault.jpg" }, { id: 101, title: "面白い動画", img: "http://img.youtube.com/vi/HxKEgjUBDAs/mqdefault.jpg" }, { id: 112, title: "test3", img: "http://img.youtube.com/vi/cIrp_dfNbVs/mqdefault.jpg" }, { id: 114, title: "org", img: "./logo.svg" },
-  { id: 115, title: "お気に入り", img: "http://img.youtube.com/vi/HxKEgjUBDAs/mqdefault.jpg" }, { id: 116, title: "微分", img: "http://img.youtube.com/vi/HxKEgjUBDAs/mqdefault.jpg" }, { id: 117, title: "lalala", img: "" }];
+  const demo_pages=[{ id: 100, title: "2nd single", url: "https://www.youtube.com/watch?v=qsureA57fEo" }, { id: 101, title: "レコ大", url: "https://www.youtube.com/watch?v=AJj9M-wcMuc" }, { id: 112, title: "test3", url: "https://www.youtube.com/watch?v=pMHaok80w_k" }, { id: 114, title: "org", url: "./logo.svg" },
+  { id: 115, title: "お気に入り", url: "" }, { id: 116, title: "微分", url: "http://img.youtube.com/vi/HxKEgjUBDAs/mqdefault.jpg" }, { id: 117, title: "lalala", url: "saa" }];
   //この定数はデバッグのために作ったので、実際は消してください
 
   const pages = [...props.pages,...demo_pages];
-  
+  //props.pagesにpagesじゃなくてmemoが入ってる？
+  //多分最新verは解決してた
+  //const pages = demo_pages;
   const classes=useStyles();
   //デバッグのためにprops.pages->pagesに書き換えたので、本番は戻してください
   const render_pages = pages.map(page=>{
     // ここにGridの要素とかを定義する感じ？
     // <Grid item>  とか？しらんけど．PageLinkの中身をいじっても良い．
+    console.log("URL:",page.url)
+    console.log("id",page.id)
+    var id="",img="";
+    if(page.url && page.url.split('v=').length===2){ 
+    id = page.url.split('v=')[1];
+    img = "https://img.youtube.com/vi/"+id+"/mqdefault.jpg"
+    }
+    //youtubeの場合はこれで取れるはず
     return (
       <PageLink
       key = {page.id}
       page= {page}
+      img = {img}
     />
     )
   });

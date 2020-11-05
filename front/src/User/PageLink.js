@@ -68,11 +68,12 @@ export default function PageLink(props) {
   // const [title, setTitle] = useState("");
   const { userInfo } = React.useContext(UserInfoContext);
   const page = props.page;
+  const img = props.img
   const classes = useStyles();
 
 
   const handleClick = () => {
-    setState({to: `/${userInfo.id}/${page.id}`, isLoaded: true,isLoading:false })
+    setState({ to: `/${userInfo.id}/${page.id}`, isLoaded: true, isLoading: false })
   }
 
   // const handleClick = () => {
@@ -105,8 +106,8 @@ export default function PageLink(props) {
           <CardMedia
             className={classes.media}
             //component="img"
-            image={page.img}
-            title="サムネ"
+            image={img}
+            title="動画のサムネイル"
           />
           <CardContent>
             <Typography gutterBottom variant="h5" component="h2">
@@ -115,7 +116,7 @@ export default function PageLink(props) {
             <Typography variant="body2" color="textSecondary" component="p">
               {page.url}
             メモの最初の1~2個{page.body}
-            {/* TODO ここらへんにタグ */}
+              {/* TODO ここらへんにタグ */}
             </Typography>
           </CardContent>
         </CardActionArea>
