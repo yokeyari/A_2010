@@ -20,6 +20,8 @@ import WriteMemoForm from './Memo/WriteMemoForm';
 import NewPage from '../NewPage/NewPage';
 import Title from './Memo/Titile'
 import Loading from '../Loading';
+import TagList from './Tag/TagList';
+import TagForm from './Tag/TagForm';
 
 //import * as MemoAPI from './LocalApi';
 import { MemoDataSource, PageDataSource } from './ProductionApi';
@@ -103,7 +105,13 @@ function Main(props) {
           {/*<NewPage />*/}
           <Title title={page.page.title} />
         </Grid>
-
+        <Grid item>
+        　<TagList tags={page.tags} withUpdate={withUpdate} />
+        </Grid>
+        <Grid>
+          <TagForm page_id={page.page.id} withUpdate={withUpdate}/>
+        </Grid>
+    
         <Grid container className ={classes.grid} direction="row">
         <Grid item xs={10} md={6}>
         <Grid container className={classes.grid}　direction="column">

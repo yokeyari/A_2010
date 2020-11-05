@@ -162,7 +162,7 @@ export class PageDataSource {
   async getPage(page_id) {
     const res = await fetch(this.API_URL+'/'+page_id);
     return res;
-    //成功 200 {"page": page,  "keywords": xxxx配列}
+    //成功 200 {"page": page,  "tags": xxxx配列}
     //失敗：404
   }
 
@@ -209,9 +209,9 @@ export class TagDataSource {
   }
 
   //手動tagの追加
-    async createManualTag(tag) {
-    const res = createData({ text: tag.text },
-      this.API_URL + `?page_id=${tag.page_id}`);
+    async createManualTag(text, page_id) {
+    const res = createData({ text: text },
+      this.API_URL + `?page_id=${page_id}`);
     return res;
   }
 
