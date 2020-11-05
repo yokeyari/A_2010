@@ -63,7 +63,6 @@ const useStyles = makeStyles((theme) => ({
   },
   login: {
     marginLeft: 'auto',
-
   },
   search_make: {
     marginLeft: 'auto',
@@ -134,6 +133,7 @@ export default function Header(props) {
           <SearchForm className={classes.search_make} onChange={handleChangeSeachForm} search_word={state.search_word} onClick={handleSeach} />
           <NewPage className={classes.search_make} />
           <Button color="inherit" component={Link} to='/login' className={classes.login}>Login</Button>
+          <Button color="inherit" component={Link} to='/singup' className={classes.login}>Singup</Button>
         </Toolbar>
       </AppBar>
     </div>

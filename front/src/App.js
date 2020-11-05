@@ -10,6 +10,7 @@ import Footer from './Footer';
 import Header from './Header';
 import { useState } from 'react';
 import UserInfoContext from './context';
+import Signup from './Top/Signup';
 
 function App() {
   const [userInfo, setUserInfo] = useState({
@@ -28,6 +29,7 @@ function App() {
           <Switch>
             <Route exact path='/' component={Top} />
             <Route exact path='/login' component={Top} />
+            <Route exact path='/signup' component={Top} />
             <Route exact path='/:user_id' component={Home} />
             <Route path='/:user_id/:page_id' component={Main} />
           </Switch>

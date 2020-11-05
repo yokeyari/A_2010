@@ -27,7 +27,7 @@ function Home() {
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
 
   const { user_id } = useParams();
-  const user = { id: user_id }
+  const user = { id: user_id };
   // 今は認証しない
   // todo 認証
 
