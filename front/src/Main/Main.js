@@ -100,30 +100,29 @@ function Main(props) {
       <main className={classes.root}>
         {/* <timeContext.Provider value={{ time, setTime }}> */}
         <Grid item>
-          {/* todo いい感じの場所とデザインに．
-        あとタイトルを更新できるように */}
-          {/*<NewPage />*/}
           <Title title={page.page.title} />
         </Grid>
-        <Grid item>
-        　<TagList tags={page.tags} withUpdate={withUpdate} />
-        </Grid>
-        <Grid>
-          <TagForm page_id={page.page.id} withUpdate={withUpdate}/>
-        </Grid>
-    
-        <Grid container className ={classes.grid} direction="row">
-        <Grid item xs={10} md={6}>
-        <Grid container className={classes.grid}　direction="column">
+        <Grid container className={classes.grid} direction="row">
           <Grid item>
-            <VideoPlayer className="" url={page.page.url} players={{ player, setPlayer }} />
+            <TagList tags={page.tags} withUpdate={withUpdate} />
           </Grid>
           <Grid item>
-          <WriteMemoForm onSubmit={handleSubmit} player={player} />
+            <TagForm page_id={page.page.id} withUpdate={withUpdate} />
           </Grid>
         </Grid>
-        </Grid>
-        <Grid item xs={10} md={6}>
+
+        <Grid container className={classes.grid} direction="row">
+          <Grid item xs={10} md={6}>
+            <Grid container className={classes.grid} direction="column">
+              <Grid item>
+                <VideoPlayer className="" url={page.page.url} players={{ player, setPlayer }} />
+              </Grid>
+              <Grid item>
+                <WriteMemoForm onSubmit={handleSubmit} player={player} />
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid item xs={10} md={6}>
             <MemoList
               memos={memos}
               onChange={handleChange}
