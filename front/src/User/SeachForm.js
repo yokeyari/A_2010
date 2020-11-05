@@ -1,7 +1,7 @@
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import React from 'react';
-import { fade,makeStyles } from '@material-ui/core/styles';
+import { fade, makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Paper from '@material-ui/core/Paper';
 import InputBase from '@material-ui/core/InputBase';
@@ -80,29 +80,29 @@ export default function SearchForm(props) {
     <div>
 
       {/*<Box className={classes.box}>*/}
-        {/*<h2 className="User-name">Welcome {"user"}!</h2>*/}
-        <div className={classes.search}>
+      {/*<h2 className="User-name">Welcome {"user"}!</h2>*/}
+      <div className={classes.search}>
         {/*<Paper className={classes.root}>*/}
-        
-          <InputBase
-            type="text"
-            value={props.search_word}
-            placeholder="Search Memos"
-            onChange={(e) => { props.onChange(e.target.value) }}
-            classes={{
-              root: classes.inputRoot,
-              input: classes.inputInput,
-            }}
-            variant="filled"
-          />
-          
-          <IconButton size="large" type="submit" className={classes.iconButton} onClick={props.onClick} aria-label="search">
-            <SearchIcon />
-          </IconButton>
-          {/*</Paper>*/}
-          </div>
-          {/*<NewPage style={{ float: 'right' }} />*/}
-       
+
+        <InputBase
+          type="text"
+          value={props.search_word}
+          placeholder="Search Memos"
+          onChange={(e) => { props.onChange(e.target.value) }}
+          classes={{
+            root: classes.inputRoot,
+            input: classes.inputInput,
+          }}
+          variant="filled"
+        />
+
+        <IconButton size="large" type="submit" className={classes.iconButton} onClick={props.onClick} aria-label="search">
+          <SearchIcon />
+        </IconButton>
+        {/*</Paper>*/}
+      </div>
+      {/*<NewPage style={{ float: 'right' }} />*/}
+
 
 
       {/*</Box>*/}
@@ -124,7 +124,7 @@ export default function SearchForm(props) {
           </IconButton>
         </Paper>
       </Box> */}
-    
+
     </div>
   )
 }

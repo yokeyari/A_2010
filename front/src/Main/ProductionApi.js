@@ -4,6 +4,8 @@ const SERVER_URL = "https://movie-rails.herokuapp.com/api/v1/";
 async function createData(body, url) {
   const res = await fetch(url, {
     method: "POST",
+    credentials: 'include', //クレデンシャルを含める指定
+    mode: 'cors', 
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
@@ -20,6 +22,8 @@ async function createData(body, url) {
 async function updateData(body, url) {
   const res = await fetch(url, {
     method: "PATCH",
+    credentials: 'include', //クレデンシャルを含める指定
+    mode: 'cors', 
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
@@ -33,7 +37,9 @@ async function updateData(body, url) {
 
 async function deleteData(url) {
   const res = await fetch(url, {
-    method: "DELETE"
+    method: "DELETE",
+    credentials: 'include', //クレデンシャルを含める指定
+    mode: 'cors', 
   });
   return res;
   //res.status: 成功200, 失敗404
@@ -48,7 +54,10 @@ export class MemoDataSource {
 
   //ページidに対応するメモの取得
   async getMemoIndex(page_id) {
-    const res = await fetch(this.API_URL + `?page_id=${page_id}`);
+    const res = await fetch(this.API_URL + `?page_id=${page_id}`,{
+      credentials: 'include', //クレデンシャルを含める指定
+      mode: 'cors', 
+    });
     try {
       const json = await res.json(); //メモが空の時例外
       console.log(json);
@@ -89,6 +98,8 @@ export class UserDataSource {
   async loginUser(user) {
     const res = await fetch(this.API_URL + '/login', {
       method: "POST",
+      credentials: 'include', //クレデンシャルを含める指定
+      mode: 'cors', 
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
@@ -108,12 +119,18 @@ export class UserDataSource {
   }
 
   async logoutUser(user) {
-    const res = await fetch(this.API_URL+'/logout');
+    const res = await fetch(this.API_URL+'/logout',{
+      credentials: 'include', //クレデンシャルを含める指定
+      mode: 'cors', 
+    });
     //成功 200
   }
 
   async getUser(user_id) {
-    const res = await fetch(this.API_URL+'/'+user_id);
+    const res = await fetch(this.API_URL+'/'+user_id,{
+      credentials: 'include', //クレデンシャルを含める指定
+      mode: 'cors', 
+    });
     return res;
     //成功 200 {"user":user}
     //失敗：404
@@ -148,7 +165,10 @@ export class PageDataSource {
 
   //userに対応するpageのindex
     async getPageIndex(user) {
-    const res = await fetch(this.API_URL + `?user_id=${user.id}`);
+    const res = await fetch(this.API_URL + `?user_id=${user.id}`,{
+      credentials: 'include', //クレデンシャルを含める指定
+      mode: 'cors', 
+    });
     try {
       const json = await res.json(); //ページが空の時例外
       console.log(json);
@@ -160,7 +180,10 @@ export class PageDataSource {
 
   //pageの取得
   async getPage(page_id) {
-    const res = await fetch(this.API_URL+'/'+page_id);
+    const res = await fetch(this.API_URL+'/'+page_id,{
+      credentials: 'include', //クレデンシャルを含める指定
+      mode: 'cors', 
+    });
     return res;
     //成功 200 {"page": page,  "keywords": xxxx配列}
     //失敗：404
@@ -194,7 +217,10 @@ export class TagDataSource {
 
   //自動tagの生成
     async createAutomatedTag(page_id) {
-    const res = await fetch(this.API_URL + `/automate?page_id=${page_id}`);
+    const res = await fetch(this.API_URL + `/automate?page_id=${page_id}`,{
+      credentials: 'include', //クレデンシャルを含める指定
+      mode: 'cors', 
+    });
     return res;
     //成功 200 {"tags": tagの配列}
     //失敗 404，500
@@ -202,7 +228,10 @@ export class TagDataSource {
 
   //tag一覧の取得
     async getTagIndex(page_id) {
-    const res = await fetch(this.API_URL + `?page_id=${page_id}`);
+    const res = await fetch(this.API_URL + `?page_id=${page_id}`,{
+      credentials: 'include', //クレデンシャルを含める指定
+      mode: 'cors', 
+    });
     return res;
     //成功 200 {"tags": tagの配列}
     //失敗 404
