@@ -52,7 +52,9 @@ function WriteMemoForm(props) {
                 label="メモを入力してください"
                 placeholder="見所"
                 multiline
-                onChange={e=>setText(e.target.value)} value={text}/>
+                onChange={e=>setText(e.target.value)} value={text}
+                
+                />
         <CardActions>
         <Button className={classes.button}  variant="contained" color="secondary"  startIcon={<DeleteIcon />} onClick={deleteMemo}> delete</Button>
         <Button className={classes.button} id="submit" variant="contained" color="primary" endIcon={<SendIcon/>} onClick={handleOnclick}>submit</Button>

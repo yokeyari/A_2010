@@ -35,21 +35,9 @@ export default function Signup() {
       // 3: "Email can't be blank"
       // 4: "Email is invalid"
       // のエラーが返ってくる (出来なかった1)
-      userDataSource.createUser({ name:"hogeh", email:"hhb@cccc.com", password:"aaaaaa", password_confirmation:"aaaaaa" })
+      userDataSource.createUser({ name: "hogeh", email: "hhb@cccc.com", password: "qwerty", password_confirmation: "qwerty" })
         .then(res => {
-          if (res.status == 200) {
-            // resがとれない (出来なかった2)
-            res.json()
-              .then(user => {
-                // console.log("getPage", page.page);
-                setState({ to: `/${user.user.id}/`, isLoaded: true, isLoading: false });
-                // props.onClose();
-              })
-          } else {
-            // TODOここにサインアップできなかったときの処理
-            setState({ ...state, isLoading: false, isLoaded: false })
-            // TODOいい感じの表示をしたい
-          }
+          console.log(res)
         });
     }
   }
@@ -59,24 +47,24 @@ export default function Signup() {
       <div className="Signup-form">
         <h1>Signup</h1>
         <p>name</p>
-        <TextField required id="standard-required" label="Required" defaultValue="name" value={name} onChange={(e) => { setName(e.target.value) }} />
+        <TextField required id="mail" label="Required" defaultValue="name" value={name} onChange={(e) => { setName(e.target.value) }} />
         <p>mail address</p>
-        <TextField required id="standard-required" label="Required" defaultValue="e-mail" value={email} onChange={(e) => { setEmail(e.target.value) }} />
+        <TextField required id="name" label="Required" defaultValue="e-mail" value={email} onChange={(e) => { setEmail(e.target.value) }} />
         <p>password</p>
         <TextField
-          id="standard-password-input"
+          id="pass"
           label="Password"
           type="password"
           // autoComplete="current-password"
-          value={password} onChange={(e) => setPassword(e.target.value) }
+          value={password} onChange={(e) => setPassword(e.target.value)}
         />
         <p>retype password</p>
         <TextField
-          id="standard-password-input"
+          id="pass2"
           label="Retype Password"
           type="password"
           // autoComplete="current-password"
-          value={passwordRetype} onChange={(e) => setPasswordRetype(e.target.value) }
+          value={passwordRetype} onChange={(e) => setPasswordRetype(e.target.value)}
         />
 
         <Transition to={state.to} ok={state.isLoaded} isLoading={state.isLoading}>
