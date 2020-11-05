@@ -24,7 +24,7 @@ import TagList from './Tag/TagList';
 import TagForm from './Tag/TagForm';
 
 //import * as MemoAPI from './LocalApi';
-import { MemoDataSource, PageDataSource } from './ProductionApi';
+import { MemoDataSource, PageDataSource, TagDataSource } from './ProductionApi';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -57,7 +57,17 @@ function Main(props) {
   //const page_id = page.page_id;
 
   useEffect(() => {
-    MemoAPI.getMemoIndex(page_id).then(json => { setMemos(json) })
+    MemoAPI.getMemoIndex(page_id).then(json => { 
+      setMemos(json) 
+      //これがないとメモ以外が即座に更新されない
+      pageDataSource.getPage(page_id).then(json => {
+        json.json().then(json => {
+          segtIsLoading(false);
+          setPage({ ...json });
+        }
+        )
+      })
+    })
   }, [reloader])
 
   useEffect(() => {
