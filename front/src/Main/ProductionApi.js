@@ -232,6 +232,7 @@ export class PageDataSource {
       },
       body: JSON.stringify({ user_id: user_id, keywords: keywords })
     })
+    // .then(res => console.log(res))
     .then(res => res.json());
     console.log(res.pages);
     return res;
