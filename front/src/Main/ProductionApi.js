@@ -223,6 +223,25 @@ export class PageDataSource {
     const res = deleteData(this.API_URL + '/' + page.id);
     return res;
   }
+
+  async searchPage(user_id, keywords) {
+    const res = await fetch(this.API_URL + '/\search', {
+      method: "POST",
+      credentials: 'include', //クレデンシャルを含める指定
+      mode: 'cors',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ user_id: user_id, keywords: keywords })
+    })
+    // .then(res => console.log(res))
+    .then(res => res.json());
+    console.log(res.pages);
+    return res;
+    //res.json 成功{"pages" (page とmemoの配列)の配列}
+    //res.status 成功200, 失敗400
+  }
 }
 
 //tagのapiクラス
