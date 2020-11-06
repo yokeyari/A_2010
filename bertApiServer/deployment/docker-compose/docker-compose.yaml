@@ -1,4 +1,4 @@
-version: "3.7"  # composeファイルのバージョン
+version: "3"  # composeファイルのバージョン
 services:       # コンテナを定義
     app-server:
         container_name: app-server  # コンテナの名称
