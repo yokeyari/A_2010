@@ -58,11 +58,9 @@ function Home() {
   }
 
   const handleSeach = (keywords) => {
-    // サーチしてwithUpdateする．
-    console.log("サーチが押されました");
-    console.log(keywords.split(' '))
-    pageDataSource.searchPage(user_id, [keywords])
+    pageDataSource.searchPage(user_id, keywords.split(' '))
     .then(res=>{
+      console.log(res.pages);
       setState({...state , pages:res.pages});
     })
   }
