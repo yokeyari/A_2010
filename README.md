@@ -1,6 +1,6 @@
 # MemoTube
 
-[![IMAGE ALT TEXT HERE](https://jphacks.com/wp-content/uploads/2020/09/JPHACKS2020_ogp.jpg)](https://www.youtube.com/watch?v=G5rULR53uMk)
+[![MemoTube](https://user-images.githubusercontent.com/28818747/98420702-13594700-20cb-11eb-9268-8c304fdb7cb2.png)](http://memotube.xyz/)
 
 ## 製品概要
 ### オンライン授業 x Tech
