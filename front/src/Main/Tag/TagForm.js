@@ -8,7 +8,12 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton'
 import TextField from '@material-ui/core/TextField';
 import Card from '@material-ui/core/Card';
+import DescriptionIcon from '@material-ui/icons/Description';
 import { CardActions } from "@material-ui/core";
+import LabelIcon from '@material-ui/icons/Label';
+import MoreIcon from '@material-ui/icons/More';
+import BrightnessAutoIcon from '@material-ui/icons/BrightnessAuto';
+import Tooltip from '@material-ui/core/Tooltip';
 const useStyles = makeStyles((theme) => ({
   root: {
     minWidth:300,
@@ -30,6 +35,10 @@ const useStyles = makeStyles((theme) => ({
   },
   button :{
     marginLeft:'auto',
+    backgroundColor:"#EEEEEE"
+  },
+  auto_button:{
+    backgroundColor:"#FFE4C4"
   }
 }
 ));
@@ -62,9 +71,16 @@ function TagForm(props) {
               margin="dense"
               onChange={e=>setText(e.target.value)} value={text}/>
      
-      <IconButton className={classes.button} size='small' variant="contained" color="secondary"  onClick={deleteTag}> <DeleteIcon /></IconButton>
-      <Button className={classes.button} size='small' id="submit" variant="contained" color="primary" endIcon={<SendIcon/>} onClick={handleOnlSubmitManualTag}>作成</Button>
-      <Button className={classes.button} size='small' id="submit" variant="contained" color="primary" endIcon={<SendIcon/>} onClick={handleOnlSubmitAutomatedTag}>自動作成</Button>
+     <Tooltip title="タグを作成">
+      <Button className={classes.button} size='small' id="submit" variant="contained" color="default" onClick={handleOnlSubmitManualTag}>
+      <LabelIcon />
+      </Button>
+      </Tooltip>
+      <Tooltip title="タグを自動作成">
+      <Button className={classes.auto_button}  size='small' id="submit" variant="contained" color="default" onClick={handleOnlSubmitAutomatedTag}>
+        <BrightnessAutoIcon/>
+      </Button>
+      </Tooltip>
       </CardActions>
       {/* for test */}
       {/* <button onClick={() => {console.log(player);player.player.player.seekTo(0.3)}}>Skip to 20s</button> */}
