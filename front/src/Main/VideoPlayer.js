@@ -27,7 +27,7 @@ const useStyles = (theme) => ({
     //maxHeight: '60vh',
     overflow: 'auto',
     margin: theme.spacing(1),
-   // padding: theme.spacing(0),
+    // padding: theme.spacing(0),
     //backgroundColor:"#ffffff",
   },
 }
@@ -54,15 +54,24 @@ class VideoPlayer extends React.Component {
     };
   }
 
-  componentWillReceiveProps(nextProps){
-    if(nextProps.url==null){
-    }else{
+  componentWillReceiveProps(nextProps) {
+    // const players = nextProps.players
+    // const play = players.player.willStop ? false
+    //   : players.player.willStart ? true
+    //     : this.state.playing;
+
+    if (nextProps.url == null) {
+    } else {
       // console.log("is play?",nextProps.players.player.playing)
-      this.setState({...this.state,url:nextProps.url});
+      this.setState({ ...this.state, url: nextProps.url });
     }
   }
 
-  
+  componentDidUpdate(){
+    // this.props.players.setPlayer({...this.props.players.player,willStart:false,willStop:false});
+  }
+
+
 
   onProgress = prog => {
     // console.log('onProgress', prog)
@@ -71,9 +80,13 @@ class VideoPlayer extends React.Component {
     if (!this.state.seeking) {
       this.setState(prog);
       // console.log('pre players:',this.props.players.player)
-      this.props.players.setPlayer({...this.props.players.player,time:prog.playedSeconds});
+      this.props.players.setPlayer({ ...this.props.players.player, time: prog.playedSeconds });
       // console.log('players:',this.props.players.player)
     }
+  }
+
+  setPlaying = (playing)=>{
+    this.props.players.setPlayer({...this.props.players.player,playing:playing})
   }
 
   handleSeekMouseDown = e => {
@@ -96,11 +109,11 @@ class VideoPlayer extends React.Component {
   }
   handlePlay = () => {
     console.log('onPlay')
-    this.setState({ playing: true })
+    this.setPlaying(true)
   }
   handlePause = () => {
     console.log('onPause')
-    this.setState({ playing: false })
+    this.setPlaying(false);
   }
   handleVolumeChange = e => {
     this.setState({ volume: parseFloat(e.target.value) })
@@ -112,7 +125,7 @@ class VideoPlayer extends React.Component {
   ref = player => {
     // console.log('set ref',player);
     this.player = player
-    this.props.players.setPlayer({...this.props.players.player,player:{player}})
+    this.props.players.setPlayer({ ...this.props.players.player, player: { player } })
   }
 
   renderCntrols = () => {
@@ -126,7 +139,7 @@ class VideoPlayer extends React.Component {
 
     const seekBar = (
       <input
-        style={{minWidth:'100%'}}
+        style={{ minWidth: '100%' }}
         type='range' min={0} max={0.999999} step='any'
         value={this.state.played}
         onMouseDown={this.handleSeekMouseDown}
@@ -148,8 +161,9 @@ class VideoPlayer extends React.Component {
 
 
   render() {
-    const { url,playing, controls, light, volume, muted, loop, played, loaded, duration, playbackRate, pip } = this.state;
-    const {classes}=this.props;
+    const { url, controls, light, volume, muted, loop, played, loaded, duration, playbackRate, pip } = this.state;
+    const playing = this.props.players.player.playing;
+    const { classes } = this.props;
     return (
       <div className={classes.video}>
         <ReactPlayer
@@ -161,7 +175,7 @@ class VideoPlayer extends React.Component {
           volume={volume}
           muted={muted}
 
-          width = '100%'
+          width='100%'
           //minWidth='800px'
           //height='60%'
           playing={playing}

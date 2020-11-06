@@ -21,11 +21,11 @@ const useStyles = makeStyles((theme) => ({
 function MemoList(props) {
   const classes = useStyles();
   const player = props.player;
-    if (props.memos.length === 0) {
+  if (props.memos.length === 0) {
     return "Loading";
   }
 
-  const memos = props.memos.memos.sort((a,b)=>{
+  const memos = props.memos.memos.sort((a, b) => {
     return a.time - b.time
   })
 
@@ -33,8 +33,6 @@ function MemoList(props) {
   //   <TextField value={props.title}></TextField>
   // )
 
-  {console.log("props.colorList")}
-  {console.log(props.colorList)}
   return (
     <>
       <Card className={classes.card}>
@@ -52,7 +50,7 @@ function MemoList(props) {
         }
       </Card>
     </>
-        )
-        }
+  )
+}
 
 export default MemoList;

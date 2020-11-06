@@ -34,8 +34,6 @@ function MemoComponent(props) {
   const player = props.player
 
   
-  console.log(classes.card)
-
   const endEditMode = () => {
     props.onChange({ ...memo, text: text });
     setEditMode(false);
@@ -64,8 +62,6 @@ function MemoComponent(props) {
       }}
       />
         ;
-  {console.log("props.color")}
-  {console.log(props.color)}
   return (
     //<div className="Post-memos" key={memo.id}>
     <Card className={classes.card} key={memo.id}>

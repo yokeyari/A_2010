@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useContext } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box'
 import Select from "@material-ui/core/Select";
@@ -50,20 +50,20 @@ function Main(props) {
   const [player, setPlayer] = useState({
     time: 0,
     player: null,
-    stop:false
+    playing: false
   });
   const [page, setPage] = useState({ page: { title: "", url: "" }, tags: [] });
   const { user_id, page_id } = useParams();
   const [isLoading, segtIsLoading] = useState(false);
   const [colorList, setColorList] = useState([]);
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
-  const user = {...userInfo,id: user_id };
+  const user = { ...userInfo, id: user_id };
   // console.log(useParams())
 
 
   //const page_id = page.page_id;
   useEffect(() => {
-    setUserInfo({...userInfo,...user});
+    setUserInfo({ ...userInfo, ...user });
   }, []);
 
   useEffect(() => {
@@ -87,7 +87,6 @@ function Main(props) {
       json.json().then(json => {
         segtIsLoading(false);
         setPage({ ...json });
-        console.log(page)
       }
       )
     })
@@ -110,6 +109,12 @@ function Main(props) {
 
   function handleChangeTitle(title) {
     // post server
+  }
+
+  function handleWriting() {
+    if (true) {
+      setPlayer({ ...player, playing: false })
+    }
   }
 
   function changeMemoColor(event) {
@@ -146,14 +151,9 @@ function Main(props) {
     );
   }
 
-  function handleWriting(){
-    if(true){
-      setPlayer({...player,stop:true})
-    }
-  }
-  function handleWriteEnd(){
-    if(true){
-      setPlayer({...player,stop:false})
+  function handleWriteEnd() {
+    if (true) {
+      setPlayer({ ...player, playing: true })
     }
   }
 
@@ -171,8 +171,8 @@ function Main(props) {
           <Grid item xs={10} md={8}>
             <TagList tags={page.tags} withUpdate={withUpdate} />
           </Grid>
-          </Grid>
-          <Grid container className={classes.grid} direction="row">
+        </Grid>
+        <Grid container className={classes.grid} direction="row">
           <Grid item xs={10} md={6}>
             <TagForm page_id={page.page.id} withUpdate={withUpdate} />
           </Grid>
@@ -181,39 +181,50 @@ function Main(props) {
         <Grid container className={classes.grid} direction="row">
           <Grid item xs={10} md={6}>
             <Grid container className={classes.grid} direction="column">
-              
-            <Grid item xs={10} md={12}>
-            <TagList tags={page.tags} withUpdate={withUpdate} />
-          </Grid>
-          </Grid>
-          <Grid container className={classes.grid} direction="row">
-          <Grid item xs={10} md={12}>
-            <TagForm page_id={page.page.id} withUpdate={withUpdate} />
-          </Grid>
+
+              <Grid item xs={10} md={12}>
+                <TagList tags={page.tags} withUpdate={withUpdate} />
+              </Grid>
+            </Grid>
+            <Grid container className={classes.grid} direction="row">
+              <Grid item xs={12} md={12}>
+                <TagForm page_id={page.page.id} withUpdate={withUpdate} />
+              </Grid>
 
               <Grid item xs={12}>
                 <VideoPlayer className="" url={page.page.url} players={{ player, setPlayer }} />
               </Grid>
               <Grid item xs={12}>
-                <WriteMemoForm onSubmit={handleSubmit} player={player} onWriting={handleWriting} onWriteEnd={handleWriteEnd}/>
+                <WriteMemoForm onSubmit={handleSubmit} player={player} onWriting={handleWriting} onWriteEnd={handleWriteEnd} />
               </Grid>
             </Grid>
           </Grid>
           <Grid item xs={10} md={6}>
+
             <Grid container direction="column">
-              <Grid item style={{ textAlign: "center" }} >
-                <Box style={{backgroundColor:"white", width:"30%", margin:"auto"}}>AIによるハイライト</Box>
-                <FormControl className={classes.formControl}>
-                  <Select onChange={changeMemoColor} 
-                    defaultValue="None"
-                    className={classes.selectEmpty}
-                    inputProps={{ "aria-label": "Without label" }}>
-                    <MenuItem value="None">None</MenuItem>
-                    <MenuItem value="positive">ポジティブ</MenuItem>
-                    <MenuItem value="negative">ネガティブ</MenuItem>
-                  </Select>
-                </FormControl>
+
+
+              <Grid container direction="row" justify="center" alignItems="center">
+
+                <Grid item >
+                  <Box style={{ marginRight: "20px" }}>AIによるハイライト</Box>
+                </Grid>
+
+                <Grid item>
+                  <FormControl className={classes.formControl}>
+                    <Select onChange={changeMemoColor}
+                      defaultValue="None"
+                      className={classes.selectEmpty}
+                      inputProps={{ "aria-label": "Without label" }}>
+                      <MenuItem value="None">None</MenuItem>
+                      <MenuItem value="positive">ポジティブ</MenuItem>
+                      <MenuItem value="negative">ネガティブ</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+
               </Grid>
+
               <Grid item>
                 <MemoList
                   memos={memos}

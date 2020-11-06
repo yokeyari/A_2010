@@ -85,8 +85,8 @@ function WriteMemoForm(props) {
             //inputProps={{ maxLength: 100 }}
             error={text.length >= 100}
             helperText={text.length >= 100 ? 'メモは100文字以内にしてください!' : ' '}
-            onFocus={() => { console.log("now foucus"); handleWriting(true) }}
-            onBlur={() => { console.log("sss"); handleWriting(false) }}
+            onFocus={() => { console.log("now foucus"); handleWriting() }}
+            onBlur={() => { console.log("sss"); handleWriteEnd() }}
           />
 
           {/*<Button className={classes.button} id="submit" variant="contained" color="primary" endIcon={<DescriptionIcon />} onClick={handleOnclick}>submit</Button>*/}
