@@ -53,7 +53,9 @@ function WriteMemoForm(props) {
                 placeholder="見所"
                 multiline
                 onChange={e=>setText(e.target.value)} value={text}
-                
+                 //inputProps={{ maxLength: 100 }}
+                 error={text.length >= 100}
+                 helperText={text.length >= 100 ? 'メモは100文字以内にしてください!' : ' '}
                 />
         <CardActions>
         <Button className={classes.button}  variant="contained" color="secondary"  startIcon={<DeleteIcon />} onClick={deleteMemo}> delete</Button>

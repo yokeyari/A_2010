@@ -28,7 +28,7 @@ import { MemoDataSource, PageDataSource, TagDataSource } from './ProductionApi';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    padding: '2vh 1vw',
+    //padding: '2vh 1vw',
     width: '100%',
     height: '70%',
     //backgroundColor:"#ffffff",
@@ -113,10 +113,12 @@ function Main(props) {
           <Title title={page.page.title} />
         </Grid>
         <Grid container className={classes.grid} direction="row">
-          <Grid item xs={12} md={6}>
+          <Grid item xs={10} md={8}>
             <TagList tags={page.tags} withUpdate={withUpdate} />
           </Grid>
-          <Grid item xs={12} md={6}>
+          </Grid>
+          <Grid container className={classes.grid} direction="row">
+          <Grid item xs={10} md={6}>
             <TagForm page_id={page.page.id} withUpdate={withUpdate} />
           </Grid>
         </Grid>

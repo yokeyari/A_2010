@@ -128,6 +128,7 @@ export default function Signup() {
                id="password"
                autoComplete="current-password"
                value={password} onChange={(e) => setPassword(e.target.value)}
+          helperText={password.length <= 5 ? 'パスワードは6文字以上にしてください!' : ' '}
              />
            </Grid>
            <Grid item xs={12}>
@@ -140,6 +141,8 @@ export default function Signup() {
           type="password"
           // autoComplete="current-password"
           value={passwordRetype} onChange={(e) => setPasswordRetype(e.target.value)}
+          //error={passwordRetype.length <= 5}
+          helperText={passwordRetype.length <= 5 ? 'パスワードは6文字以上にしてください!' : ' '}
         />
         </Grid>
          </Grid>
