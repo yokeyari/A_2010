@@ -3,7 +3,7 @@
 }
 .App-header {
   background-color: #ffffff;
-  min-height: 70px;
+  /* min-height: 70px; */
   width:100%;
   align-items: center; /* 縦方向中央揃え */
   font-size: calc(10px + 2vmin);
@@ -14,10 +14,11 @@
 
 }
 
-.header-logo {
+
+/* .header-logo {
   height: 10vh;
   float:left;
-}
+} */
 
 .App-login{
   display:inline-block;

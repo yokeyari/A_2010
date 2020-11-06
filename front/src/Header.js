@@ -61,6 +61,10 @@ const useStyles = makeStyles((theme) => ({
     //backgroundColor:"#7cfc00",
     backgroundColor: "#4F5D75" //青っぽい黒でいい感じ
   },
+  logo :{
+    height: "10vh",
+    float:"left",
+  },
   menuButton: {
     marginRight: theme.spacing(2),
   },
@@ -113,14 +117,14 @@ export default function Header(props) {
     <div className={classes.root}>
       <AppBar className={classes.root} color="primary" position="static" >
         <Toolbar>
+
+          <Button component={Link} to={`/${userInfo.id}`}>
+            <img src={logo} className={classes.logo} alt="memotube" />
+          </Button>
+
           <Hidden xsDown>
-            <Button component={Link} to={`/${userInfo.id}`}>
-              <img src={logo} className="header-logo" alt="memotube" />
-            </Button>
+            <SearchForm className={classes.search_make} onChange={handleChangeSeachForm} search_word={state.search_word} onClick={handleSeach} />
           </Hidden>
-
-          <SearchForm className={classes.search_make} onChange={handleChangeSeachForm} search_word={state.search_word} onClick={handleSeach} />
-
 
           <NewPage className={classes.search_make} />
 

@@ -31,7 +31,7 @@ import Signup from "./Signup";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    height: '100vh',
+    // height: '100vh',
   },
   image: {
     backgroundImage: `url(${img})`,
