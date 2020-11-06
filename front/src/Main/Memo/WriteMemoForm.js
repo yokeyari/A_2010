@@ -35,8 +35,11 @@ function WriteMemoForm(props) {
   const [text, setText] = useState("");
   const player = props.player;
   const classes = useStyles();
-  const handleWriting = (isWriting) => {
-    props.onWriting(isWriting);
+  const handleWriting = () => {
+
+  }
+  const handleWriteEnd = () =>{
+
   }
 
   const handleOnclick = () => {
@@ -60,8 +63,8 @@ function WriteMemoForm(props) {
           //inputProps={{ maxLength: 100 }}
           error={text.length >= 100}
           helperText={text.length >= 100 ? 'メモは100文字以内にしてください!' : ' '}
-          onFocus={() => { console.log("now foucus"); handleWriting(true) }}
-          onBlur={() => { console.log("sss"); handleWriting(false) }}
+          onFocus={() => { console.log("now foucus"); handleWriting() }}
+          onBlur={() => { console.log("sss"); handleWriteEnd() }}
         />
         <CardActions>
           <Button className={classes.button} variant="contained" color="secondary" startIcon={<DeleteIcon />} onClick={deleteMemo}> delete</Button>

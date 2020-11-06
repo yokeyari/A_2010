@@ -79,6 +79,7 @@ export default function Signup() {
             // TODOいい感じの表示をしたい
           }
         });
+        
     }
   }
 
