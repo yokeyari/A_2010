@@ -12,22 +12,22 @@ import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 const useStyles = makeStyles((theme) => ({
 	fab: {
-	  margin: theme.spacing(2),
+		margin: theme.spacing(2),
 	},
 	absolute: {
-	  position: 'absolute',
-	  bottom: theme.spacing(2),
-	  right: theme.spacing(3),
+		position: 'absolute',
+		bottom: theme.spacing(2),
+		right: theme.spacing(3),
 	},
 	paper: {
 		backgroundColor: theme.palette.background.paper,
 		border: '2px solid #000',
 		boxShadow: theme.shadows[5],
 		padding: theme.spacing(2, 4, 3),
-	  },
-  }));
+	},
+}));
 function NewPage() {
-	const classes=useStyles();
+	const classes = useStyles();
 	const [open, setOpen] = React.useState(false);
 	const handleOpen = () => {
 		setOpen(true);
@@ -45,9 +45,9 @@ function NewPage() {
 	return (
 		<div className="Create-NewPage-Modal">
 			<Tooltip title="新規メモ作成">
-			<Fab className={classes.fab} aria-label="新規メモ作成" variant="contained" color="primary" onClick={handleOpen}>
-				<AddIcon fontSize="large"/>
-			</Fab>
+				<Fab className={classes.fab} aria-label="新規メモ作成" variant="contained" color="primary" onClick={handleOpen}>
+					<AddIcon fontSize="large" />
+				</Fab>
 			</Tooltip>
 			<Modal
 				open={open}
@@ -55,11 +55,11 @@ function NewPage() {
 				aria-labelledby="simple-modal-title"
 				aria-describedby="simple-modal-description"
 			>
-			<Fade in={open}>
-				<div style={modalStyle}>
-					<NewPageForm onClose={handleClose}/>
-				</div>
-			</Fade>
+				<Fade in={open}>
+					<div style={modalStyle}>
+						<NewPageForm onClose={handleClose} />
+					</div>
+				</Fade>
 			</Modal>
 		</div>
 	);

@@ -88,6 +88,7 @@ export default function Header(props) {
 
 
   const handleChangeSeachForm = (text) => {
+    props.onChange(text);
     setState({ ...state, search_word: text })
   }
 
@@ -142,7 +143,7 @@ export default function Header(props) {
           <NewPage className={classes.search_make} />
           <div className={classes.right}>
           <Button color="inherit" component={Link} to='/login' className={classes.rightLink}>Login</Button>
-          <Button color="inherit" component={Link} to='/signup' className={classes.rightLink}>Singup</Button>
+          <Button color="inherit" component={Link} to='/signup' className={classes.rightLink}>Signup</Button>
           </div>
         </Toolbar>
       </AppBar>
