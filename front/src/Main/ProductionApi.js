@@ -149,16 +149,11 @@ export class UserDataSource {
   }
 
   //userの新規作成
-  async createUser({name, email, password, password_confirmation}) {
-    console.log(name,email,password,password_confirmation);
-    const res = await createData({ name: name, email: email, password:password, password_confirmation: password_confirmation },
+  async createUser({ name, email, password, password_confirmation }) {
+    console.log(name, email, password, password_confirmation);
+    const res = await createData({ name: name, email: email, password: password, password_confirmation: password_confirmation },
       this.API_URL);
     console.log(res);
-    if(res.statusText=="OK"){
-      return await res.json();
-    }else{
-      return await res.json();
-    }
     return res;
   }
 
@@ -195,6 +190,7 @@ export class PageDataSource {
     } catch (err) {
       //例外時の処理とreturn
       console.log("no pages");
+
     }
   }
 
@@ -226,25 +222,6 @@ export class PageDataSource {
   async deletePage(page) {
     const res = deleteData(this.API_URL + '/' + page.id);
     return res;
-  }
-
-  async searchPage(user_id, keywords) {
-    const res = await fetch(this.API_URL + '/\search', {
-      method: "POST",
-      credentials: 'include', //クレデンシャルを含める指定
-      mode: 'cors',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ user_id: user_id, keywords: keywords })
-    })
-    // .then(res => console.log(res))
-    .then(res => res.json());
-    console.log(res.pages);
-    return res;
-    //res.json 成功{"pages" (page とmemoの配列)の配列}
-    //res.status 成功200, 失敗400
   }
 }
 

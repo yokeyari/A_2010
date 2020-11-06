@@ -21,6 +21,9 @@ export default function Signup() {
     isLoaded: false,
     isLoading: false
   })
+  const { userInfo, setUserInfo } = useContext(UserInfoContext);
+
+
   // const { userInfo } = useContext(UserInfoContext);
 
   const handleSingup = () => {
@@ -28,16 +31,22 @@ export default function Signup() {
       // 本当はここにバリデーションをつける？ 
       setState({ ...state, isLoading: true });
       // userDataSource.createUser({ name, email, password, passwordRetype })
-      // デバッグ用で入力を直接指定しているはずなのに
-      // 0: "Password can't be blank"
-      // 1: "Password is too short (minimum is 6 characters)"
-      // 2: "Name can't be blank"
-      // 3: "Email can't be blank"
-      // 4: "Email is invalid"
-      // のエラーが返ってくる (出来なかった1)
-      userDataSource.createUser({ name: "hogeh", email: "hhb@cccc.com", password: "qwerty", password_confirmation: "qwerty" })
+      userDataSource.createUser({ name, email, password, passwordRetype })
         .then(res => {
-          console.log(res)
+          if (res.statusText == "OK") {
+            res.json()
+              .then(user => {
+                console.log(user);
+                // console.log("getPage", page.page);
+                setUserInfo(user.user);
+                setState({ to: `/${user.user.id}/`, isLoaded: true, isLoading: false });
+                // props.onClose();
+              })
+          } else {
+            // TODOここに作れなかったときの処理．エラーを表示させる
+            setState({ ...state, isLoading: false, isLoaded: false })
+            // TODOいい感じの表示をしたい
+          }
         });
     }
   }
