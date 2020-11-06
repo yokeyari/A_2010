@@ -32,8 +32,6 @@ function MemoList(props) {
   //   <TextField value={props.title}></TextField>
   // )
 
-  {console.log("props.colorList")}
-  {console.log(props.colorList)}
   return (
     <>
       <Card className={classes.card}>
