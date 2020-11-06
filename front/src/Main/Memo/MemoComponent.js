@@ -7,7 +7,7 @@ import TextField from '@material-ui/core/TextField';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import DoneIcon from '@material-ui/icons/Done';
-import DescriptionIcon from '@material-ui/icons/Description';
+
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import { CardActions } from "@material-ui/core";
 // class Memo{
@@ -76,7 +76,7 @@ function MemoComponent(props) {
         <Button className="delete" color="secondary" startIcon={<DeleteIcon />} onClick={() => { props.onDelete(memo) }}>delete</Button>
       </CardActions>
       <CardActions>
-        <DescriptionIcon />{body}
+        {body}
       </CardActions>
     </Card>
     //</div>

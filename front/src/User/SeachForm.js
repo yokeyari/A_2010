@@ -1,6 +1,6 @@
+import React, { useContext, useEffect, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import React from 'react';
 import { fade, makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Paper from '@material-ui/core/Paper';
@@ -10,18 +10,26 @@ import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import DirectionsIcon from '@material-ui/icons/Directions';
 import CreateIcon from '@material-ui/icons/Create';
+import {
+  BrowserRouter as Router,
+  Link,
+  useRouteMatch,
+  useParams,
+} from "react-router-dom";
 
 import NewPage from './../NewPage/NewPage'
+
+import UserInfoContext from '../context'
 
 const useStyles = makeStyles((theme) => ({
   root: {
     //margin: '',
     //transition: theme.transitions.create('width'),
-    padding: '5px 2px',
+    padding: '10px 2px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'right',
-    //width: 400,
+    //width: '50vw',
 
   },
 
@@ -69,6 +77,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SearchForm(props) {
   const classes = useStyles();
+  const { userInfo } = useContext(UserInfoContext);
   /*const seachField = <TextField
     type="text"
     value={props.search_word}
@@ -77,10 +86,6 @@ export default function SearchForm(props) {
 
   const seachButton = <Button onClick={props.onClick}>検索</Button>;
   return (
-    <div>
-
-      {/*<Box className={classes.box}>*/}
-      {/*<h2 className="User-name">Welcome {"user"}!</h2>*/}
       <div className={classes.search}>
         {/*<Paper className={classes.root}>*/}
 
@@ -96,12 +101,30 @@ export default function SearchForm(props) {
           variant="filled"
         />
 
-        <IconButton size="large" type="submit" className={classes.iconButton} onClick={props.onClick} aria-label="search">
-          <SearchIcon />
-        </IconButton>
+        <Link to={`/${userInfo.id}/`}>
+          <IconButton size="large" type="submit" className={classes.iconButton} onClick={props.onClick} aria-label="search">
+            <SearchIcon />
+          </IconButton>
+        </Link>
+
         {/*</Paper>*/}
       </div>
-      {/*<NewPage style={{ float: 'right' }} />*/}
+    
+  )
+}
+{/*<FormControl className={classes.formControl} >
+              <Select
+                placeholder="タグ検索"
+
+                value={selectedOption}
+                onChange={this.handleChange}
+                options={tags}
+              />
+  </FormControl>*/}
+
+{/*{seachField}*/ }
+{/*{seachButton}*/ }
+  {/*<NewPage style={{ float: 'right' }} />*/}
 
 
 
@@ -124,19 +147,3 @@ export default function SearchForm(props) {
           </IconButton>
         </Paper>
       </Box> */}
-
-    </div>
-  )
-}
-{/*<FormControl className={classes.formControl} >
-              <Select
-                placeholder="タグ検索"
-
-                value={selectedOption}
-                onChange={this.handleChange}
-                options={tags}
-              />
-  </FormControl>*/}
-
-{/*{seachField}*/ }
-{/*{seachButton}*/ }

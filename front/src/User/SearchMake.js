@@ -23,53 +23,53 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 //import Select from 'react-select';
 const useStyles = (theme) => ({
-    root: {
-      //margin: '',
-      padding: '2px 4px',
-      display: 'flex',
-      justify: 'flex-end',
-      alignItems: 'center',
-      justifyContent: 'right',
-      //width: 400,
-  
-    },
-    formControl: {
-      margin: theme.spacing(),
-      //marginLeft: 'auto',
-      float: 'right',
-      minWidth: 120,
-    },
-    card: {
-      //maxWidth: 2000,
-      //width: "23%",
-      width: '23vw',
-      height: "20%",
-      margin: theme.spacing(1),
-      //padding: theme.spacing(2),
-    },
-    media: {
-      //height: 140,
-      paddingTop: '56.25%'
-    },
-    input: {
-      marginLeft: theme.spacing(3),
-      flex: 1,
-      //maxWidth:400
-    },
-    iconButton: {
-      padding: 10,
-    },
-    divider: {
-      height: 28,
-      margin: 4,
-    },
-  });
+  root: {
+    //margin: '',
+    padding: '2px 4px',
+    display: 'flex',
+    justify: 'flex-end',
+    alignItems: 'center',
+    justifyContent: 'right',
+    //width: 400,
+
+  },
+  formControl: {
+    margin: theme.spacing(),
+    //marginLeft: 'auto',
+    float: 'right',
+    minWidth: 120,
+  },
+  card: {
+    //maxWidth: 2000,
+    //width: "23%",
+    width: '23vw',
+    height: "20%",
+    margin: theme.spacing(1),
+    //padding: theme.spacing(2),
+  },
+  media: {
+    //height: 140,
+    paddingTop: '56.25%'
+  },
+  input: {
+    marginLeft: theme.spacing(3),
+    flex: 1,
+    //maxWidth:400
+  },
+  iconButton: {
+    padding: 10,
+  },
+  divider: {
+    height: 28,
+    margin: 4,
+  },
+});
 class SearchMake extends React.Component {
-    render(){
-        const { classes } = this.props;
-        
-    return(
-        <div>
+  render() {
+    const { classes } = this.props;
+
+    return (
+      <div>
         {/*ここからトップページ(検索、新規作成など)*/}
         <Box className={classes.root} style={{ backgroundColor: "#87CEFA" }}>
           <h2 className="User-name">Welcome {"user"}!</h2>
@@ -102,6 +102,6 @@ class SearchMake extends React.Component {
       </div>
     )
 
-    }
+  }
 }
 export default withStyles(useStyles)(SearchMake)

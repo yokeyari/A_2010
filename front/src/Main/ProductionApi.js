@@ -5,6 +5,7 @@ const BERT_URL = "http://memotube.xyz:5555/sentiment";
 //const SERVER_URL = "https://movie-rails-cors-test.herokuapp.com/api/v1/"
 
 async function createData(body, url) {
+  console.log(JSON.stringify(body));
   const res = await fetch(url, {
     method: "POST",
     credentials: 'include', //クレデンシャルを含める指定
@@ -150,9 +151,9 @@ export class UserDataSource {
   }
 
   //userの新規作成
-  async createUser({ name, email, password, password_confirmation }) {
-    console.log(name, email, password, password_confirmation);
-    const res = await createData({ name: name, email: email, password: password, password_confirmation: password_confirmation },
+  async createUser(user) {
+    console.log(user);
+    const res = await createData(user,
       this.API_URL);
     console.log(res);
     return res;
@@ -225,7 +226,7 @@ export class PageDataSource {
     return res;
   }
 
-  async searchPage(user_id, keywords) {
+  async searchPage(user, keywords) {
     const res = await fetch(this.API_URL + '/\search', {
       method: "POST",
       credentials: 'include', //クレデンシャルを含める指定
@@ -234,7 +235,7 @@ export class PageDataSource {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ user_id: user_id, keywords: keywords })
+      body: JSON.stringify({ user_id: user.id, keywords: keywords })
     })
     // .then(res => console.log(res))
     .then(res => res.json());
