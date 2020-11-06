@@ -21,19 +21,32 @@ ActiveRecord::Schema.define(version: 2020_11_05_133843) do
     t.index ["page_id"], name: "index_memos_on_page_id"
   end
 
-# Could not dump table "pages" because of following StandardError
-#   Unknown type 'token' for column 'token'
+  create_table "pages", force: :cascade do |t|
+    t.integer "user_id"
+    t.string "url"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "title"
+    t.string "token"
+    t.index ["user_id"], name: "index_pages_on_user_id"
+  end
 
   create_table "tags", force: :cascade do |t|
     t.integer "page_id"
     t.string "text"
-    t.boolean "is_automated", default: false
+    t.boolean "is_automated"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["page_id"], name: "index_tags_on_page_id"
   end
 
-# Could not dump table "users" because of following StandardError
-#   Unknown type 'token' for column 'token'
+  create_table "users", force: :cascade do |t|
+    t.string "name"
+    t.string "email"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "password_digest"
+    t.string "token"
+  end
 
 end
