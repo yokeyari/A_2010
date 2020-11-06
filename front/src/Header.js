@@ -88,6 +88,7 @@ export default function Header(props) {
 
 
   const handleChangeSeachForm = (text) => {
+    props.onChange(text);
     setState({ ...state, search_word: text })
   }
 

@@ -1,6 +1,6 @@
+import React, { useContext, useEffect, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import React from 'react';
 import { fade, makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Paper from '@material-ui/core/Paper';
@@ -10,8 +10,16 @@ import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import DirectionsIcon from '@material-ui/icons/Directions';
 import CreateIcon from '@material-ui/icons/Create';
+import {
+  BrowserRouter as Router,
+  Link,
+  useRouteMatch,
+  useParams,
+} from "react-router-dom";
 
 import NewPage from './../NewPage/NewPage'
+
+import UserInfoContext from '../context'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -69,6 +77,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SearchForm(props) {
   const classes = useStyles();
+  const { userInfo } = useContext(UserInfoContext);
   /*const seachField = <TextField
     type="text"
     value={props.search_word}
@@ -96,9 +105,12 @@ export default function SearchForm(props) {
           variant="filled"
         />
 
-        <IconButton size="large" type="submit" className={classes.iconButton} onClick={props.onClick} aria-label="search">
-          <SearchIcon />
-        </IconButton>
+        <Link to={`/${userInfo.id}/`}>
+          <IconButton size="large" type="submit" className={classes.iconButton} onClick={props.onClick} aria-label="search">
+            <SearchIcon />
+          </IconButton>
+        </Link>
+
         {/*</Paper>*/}
       </div>
       {/*<NewPage style={{ float: 'right' }} />*/}

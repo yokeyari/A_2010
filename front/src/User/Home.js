@@ -22,7 +22,7 @@ import NewPage from '../NewPage/NewPage';
 
 const pageDataSource = new PageDataSource();
 
-function Home() {
+function Home(props) {
   const [state, setState] = useState({ search_word: "", pages: [] });
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
 
@@ -31,23 +31,34 @@ function Home() {
   // 今は認証しない
   // todo 認証
 
-  console.log("userinco",userInfo);
+  // console.log("userinco",userInfo);
+  console.log("search",props.search_word)
 
   const loadPages = () => {
+    if(props.search_word==""){
+      pageDataSource.getPageIndex(user).then(res=>{
+        if(res===undefined){
+          
+        }else{
+          setState({...state , pages:res.pages})
+        }
+      })
+    }else{
+      pageDataSource.searchPage(user, props.search_word.split(' '))
+      .then(res=>{
+        // console.log(props.search_word)
+        console.log(res.pages);
+        setState({...state , pages:res.pages});
+      })
+    }
     // PageAPI.fetchMemos().then(json => { setState({ ...state, pages: json }) })
-    pageDataSource.getPageIndex(user).then(res=>{
-      if(res===undefined){
-        
-      }else{
-        setState({...state , pages:res.pages})
-      }
-    })
+
   }
 
   useEffect(() => {
     setUserInfo({...userInfo,...user});
     loadPages();
-  }, []);
+  }, [props.search_word]);
 
   const withUpdate = (doSomething) => {
     doSomething.then(() => { loadPages() })
@@ -57,19 +68,15 @@ function Home() {
     setState({ ...state, search_word: text })
   }
 
-  const handleSeach = (keywords) => {
-    pageDataSource.searchPage(user_id, keywords.split(' '))
-    .then(res=>{
-      console.log(res.pages);
-      setState({...state , pages:res.pages});
-    })
+  const handleSeach = () => {
+    loadPages();
   }
 
   return (
     <div className="User-Top">
       {/*className="User-To"*/}
-      <h2 className="User-name">Welcome {"user"}!</h2>
-      <SearchForm onChange={handleChangeSeachForm} search_word={state.search_word}　onClick={() => {handleSeach(state.search_word)}} />
+      <h2 className="User-name">Welcome {userInfo.name}!</h2>
+      {/* <SearchForm onChange={handleChangeSeachForm} search_word={state.search_word}　onClick={() => {handleSeach(state.search_word)}} /> */}
 
       <PageList pages={state.pages} withUpdate={withUpdate} />
     </div>
