@@ -86,6 +86,7 @@ export default function PageList(props){
       key = {page.id}
       page= {page}
       img = {img}
+      withUpdate={props.withUpdate}
     />
     )
   });

@@ -59,6 +59,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 export default function PageLink(props) {
+  const PageApi = new PageDataSource();
   const [state, setState] = React.useState({
     url: "",
     title: "",
@@ -76,6 +77,9 @@ export default function PageLink(props) {
 
   const handleClick = () => {
     setState({ to: `/${userInfo.id}/${page.id}`, isLoaded: true, isLoading: false })
+  }
+  const handleDelete = (page) => {
+    props.withUpdate(PageApi.deletePage(page));
   }
 
   // const handleClick = () => {
@@ -122,7 +126,7 @@ export default function PageLink(props) {
             </Typography>
           </CardContent>
         </CardActionArea>
-        <Button className="delete" color="secondary" startIcon={<DeleteIcon />} onClick={() => { }}></Button>
+        <Button className="delete" color="secondary" startIcon={<DeleteIcon />} onClick={() => { handleDelete(page) }}></Button>
       </Card>
     </>
   )

@@ -57,18 +57,21 @@ function Home() {
     setState({ ...state, search_word: text })
   }
 
-  const handleSeach = () => {
-    // サーチしてwithUpdateする．
-
+  const handleSeach = (keywords) => {
+    pageDataSource.searchPage(user_id, keywords.split(' '))
+    .then(res=>{
+      console.log(res.pages);
+      setState({...state , pages:res.pages});
+    })
   }
 
   return (
     <div className="User-Top">
       {/*className="User-To"*/}
       <h2 className="User-name">Welcome {"user"}!</h2>
-      {/*<SearchForm onChange={handleChangeSeachForm} search_word={state.search_word}　onClick={handleSeach} />*/}
+      <SearchForm onChange={handleChangeSeachForm} search_word={state.search_word}　onClick={() => {handleSeach(state.search_word)}} />
 
-      <PageList pages={state.pages}/>
+      <PageList pages={state.pages} withUpdate={withUpdate} />
     </div>
 
   );

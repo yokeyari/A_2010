@@ -1,4 +1,5 @@
 class Api::V1::TagsController < ApplicationController
+  #before_action :logged_in?
   before_action :find_page, only: [:index, :automate]
   before_action :find_tag, only: [:destroy, :update]
 
@@ -10,7 +11,7 @@ class Api::V1::TagsController < ApplicationController
   # タグを作成する
   def create
     begin
-      tag = Tag.create!(params.permit(:page_id, :text).merge(is_automated: false))
+      tag = Tag.create!(params.permit(:page_id, :text))
       render json: {tag: tag}, status: 200
     rescue => e # 作成できない場合
       render json: {error: e.record.errors.full_messages}, status: :bad_request
@@ -37,7 +38,7 @@ class Api::V1::TagsController < ApplicationController
   # 自動タグを取得し、データベース中の自動タグを更新する
   def automate
     @page.tags.where(is_automated: true).destroy_all # 自動タグを全消去する
-    keywords = tagging(@page)
+    keywords = tagging(@page)[0, 3]
     
     # 保存に失敗した時を想定していない
     tags = keywords.map {|keyword| Tag.create(page_id: params[:page_id], text: keyword, is_automated: true)}
