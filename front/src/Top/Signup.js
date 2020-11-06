@@ -61,7 +61,7 @@ export default function Signup() {
       // 本当はここにバリデーションをつける？ 
       setState({ ...state, isLoading: true });
       // userDataSource.createUser({ name, email, password, passwordRetype })
-      userDataSource.createUser({ name, email, password, password_confirmation:passwordRetype })
+      userDataSource.createUser({ name, email, password, password_confirmation: passwordRetype })
         .then(res => {
           if (res.statusText == "OK") {
             res.json()
@@ -79,6 +79,7 @@ export default function Signup() {
             // TODOいい感じの表示をしたい
           }
         });
+        
     }
   }
 
@@ -92,7 +93,7 @@ export default function Signup() {
           </Avatar>
           <Typography component="h1" variant="h5">
             Sign up
-       </Typography>
+      </Typography>
           <form className={classes.form} noValidate>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
@@ -106,6 +107,7 @@ export default function Signup() {
                   label="Name"
                   autoFocus
                   onChange={(e) => setName(e.target.value)}
+                  value={name}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -118,6 +120,7 @@ export default function Signup() {
                   name="email"
                   autoComplete="email"
                   onChange={(e) => setEmail(e.target.value)}
+                  value={email}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -131,6 +134,7 @@ export default function Signup() {
                   id="password"
                   autoComplete="current-password"
                   value={password} onChange={(e) => setPassword(e.target.value)}
+                  helperText={password.length <= 5 ? 'パスワードは6文字以上にしてください!' : ' '}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -143,6 +147,8 @@ export default function Signup() {
                   type="password"
                   // autoComplete="current-password"
                   value={passwordRetype} onChange={(e) => setPasswordRetype(e.target.value)}
+                  //error={passwordRetype.length <= 5}
+                  helperText={passwordRetype.length <= 5 ? 'パスワードは6文字以上にしてください!' : ' '}
                 />
               </Grid>
             </Grid>

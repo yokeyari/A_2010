@@ -47,7 +47,7 @@ function Home(props) {
       pageDataSource.searchPage(user, props.search_word.split(' '))
       .then(res=>{
         // console.log(props.search_word)
-        console.log(res.pages);
+        console.log("load page");
         setState({...state , pages:res.pages});
       })
     }
