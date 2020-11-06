@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
     
   },
   card: {
-    maxWidth: 600,
+    //maxWidth: 600,
     maxHeight: 500,
     overflow: 'auto',
     margin: theme.spacing(2),

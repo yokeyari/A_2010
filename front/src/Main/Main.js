@@ -112,6 +112,7 @@ function Main(props) {
         <Grid item>
           <Title title={page.page.title} />
         </Grid>
+        {/*
         <Grid container className={classes.grid} direction="row">
           <Grid item xs={10} md={8}>
             <TagList tags={page.tags} withUpdate={withUpdate} />
@@ -121,15 +122,25 @@ function Main(props) {
           <Grid item xs={10} md={6}>
             <TagForm page_id={page.page.id} withUpdate={withUpdate} />
           </Grid>
-        </Grid>
+        </Grid>*/}
 
         <Grid container className={classes.grid} direction="row">
           <Grid item xs={10} md={6}>
             <Grid container className={classes.grid} direction="column">
-              <Grid item>
+              
+            <Grid item xs={10} md={12}>
+            <TagList tags={page.tags} withUpdate={withUpdate} />
+          </Grid>
+          </Grid>
+          <Grid container className={classes.grid} direction="row">
+          <Grid item xs={10} md={12}>
+            <TagForm page_id={page.page.id} withUpdate={withUpdate} />
+          </Grid>
+
+              <Grid item xs={12}>
                 <VideoPlayer className="" url={page.page.url} players={{ player, setPlayer }} />
               </Grid>
-              <Grid item>
+              <Grid item xs={12}>
                 <WriteMemoForm onSubmit={handleSubmit} player={player} />
               </Grid>
             </Grid>

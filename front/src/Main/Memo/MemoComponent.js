@@ -52,6 +52,7 @@ function MemoComponent(props) {
       <TextField
       multiline
       //rows={4}
+      fullWidth
       value={memo.text}
       variant="outlined"
       InputProps={{
