@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   namespace 'api' do
     namespace 'v1' do
       post 'users/login', to: 'users#login'
-      get 'users/logged_in', to: 'users#logged_in?'
+      #get 'users/logged_in', to: 'users#logged_in?'
       post 'users/logout', to: 'users#logout'
       
       get 'users', to: 'users#index'
@@ -16,6 +16,8 @@ Rails.application.routes.draw do
       post 'pages', to: 'pages#create'
       patch 'pages/:page_id', to: 'pages#update'
       delete 'pages/:page_id', to: 'pages#destroy'
+      post 'pages/search', to: 'pages#search'
+      get 'pages/token', to: 'pages#reset_token'
 
       get 'tags', to: 'tags#index'
       post 'tags', to: 'tags#create'

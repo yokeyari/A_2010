@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_04_083424) do
+ActiveRecord::Schema.define(version: 2020_11_05_133843) do
 
   create_table "memos", force: :cascade do |t|
     t.integer "page_id"
@@ -27,13 +27,14 @@ ActiveRecord::Schema.define(version: 2020_11_04_083424) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "title"
+    t.string "token"
     t.index ["user_id"], name: "index_pages_on_user_id"
   end
 
   create_table "tags", force: :cascade do |t|
     t.integer "page_id"
     t.string "text"
-    t.boolean "is_automated", default: false
+    t.boolean "is_automated"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["page_id"], name: "index_tags_on_page_id"
@@ -44,8 +45,8 @@ ActiveRecord::Schema.define(version: 2020_11_04_083424) do
     t.string "email"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.string "token"
     t.string "password_digest"
+    t.string "token"
   end
 
 end
