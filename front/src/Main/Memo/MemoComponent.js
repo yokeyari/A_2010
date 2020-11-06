@@ -55,6 +55,7 @@ function MemoComponent(props) {
       <TextField
       multiline
       //rows={4}
+      style={{backgroundColor:props.color}}
       value={memo.text}
       variant="outlined"
       InputProps={{
@@ -66,8 +67,8 @@ function MemoComponent(props) {
   {console.log(props.color)}
   return (
     //<div className="Post-memos" key={memo.id}>
-    <Card className={classes.card} key={memo.id} style={{backgroundColor:props.color}}>
-      <CardActions>
+    <Card className={classes.card} key={memo.id}>
+      <CardActions >
         <Button className="timeButton" startIcon={<AccessTimeIcon />} onClick={() => { handleJump() }} >{formatSec2Str(memo.time)}</Button>
         {isEditMode ?
           <Button className="edit" startIcon={<DoneIcon />} onClick={() => { endEditMode() }}>done</Button> :
