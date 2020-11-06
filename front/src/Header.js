@@ -57,13 +57,20 @@ const useStyles = makeStyles((theme) => ({
     //color:"#696969"
     //backgroundColor:"#00ff7f"
     //backgroundColor:"#7cfc00",
-    backgroundColor:"4F5D75" //青っぽい黒でいい感じ
+    backgroundColor:"#4F5D75" //青っぽい黒でいい感じ
   },
   menuButton: {
     marginRight: theme.spacing(2),
   },
-  login: {
-    marginLeft: 'auto',
+  rightLink: {
+    fontSize: 16,
+    color: theme.palette.common.white,
+    marginLeft: theme.spacing(3),
+  },
+  right:{
+    flex: 1,
+    display: 'flex',
+    justifyContent: 'flex-end',
   },
   search_make: {
     marginLeft: 'auto',
@@ -100,7 +107,7 @@ export default function Header(props) {
 
   return (
     <div className={classes.root}>
-      <AppBar className={classes.root} color="default" position="static" >
+      <AppBar className={classes.root} color="primary" position="static" >
         <Toolbar>
           <IconButton variant="contained" onClick={handleClick} edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
             <MenuIcon />
@@ -133,8 +140,10 @@ export default function Header(props) {
         </Button>
           <SearchForm className={classes.search_make} onChange={handleChangeSeachForm} search_word={state.search_word} onClick={handleSeach} />
           <NewPage className={classes.search_make} />
-          <Button color="inherit" component={Link} to='/login' className={classes.login}>Login</Button>
-          <Button color="inherit" component={Link} to='/signup' className={classes.login}>Singup</Button>
+          <div className={classes.right}>
+          <Button color="inherit" component={Link} to='/login' className={classes.rightLink}>Login</Button>
+          <Button color="inherit" component={Link} to='/signup' className={classes.rightLink}>Singup</Button>
+          </div>
         </Toolbar>
       </AppBar>
     </div>

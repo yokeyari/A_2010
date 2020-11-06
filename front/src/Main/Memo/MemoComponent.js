@@ -49,7 +49,16 @@ function MemoComponent(props) {
         multiline
         type="text" id="memo-input" className="" onChange={(e) => setText(e.target.value)} value={text} />
       :
-      memo.text;
+      <TextField
+      multiline
+      //rows={4}
+      value={memo.text}
+      variant="outlined"
+      InputProps={{
+        readOnly: true,
+      }}
+      />
+        ;
   return (
     //<div className="Post-memos" key={memo.id}>
     <Card className={classes.card} key={memo.id}>
