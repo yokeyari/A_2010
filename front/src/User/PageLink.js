@@ -40,8 +40,11 @@ const useStyles = makeStyles((theme) => ({
   card: {
     //maxWidth: 2000,
     //width: "23%",
-    width: '20vw',
-    maxHeight: "20%",
+    // width: '20vw',
+    // minWidth:"25%",
+    // maxWidth:"240px",
+    // maxHeight: "100%",
+    minHeight:"95%",
     margin: theme.spacing(1),
     position: "relative",
     //padding: theme.spacing(2),
