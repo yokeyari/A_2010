@@ -201,7 +201,7 @@ function Main(props) {
           </Grid>
           <Grid item xs={10} md={6}>
 
-            <Grid container direction="column">
+            <Grid container direction="column" >
 
 
               <Grid container direction="row" justify="center" alignItems="center">

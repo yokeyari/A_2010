@@ -16,7 +16,7 @@ import BrightnessAutoIcon from '@material-ui/icons/BrightnessAuto';
 import Tooltip from '@material-ui/core/Tooltip';
 const useStyles = makeStyles((theme) => ({
   root: {
-    minWidth: 300,
+    // minWidth: "100%",
     //flexGrow: 1,
     maxHeight: 500,
     overflow: 'auto',
@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
 
   },
   card: {
-    //width: 300,
+    // width: "90%",
     //height: 100,
     overflow: 'auto',
     margin: theme.spacing(1),
@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
     //backgroundColor:"#D2B48C",
   },
   button: {
-    marginLeft: 'auto',
+    // marginLeft: 'auto',
     backgroundColor: "#EEEEEE"
   },
   auto_button: {
@@ -65,6 +65,7 @@ function TagForm(props) {
     <Card className={classes.card}>
       <div id="tag-form" className="Main-tag">
         <CardActions>
+
           <TextField type="text" id="tag-input" className={classes.root}
             label="追加したいタグを入力してください" size='small'
             variant="outlined"
@@ -76,11 +77,14 @@ function TagForm(props) {
               <LabelIcon />
             </Button>
           </Tooltip>
+
+
           <Tooltip title="タグを自動作成">
             <Button className={classes.auto_button} size='small' id="submit" variant="contained" color="default" onClick={handleOnlSubmitAutomatedTag}>
               <BrightnessAutoIcon />
             </Button>
           </Tooltip>
+
         </CardActions>
         {/* for test */}
         {/* <button onClick={() => {console.log(player);player.player.player.seekTo(0.3)}}>Skip to 20s</button> */}

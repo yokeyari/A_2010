@@ -6,8 +6,8 @@ import Card from '@material-ui/core/Card'
 const useStyles = makeStyles((theme) => ({
   card: {
     //width: '30vw',
-    maxHeight: '90%',
-    minHeight: '90%',
+    maxHeight: '80vh',
+    minHeight: '80%',
     overflow: 'auto',
     //margin: theme.spacing(2),
     margin: '10px 10px 10px 5vw',
