@@ -24,7 +24,8 @@ import TagList from './Tag/TagList';
 import TagForm from './Tag/TagForm';
 
 //import * as MemoAPI from './LocalApi';
-import { MemoDataSource, PageDataSource, TagDataSource } from './ProductionApi';
+import { MemoDataSource, PageDataSource, TagDataSource, BertDataSource } from './ProductionApi';
+import { Button } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -37,8 +38,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const MemoAPI = new MemoDataSource();
-const pageDataSource = new PageDataSource();
-
+const PageApi = new PageDataSource();
+const BertApi = new BertDataSource();
 
 function Main(props) {
   const classes = useStyles();
@@ -60,7 +61,7 @@ function Main(props) {
     MemoAPI.getMemoIndex(page_id).then(json => { 
       setMemos(json) 
       //これがないとメモ以外が即座に更新されない
-      pageDataSource.getPage(page_id).then(json => {
+      PageApi.getPage(page_id).then(json => {
         json.json().then(json => {
           segtIsLoading(false);
           setPage({ ...json });
@@ -73,7 +74,7 @@ function Main(props) {
   useEffect(() => {
     // ここでタイトルなどの読み込み
     segtIsLoading(true);
-    pageDataSource.getPage(page_id).then(json => {
+    PageApi.getPage(page_id).then(json => {
       json.json().then(json => {
         segtIsLoading(false);
         setPage({ ...json });
@@ -100,6 +101,19 @@ function Main(props) {
 
   function handleChangeTitle(title) {
     // post server
+  }
+
+  function handleChangeMemoColor() {
+    const tmp_memos = memos.memos;
+    let text_list = [];
+    for (let i=0; i<tmp_memos.length; i++) {
+      console.log(tmp_memos[i].text);
+      text_list.push(tmp_memos[i].text);
+    }
+    const np_scores = BertApi.getSentment(text_list).then(res=>{
+      console.log(res)
+    }
+    );
   }
 
 
@@ -129,6 +143,9 @@ function Main(props) {
               </Grid>
               <Grid item>
                 <WriteMemoForm onSubmit={handleSubmit} player={player} />
+              </Grid>
+              <Grid>
+                <Button onClick={()=>{handleChangeMemoColor()}}>bertで着色</Button>
               </Grid>
             </Grid>
           </Grid>

@@ -1,6 +1,7 @@
 // import axios from 'axios';
 
 const SERVER_URL = "https://movie-rails.herokuapp.com/api/v1/";
+const BERT_URL = "http://memotube.xyz:5555/sentiment";
 //const SERVER_URL = "https://movie-rails-cors-test.herokuapp.com/api/v1/"
 
 async function createData(body, url) {
@@ -290,5 +291,23 @@ export class TagDataSource {
   async deleteTag(tag) {
     const res = deleteData(this.API_URL + '/' + tag.id);
     return res;
+  }
+}
+
+export class BertDataSource {
+  async getSentment (text_list) {
+    let np_scores = [];
+    for (let text of text_list) {
+      console.log("before",text)
+      const res = await fetch(BERT_URL + `?text=${text}`, {
+        credentials: 'include', //クレデンシャルを含める指定
+        mode: 'cors',
+      });
+      console.log("after,",res)
+      const json = await res.json();
+      console.log(json)
+      np_scores.push(json.body)
+    }
+    return np_scores;
   }
 }
