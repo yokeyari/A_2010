@@ -20,11 +20,11 @@ const useStyles = makeStyles((theme) => ({
 function MemoList(props) {
   const classes = useStyles();
   const player = props.player;
-    if (props.memos.length === 0) {
+  if (props.memos.length === 0) {
     return "Loading";
   }
 
-  const memos = props.memos.memos.sort((a,b)=>{
+  const memos = props.memos.memos.sort((a, b) => {
     return a.time - b.time
   })
 
@@ -49,7 +49,7 @@ function MemoList(props) {
         }
       </Card>
     </>
-        )
-        }
+  )
+}
 
 export default MemoList;
