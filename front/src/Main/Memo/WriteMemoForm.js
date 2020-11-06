@@ -36,10 +36,10 @@ function WriteMemoForm(props) {
   const player = props.player;
   const classes = useStyles();
   const handleWriting = () => {
-
+    props.onWriting();
   }
   const handleWriteEnd = () =>{
-
+    props.onWriteEnd();
   }
 
   const handleOnclick = () => {
