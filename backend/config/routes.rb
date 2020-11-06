@@ -16,7 +16,7 @@ Rails.application.routes.draw do
       post 'pages', to: 'pages#create'
       patch 'pages/:page_id', to: 'pages#update'
       delete 'pages/:page_id', to: 'pages#destroy'
-      post 'pages/search', to: 'page#search'
+      post 'pages/search', to: 'pages#search'
       get 'pages/token', to: 'pages#reset_token'
 
       get 'tags', to: 'tags#index'
