@@ -17,11 +17,11 @@ const useStyles = makeStyles((theme) => ({
   root: {
     //margin: '',
     //transition: theme.transitions.create('width'),
-    padding: '5px 2px',
+    padding: '10px 2px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'right',
-    //width: 400,
+    //width: '50vw',
 
   },
 
@@ -77,10 +77,6 @@ export default function SearchForm(props) {
 
   const seachButton = <Button onClick={props.onClick}>検索</Button>;
   return (
-    <div>
-
-      {/*<Box className={classes.box}>*/}
-      {/*<h2 className="User-name">Welcome {"user"}!</h2>*/}
       <div className={classes.search}>
         {/*<Paper className={classes.root}>*/}
 
@@ -101,7 +97,22 @@ export default function SearchForm(props) {
         </IconButton>
         {/*</Paper>*/}
       </div>
-      {/*<NewPage style={{ float: 'right' }} />*/}
+    
+  )
+}
+{/*<FormControl className={classes.formControl} >
+              <Select
+                placeholder="タグ検索"
+
+                value={selectedOption}
+                onChange={this.handleChange}
+                options={tags}
+              />
+  </FormControl>*/}
+
+{/*{seachField}*/ }
+{/*{seachButton}*/ }
+  {/*<NewPage style={{ float: 'right' }} />*/}
 
 
 
@@ -124,19 +135,3 @@ export default function SearchForm(props) {
           </IconButton>
         </Paper>
       </Box> */}
-
-    </div>
-  )
-}
-{/*<FormControl className={classes.formControl} >
-              <Select
-                placeholder="タグ検索"
-
-                value={selectedOption}
-                onChange={this.handleChange}
-                options={tags}
-              />
-  </FormControl>*/}
-
-{/*{seachField}*/ }
-{/*{seachButton}*/ }
