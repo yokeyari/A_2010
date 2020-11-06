@@ -33,14 +33,16 @@ http://memotube.xyz:3000/
 <span style="color: red">ここいる？</span>
 
 ### 今後の展望
-* 
+* 現在はネット上の動画しか再生できないため、ローカルに動画ファイルも再生できるようにする
 <span style="color: red">TODO</span>
 
 ### 注力したこと（こだわり等）
 * ログイン機能．
 * メモページの共有機能．
 
-<span style="color: red">TODO</span>
+<span style="color: red">TODO
+
+</span>
 
 ## 開発技術
 ### 活用した技術
