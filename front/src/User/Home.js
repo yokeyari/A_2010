@@ -72,7 +72,6 @@ function Home() {
       {/*className="User-To"*/}
       <h2 className="User-name">Welcome {"user"}!</h2>
       <SearchForm onChange={handleChangeSeachForm} search_word={state.search_word}　onClick={() => {handleSeach(state.search_word)}} />
-      {/* <SearchForm onChange={handleChangeSeachForm} search_word={state.search_word}　onClick={() => {handleSeach(user_id, test_keywords)}} /> */}
 
       <PageList pages={state.pages} withUpdate={withUpdate} />
     </div>
