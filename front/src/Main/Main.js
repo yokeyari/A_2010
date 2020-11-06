@@ -46,7 +46,8 @@ function Main(props) {
   const [reloader, setReloader] = useState(0);
   const [player, setPlayer] = useState({
     time: 0,
-    player: null
+    player: null,
+    stop:false
   });
   const [page, setPage] = useState({ page: { title: "", url: "" }, tags: [] });
   const { user_id, page_id } = useParams();
@@ -102,6 +103,12 @@ function Main(props) {
     // post server
   }
 
+  function handleWriting(isWriting){
+    if(true){
+      setPlayer({...player,stop:isWriting})
+    }
+  }
+
 
   return (
     <div className="Main">
@@ -128,7 +135,7 @@ function Main(props) {
                 <VideoPlayer className="" url={page.page.url} players={{ player, setPlayer }} />
               </Grid>
               <Grid item>
-                <WriteMemoForm onSubmit={handleSubmit} player={player} />
+                <WriteMemoForm onSubmit={handleSubmit} player={player} onWriting={handleWriting}/>
               </Grid>
             </Grid>
           </Grid>

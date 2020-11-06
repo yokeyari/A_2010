@@ -57,9 +57,12 @@ class VideoPlayer extends React.Component {
   componentWillReceiveProps(nextProps){
     if(nextProps.url==null){
     }else{
+      // console.log("is play?",nextProps.players.player.playing)
       this.setState({...this.state,url:nextProps.url});
     }
   }
+
+  
 
   onProgress = prog => {
     // console.log('onProgress', prog)

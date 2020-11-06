@@ -35,6 +35,10 @@ function WriteMemoForm(props) {
   const [text, setText] = useState("");
   const player = props.player;
   const classes = useStyles();
+  const handleWriting = (isWriting)=>{
+    props.onWriting(isWriting);
+  }
+
   const handleOnclick = () => {
     props.onSubmit({text:text,time:player.time});
     setText("");
@@ -53,7 +57,8 @@ function WriteMemoForm(props) {
                 placeholder="見所"
                 multiline
                 onChange={e=>setText(e.target.value)} value={text}
-                
+                onFocus={()=>{console.log("now foucus");handleWriting(true)}}
+                onBlur={()=>{console.log("sss");handleWriting(false)}}
                 />
         <CardActions>
         <Button className={classes.button}  variant="contained" color="secondary"  startIcon={<DeleteIcon />} onClick={deleteMemo}> delete</Button>
