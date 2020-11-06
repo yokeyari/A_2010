@@ -7,7 +7,7 @@ const useStyles = makeStyles((theme) => ({
   card: {
     //width: '30vw',
     maxHeight: '80vh',
-    minHeight: '80%',
+    minHeight: '75vh',
     overflow: 'auto',
     //margin: theme.spacing(2),
     margin: '10px 10px 10px 5vw',
