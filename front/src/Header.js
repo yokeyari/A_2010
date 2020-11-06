@@ -8,7 +8,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import Grid from  '@material-ui/core/Grid';
+import Grid from '@material-ui/core/Grid';
 import Hidden from '@material-ui/core/Hidden';
 import MovieIcon from '@material-ui/icons/Movie';
 import PersonIcon from '@material-ui/icons/Person';
@@ -59,7 +59,7 @@ const useStyles = makeStyles((theme) => ({
     //color:"#696969"
     //backgroundColor:"#00ff7f"
     //backgroundColor:"#7cfc00",
-    backgroundColor:"#4F5D75" //青っぽい黒でいい感じ
+    backgroundColor: "#4F5D75" //青っぽい黒でいい感じ
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -69,7 +69,7 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.common.white,
     marginLeft: theme.spacing(3),
   },
-  right:{
+  right: {
     flex: 1,
     display: 'flex',
     justifyContent: 'flex-end',
@@ -77,7 +77,7 @@ const useStyles = makeStyles((theme) => ({
   search_make: {
     //marginLeft: 'auto',
     //marginRight: 'auto'
-    width:'60vw'
+    width: '60vw'
   },
   title: {
     flexGrow: 1,
@@ -91,6 +91,7 @@ export default function Header(props) {
 
 
   const handleChangeSeachForm = (text) => {
+    props.onChange(text);
     setState({ ...state, search_word: text })
   }
 
@@ -113,24 +114,23 @@ export default function Header(props) {
       <AppBar className={classes.root} color="primary" position="static" >
         <Toolbar>
           <Hidden xsDown>
-          <Button component={Link} to={`/${userInfo.id}`}>
-            <img src={logo} className="header-logo" alt="memotube" />
-        </Button>
-        </Hidden>
-      
+            <Button component={Link} to={`/${userInfo.id}`}>
+              <img src={logo} className="header-logo" alt="memotube" />
+            </Button>
+          </Hidden>
+
           <SearchForm className={classes.search_make} onChange={handleChangeSeachForm} search_word={state.search_word} onClick={handleSeach} />
-     
-       
+
+
           <NewPage className={classes.search_make} />
-      
-          
+
+
           <div className={classes.right}>
-        
-          <Button color="inherit" component={Link} to='/login' className={classes.rightLink}>Login</Button>
-          {/*<Button color="inherit" component={Link} to='/signup' className={classes.rightLink}>Singup</Button>*/}
-        
+
+            <Button color="inherit" component={Link} to='/login' className={classes.rightLink}>Login</Button>
+            {/* <Button color="inherit" component={Link} to='/signup' className={classes.rightLink}>Signup</Button> */}
           </div>
-          
+
         </Toolbar>
       </AppBar>
 
