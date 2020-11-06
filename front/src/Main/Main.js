@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect,useContext } from 'react'
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box'
 import {
@@ -25,6 +25,7 @@ import TagForm from './Tag/TagForm';
 
 //import * as MemoAPI from './LocalApi';
 import { MemoDataSource, PageDataSource, TagDataSource } from './ProductionApi';
+import UserInfoContext from '../context'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -46,15 +47,21 @@ function Main(props) {
   const [reloader, setReloader] = useState(0);
   const [player, setPlayer] = useState({
     time: 0,
-    player: null
+    player: null,
+    stop:false
   });
   const [page, setPage] = useState({ page: { title: "", url: "" }, tags: [] });
   const { user_id, page_id } = useParams();
   const [isLoading, segtIsLoading] = useState(false);
+  const { userInfo, setUserInfo } = useContext(UserInfoContext);
+  const user = {...userInfo,id: user_id };
   // console.log(useParams())
 
 
   //const page_id = page.page_id;
+  useEffect(() => {
+    setUserInfo({...userInfo,...user});
+  }, []);
 
   useEffect(() => {
     MemoAPI.getMemoIndex(page_id).then(json => { 
@@ -102,6 +109,16 @@ function Main(props) {
     // post server
   }
 
+  function handleWriting(){
+    if(true){
+      setPlayer({...player,stop:true})
+    }
+  }
+  function handleWriteEnd(){
+    if(true){
+      setPlayer({...player,stop:false})
+    }
+  }
 
   return (
     <div className="Main">
@@ -140,8 +157,13 @@ function Main(props) {
               <Grid item xs={12}>
                 <VideoPlayer className="" url={page.page.url} players={{ player, setPlayer }} />
               </Grid>
+<<<<<<< HEAD
               <Grid item xs={12}>
                 <WriteMemoForm onSubmit={handleSubmit} player={player} />
+=======
+              <Grid item>
+                <WriteMemoForm onSubmit={handleSubmit} player={player} onWriting={handleWriting} onWriteEnd={handleWriteEnd}/>
+>>>>>>> develop
               </Grid>
             </Grid>
           </Grid>
