@@ -157,13 +157,8 @@ function Main(props) {
               <Grid item xs={12}>
                 <VideoPlayer className="" url={page.page.url} players={{ player, setPlayer }} />
               </Grid>
-<<<<<<< HEAD
-              <Grid item xs={12}>
-                <WriteMemoForm onSubmit={handleSubmit} player={player} />
-=======
               <Grid item>
                 <WriteMemoForm onSubmit={handleSubmit} player={player} onWriting={handleWriting} onWriteEnd={handleWriteEnd}/>
->>>>>>> develop
               </Grid>
             </Grid>
           </Grid>
