@@ -46,7 +46,7 @@ class Api::V1::PagesController < ApplicationController
     re = []
     @user.pages.each do |page|
       a = page.memos.filter do |memo| 
-        keywords.any? {|keyword| memo.include?(keyword)}
+        keywords.any? {|keyword| memo.text.include?(keyword)}
       end
       next if a.empty?
       re << page.attributes.merge(memos: a)
