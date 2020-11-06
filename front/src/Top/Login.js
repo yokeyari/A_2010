@@ -143,6 +143,13 @@ export default function Login() {
         <Transition to={state.to} ok={state.isLoaded} isLoading={state.isLoading}>
           <Button id="submit" fullWidth color="primary" variant="contained" onClick={handleLogin}>Log In</Button>
         </Transition>
+        <Grid container justify="flex-end">
+           <Grid item>
+               <Link to="./signup" variant="body2">
+                Don't you have an account yet? Sign up
+              </Link>
+           </Grid>
+         </Grid>
       </form>
     </div>
   );

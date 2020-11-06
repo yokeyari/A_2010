@@ -113,10 +113,10 @@ function Main(props) {
           <Title title={page.page.title} />
         </Grid>
         <Grid container className={classes.grid} direction="row">
-          <Grid item>
+          <Grid item xs={12} md={6}>
             <TagList tags={page.tags} withUpdate={withUpdate} />
           </Grid>
-          <Grid item>
+          <Grid item xs={12} md={6}>
             <TagForm page_id={page.page.id} withUpdate={withUpdate} />
           </Grid>
         </Grid>

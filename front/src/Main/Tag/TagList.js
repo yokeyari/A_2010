@@ -4,7 +4,9 @@ import  TagComponent from './TagComponent';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card'
-
+import Grid from '@material-ui/core/Grid'
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 const useStyles = makeStyles((theme) => ({
     card: {
       width: '40vw',
@@ -34,19 +36,22 @@ function TagList(props) {
 
   return (
     <>
-      <Card className={classes.card}>
+      <FormGroup row>
         {
           tags.map(tag =>
-            (<TagComponent
+            (
+            <TagComponent
               key={tag.id.toString()}
               text={tag.text}
               tag={tag}
               onChange={handleChange}
               onDelete={handleDelete}
-            />)
+            />
+
+            )
           )
         }
-      </Card>
+      </FormGroup>
     </>
   )
 }
