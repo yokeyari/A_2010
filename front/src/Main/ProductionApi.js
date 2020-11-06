@@ -300,7 +300,6 @@ export class BertDataSource {
     for (let text of text_list) {
       console.log("before",text)
       const res = await fetch(BERT_URL + `?text=${text}`, {
-        credentials: 'include', //クレデンシャルを含める指定
         mode: 'cors',
       });
       console.log("after,",res)

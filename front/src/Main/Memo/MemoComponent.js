@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
   card: {
     //Width: "600px",
     margin: theme.spacing(1),
-    //backgroundColor: "#EEEEEE",
+    // backgroundColor: "#EEEEEE"
     //color: "#0000ff",
     //padding: theme.spacing(2),
   },
@@ -32,6 +32,9 @@ function MemoComponent(props) {
   const [text, setText] = useState(props.memo.text)
   const memo = props.memo
   const player = props.player
+
+  
+  console.log(classes.card)
 
   const endEditMode = () => {
     props.onChange({ ...memo, text: text });
@@ -59,9 +62,11 @@ function MemoComponent(props) {
       }}
       />
         ;
+  {console.log("props.color")}
+  {console.log(props.color)}
   return (
     //<div className="Post-memos" key={memo.id}>
-    <Card className={classes.card} key={memo.id}>
+    <Card className={classes.card} key={memo.id} style={{backgroundColor:props.color}}>
       <CardActions>
         <Button className="timeButton" startIcon={<AccessTimeIcon />} onClick={() => { handleJump() }} >{formatSec2Str(memo.time)}</Button>
         {isEditMode ?

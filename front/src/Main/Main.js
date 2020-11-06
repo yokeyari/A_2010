@@ -52,6 +52,7 @@ function Main(props) {
   const [page, setPage] = useState({ page: { title: "", url: "" }, tags: [] });
   const { user_id, page_id } = useParams();
   const [isLoading, segtIsLoading] = useState(false);
+  const [colorList,setColorList] = useState([]);
   // console.log(useParams())
 
 
@@ -103,7 +104,7 @@ function Main(props) {
     // post server
   }
 
-  function handleChangeMemoColor() {
+  function changeMemoColor(mode) {
     const tmp_memos = memos.memos;
     let text_list = [];
     for (let i=0; i<tmp_memos.length; i++) {
@@ -111,11 +112,34 @@ function Main(props) {
       text_list.push(tmp_memos[i].text);
     }
     const np_scores = BertApi.getSentment(text_list).then(res=>{
-      console.log(res)
+      console.log(res);
+      let tmp_colorList = [];
+      if (mode==="positive") {
+        tmp_colorList = res.map((np)=>{
+          if (np.positiveness>1.0) {
+            return "#FF5733";
+          } else if (np.positiveness>0.5) {
+            return "#FFD033";
+          }
+        })
+      } else if (mode==="negative") {
+        tmp_colorList = res.map((np)=>{
+          if (np.positiveness<-1.0) {
+            return "#33C7FF";
+          } else if (np.positiveness<-0.5) {
+            return "#33F2FF";
+          }
+        })
+      }
+      setColorList(tmp_colorList)
     }
+
     );
   }
-
+  
+  function resetMemoColor() {
+    setColorList( Array(memos.memos.length).fill("white") );
+  }
 
   return (
     <div className="Main">
@@ -145,13 +169,16 @@ function Main(props) {
                 <WriteMemoForm onSubmit={handleSubmit} player={player} />
               </Grid>
               <Grid>
-                <Button onClick={()=>{handleChangeMemoColor()}}>bertで着色</Button>
+                <Button onClick={()=>{changeMemoColor("positive")}}>ポジティブを着色</Button>
+                <Button onClick={()=>{changeMemoColor("negative")}}>ネガティブを着色</Button>
+                <Button onClick={()=>{resetMemoColor()}}>色リセット</Button>
               </Grid>
             </Grid>
           </Grid>
           <Grid item xs={10} md={6}>
             <MemoList
               memos={memos}
+              colorList={colorList}
               onChange={handleChange}
               onDelete={handleDelete}
               player={player}

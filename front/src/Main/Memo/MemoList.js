@@ -32,13 +32,16 @@ function MemoList(props) {
   //   <TextField value={props.title}></TextField>
   // )
 
+  {console.log("props.colorList")}
+  {console.log(props.colorList)}
   return (
     <>
       <Card className={classes.card}>
         {
-          memos.map(memo =>
+          memos.map((memo, i) =>
             (<MemoComponent
               key={memo.id.toString()}
+              color={props.colorList[i]}
               memo={memo}
               onChange={props.onChange}
               onDelete={props.onDelete}
