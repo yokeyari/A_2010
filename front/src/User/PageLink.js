@@ -26,6 +26,7 @@ const useStyles = makeStyles((theme) => ({
     justify: 'flex-end',
     alignItems: 'center',
     justifyContent: 'right',
+    
     //width: 400,
 
   },
@@ -34,6 +35,7 @@ const useStyles = makeStyles((theme) => ({
     //marginLeft: 'auto',
     float: 'right',
     minWidth: 120,
+    
   },
   card: {
     //maxWidth: 2000,
@@ -41,11 +43,14 @@ const useStyles = makeStyles((theme) => ({
     width: '20vw',
     maxHeight: "20%",
     margin: theme.spacing(1),
+    position: "relative",
     //padding: theme.spacing(2),
   },
+
   media: {
     //height: 140,
-    paddingTop: '56.25%'
+    paddingTop: '56.25%',
+    
   },
   iconButton: {
     padding: 10,
@@ -53,6 +58,16 @@ const useStyles = makeStyles((theme) => ({
   divider: {
     height: 28,
     margin: 4,
+    
+  },
+
+  button: {
+    position: "absolute",
+    top: 'auto',
+    right: 0,
+    bottom: 2,
+    left: 'auto',
+    //position: 'fixed',
   },
 }));
 
@@ -108,12 +123,13 @@ export default function PageLink(props) {
 
       </Transition>
       <Card className={classes.card}>
-        <CardActionArea onClick={handleClick}>
+        <CardActionArea  onClick={handleClick}>
           <CardMedia
             className={classes.media}
             //component="img"
             image={img}
             title="動画のサムネイル"
+            
           />
           <CardContent>
             <Typography gutterBottom variant="h5" component="h2">
@@ -121,12 +137,20 @@ export default function PageLink(props) {
             </Typography>
             <Typography variant="body2" color="textSecondary" component="p">
               {page.url}
-            メモの最初の1~2個{page.body}
-              {/* TODO ここらへんにタグ */}
+              {
+                page.memos[0]!=undefined && (
+                <p>{page.memos[0].text}</p>
+                )
+              }
+              {
+                page.tags[0]!=undefined && (
+                <p># {page.tags[0].text}</p>
+                )
+              }
             </Typography>
           </CardContent>
         </CardActionArea>
-        <Button className="delete" color="secondary" startIcon={<DeleteIcon />} onClick={() => { handleDelete(page) }}></Button>
+        <Button className={classes.button} color="secondary" startIcon={<DeleteIcon />} onClick={() => { handleDelete(page) }}></Button>
       </Card>
     </>
   )

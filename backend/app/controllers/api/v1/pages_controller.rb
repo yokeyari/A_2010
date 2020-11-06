@@ -48,8 +48,16 @@ class Api::V1::PagesController < ApplicationController
       a = page.memos.filter do |memo| 
         keywords.any? {|keyword| memo.text.include?(keyword)}
       end
-      next if a.empty?
-      re << page.attributes.merge(memos: a)
+
+      b = page.tags.filter do |tag|
+        keywords.any? {|keyword| tag.text.include?(keyword)}
+      end
+
+      c = keywords.any? {|keyword| page.title.include?(keyword)}
+
+      next if a.empty? && b.empty? && !c
+
+      re << page.attributes.merge(memos: a, tags: b)
     end
     render json: {pages: re}, status: :ok
   end
