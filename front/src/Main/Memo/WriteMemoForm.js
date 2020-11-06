@@ -5,7 +5,12 @@ import SendIcon from '@material-ui/icons/Send';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
+import DescriptionIcon from '@material-ui/icons/Description';
+import Tooltip from '@material-ui/core/Tooltip';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Card from '@material-ui/core/Card';
+import CardHeader from '@material-ui/core/CardHeader';
+import IconButton from '@material-ui/core/IconButton'
 import { CardActions } from "@material-ui/core";
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -26,8 +31,14 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
     //backgroundColor:"#D2B48C",
   },
+  card_action: {
+    //marginLeft:theme.spacing(2)
+  },
   button: {
     marginLeft: 'auto',
+    //display: 'flex',
+    //justifyContent:'space-between',
+    //alignItems: 'center',
   }
 }
 ));
@@ -52,20 +63,30 @@ function WriteMemoForm(props) {
     //<div>
     <Card className={classes.card}>
       <div id="memo-form" className="Main-memo">
-        <TextField type="text" id="memo-input" className={classes.root}
-          label="メモを入力してください"
-          placeholder="見所"
-          multiline
-          onChange={e => setText(e.target.value)} value={text}
-          //inputProps={{ maxLength: 100 }}
-          error={text.length >= 100}
-          helperText={text.length >= 100 ? 'メモは100文字以内にしてください!' : ' '}
-          onFocus={() => { console.log("now foucus"); handleWriting(true) }}
-          onBlur={() => { console.log("sss"); handleWriting(false) }}
+        <CardHeader
+          action={
+            <Tooltip title="メモを作成">
+              <Button className={classes.button} aria-label="メモを作成" id="submit" variant="contained" color="primary" onClick={handleOnclick}>
+                <DescriptionIcon />
+              </Button>
+            </Tooltip>
+          }
         />
-        <CardActions>
-          <Button className={classes.button} variant="contained" color="secondary" startIcon={<DeleteIcon />} onClick={deleteMemo}> delete</Button>
-          <Button className={classes.button} id="submit" variant="contained" color="primary" endIcon={<SendIcon />} onClick={handleOnclick}>submit</Button>
+        <CardActions className={classes.card_action}>
+          <TextField type="text" id="memo-input" className={classes.root}
+            label="メモを入力してください"
+            //placeholder="見所"
+            multiline
+            fullWidth
+            onChange={e => setText(e.target.value)} value={text}
+            //inputProps={{ maxLength: 100 }}
+            error={text.length >= 100}
+            helperText={text.length >= 100 ? 'メモは100文字以内にしてください!' : ' '}
+            onFocus={() => { console.log("now foucus"); handleWriting(true) }}
+            onBlur={() => { console.log("sss"); handleWriting(false) }}
+          />
+
+          {/*<Button className={classes.button} id="submit" variant="contained" color="primary" endIcon={<DescriptionIcon />} onClick={handleOnclick}>submit</Button>*/}
         </CardActions>
         {/* for test */}
         {/* <button onClick={() => {console.log(player);player.player.player.seekTo(0.3)}}>Skip to 20s</button> */}
