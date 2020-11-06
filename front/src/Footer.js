@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
     wrapper:{
         //backgroundColor: "#e7ecec",
         textAlign: 'right',
-        minHeight:'10vh',
+        minHeight:'15vh',
         position:'relative'
     }
   }));
