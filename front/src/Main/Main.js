@@ -194,7 +194,7 @@ function Main(props) {
               <Grid item xs={12}>
                 <VideoPlayer className="" url={page.page.url} players={{ player, setPlayer }} />
               </Grid>
-              <Grid item>
+              <Grid item xs={12}>
                 <WriteMemoForm onSubmit={handleSubmit} player={player} onWriting={handleWriting} onWriteEnd={handleWriteEnd}/>
               </Grid>
             </Grid>
