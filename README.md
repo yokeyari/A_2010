@@ -53,9 +53,6 @@ http://memotube.xyz/
 * gooラボAPIを用いた形態素解析による自動タグ生成
 * DistilBERTを用いたメモの感情判定
 
-<span style="color: red">TODO
-
-</span>
 
 ## 開発技術
 ### 活用した技術
