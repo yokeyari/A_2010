@@ -143,9 +143,9 @@ function Main(props) {
         })
       } else if (mode === "negative") {
         tmp_colorList = res.map((np) => {
-          if (np.positiveness < -1.0) {
+          if (np.negativeness > 1.0) {
             return "#33C7FF";
-          } else if (np.positiveness < -0.5) {
+          } else if (np.negativeness > 0.5) {
             return "#33F2FF";
           }
         })
