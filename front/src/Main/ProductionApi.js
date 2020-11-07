@@ -1,6 +1,7 @@
 // import axios from 'axios';
 
-const SERVER_URL = "https://movie-rails.herokuapp.com/api/v1/";
+const SERVER_URL = "http://memotube.xyz:5000/api/v1/";
+// const SERVER_URL = "https://movie-rails.herokuapp.com/api/v1/";
 const BERT_URL = "http://memotube.xyz:5555/sentiment";
 //const SERVER_URL = "https://movie-rails-cors-test.herokuapp.com/api/v1/"
 
@@ -132,10 +133,11 @@ export class UserDataSource {
     //失敗 401
   }
 
-  async logoutUser(user) {
-    const res = await fetch(this.API_URL + '/logout', {
+  async logoutUser(user_id) {
+    const res = await fetch(this.API_URL+`/logout?user_id=${user_id}`, {
       credentials: 'include', //クレデンシャルを含める指定
       mode: 'cors',
+      method: 'POST'
     });
     //成功 200
   }

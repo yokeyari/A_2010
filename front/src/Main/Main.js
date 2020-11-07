@@ -109,6 +109,9 @@ function Main(props) {
 
   function handleChangeTitle(title) {
     // post server
+    console.log({tags:page.tags,page:{...page.page,title:title}});
+    // setPage({tags:page.tags,page:{...page.page,title:title}});
+    // withUpdate(PageApi.updatePage({ url: page.page.url, title: title, id: page_id }));
   }
 
   function handleWriting() {
@@ -140,9 +143,9 @@ function Main(props) {
         })
       } else if (mode === "negative") {
         tmp_colorList = res.map((np) => {
-          if (np.positiveness < -1.0) {
+          if (np.negativeness > 1.0) {
             return "#33C7FF";
-          } else if (np.positiveness < -0.5) {
+          } else if (np.negativeness > 0.5) {
             return "#33F2FF";
           }
         })
@@ -166,19 +169,8 @@ function Main(props) {
       <main className={classes.root}>
         {/* <timeContext.Provider value={{ time, setTime }}> */}
         <Grid item>
-          <Title title={page.page.title} />
+          <Title title={page.page.title} onChange={handleChangeTitle} />
         </Grid>
-        {/*
-        <Grid container className={classes.grid} direction="row">
-          <Grid item xs={10} md={8}>
-            <TagList tags={page.tags} withUpdate={withUpdate} />
-          </Grid>
-        </Grid>
-        <Grid container className={classes.grid} direction="row">
-          <Grid item xs={10} md={6}>
-            <TagForm page_id={page.page.id} withUpdate={withUpdate} />
-          </Grid>
-        </Grid>*/}
 
         <Grid container className={classes.grid} direction="row">
           <Grid item xs={10} md={6}>

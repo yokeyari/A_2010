@@ -67,7 +67,7 @@ class VideoPlayer extends React.Component {
     }
   }
 
-  componentDidUpdate(){
+  componentDidUpdate() {
     // this.props.players.setPlayer({...this.props.players.player,willStart:false,willStop:false});
   }
 
@@ -85,8 +85,8 @@ class VideoPlayer extends React.Component {
     }
   }
 
-  setPlaying = (playing)=>{
-    this.props.players.setPlayer({...this.props.players.player,playing:playing})
+  setPlaying = (playing) => {
+    this.props.players.setPlayer({ ...this.props.players.player, playing: playing })
   }
 
   handleSeekMouseDown = e => {
@@ -174,7 +174,11 @@ class VideoPlayer extends React.Component {
           onPlay={this.handlePlay}
           volume={volume}
           muted={muted}
-
+          config={{
+            youtube: {
+              playerVars: { showinfo: 0 ,modestbranding: 1,rel:0,iv_load_policy:0 }
+            }
+          }}
           width='100%'
           //minWidth='800px'
           //height='60%'
