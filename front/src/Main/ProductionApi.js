@@ -133,10 +133,11 @@ export class UserDataSource {
     //失敗 401
   }
 
-  async logoutUser(user) {
-    const res = await fetch(this.API_URL + '/logout', {
+  async logoutUser(user_id) {
+    const res = await fetch(this.API_URL+`/logout?user_id=${user_id}`, {
       credentials: 'include', //クレデンシャルを含める指定
       mode: 'cors',
+      method: 'POST'
     });
     //成功 200
   }
