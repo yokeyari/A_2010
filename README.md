@@ -16,6 +16,7 @@
 ### 製品説明（具体的な製品の説明）
 
 [デモ動画](https://www.youtube.com/watch?v=9jvrdHWzGKQ&feature=youtu.be)
+[![Audi R8](https://www.youtube.com/watch?v=9jvrdHWzGKQ&feature=youtu.be/0.jpg)](https://www.youtube.com/watch?v=9jvrdHWzGKQ&feature=youtu.be "Audi R8")
 
 ### 特長
 
