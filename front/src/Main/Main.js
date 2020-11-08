@@ -61,6 +61,7 @@ function Main(props) {
   // console.log(useParams())
 
 
+  
   //const page_id = page.page_id;
   useEffect(() => {
     setUserInfo({ ...userInfo, ...user });
@@ -78,7 +79,7 @@ function Main(props) {
         )
       })
     })
-  }, [reloader])
+  }, [reloader,page_id])
 
   useEffect(() => {
     // ここでタイトルなどの読み込み

@@ -15,7 +15,7 @@ import Auth from './Auth';
 
 function App() {
   const [userInfo, setUserInfo] = useState({
-    id: "user_id",
+    id: "",
     thema: "normal",
     token: null
   })
