@@ -14,8 +14,7 @@
 
 
 ### 製品説明（具体的な製品の説明）
-[![Instruction](https://user-images.githubusercontent.com/73517450/98463317-b4481f00-21fd-11eb-85db-8efd3a096764.png)](https://www.youtube.com/watch?v=9jvrdHWzGKQ&feature=youtu.be "MemoTube")
-[<img src="https://user-images.githubusercontent.com/73517450/98463317-b4481f00-21fd-11eb-85db-8efd3a096764.png" width="80%">](https://www.youtube.com/watch?v=9jvrdHWzGKQ&feature=youtu.be "MemoTube")
+[<img src="https://user-images.githubusercontent.com/73517450/98463317-b4481f00-21fd-11eb-85db-8efd3a096764.png" width="70%">](https://www.youtube.com/watch?v=9jvrdHWzGKQ&feature=youtu.be "MemoTube")
 ### 特長
 
 #### 1. 直接メモを動画に書き込める
