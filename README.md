@@ -16,7 +16,7 @@
 ### 製品説明（具体的な製品の説明）
 
 [デモ動画](https://www.youtube.com/watch?v=9jvrdHWzGKQ&feature=youtu.be)
-[![MemoTube](https://www.youtube.com/watch?v=9jvrdHWzGKQ/0.jpg)](https://www.youtube.com/watch?v=9jvrdHWzGKQ&feature=youtu.be "MemoTube")
+[![MemoTube](https://github.com/jphacks/A_2010/issues/41#issuecomment-723561531)](https://www.youtube.com/watch?v=9jvrdHWzGKQ&feature=youtu.be "MemoTube")
 
 ### 特長
 
