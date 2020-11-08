@@ -32,7 +32,7 @@ function Home(props) {
   // todo 認証
 
   // console.log("userinco",userInfo);
-  console.log("search",props.search_word)
+  // console.log("search",props.search_word)
 
   const loadPages = () => {
     if(props.search_word==""){

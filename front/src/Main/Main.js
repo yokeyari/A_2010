@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react'
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box'
 import Select from "@material-ui/core/Select";
+import { Button, FormControl, InputLabel, MenuItem } from '@material-ui/core';
 import {
   BrowserRouter as Router,
   Switch,
@@ -10,10 +11,9 @@ import {
   useRouteMatch,
   useParams,
 } from "react-router-dom";
-
+import { makeStyles } from '@material-ui/core/styles';
 
 import "./Main.css";
-import { makeStyles } from '@material-ui/core/styles';
 // import Memo from "./Memo/Memo";
 import VideoPlayer from "./VideoPlayer";
 import MemoList from './Memo/MemoList';
@@ -26,7 +26,7 @@ import TagForm from './Tag/TagForm';
 
 //import * as MemoAPI from './LocalApi';
 import { MemoDataSource, PageDataSource, TagDataSource, BertDataSource } from './ProductionApi';
-import { Button, FormControl, InputLabel, MenuItem } from '@material-ui/core';
+
 import UserInfoContext from '../context'
 
 const useStyles = makeStyles((theme) => ({
@@ -53,19 +53,17 @@ function Main(props) {
     playing: false
   });
   const [page, setPage] = useState({ page: { title: "", url: "" }, tags: [] });
-  const { user_id, page_id } = useParams();
   const [isLoading, segtIsLoading] = useState(false);
   const [colorList, setColorList] = useState([]);
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
-  const user = { ...userInfo, id: user_id };
-  // console.log(useParams())
+
+  console.log(useParams());
+
+  const page_id = props.page_id;
 
 
   
   //const page_id = page.page_id;
-  useEffect(() => {
-    setUserInfo({ ...userInfo, ...user });
-  }, []);
 
   useEffect(() => {
     MemoAPI.getMemoIndex(page_id).then(json => {

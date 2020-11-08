@@ -209,6 +209,16 @@ export class PageDataSource {
     //失敗：404
   }
 
+  async getPageByToken(page_token){
+    const res = await fetch(this.API_URL + '/' + page_token, {
+      method:"POST",
+      // credentials: 'include', //クレデンシャルを含める指定
+      mode: 'cors',
+    });
+    return res;
+    //成功 200 {"page": page,  
+  }
+
   async createPage(page) {
     const res = createData({ url: page.url, title: page.title },
       this.API_URL + `?user_id=${page.user_id}`);

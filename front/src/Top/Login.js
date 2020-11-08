@@ -87,6 +87,8 @@ export default function Login() {
                 // console.log("getPage", page.page);
                 setUserInfo(user.user)
                 setState({ to: `/${user.user.id}/`, isLoaded: true, isLoading: false });
+
+                localStorage.setItem('user',JSON.stringify(user.user));
                 // props.onClose();
               })
           } else {

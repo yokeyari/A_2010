@@ -74,8 +74,8 @@ export default function PageList(props) {
   const render_pages = pages.map(page => {
     // ここにGridの要素とかを定義する感じ？
     // <Grid item>  とか？しらんけど．PageLinkの中身をいじっても良い．
-    console.log("URL:", page.url)
-    console.log("id", page.id)
+    // console.log("URL:", page.url)
+    // console.log("id", page.id)
     var id = "", img = "";
     if (page.url && page.url.split('v=').length === 2) {
       id = page.url.split('v=')[1];
