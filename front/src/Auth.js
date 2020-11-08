@@ -9,11 +9,10 @@ function Auth(props) {
   const a = localStorage.getItem('user');
   const user = JSON.parse(a);
  
-  if(!token) token=user.token
+  if(!token && user) token=user.token
   useEffect(()=>{
-    if(!token){
+    if(!token && user){
       // console.log(user)
-      token = user.token
       setUserInfo(user)
     }
   },[])

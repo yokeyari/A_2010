@@ -34,19 +34,19 @@ function App() {
           <Header onChange={(value) => { handleSearchChange(value) }} />
 
           <Switch>
+            <Route exact path='/' component={Top} />
             <Route exact path='/login' component={Top} />
             <Route exact path='/signup' component={Top} />
             <Route exact path='/page/:token'>
-              <PageAuth mode="token"/>
+              <PageAuth mode="token" />
             </Route>
             <Auth>
               <Switch>
-                <Route exact path='/' component={Top} />
                 <Route exact path='/:user_id'>
                   <Home search_word={search_word} />
                 </Route>
                 <Route path='/:user_id/:page_id'>
-                  <PageAuth mode="user"/>
+                  <PageAuth mode="user" />
                 </Route>
               </Switch>
             </Auth>
