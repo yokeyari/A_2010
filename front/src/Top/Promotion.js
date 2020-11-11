@@ -1,5 +1,5 @@
 import React from "react";
-import {useState} from 'react';
+import { useState } from 'react';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import "./Login.css";
 import logo from '../memotubelogo_orange_moji.png';
@@ -25,10 +25,10 @@ const useStyles = makeStyles((theme) => ({
 		width: '230px'
 	}
 	,
-	video:{
-		opacity:1.0,
-		width:'80%',
-		margin:'auto'
+	video: {
+		opacity: 1.0,
+		width: '80%',
+		margin: 'auto'
 	}
 }));
 
@@ -38,11 +38,11 @@ function Promotion() {
 		time: 0,
 		player: null,
 		playing: false
-	  });
-	const url="https://youtu.be/9jvrdHWzGKQ";
+	});
+	const url = "https://www.youtube.com/watch?v=5g_SkXsIZvQ&feature=youtu.be";
 	return (
 
-		<div  style={{ color: "#ffffff" }}>
+		<div style={{ color: "#ffffff" }}>
 			<h1 className={classes.midashi}>What's <img src={logo} className={classes.img} />?</h1>
 			<p className={classes.root}>
 				<br />
@@ -50,7 +50,7 @@ function Promotion() {
 				動画内の時間とメモをリンクさせたり、そのメモを友達と共有できます!<br />
 			</p>
 			<div className={classes.video}>
-			<VideoPlayer   url={url} players={{ player, setPlayer }} />
+				<VideoPlayer url={url} players={{ player, setPlayer }} />
 			</div>
 			<h2 className={classes.root}>Let's try it !!</h2>
 			<p className={classes.root}>
