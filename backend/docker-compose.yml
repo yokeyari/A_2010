@@ -1,9 +1,20 @@
 version: '3'
 services:
+  db:
+    image: postgres:13.0
+    volumes:
+      - ~/volume/db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: 'postgres'
   web:
     build: .
     command: bash -c "bundle install  && rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
     volumes:
       - .:/myapp
     ports:
-            - "5000:3000"
+      - "5000:3000"
+    depends_on:
+      - db
+    environment:
+      RAILS_ENV: production
+

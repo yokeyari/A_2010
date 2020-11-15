@@ -3,7 +3,7 @@ services:
   db:
     image: postgres:13.0
     volumes:
-      - ~/volume/db:/var/lib/postgresql/data
+      - ~/volume/db2:/var/lib/postgresql/data
     environment:
       POSTGRES_PASSWORD: 'postgres'
   web:

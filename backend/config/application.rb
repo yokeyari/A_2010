@@ -26,6 +26,7 @@ module Movie
     config.hosts << "memotube.xyz"
     config.hosts << "api.memotube.xyz"
     config.hosts << "dev.memotube.xyz"
+    config.hosts << "localhost"
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers
