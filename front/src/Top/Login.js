@@ -21,6 +21,7 @@ import { UserDataSource } from "../Main/ProductionApi";
 import UserInfoContext from "../context";
 import Transition from "../Transition";
 import transitions from "@material-ui/core/styles/transitions";
+import GoogleAuth from '../GoogleAuth';
 
 const userDataSource = new UserDataSource();
 const useStyles = makeStyles((theme) => ({
@@ -109,6 +110,7 @@ export default function Login() {
   return (
 
     <div className={classes.paper}>
+      <GoogleAuth />
       <Avatar className={classes.avatar}>
         <LockOutlinedIcon />
       </Avatar>

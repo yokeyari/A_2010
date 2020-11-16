@@ -40,16 +40,20 @@ function App() {
             <Route exact path='/page/:token'>
               <PageAuth mode="token" />
             </Route>
-            <Auth>
+            {/* <Auth> */}
               <Switch>
                 <Route exact path='/:user_id'>
-                  <Home search_word={search_word} />
+                  <Auth>
+                    <Home search_word={search_word} />
+                  </Auth>
                 </Route>
                 <Route path='/:user_id/:page_id'>
-                  <PageAuth mode="user" />
+                  {/* <Auth> */}
+                    <PageAuth mode="user" />
+                  {/* </Auth> */}
                 </Route>
               </Switch>
-            </Auth>
+            {/* </Auth> */}
           </Switch>
 
           <Footer />
