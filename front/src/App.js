@@ -49,9 +49,9 @@ function App() {
                   </Auth>
                 </Route>
                 <Route path='/:user_id/:page_id'>
-                  {/* <Auth> */}
+                  <Auth>
                     <PageAuth mode="user" />
-                  {/* </Auth> */}
+                  </Auth>
                 </Route>
               </Switch>
             {/* </Auth> */}
