@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import MemoComponent from './MemoComponent'
+import Thread from './ThreadList'
 import Card from '@material-ui/core/Card'
+import ThreadList from './ThreadList';
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -37,16 +39,29 @@ function MemoList(props) {
     <>
       <Card className={classes.card}>
         {
-          memos.map((memo, i) =>
-            (<MemoComponent
-              key={memo.id.toString()}
-              color={props.colorList[i]}
-              memo={memo}
-              onChange={props.onChange}
-              onDelete={props.onDelete}
-              player={player}
-            />)
-          )
+          memos.map((memo, i) => (
+            
+            memo.parent_id==null&&(
+              <>
+                <MemoComponent
+                  key={memo.id.toString()}
+                  color={props.colorList[i]}
+                  memo={memo}
+                  onChange={props.onChange}
+                  onDelete={props.onDelete}
+                  player={player}
+                />
+                <ThreadList
+                  memos={memos}
+                  parent_memo={memo}
+                  user_id={props.user_id}
+                  onChange={props.onChange}
+                  onDelete={props.onDelete}
+                  onSubmit={props.onSubmit}
+                />
+              </>
+            )
+          ))
         }
       </Card>
     </>

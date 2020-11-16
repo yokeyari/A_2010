@@ -6,4 +6,7 @@ services:
     volumes:
       - .:/myapp
     ports:
-            - "5000:3000"
+      - "5000:3000"
+    environment:
+      RAILS_ENV: development
+
