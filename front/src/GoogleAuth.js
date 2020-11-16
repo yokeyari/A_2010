@@ -45,8 +45,8 @@ class GoogleAuth extends React.Component{
           if (res.statusText == "OK") {
             res.json()
               .then(user => {
-                console.log(user);
-                this.props.history.push(`/${user.id}/`);
+                console.log('response user', user);
+                this.props.history.push(`/${user.user.id}/`);
               })
           } else {
             console.log(res);
