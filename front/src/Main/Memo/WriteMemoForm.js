@@ -52,9 +52,9 @@ function WriteMemoForm(props) {
   const handleWriteEnd = () =>{
     props.onWriteEnd();
   }
-
+  
   const handleOnclick = () => {
-    props.onSubmit({ text: text, time: player.time });
+    props.onSubmit({ text: text, time: player.time, user_id: props.user_id });
     setText("");
   }
   const deleteMemo = () => {

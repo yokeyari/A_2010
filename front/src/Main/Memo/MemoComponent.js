@@ -63,7 +63,6 @@ function MemoComponent(props) {
       />
         ;
   return (
-    //<div className="Post-memos" key={memo.id}>
     <Card className={classes.card} key={memo.id}>
       <CardActions >
         <Button className="timeButton" startIcon={<AccessTimeIcon />} onClick={() => { handleJump() }} >{formatSec2Str(memo.time)}</Button>

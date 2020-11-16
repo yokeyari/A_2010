@@ -57,10 +57,7 @@ function Main(props) {
   const [colorList, setColorList] = useState([]);
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
 
-  console.log(useParams());
-
   const page_id = props.page_id;
-
 
   
   //const page_id = page.page_id;
@@ -103,6 +100,7 @@ function Main(props) {
   }
 
   function handleSubmit(memo) {
+    console.log(memo);
     withUpdate(MemoAPI.createMemo(memo, page_id));
   }
 
@@ -188,15 +186,14 @@ function Main(props) {
                 <VideoPlayer className="" url={page.page.url} players={{ player, setPlayer }} />
               </Grid>
               <Grid item xs={12}>
-                <WriteMemoForm onSubmit={handleSubmit} player={player} onWriting={handleWriting} onWriteEnd={handleWriteEnd} />
+                <WriteMemoForm onSubmit={handleSubmit} player={player} user_id={page.page.user_id} onWriting={handleWriting} onWriteEnd={handleWriteEnd} />
               </Grid>
             </Grid>
           </Grid>
           <Grid item xs={10} md={6}>
 
             <Grid container direction="column" >
-
-
+              
               <Grid container direction="row" justify="center" alignItems="center">
 
                 <Grid item >
@@ -224,7 +221,9 @@ function Main(props) {
                   colorList={colorList}
                   onChange={handleChange}
                   onDelete={handleDelete}
+                  onSubmit={handleSubmit}
                   player={player}
+                  user_id={page.page.user_id}
                 />
               </Grid>
             </Grid>
