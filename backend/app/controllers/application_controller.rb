@@ -35,7 +35,7 @@ class ApplicationController < ActionController::API
     http.start {|h| res = h.request(req)}
     res
   end
-
+=begin
   # セッションからユーザーを取得
   def current_user
     @current_user ||= User.find_by(id: session[:user_id])
@@ -53,4 +53,5 @@ class ApplicationController < ActionController::API
       render status: :unauthorized 
     end
   end
+=end
 end
