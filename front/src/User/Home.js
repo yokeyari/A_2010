@@ -25,11 +25,10 @@ const pageDataSource = new PageDataSource();
 function Home(props) {
   const [state, setState] = useState({ search_word: "", pages: [] });
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
+  const user = userInfo;
 
-  const { user_id } = useParams();
-  const user = {...userInfo,id: user_id };
-  // 今は認証しない
-  // todo 認証
+  // const { user_id } = useParams();
+  // const user = {...userInfo,id: user_id };
 
   // console.log("userinco",userInfo);
   // console.log("search",props.search_word)
@@ -56,7 +55,7 @@ function Home(props) {
   }
 
   useEffect(() => {
-    setUserInfo({...userInfo,...user});
+    // setUserInfo({...userInfo,...user});
     loadPages();
   }, [props.search_word]);
 

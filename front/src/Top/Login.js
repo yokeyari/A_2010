@@ -89,7 +89,7 @@ export default function Login() {
                 setUserInfo(user.user)
                 setState({ to: `/${user.user.id}/`, isLoaded: true, isLoading: false });
 
-                localStorage.setItem('user',JSON.stringify(user.user));
+                localStorage.setItem('user', JSON.stringify(user.user));
                 // props.onClose();
               })
           } else {
@@ -148,12 +148,12 @@ export default function Login() {
           <Button id="submit" fullWidth color="primary" variant="contained" onClick={handleLogin}>Log In</Button>
         </Transition>
         <Grid container justify="flex-end">
-           <Grid item>
-               <Link to="./signup" variant="body2">
-                Don't you have an account yet? Sign up
+          <Grid item>
+            <Link to="./signup" variant="body2">
+              Don't you have an account yet? Sign up
               </Link>
-           </Grid>
-         </Grid>
+          </Grid>
+        </Grid>
       </form>
     </div>
   );

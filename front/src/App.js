@@ -17,7 +17,8 @@ function App() {
   const [userInfo, setUserInfo] = useState({
     id: "",
     thema: "normal",
-    token: null
+    token: null,
+    isLogin: false
   })
   const [search_word, setSearch_word] = useState("");
 

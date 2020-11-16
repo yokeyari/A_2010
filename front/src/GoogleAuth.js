@@ -1,14 +1,16 @@
-import React from 'react';
+import React, { useEffect, useContext,useRef } from 'react';
 import { Link, Redirect, withRouter } from 'react-router-dom';
-import {UserDataSource} from './Main/ProductionApi';
+
+import UserInfoContext from './context'
+import { UserDataSource } from './Main/ProductionApi';
 
 const userDataSource = new UserDataSource();
 
-class GoogleAuth extends React.Component{
+function GoogleAuth(props) {
+  const { userInfo, setUserInfo } = useContext(UserInfoContext);
+  const auth = useRef(null);
 
-  state = { isSignedIn: false };
-
-  authCheck() {
+  const authCheck = () => {
     window.gapi.load('client:auth2', () => {
       window.gapi.client.init({
         clientId: '1067371292574-gg50a0rilqkk188icegdc79t60gau1s7.apps.googleusercontent.com', /* 自分が作成したIDを入力　*/
@@ -17,27 +19,30 @@ class GoogleAuth extends React.Component{
       }).then(() => {
         // APIで使用されるメソッド
         // OAuthを使用してログインするかをクライアントに投げる
-        this.auth = window.gapi.auth2.getAuthInstance();
+        auth.current = window.gapi.auth2.getAuthInstance();
         // Stateとして、サインインの情報を保存する
-        this.setState({ isSignedIn: this.auth.isSignedIn.get() });
-        this.auth.isSignedIn.listen(this.onAuthChange);
+        auth.current.isSignedIn.listen(onAuthChange);
+        console.log(userInfo)
+        // setUserInfo({ ...userInfo, isLogin: auth.current.isSignedIn.get() });
+        
       })
     });
   }
 
-  componentDidMount(){
-    this.authCheck();
-  }
+  useEffect(() => {
+    authCheck();
+  },[])
 
-  // this.auth.isSignedInのリスナー関数
+  //  auth.current.isSignedInのリスナー関数
   // Stateの更新をする
-  onAuthChange = (val) => {
-    this.setState({ isSignedIn: this.auth.isSignedIn.get() });
+  const onAuthChange = (val) => {
+    console.log("google auth",userInfo)
+    // setUserInfo({ ...userInfo, isLogin: auth.current.isSignedIn.get() });
     if (val) {
-      console.log('current user', this.auth.currentUser.get().getBasicProfile());
-      console.log('auth response', this.auth.currentUser.get().getAuthResponse());
-      const id_token = this.auth.currentUser.get().getAuthResponse().id_token;
-      const name = this.auth.currentUser.get().getBasicProfile().getName();
+      console.log('current user', auth.current.currentUser.get().getBasicProfile());
+      console.log('auth response', auth.current.currentUser.get().getAuthResponse());
+      const id_token = auth.current.currentUser.get().getAuthResponse().id_token;
+      const name = auth.current.currentUser.get().getBasicProfile().getName();
 
       //login して返ってきたuserのidのページに移動する 
       userDataSource.loginUser(id_token, name)
@@ -46,45 +51,48 @@ class GoogleAuth extends React.Component{
             res.json()
               .then(user => {
                 console.log('response user', user);
-                this.props.history.push(`/${user.user.id}/`);
+                props.history.push(`/${user.user.id}/`);
               })
           } else {
             console.log(res);
             // TODOここにログインできなかったときの処理
           }
         });
-      // this.props.history.push('/1/');
+      //  props.history.push('/1/');
     } else {
-      this.props.history.push('/');
+      console.log("pushed")
+      props.history.push('/');
     }
   }
 
   // 正確には、クリックしただけでサインインはできていないので、アクションの名前にClickをつける
-  onSignInClick = () => {
-    // this.authCheck();
-    this.auth.signIn();
+  const onSignInClick = () => {
+    console.log(auth)
+    //  authCheck();
+    auth.current.signIn();
   };
-  onSignOutClick = () => {
-    this.auth.signOut();
-    // this.authCheck();
-    this.props.history.push('/');
+  const onSignOutClick = () => {
+    console.log(auth)
+    auth.current.signOut();
+    //  authCheck();
+    props.history.push('/');
   }
 
   // ヘルパー
   // stateによって、表示される情報を切り替える
-  renderAuthButton() {
-    if (this.state.isSignedIn === null){
+  const renderAuthButton = () => {
+    if (userInfo.isLogin === null) {
       return null;
-    } else if (this.state.isSignedIn) {
+    } else if (userInfo.isLogin) {
       return (
-        <button onClick={this.onSignOutClick} className="ui red google button">
+        <button onClick={onSignOutClick} className="ui red google button">
           <i className="google icon" />
           Sign Out With Google
         </button>
       );
     } else {
       return (
-        <button onClick={this.onSignInClick} className="ui red google button">
+        <button onClick={onSignInClick} className="ui red google button">
           <i className="google icon" />
           Sign In With Google
         </button>
@@ -92,14 +100,13 @@ class GoogleAuth extends React.Component{
     }
   }
 
-// 実際のレンダリング
-  render() {
-    return (
-      <div>
-        {this.renderAuthButton()}
-      </div>
-    );
-  }
+  // 実際のレンダリング
+  return (
+    <div>
+      { renderAuthButton()}
+    </div>
+  );
+
 }
 
 export default withRouter(GoogleAuth); 

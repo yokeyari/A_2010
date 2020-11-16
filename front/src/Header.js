@@ -95,6 +95,7 @@ export default function Header(props) {
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
 
   const UserApi = new UserDataSource();
+  const classes = useStyles();
 
   const handleChangeSeachForm = (text) => {
     props.onChange(text);
@@ -112,8 +113,10 @@ export default function Header(props) {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const classes = useStyles();
+  
+
   const handleLogout = () => {
+    // document.cookie = "_session_id=0";
     UserApi.logoutUser(userInfo.id);
   }
 

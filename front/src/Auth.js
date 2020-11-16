@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Redirect, useParams } from 'react-router-dom'
 import UserInfoContext from './context';
 import { UserDataSource } from './Main/ProductionApi';
@@ -8,16 +8,16 @@ const userDataSource = new UserDataSource();
 function Auth(props) {
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
   const { user_id } = useParams();
+  const [isMatch, setIsMatch ] = useState(true);
+
   console.log("p user id", user_id)
   console.log("Auth userInfo", userInfo);
 
-  let isLogin = false;
-  if(userInfo.isLogin==true) isLogin=true;
+  const isLogin = (userInfo.isLogin == true) ? true : false;
 
 
   useEffect(() => {
-    if (false) {
-    } else {
+    if (userInfo.id != user_id) {
       userDataSource.isLogIn()
         .then(res => {
           console.log(res);
@@ -26,26 +26,30 @@ function Auth(props) {
               .then(res => {
                 const user = res.user
                 console.log("logged in user", user);
-                if (user.id == user_id) console.log("match!!");
-                setUserInfo({ ...userInfo, id: user_id ,isLogin:true })
+                if (user.id == user_id) {
+                  console.log("match");
+                  setUserInfo({ ...userInfo, id: user_id, isLogin: true });
+                  setIsMatch(true);
+                  console.log(userInfo);
+                } else {
+                  console.log("set user none")
+                  setIsMatch(false);
+                  setUserInfo({ id: "", isLogin: false })
+                }
               })
           } else {
-            setUserInfo({ id: "" });
+            console.log("set user none")
+            setUserInfo({ id: "", isLogIn: false });
             // setUserInfo({ ...userInfo, id: "" ,isLogin:false })
           }
         })
     }
   }, []);
 
-  useEffect(() => {
-
-  }, [])
-
-  // console.log("isLogin", isLogin);
-
   return (
-     (isLogin ? props.children : <Redirect to={'/login'} />)
- );
+    (isLogin ? props.children :
+      !isMatch ? <Redirect to={'/login'} /> : null)
+  );
 
 
   // return (token ? props.children : <Redirect to={'/login'} />)
