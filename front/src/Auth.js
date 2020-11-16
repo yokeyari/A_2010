@@ -30,6 +30,7 @@ function Auth(props) {
   // })
   userDataSource.isLogIn()
     .then(res => {
+      console.log(res)
       if (res.statusText == "OK") {
         res.json()
           .then(user => {
