@@ -10,12 +10,10 @@ class Api::V1::MemosController < ApplicationController
 
   # メモを作成する．
   def create
-    begin
-      memo = Memo.create!(params.permit(:page_id, :text, :time))
-      render json: {memo: memo}, status: :ok
-    rescue => e # 作成できない場合
-      render json: {error: e.record.errors.full_messages}, status: :bad_request
-    end
+    memo = Memo.create!(params.permit(:user_id, :page_id, :parent_id, :text, :time))
+    render json: {memo: memo}, status: :ok
+  rescue => e # 作成できない場合
+    render json: {error: e.record.errors.full_messages}, status: :bad_request
   end
 
   def update

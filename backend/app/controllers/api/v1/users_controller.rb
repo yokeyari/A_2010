@@ -1,7 +1,7 @@
 class Api::V1::UsersController < ApplicationController
-  before_action :token_check, only: [:show]
+  #before_action :token_check, only: [:show]
   before_action :find_user, only: [:show, :update, :destroy]
-
+=begin
   def login
     user = User.find_by(email: params[:email].downcase)
     if user.nil?
@@ -19,8 +19,7 @@ class Api::V1::UsersController < ApplicationController
     User.find(params[:user_id]).regenerate_token
     render status: :ok
   end
-
-  # ユーザー1覧
+=end
   def index
     render json: {users: User.all}, status: :ok
   end
@@ -29,15 +28,12 @@ class Api::V1::UsersController < ApplicationController
     render json: {user: @user}, status: :ok
   end
 
-  # ユーザーの作成
   def create
-    begin
-      user = User.create!(params.permit(:name, :email, :password, :password_confirmation))
-      #session[:user_id] = user.id
-      render json: {user: user}, status: :ok
-    rescue => e
-      render json: {error: e.record.errors.full_messages}, status: :bad_request
-    end
+    user = User.create!(params.permit(:name, :email, :password, :password_confirmation))
+    session[:user] = user
+    render json: {user: user}, status: :ok
+  rescue => e
+    render json: {error: e.record.errors.full_messages}, status: :bad_request
   end
 
   # ユーザーのupdate
@@ -52,7 +48,7 @@ class Api::V1::UsersController < ApplicationController
   # ユーザーの削除
   def destroy
     @user.destroy
-    session.delete(:user_id)
+    reset_session
     render status: :ok
   end
 end
