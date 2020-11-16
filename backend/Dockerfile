@@ -16,7 +16,7 @@ COPY Gemfile.lock /myapp/Gemfile.lock
 RUN bundle install
 COPY . /myapp
 
-RUN apt-get install vim 
+RUN apt-get install -y vim 
 
 # Add a script to be executed every time the container starts.
 COPY entrypoint.sh /usr/bin/
