@@ -1,6 +1,6 @@
 // import axios from 'axios';
 
-const SERVER_URL = "http://localhost/api/v1/";
+const SERVER_URL = "http://localhost:5000/api/v1/";
 // const SERVER_URL = "https://api.memotube.xyz/api/v1/";
 // const SERVER_URL = "https://movie-rails.herokuapp.com/api/v1/";
 const BERT_URL = "https://bert.memotube.xyz/sentiment";
