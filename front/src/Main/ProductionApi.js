@@ -110,8 +110,8 @@ export class UserDataSource {
   //   return res;
   // }
   // }
-  async loginUser(user) {
-    const res = await fetch(this.API_URL + '/login', {
+  async loginUser(id_token, name) {
+    const res = await fetch(SERVER_URL + 'authes/login', {
       method: "POST",
       credentials: 'include', //クレデンシャルを含める指定
       mode: 'cors',
@@ -119,18 +119,21 @@ export class UserDataSource {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ email: user.email, password: user.password })
+      body: JSON.stringify({ id_token: id_token, user: name })
     })
     return res;
     //res.json 成功{"user":user}
     //res.status 成功200, 失敗400
   }
 
-  async checkLoggedInUser(user) {
-    const res = await fetch(this.API_URL + '/logged_in');
+  async isLogIn() {
+    const res = await fetch(SERVER_URL + 'authes/islogin', {
+      credentials: 'include', 
+      mode: 'cors'
+    });
     return res;
-    //成功 200
-    //失敗 401
+    //成功 {user}
+    //失敗 
   }
 
   async logoutUser(user_id) {
@@ -142,10 +145,11 @@ export class UserDataSource {
     //成功 200
   }
 
-  async getUser(user_id) {
-    const res = await fetch(this.API_URL + '/' + user_id, {
+  async getUser(access_token) {
+    const res = await fetch(this.API_URL + '/' , {
       credentials: 'include', //クレデンシャルを含める指定
       mode: 'cors',
+      headers: {'Authorization': 'Basic ' + access_token}
     });
     return res;
     //成功 200 {"user":user}
@@ -153,10 +157,12 @@ export class UserDataSource {
   }
 
   //userの新規作成
-  async createUser(user) {
-    console.log(user);
-    const res = await createData(user,
-      this.API_URL);
+  async createUser(user_name, access_token) {
+    const res = await createData(
+      user_name,
+      this.API_URL,
+      access_token
+    );
     console.log(res);
     return res;
   }
