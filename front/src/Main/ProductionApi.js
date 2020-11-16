@@ -24,7 +24,6 @@ async function createData(body, url) {
   //res.status: 成功200, 失敗400
 }
 
-// To do 使えるようにする
 async function updateData(body, url) {
   const res = await fetch(url, {
     method: "PATCH",
@@ -75,7 +74,7 @@ export class MemoDataSource {
 
   //メモの新規作成
   async createMemo(memo, page_id) {
-    const res = createData({ text: memo.text, time: memo.time },
+    const res = createData({ text: memo.text, time: memo.time, parent_id: memo.parent_id, user_id: memo.user_id },
       this.API_URL + `?page_id=${page_id}`);
     return res;
   }

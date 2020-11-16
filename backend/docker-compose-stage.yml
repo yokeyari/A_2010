@@ -3,7 +3,11 @@ services:
   db:
     image: postgres:13.0
     volumes:
+<<<<<<< HEAD
       - ~/volume/db:/var/lib/postgresql/data
+=======
+      - ~/volume/db2:/var/lib/postgresql/data
+>>>>>>> develop
     environment:
       POSTGRES_PASSWORD: 'postgres'
   web:
@@ -12,7 +16,11 @@ services:
     volumes:
       - .:/myapp
     ports:
+<<<<<<< HEAD
       - "5000:3000"
+=======
+      - "3333:3000"
+>>>>>>> develop
     depends_on:
       - db
     environment:

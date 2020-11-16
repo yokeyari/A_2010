@@ -8,4 +8,9 @@ services:
     ports:
       - "5000:3000"
     environment:
+<<<<<<< HEAD
             RAILS_ENV: development
+=======
+      RAILS_ENV: development
+
+>>>>>>> develop
