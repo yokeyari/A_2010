@@ -32,13 +32,14 @@ function Auth(props) {
                   setIsMatch(true);
                   console.log(userInfo);
                 } else {
-                  console.log("set user none")
+                  console.log("no match user")
                   setIsMatch(false);
                   setUserInfo({ id: "", isLogin: false })
                 }
               })
           } else {
             console.log("set user none")
+            setIsMatch(false);
             setUserInfo({ id: "", isLogIn: false });
             // setUserInfo({ ...userInfo, id: "" ,isLogin:false })
           }
