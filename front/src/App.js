@@ -53,6 +53,11 @@ function App() {
                     <PageAuth mode="user" />
                   </Auth>
                 </Route>
+                <Route path='/:user_id/:ws_id'>
+                  <Auth>
+                    
+                  </Auth>
+                </Route>
               </Switch>
             {/* </Auth> */}
           </Switch>

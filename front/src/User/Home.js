@@ -11,20 +11,23 @@ import {
 
 
 import * as PageAPI from '../Main/LocalApi';
-import { PageDataSource } from './../Main/ProductionApi'
+import { PageDataSource, WorkspaceDataSource } from './../Main/ProductionApi'
 import User from './User';
 //import './User.css';
 import PageList from './PageList';
 import SearchForm from './SeachForm';
+import SelectWorkspace from '../Workspace/SelectWorkspace';
 import UserInfoContext from '../context'
 
 import NewPage from '../NewPage/NewPage';
 
 const pageDataSource = new PageDataSource();
+const workspacesDataSource = new WorkspaceDataSource();
 
 function Home(props) {
   const [state, setState] = useState({ search_word: "", pages: [] });
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
+  const [workspaces, setWorkspaces] = useState([])
   const user = userInfo;
 
   // const { user_id } = useParams();
@@ -54,6 +57,19 @@ function Home(props) {
 
   }
 
+  // useEffect(() => {
+  //   console.log('load workspace list');
+  //   // ???
+  //   // workspacesDataSource.getIndex().then(res => {
+  //   //   console.log('load workspace list');
+  //   //   setState({...state, workspaces: res.workspaces});
+  //   // })
+
+  //   // ????
+  //   const test_workspaces = [{id: 1, name: "ws1", permission: "normal"}]
+  //   setWorkspaces(test_workspaces);
+  // }, [])
+
   useEffect(() => {
     // setUserInfo({...userInfo,...user});
     loadPages();
@@ -71,12 +87,15 @@ function Home(props) {
     loadPages();
   }
 
+  // console.log('called from home.js', workspaces);
+
   return (
     <div className="User-Top">
       {/*className="User-To"*/}
       <h2 className="User-name">Welcome {userInfo.name}!</h2>
       {/* <SearchForm onChange={handleChangeSeachForm} search_word={state.search_word}　onClick={() => {handleSeach(state.search_word)}} /> */}
 
+      <SelectWorkspace />
       <PageList pages={state.pages} withUpdate={withUpdate} />
     </div>
 
