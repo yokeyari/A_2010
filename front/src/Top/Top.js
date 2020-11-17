@@ -1,4 +1,4 @@
-import React,{useContext} from "react";
+import React, { useContext } from "react";
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import img from '.././intro.jpg';
@@ -13,10 +13,13 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Hidden from '@material-ui/core/Hidden';
+import GoogleLogin from "../Auth/GoogleLogin";
 import {
   BrowserRouter as Router,
   useRouteMatch,
   Redirect,
+  Route,
+  Switch
 } from "react-router-dom";
 
 
@@ -26,6 +29,7 @@ import "./Login.css";
 import { UserDataSource } from '../Main/ProductionApi';
 import Signup from "./Signup";
 import UserInfoContext from '../context';
+import { Container } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -69,7 +73,6 @@ const UserAPI = new UserDataSource();
 function Top() {
   const classes = useStyles();
   // console.log(useRouteMatch());
-  const path = useRouteMatch().path;
   const { userInfo } = useContext(UserInfoContext);
 
 
@@ -91,7 +94,7 @@ function Top() {
     } else {
       return (
         <div>
-          <Grid container className={classes.root} row="column" >
+          <Grid container className={classes.root}>
             <CssBaseline />
             {/*<Hidden xsDown>*/}
             <Grid item xs={false} sm={4} md={7} className={classes.image} >
@@ -100,11 +103,20 @@ function Top() {
             {/*</Hidden>*/}
 
             <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-              {path == "/login" ?
-                <Login />
-                :
-                <Signup />
-              }
+                <Box textAlign='center'>
+                  <GoogleLogin/>
+                </Box>
+                <Switch>
+                  <Route exact path='/'></Route>
+
+                  <Route exact path='/login'>
+                      <Login />
+                  </Route>
+
+                  <Route exact path='/signup'>
+                      <Signup />
+                  </Route>
+                </Switch>
             </Grid>
           </Grid>
         </div>

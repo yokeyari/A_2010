@@ -168,34 +168,3 @@ export default function Signup() {
     </div>
   );
 }
-{/*
-   <div className="Signup">
-      <div className="Signup-form">
-        <h1>Signup</h1>
-        <p>name</p>
-        <TextField required id="mail" label="Required" defaultValue="name" value={name} onChange={(e) => { setName(e.target.value) }} />
-        <p>mail address</p>
-        <TextField required id="name" label="Required" defaultValue="e-mail" value={email} onChange={(e) => { setEmail(e.target.value) }} />
-        <p>password</p>
-        <TextField
-          id="pass"
-          label="Password"
-          type="password"
-          // autoComplete="current-password"
-          value={password} onChange={(e) => setPassword(e.target.value)}
-        />
-        <p>retype password</p>
-        <TextField
-          id="pass2"
-          label="Retype Password"
-          type="password"
-          // autoComplete="current-password"
-          value={passwordRetype} onChange={(e) => setPasswordRetype(e.target.value)}
-        />
-
-        <Transition to={state.to} ok={state.isLoaded} isLoading={state.isLoading}>
-          <Button id="submit" variant="contained" onClick={handleSingup}>submit</Button>
-        </Transition>
-
-      </div>
-</div>*/}

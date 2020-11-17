@@ -1,104 +1,66 @@
 import React, { useContext, useEffect, useState, useRef } from 'react'
-import { Redirect, useParams, withRouter } from 'react-router-dom'
+import { Redirect, useParams, withRouter, Link } from 'react-router-dom'
+import { makeStyles, withStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+
 import UserInfoContext from '../context';
 import { UserDataSource } from '../Main/ProductionApi';
 
 const userDataSource = new UserDataSource();
 
+const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+    backgroundColor: "#4F5D75" //青っぽい黒でいい感じ
+  },
+  rightLink: {
+    fontSize: 16,
+    color: theme.palette.common.white,
+    marginLeft: theme.spacing(3),
+  },
+  right: {
+    flex: 1,
+    display: 'flex',
+    justifyContent: 'flex-end',
+  },
+}));
+
+
+
+
 function LoginAuth(props) {
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
-  const auth = useRef(null);
 
+  const classes = useStyles();
 
   const isLogin = (userInfo.isLogin == true) ? true : false;
 
   useEffect(() => {
-    const initGAPI = () => {
-      const sendLoginState = () => {
-        console.log('current user', auth.current.currentUser.get().getBasicProfile());
-        console.log('auth response', auth.current.currentUser.get().getAuthResponse());
-        const id_token = auth.current.currentUser.get().getAuthResponse().id_token;
-        const name = auth.current.currentUser.get().getBasicProfile().getName();
-        //login して返ってきたuserのidのページに移動する 
-        userDataSource.loginGoogleUser(id_token, name)
-          .then(res => {
-            if (res.statusText == "OK") {
-              res.json()
-                .then(user => {
-                  console.log('response user', user);
-                  setUserInfo({ ...userInfo, endCheck: true, id: user.user.id, name: user.user.name, isLogin: true });
-                  props.history.push(`/${user.user.id}/`);
-                })
-            } else {
-              console.log(res);
-              // TODOここにログインできなかったときの処理
-            }
-          });
-        //  props.history.push('/1/');
-      }
-
-      function onAuthChange(val) {
-        console.log("google auth", val)
-        if (val) {
-          sendLoginState();
-        } else {
-          setUserInfo({endCheck: true, id: "", name: "", isLogin: false });
-          props.history.push('/');
-        }
-      }
-
-      window.gapi.load('client:auth2', () => {
-        window.gapi.client.init({
-          clientId: '1067371292574-gg50a0rilqkk188icegdc79t60gau1s7.apps.googleusercontent.com', /* 自分が作成したIDを入力　*/
-          scope: 'email'
-          // thenを使用することで、処理が成功した場合のみ、処理を進めることができる
-        }).then(() => {
-          // APIで使用されるメソッド
-          // OAuthを使用してログインするかをクライアントに投げる
-          auth.current = window.gapi.auth2.getAuthInstance();
-          // Stateとして、サインインの情報を保存する
-          auth.current.isSignedIn.listen(onAuthChange);
-          console.log(userInfo)
-          if (auth.current.isSignedIn.get()) {
-            userDataSource.isLogIn().then(res => {
-              console.log(res);
-              if (res.statusText == "OK") {
-                res.json().then(res => {
-                  const user = res.user
-                  console.log("logged in user", user);
-                  setUserInfo({ ...userInfo, endCheck: true, id: user.id, name: user.name, isLogin: true });
-                })
-              } else {
-                console.log("set user none")
-                sendLoginState();
-              }
-            })
-          }else{
-            setUserInfo({...userInfo,endCheck:true});
-          }
+    userDataSource.isLogIn().then(res => {
+      console.log("first login check", res);
+      if (res.statusText == "OK") {
+        res.json().then(res => {
+          const user = res.user
+          console.log("logged in user", user);
+          setUserInfo({ ...userInfo, endCheck: true, id: user.id, name: user.name, isLogin: true });
         })
-      });
-    }
-
-    initGAPI();
+      } else {
+        setUserInfo({ ...userInfo, endCheck: true, isLogin: false });
+      }
+    })
   }, []);
-
-
-
-
 
 
   // 正確には、クリックしただけでサインインはできていないので、アクションの名前にClickをつける
   const onSignInClick = () => {
-    console.log(auth)
-    //  authCheck();
-    auth.current.signIn();
+
   };
   const onSignOutClick = () => {
-    console.log(auth)
-    auth.current.signOut();
-    //  authCheck();
-    props.history.push('/');
+    userDataSource.logoutUser().then((res) => {
+      console.log(res)
+      setUserInfo({ endCheck: true, id: "", name: "", isLogin: false });
+      props.history.push('/login');
+    });
   }
 
 
@@ -106,19 +68,13 @@ function LoginAuth(props) {
   function renderAuthButton() {
     if (userInfo.isLogin === null) {
       return null;
-    } else if (false || userInfo.isLogin) {
+    } else if (userInfo.isLogin) {
       return (
-        <button onClick={onSignOutClick} className="ui red google button">
-          <i className="google icon" />
-          Sign Out With Google
-        </button>
+        <Button color="inherit" onClick={onSignOutClick} className={classes.rightLink}>Logout</Button>
       );
     } else {
       return (
-        <button onClick={onSignInClick} className="ui red google button">
-          <i className="google icon" />
-          Sign In With Google
-        </button>
+        <Button color="inherit" component={Link} to='/login' className={classes.rightLink} onClick={onSignInClick} >Login</Button>
       );
     }
   }
@@ -135,4 +91,5 @@ function LoginAuth(props) {
 
 }
 
-export default withRouter(LoginAuth)
+export default withRouter(LoginAuth);
+

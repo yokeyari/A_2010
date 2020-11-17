@@ -139,9 +139,6 @@ export default function Header(props) {
           <div className={classes.right}>
 
             <LoginAuth/>
-            <Button color="inherit" component={Link} to='/login' className={classes.rightLink}>Login</Button>
-            <Button color="inherit" component={Link} to='/login' onClick={()=>{handleLogout()}}  className={classes.rightLink}>Logout</Button>
-            {/* <Button color="inherit" component={Link} to='/signup' className={classes.rightLink}>Signup</Button> */}
           </div>
 
         </Toolbar>
