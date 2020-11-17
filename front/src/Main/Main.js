@@ -56,15 +56,17 @@ function Main(props) {
   const [isLoading, segtIsLoading] = useState(false);
   const [colorList, setColorList] = useState([]);
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
+  const [visMemos, SetVisMemos] = useState({memos: []});
+  const { ws_id } = useParams();
 
   const page_id = props.page_id;
 
-  
   //const page_id = page.page_id;
 
   useEffect(() => {
     MemoAPI.getMemoIndex(page_id).then(json => {
-      setMemos(json)
+      setMemos(json);
+      SetVisMemos(json);
       //これがないとメモ以外が即座に更新されない
       PageApi.getPage(page_id).then(json => {
         json.json().then(json => {
@@ -74,9 +76,10 @@ function Main(props) {
         )
       })
     })
-  }, [reloader,page_id])
+  }, [reloader, page_id])
 
   useEffect(() => {
+    setUserInfo({...userInfo, ws_id: (ws_id ? ws_id : "home")});
     // ここでタイトルなどの読み込み
     segtIsLoading(true);
     PageApi.getPage(page_id).then(json => {
@@ -106,7 +109,7 @@ function Main(props) {
 
   function handleChangeTitle(title) {
     // post server
-    console.log({tags:page.tags,page:{...page.page,title:title}});
+    console.log({ tags: page.tags, page: { ...page.page, title: title } });
     // setPage({tags:page.tags,page:{...page.page,title:title}});
     // withUpdate(PageApi.updatePage({ url: page.page.url, title: title, id: page_id }));
   }
@@ -114,6 +117,23 @@ function Main(props) {
   function handleWriting() {
     if (true) {
       setPlayer({ ...player, playing: false })
+    }
+  }
+
+  function changeMemoByAttribute(event) {
+    const mode = event.target.value;
+    const mymemos = memos.memos.filter(memo => memo.user_id==userInfo.id ? true : false)
+    switch (mode) {
+      case 'onlyme':
+        SetVisMemos({memos: mymemos}); break;
+      case 'public': 
+        const public_memos = mymemos.filter(memo => memo.attribute=="public" ? true : false); 
+        SetVisMemos({memos: public_memos}); break;
+      case 'private':
+        const private_memos = mymemos.filter(memo => memo.attribute=="private" ? true : false);
+        SetVisMemos({memos: private_memos}); break;
+      default:
+        SetVisMemos(memos)
     }
   }
 
@@ -159,6 +179,29 @@ function Main(props) {
     }
   }
 
+  const VisMemoHamburger = 
+    (userInfo.ws_id != "home") ?
+      <Grid container direction="row" justify="center" alignItems="center">
+        <Grid item>
+          <Box style={{ marginRight: "20px" }}>メモの表示切替</Box>
+        </Grid>
+        <Grid item>
+          <FormControl className={classes.formControl}>
+            <Select onChange={changeMemoByAttribute}
+              defaultValue="all"
+              className={classes.selectEmpty}
+              inputProps={{ "aria-label": "Without label" }}>
+              <MenuItem value="all">全員</MenuItem>
+              <MenuItem value="onlyme">自分</MenuItem>
+              <MenuItem value="public">public</MenuItem>
+              <MenuItem value="private">private</MenuItem>
+            </Select>
+          </FormControl>
+        </Grid>
+      </Grid>
+      : <></>
+  
+
   return (
     <div className="Main">
       <Loading open={isLoading}>
@@ -193,7 +236,7 @@ function Main(props) {
           <Grid item xs={10} md={6}>
 
             <Grid container direction="column" >
-              
+
               <Grid container direction="row" justify="center" alignItems="center">
 
                 <Grid item >
@@ -215,9 +258,11 @@ function Main(props) {
 
               </Grid>
 
+              {VisMemoHamburger}
+
               <Grid item>
                 <MemoList
-                  memos={memos}
+                  memos={visMemos}
                   colorList={colorList}
                   onChange={handleChange}
                   onDelete={handleDelete}

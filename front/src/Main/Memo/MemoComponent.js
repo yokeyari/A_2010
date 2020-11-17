@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import { makeStyles } from '@material-ui/core/styles';
 import { formatSec2Str } from '../Duration';
 import Card from '@material-ui/core/Card'
@@ -9,7 +9,10 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import DoneIcon from '@material-ui/icons/Done';
 
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
-import { CardActions } from "@material-ui/core";
+import Select from "@material-ui/core/Select";
+import { CardActions, FormControl, MenuItem } from "@material-ui/core";
+
+import UserInfoContext from "../../context";
 // class Memo{
 //   body = '';
 //   time = 0;
@@ -30,10 +33,11 @@ function MemoComponent(props) {
   const classes = useStyles();
   const [isEditMode, setEditMode] = useState(false);
   const [text, setText] = useState(props.memo.text)
+  const { userInfo, setUserInfo } = useContext(UserInfoContext);
   const memo = props.memo
   const player = props.player
 
-  
+
   const endEditMode = () => {
     props.onChange({ ...memo, text: text });
     setEditMode(false);
@@ -43,6 +47,24 @@ function MemoComponent(props) {
     player.player.player.seekTo(memo.time)
   }
 
+  const handleChangeAttribute = (event) => {
+    const attribute = event.target.value;
+    props.onChange({ ...memo, attribute: attribute });
+  }
+
+  const seletctAttribute =
+    (userInfo.ws_id != "home") ?
+      <FormControl>
+        <Select onChange={handleChangeAttribute}
+          defaultValue={memo.attribute}
+          className={""}
+          inputProps={{ "aria-label": "Without label" }}
+        >
+          <MenuItem value={"private"}>private</MenuItem>
+          <MenuItem value={"public"}>public</MenuItem>
+        </Select>
+      </FormControl>
+      : <></>
 
   const body =
     isEditMode ?
@@ -51,17 +73,17 @@ function MemoComponent(props) {
         type="text" id="memo-input" className="" onChange={(e) => setText(e.target.value)} value={text} />
       :
       <TextField
-      multiline
-      //rows={4}
-      fullWidth
-      style={{backgroundColor:props.color}}
-      value={memo.text}
-      variant="outlined"
-      InputProps={{
-        readOnly: true,
-      }}
+        multiline
+        //rows={4}
+        fullWidth
+        style={{ backgroundColor: props.color }}
+        value={memo.text}
+        variant="outlined"
+        InputProps={{
+          readOnly: true,
+        }}
       />
-        ;
+    ;
   return (
     <Card className={classes.card} key={memo.id}>
       <CardActions >
@@ -70,6 +92,7 @@ function MemoComponent(props) {
           <Button className="edit" startIcon={<DoneIcon />} onClick={() => { endEditMode() }}>done</Button> :
           <Button className="edit" color="primary" startIcon={<EditIcon />} onClick={() => { setEditMode(true) }}>edit</Button>}
         <Button className="delete" color="secondary" startIcon={<DeleteIcon />} onClick={() => { props.onDelete(memo) }}>delete</Button>
+        {seletctAttribute}
       </CardActions>
       <CardActions>
         {body}

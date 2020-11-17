@@ -72,28 +72,25 @@ function WriteMemoForm(props) {
     setAttribute(value);
   }
 
-  console.log("ws_id", userInfo.ws_id);
+  const seletctAttribute =
+    (userInfo.ws_id != "home") ?
+      <FormControl>
+        <Select onChange={handleChangeAttribute}
+          defaultValue="private"
+          className={""}
+          inputProps={{ "aria-label": "Without label" }}
+        >
+          <MenuItem value={"private"}>private</MenuItem>
+          <MenuItem value={"public"}>public</MenuItem>
+        </Select>
+      </FormControl>
+      : <></>
 
   return (
     //<div>
     <Card className={classes.card}>
       <div id="memo-form" className="Main-memo">
-        <div>
-          {/* ws_idがhomeじゃない時にpublicとprivateの選択肢が出る */}
-          {/* homeの時はprivateでメモが作成される */}
-          {(userInfo.ws_id != "home") && (
-            <FormControl>
-              <Select onChange={handleChangeAttribute}
-                defaultValue="select attribute"
-                className={""}
-                inputProps={{ "aria-label": "Without label" }}
-              >
-                <MenuItem value={"private"}>private</MenuItem>
-                <MenuItem value={"public"}>public</MenuItem>
-              </Select>
-            </FormControl>
-          )}
-        </div>
+        {seletctAttribute}
         <CardHeader
           action={
             <Tooltip title="メモを作成">
