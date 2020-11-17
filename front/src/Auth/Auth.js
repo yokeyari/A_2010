@@ -1,3 +1,4 @@
+import { Container } from '@material-ui/core';
 import React, { useContext, useEffect, useState } from 'react'
 import { Redirect, useParams } from 'react-router-dom'
 import UserInfoContext from '../context';
@@ -15,11 +16,21 @@ function Auth(props) {
 
   const isLogin = (userInfo.isLogin == true) ? true : false;
 
+  const error_page = 
+  <Container>
+    nothing found ,pleas check url
+  </Container>
 
-  return (
-    (isLogin ? props.children :
-      !isMatch ? <Redirect to={'/login'} /> : null)
-  );
+  if(isLogin){
+    if(userInfo.id == user_id){
+      return props.children
+    }else{
+      return error_page
+    }
+  }else{
+    return null
+  }
+
 
 
   // return (token ? props.children : <Redirect to={'/login'} />)
