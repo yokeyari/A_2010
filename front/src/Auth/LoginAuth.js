@@ -62,7 +62,7 @@ function LoginAuth(props) {
           res.json()
             .then(user => {
               console.log('response user', user);
-              setUserInfo({ ...userInfo, isLogin: auth.current.isSignedIn.get() });
+              setUserInfo({ ...userInfo, id: user.user.id, isLogin: auth.current.isSignedIn.get() });
               props.history.push(`/${user.user.id}/`);
             })
         } else {
@@ -93,8 +93,8 @@ function LoginAuth(props) {
   }
 
   function onAuthChange(val) {
-    console.log("google auth", userInfo)
-    // setUserInfo({ ...userInfo, isLogin: auth.current.isSignedIn.get() });
+    console.log("google auth", val)
+    setUserInfo({ ...userInfo, isLogin: val });
     if (val) {
       sendLoginState();
     } else {
