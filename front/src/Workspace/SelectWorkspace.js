@@ -1,8 +1,8 @@
 import { useContext, useState, useEffect } from "react";
-import { withRouter } from 'react-router-dom';
+import { withRouter, useParams } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import Select from "@material-ui/core/Select";
-import { FormControl, MenuItem } from '@material-ui/core';
+import { FormControl, MenuItem, InputLabel } from '@material-ui/core';
 
 import UserInfoContext from '../context';
 import { WorkspaceDataSource } from '../Main/ProductionApi';
@@ -11,6 +11,7 @@ import { WorkspaceDataSource } from '../Main/ProductionApi';
 function SelectWorkspace(props) {
   const [workspaces, setWorkspaces] = useState([])
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
+  const { ws_id } = useParams();
 
   function switchWorkspace(event) {
     // 本番用
@@ -19,8 +20,15 @@ function SelectWorkspace(props) {
 
     // テスト用
     const workspace_id = event.target.value;
-    // workspace=="home" ? props.history.push(`/${userInfo.id}`) : props.history.push({pathname: `/${userInfo.id}/ws/${workspace.id}`, state: {workspace: workspace}})
-    workspace_id=="home" ? props.history.push(`/${userInfo.id}`) : props.history.push(`/${userInfo.id}/ws/${workspace_id}`)
+    console.log(workspace_id);
+    switch (workspace_id) {
+      case "home":
+        props.history.push(`/${userInfo.id}`); break;
+      case "create":
+        break;
+      default:
+        props.history.push(`/${userInfo.id}/ws/${workspace_id}`);
+    }
   }
 
   useEffect(() => {
@@ -40,8 +48,10 @@ function SelectWorkspace(props) {
     <div className="Select-Workspace-List">
       <Grid item>
         <FormControl>
+          <InputLabel id="demo-simple-select-label">workspace</InputLabel>
+          {console.log(userInfo.ws_id)}
           <Select onChange={switchWorkspace}
-            defaultValue="select workspace"
+            defaultValue={ws_id ? ws_id : "home"}
             className={""}
             inputProps={{ "aria-label": "Without label" }}
           >
@@ -51,6 +61,7 @@ function SelectWorkspace(props) {
                 <MenuItem value={workspace.id} key={workspace.id}>{workspace.name} ({workspace.permission})</MenuItem>
                 ))
             }
+            <MenuItem value={"create"}>create workspace</MenuItem>
           </Select>
         </FormControl>
       </Grid>
