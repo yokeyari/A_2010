@@ -1,8 +1,8 @@
 import React, { useEffect, useContext,useRef } from 'react';
 import { Link, Redirect, withRouter } from 'react-router-dom';
 
-import UserInfoContext from './context'
-import { UserDataSource } from './Main/ProductionApi';
+import UserInfoContext from '../context'
+import { UserDataSource } from '../Main/ProductionApi';
 
 const userDataSource = new UserDataSource();
 

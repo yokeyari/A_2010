@@ -21,7 +21,7 @@ import { UserDataSource } from "../Main/ProductionApi";
 import UserInfoContext from "../context";
 import Transition from "../Transition";
 import transitions from "@material-ui/core/styles/transitions";
-import GoogleAuth from '../GoogleAuth';
+import GoogleAuth from '../Auth/GoogleAuth';
 
 const userDataSource = new UserDataSource();
 const useStyles = makeStyles((theme) => ({

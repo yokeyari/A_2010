@@ -99,7 +99,7 @@ export class UserDataSource {
   constructor() {
   }
 
-  //userのログイン
+  // userのメールログイン
   // async loginUser(user) {
   //   const res = await axios.post(this.API_URL + '/login', {
   //     email: user.email, password: user.password
@@ -109,9 +109,10 @@ export class UserDataSource {
   //   console.log(res);
   //   return res;
   // }
-  // }
-  async loginUser(id_token, name) {
-    const res = await fetch(SERVER_URL + 'authes/login', {
+
+
+  async loginGoogleUser(id_token, name) {
+    const res = await fetch(SERVER_URL + 'authes/login/google', {
       method: "POST",
       credentials: 'include', //クレデンシャルを含める指定
       mode: 'cors',
@@ -128,7 +129,7 @@ export class UserDataSource {
 
   async isLogIn() {
     const res = await fetch(SERVER_URL + 'authes/islogin', {
-      credentials: 'include', 
+      credentials: 'include',
       mode: 'cors'
     });
     return res;
@@ -137,7 +138,7 @@ export class UserDataSource {
   }
 
   async logoutUser(user_id) {
-    const res = await fetch(this.API_URL+`/logout?user_id=${user_id}`, {
+    const res = await fetch(this.API_URL + `/logout?user_id=${user_id}`, {
       credentials: 'include', //クレデンシャルを含める指定
       mode: 'cors',
       method: 'POST'
@@ -146,10 +147,10 @@ export class UserDataSource {
   }
 
   async getUser(access_token) {
-    const res = await fetch(this.API_URL + '/' , {
+    const res = await fetch(this.API_URL + '/', {
       credentials: 'include', //クレデンシャルを含める指定
       mode: 'cors',
-      headers: {'Authorization': 'Basic ' + access_token}
+      headers: { 'Authorization': 'Basic ' + access_token }
     });
     return res;
     //成功 200 {"user":user}
@@ -215,9 +216,9 @@ export class PageDataSource {
     //失敗：404
   }
 
-  async getPageByToken(page_token){
+  async getPageByToken(page_token) {
     const res = await fetch(this.API_URL + '/' + page_token, {
-      method:"POST",
+      method: "POST",
       // credentials: 'include', //クレデンシャルを含める指定
       mode: 'cors',
     });
@@ -255,8 +256,8 @@ export class PageDataSource {
       },
       body: JSON.stringify({ user_id: user.id, keywords: keywords })
     })
-    // .then(res => console.log(res))
-    .then(res => res.json());
+      // .then(res => console.log(res))
+      .then(res => res.json());
     console.log(res.pages);
     return res;
     //res.json 成功{"pages" (page とmemoの配列)の配列}
@@ -314,14 +315,14 @@ export class TagDataSource {
 }
 
 export class BertDataSource {
-  async getSentment (text_list) {
+  async getSentment(text_list) {
     let np_scores = [];
     for (let text of text_list) {
-      console.log("before",text)
+      console.log("before", text)
       const res = await fetch(BERT_URL + `?text=${text}`, {
         mode: 'cors',
       });
-      console.log("after,",res)
+      console.log("after,", res)
       const json = await res.json();
       console.log(json)
       np_scores.push(json.body)

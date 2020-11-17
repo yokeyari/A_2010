@@ -10,8 +10,8 @@ import Header from './Header';
 import { useState } from 'react';
 import UserInfoContext from './context';
 import Signup from './Top/Signup';
-import Auth from './Auth';
-import PageAuth from "./PageAuth";
+import Auth from './Auth/Auth';
+import PageAuth from "./Auth/PageAuth";
 
 function App() {
   const [userInfo, setUserInfo] = useState({
