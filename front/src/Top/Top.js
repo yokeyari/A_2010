@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useContext} from "react";
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import img from '.././intro.jpg';
@@ -15,11 +15,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Hidden from '@material-ui/core/Hidden';
 import {
   BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
   useRouteMatch,
-  useParams,
+  Redirect,
 } from "react-router-dom";
 
 
@@ -28,6 +25,7 @@ import Promotion from './Promotion';
 import "./Login.css";
 import { UserDataSource } from '../Main/ProductionApi';
 import Signup from "./Signup";
+import UserInfoContext from '../context';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -37,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundImage: `url(${img})`,
     backgroundRepeat: 'no-repeat',
     backgroundColor:
-    theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
+      theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
     // backgroundColor: "#87cefa",
     //backgroundColor: "#4FC3F7",
     //padding:"0 5%",
@@ -65,12 +63,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+
+const UserAPI = new UserDataSource();
+
 function Top() {
   const classes = useStyles();
   // console.log(useRouteMatch());
   const path = useRouteMatch().path;
+  const { userInfo } = useContext(UserInfoContext);
 
-  const UserAPI = new UserDataSource();
 
   // UserAPI.loginUser(user)
   // UserAPI.createUser(user)
@@ -78,26 +79,40 @@ function Top() {
   // UserAPI.deleteUser(user)
   // UserAPI.getUser(user_id)
 
-  return (
-    <div>
-      <Grid container  className={classes.root} row="column" >
-        <CssBaseline />
-        {/*<Hidden xsDown>*/}
-          <Grid item  xs={false} sm={4} md={7} className={classes.image} >
-            <Promotion />
+  if (userInfo.endCheck == false) {
+    return (
+      null
+    )
+  } else {
+    if (userInfo.id != "") {
+      return (
+        <Redirect to={`/${userInfo.id}/`} />
+      )
+    } else {
+      return (
+        <div>
+          <Grid container className={classes.root} row="column" >
+            <CssBaseline />
+            {/*<Hidden xsDown>*/}
+            <Grid item xs={false} sm={4} md={7} className={classes.image} >
+              <Promotion />
+            </Grid>
+            {/*</Hidden>*/}
+
+            <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+              {path == "/login" ?
+                <Login />
+                :
+                <Signup />
+              }
+            </Grid>
           </Grid>
-        {/*</Hidden>*/}
-        
-        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-          {path == "/login" ?
-            <Login />
-            :
-            <Signup />
-          }
-        </Grid>
-      </Grid>
-    </div>
-  );
+        </div>
+      );
+    }
+  }
+
+
 }
 
 

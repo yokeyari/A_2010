@@ -7,100 +7,84 @@ const userDataSource = new UserDataSource();
 
 function LoginAuth(props) {
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
-  const [endCheck, setEndCheck] = useState(false);
   const auth = useRef(null);
 
 
   const isLogin = (userInfo.isLogin == true) ? true : false;
 
   useEffect(() => {
+    const initGAPI = () => {
+      const sendLoginState = () => {
+        console.log('current user', auth.current.currentUser.get().getBasicProfile());
+        console.log('auth response', auth.current.currentUser.get().getAuthResponse());
+        const id_token = auth.current.currentUser.get().getAuthResponse().id_token;
+        const name = auth.current.currentUser.get().getBasicProfile().getName();
+        //login して返ってきたuserのidのページに移動する 
+        userDataSource.loginGoogleUser(id_token, name)
+          .then(res => {
+            if (res.statusText == "OK") {
+              res.json()
+                .then(user => {
+                  console.log('response user', user);
+                  setUserInfo({ ...userInfo, endCheck: true, id: user.user.id, name: user.user.name, isLogin: true });
+                  props.history.push(`/${user.user.id}/`);
+                })
+            } else {
+              console.log(res);
+              // TODOここにログインできなかったときの処理
+            }
+          });
+        //  props.history.push('/1/');
+      }
+
+      function onAuthChange(val) {
+        console.log("google auth", val)
+        if (val) {
+          sendLoginState();
+        } else {
+          setUserInfo({endCheck: true, id: "", name: "", isLogin: false });
+          props.history.push('/');
+        }
+      }
+
+      window.gapi.load('client:auth2', () => {
+        window.gapi.client.init({
+          clientId: '1067371292574-gg50a0rilqkk188icegdc79t60gau1s7.apps.googleusercontent.com', /* 自分が作成したIDを入力　*/
+          scope: 'email'
+          // thenを使用することで、処理が成功した場合のみ、処理を進めることができる
+        }).then(() => {
+          // APIで使用されるメソッド
+          // OAuthを使用してログインするかをクライアントに投げる
+          auth.current = window.gapi.auth2.getAuthInstance();
+          // Stateとして、サインインの情報を保存する
+          auth.current.isSignedIn.listen(onAuthChange);
+          console.log(userInfo)
+          if (auth.current.isSignedIn.get()) {
+            userDataSource.isLogIn().then(res => {
+              console.log(res);
+              if (res.statusText == "OK") {
+                res.json().then(res => {
+                  const user = res.user
+                  console.log("logged in user", user);
+                  setUserInfo({ ...userInfo, endCheck: true, id: user.id, name: user.name, isLogin: true });
+                })
+              } else {
+                console.log("set user none")
+                sendLoginState();
+              }
+            })
+          }else{
+            setUserInfo({...userInfo,endCheck:true});
+          }
+        })
+      });
+    }
+
     initGAPI();
   }, []);
 
-  // useEffect(() => {
-  //   if (userInfo.id != user_id) {
-  //     userDataSource.isLogIn()
-  //       .then(res => {
-  //         console.log(res);
-  //         if (res.statusText == "OK") {
-  //           res.json()
-  //             .then(res => {
-  //               const user = res.user
-  //               console.log("logged in user", user);
-  //               if (user.id == user_id) {
-  //                 console.log("match");
-  //                 setUserInfo({ ...userInfo, id: user_id, isLogin: true });
-  //                 setEndCheck(true);
-  //                 console.log(userInfo);
-  //               } else {
-  //                 console.log("no match user")
-  //                 setEndCheck(true);
-  //                 setUserInfo({ id: "", isLogin: false })
-  //               }
-  //             })
-  //         } else {
-  //           console.log("set user none")
-  //           setEndCheck(true);
-  //           setUserInfo({ id: "", isLogIn: false });
-  //           // setUserInfo({ ...userInfo, id: "" ,isLogin:false })
-  //         }
-  //       })
-  //   }
-  // }, []);
 
 
-
-  const sendLoginState = () => {
-    console.log('current user', auth.current.currentUser.get().getBasicProfile());
-    console.log('auth response', auth.current.currentUser.get().getAuthResponse());
-    const id_token = auth.current.currentUser.get().getAuthResponse().id_token;
-    const name = auth.current.currentUser.get().getBasicProfile().getName();
-    //login して返ってきたuserのidのページに移動する 
-    userDataSource.loginGoogleUser(id_token, name)
-      .then(res => {
-        if (res.statusText == "OK") {
-          res.json()
-            .then(user => {
-              console.log('response user', user);
-              setUserInfo({ ...userInfo, id: user.user.id, isLogin: auth.current.isSignedIn.get() });
-              props.history.push(`/${user.user.id}/`);
-            })
-        } else {
-          console.log(res);
-          // TODOここにログインできなかったときの処理
-        }
-      });
-    //  props.history.push('/1/');
-  }
-
-
-  const initGAPI = () => {
-    window.gapi.load('client:auth2', () => {
-      window.gapi.client.init({
-        clientId: '1067371292574-gg50a0rilqkk188icegdc79t60gau1s7.apps.googleusercontent.com', /* 自分が作成したIDを入力　*/
-        scope: 'email'
-        // thenを使用することで、処理が成功した場合のみ、処理を進めることができる
-      }).then(() => {
-        // APIで使用されるメソッド
-        // OAuthを使用してログインするかをクライアントに投げる
-        auth.current = window.gapi.auth2.getAuthInstance();
-        // Stateとして、サインインの情報を保存する
-        auth.current.isSignedIn.listen(onAuthChange);
-        console.log(userInfo)
-        sendLoginState();
-      })
-    });
-  }
-
-  function onAuthChange(val) {
-    console.log("google auth", val)
-    setUserInfo({ ...userInfo, isLogin: val });
-    if (val) {
-      sendLoginState();
-    } else {
-      props.history.push('/');
-    }
-  }
 
 
 
@@ -143,7 +127,7 @@ function LoginAuth(props) {
   return (
     <div>
       { renderAuthButton()}
-      {(!endCheck ? null :
+      {(!userInfo.endCheck ? null :
         !isLogin ? <Redirect to={'/login'} /> : null)}
     </div>
   );
