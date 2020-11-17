@@ -120,7 +120,7 @@ export class UserDataSource {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ id_token: id_token, user: name })
+      body: JSON.stringify({ id_token: id_token, name: name })
     })
     return res;
     //res.json 成功{"user":user}
