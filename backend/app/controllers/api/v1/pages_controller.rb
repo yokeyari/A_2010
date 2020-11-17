@@ -1,6 +1,5 @@
 class Api::V1::PagesController < ApplicationController
-  #before_action :logged_in?
-  before_action :find_user, only: [:index, :search]
+  before_action :current_user
   before_action :find_page, only: [:show, :update, :destroy, :reset_token]
 
   # メモページ一覧とメモ一覧を返す
@@ -15,17 +14,13 @@ class Api::V1::PagesController < ApplicationController
     render json: {page: @page, tags: @page.tags}, status: :ok
   end
 
-  # 新しいpageの作成
   def create
-    begin
-      page = Page.create!(params.permit(:user_id, :url, :title))
-      render json: {page: page}, status: :ok
-    rescue => e
-      render json: {error: e.record.errors.full_messages}, status: :bad_request
-    end
+    page = Page.create!(params.permit(:user_id, :url, :title))
+    render json: {page: page}, status: :ok
+  rescue => e
+    render json: {error: e.record.errors.full_messages}, status: :bad_request
   end
 
-  # ページの更新
   def update
     if @page.update(params.permit(:url, :title))
       render json: {page: @page}, status: :ok
@@ -34,7 +29,6 @@ class Api::V1::PagesController < ApplicationController
     end
   end
 
-  # ページ削除
   def destroy
     @page.destroy
     render status: :ok
@@ -56,13 +50,12 @@ class Api::V1::PagesController < ApplicationController
       c = keywords.any? {|keyword| page.title.include?(keyword)}
 
       next if a.empty? && b.empty? && !c
-
       re << page.attributes.merge(memos: a, tags: b)
     end
     render json: {pages: re}, status: :ok
   end
 
-  # トークン再生性
+  # トークン再生成
   def reset_token
     @page.regenerate_token
     render json: {page: @page} ,status: :ok
