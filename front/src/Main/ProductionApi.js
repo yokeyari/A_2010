@@ -74,7 +74,7 @@ export class MemoDataSource {
 
   //メモの新規作成
   async createMemo(memo, page_id) {
-    const res = createData({ text: memo.text, time: memo.time, parent_id: memo.parent_id, user_id: memo.user_id },
+    const res = createData({ text: memo.text, time: memo.time, parent_id: memo.parent_id, user_id: memo.user_id, attribute: memo.attribute },
       this.API_URL + `?page_id=${page_id}`);
     return res;
   }
@@ -226,7 +226,7 @@ export class PageDataSource {
   }
 
   async createPage(page) {
-    const res = createData({ url: page.url, title: page.title },
+    const res = createData({ url: page.url, title: page.title, ws_id: page.ws_id },
       this.API_URL + `?user_id=${page.user_id}`);
     return res;
   }
@@ -315,12 +315,40 @@ export class TagDataSource {
 
 export class WorkspaceDataSource {
   API_URL = SERVER_URL + 'ws';
+  init = {
+    credentials: 'include', 
+    mode: 'cors',
+  }
 
-  async getIndex() {
-    const res = await fetch(this.API_URL + "/index", {
-      credentials: 'include', //クレデンシャルを含める指定
+  async getWorkspaceIndex() {
+    const res = await fetch(this.API_URL + "/index", this.init);
+    return res;
+  }
+
+  async getWorkspace(ws_id) {
+    const res = await fetch(this.API_URL + `/${ws_id}`, this.init);
+    return res;
+  }
+
+  async getPageIndex(ws_id) {
+    const res = await fetch(this.API_URL + `/${ws_id}/pages`, this.init);
+    return res;
+  }
+
+  async searchPage(ws_id, keywords) {
+    const res = await fetch(this.API_URL + '/search', {
+      method: "POST",
+      credentials: 'include', 
       mode: 'cors',
-    });
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ ws_id: ws_id, keywords: keywords })
+    })
+      // .then(res => console.log(res))
+      .then(res => res.json());
+    console.log(res.pages);
     return res;
   }
 }

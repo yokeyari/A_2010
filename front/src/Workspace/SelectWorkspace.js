@@ -8,29 +8,31 @@ import UserInfoContext from '../context';
 import { WorkspaceDataSource } from '../Main/ProductionApi';
 
 
-function SelectWorkspaceList(props) {
+function SelectWorkspace(props) {
   const [workspaces, setWorkspaces] = useState([])
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
 
   function switchWorkspace(event) {
     // 本番用
     // const workspace_id = event.target.value;
-    // props.history.push(`/ws/${userInfo.id}/${workspace_id}`);
+    // workspace_id=="main_page" ? props.history.push(`/${userInfo.id}`) : props.history.push(`/${userInfo.id}/ws/${workspace_id}`)
 
     // テスト用
-    props.history.push(`/${userInfo.id}`);
+    const workspace_id = event.target.value;
+    // workspace=="home" ? props.history.push(`/${userInfo.id}`) : props.history.push({pathname: `/${userInfo.id}/ws/${workspace.id}`, state: {workspace: workspace}})
+    workspace_id=="home" ? props.history.push(`/${userInfo.id}`) : props.history.push(`/${userInfo.id}/ws/${workspace_id}`)
   }
 
   useEffect(() => {
     console.log('load workspace list');
     // 本番用
-    // workspacesDataSource.getIndex().then(res => {
+    // workspacesDataSource.getWorkspaceIndex().then(res => {
     //   console.log('load workspace list');
     //   setState({...state, workspaces: res.workspaces});
     // })
 
     // テスト用
-    const test_workspaces = [{id: 1, name: "ws1", permission: "normal"}]
+    const test_workspaces = [{id: 1, name: "ws1", permission: "general"}]
     setWorkspaces(test_workspaces);
   }, [])
 
@@ -43,10 +45,10 @@ function SelectWorkspaceList(props) {
             className={""}
             inputProps={{ "aria-label": "Without label" }}
           >
-            <MenuItem value={userInfo.id}>user page</MenuItem>
+            <MenuItem value={"home"}>user page</MenuItem>
             {
                 workspaces.map((workspace) => (
-                <MenuItem value={workspace.id}>{workspace.name} ({workspace.permission})</MenuItem>
+                <MenuItem value={workspace.id} key={workspace.id}>{workspace.name} ({workspace.permission})</MenuItem>
                 ))
             }
           </Select>
@@ -56,4 +58,4 @@ function SelectWorkspaceList(props) {
   )
 }
 
-export default withRouter(SelectWorkspaceList);
+export default withRouter(SelectWorkspace);

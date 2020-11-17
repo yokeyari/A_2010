@@ -94,7 +94,11 @@ export default function PageLink(props) {
 
 
   const handleClick = () => {
-    setState({ to: `/${userInfo.id}/${page.id}`, isLoaded: true, isLoading: false })
+    if (userInfo.ws_id=="home") {
+      setState({ to: `/${userInfo.id}/${page.id}`, isLoaded: true, isLoading: false })
+    } else {
+      setState({ to: `/${userInfo.id}/ws/${userInfo.ws_id}/${page.id}`, isLoaded: true, isLoading: false })
+    }
   }
   const handleDelete = (page) => {
     props.withUpdate(PageApi.deletePage(page));

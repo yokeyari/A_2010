@@ -68,13 +68,19 @@ export default function NewPageForm(props) {
 		}
 
 		trackPromise(
-			pageDataSource.createPage({ url: state.url, title: state.title, user_id: userInfo.id })
+			pageDataSource.createPage({ url: state.url, title: state.title, user_id: userInfo.id, ws_id: userInfo.ws_id })
 				.then(res => {
 					if (res.statusText == "OK") {
 						res.json()
 							.then(page => {
 								// console.log("getPage", page.page);
-								setState({ ...state, to: `/${userInfo.id}/${page.page.id}`, isLoaded: true });
+								// homeにいる時とworkspaceにいる時で場合分け
+								if (userInfo.ws_id == "home") {
+									setState({ ...state, to: `/${userInfo.id}/${page.page.id}`, isLoaded: true });
+								} else {
+									setState({ ...state, to: `/${userInfo.id}/ws/${userInfo.ws_id}/${page.page.id}`, isLoaded: true });
+								}
+								
 								props.onClose();
 							})
 					} else {

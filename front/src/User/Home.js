@@ -18,16 +18,14 @@ import PageList from './PageList';
 import SearchForm from './SeachForm';
 import SelectWorkspace from '../Workspace/SelectWorkspace';
 import UserInfoContext from '../context'
-
 import NewPage from '../NewPage/NewPage';
 
 const pageDataSource = new PageDataSource();
-const workspacesDataSource = new WorkspaceDataSource();
+const workspaceDataSource = new WorkspaceDataSource();
 
 function Home(props) {
   const [state, setState] = useState({ search_word: "", pages: [] });
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
-  const [workspaces, setWorkspaces] = useState([])
   const user = userInfo;
 
   // const { user_id } = useParams();
@@ -38,15 +36,21 @@ function Home(props) {
 
   const loadPages = () => {
     if(props.search_word==""){
+      // ws_id?"home"???????
       pageDataSource.getPageIndex(user).then(res=>{
+      // workspaceDataSource.getPageIndex("home").then(res=>{
         if(res===undefined){
           
         }else{
           setState({...state , pages:res.pages})
+          console.log("----------");
+          console.log(res.pages);
         }
       })
     }else{
+      // ws_id?"home"???????
       pageDataSource.searchPage(user, props.search_word.split(' '))
+      // workspaceDataSource.searchPage("home", props.search_word.split(' '))
       .then(res=>{
         // console.log(props.search_word)
         console.log("load page");
@@ -57,18 +61,9 @@ function Home(props) {
 
   }
 
-  // useEffect(() => {
-  //   console.log('load workspace list');
-  //   // ???
-  //   // workspacesDataSource.getIndex().then(res => {
-  //   //   console.log('load workspace list');
-  //   //   setState({...state, workspaces: res.workspaces});
-  //   // })
-
-  //   // ????
-  //   const test_workspaces = [{id: 1, name: "ws1", permission: "normal"}]
-  //   setWorkspaces(test_workspaces);
-  // }, [])
+  useEffect(() => {
+    setUserInfo({...userInfo, ws_id: "home", permission: "owner"});
+  }, [])
 
   useEffect(() => {
     // setUserInfo({...userInfo,...user});
@@ -87,7 +82,6 @@ function Home(props) {
     loadPages();
   }
 
-  // console.log('called from home.js', workspaces);
 
   return (
     <div className="User-Top">

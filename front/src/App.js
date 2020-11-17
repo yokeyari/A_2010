@@ -1,6 +1,5 @@
-import logo from './logo.png';
 // import './App.css';
-import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 
 import Top from './Top/Top';
@@ -9,16 +8,18 @@ import Footer from './Footer';
 import Header from './Header';
 import { useState } from 'react';
 import UserInfoContext from './context';
-import Signup from './Top/Signup';
 import Auth from './Auth';
 import PageAuth from "./PageAuth";
+import Workspace from "./Workspace/Workspace";
 
 function App() {
   const [userInfo, setUserInfo] = useState({
     id: "",
     thema: "normal",
     token: null,
-    isLogin: false
+    isLogin: false,
+    ws_id: "home", 
+    permission: "owner"
   })
   const [search_word, setSearch_word] = useState("");
 
@@ -28,7 +29,7 @@ function App() {
 
   return (
     <div>
-      {/* {console.log("userInfo", userInfo, "---------------")} */}
+      {console.log("userInfo", userInfo, "---------------")}
       <UserInfoContext.Provider value={{ userInfo, setUserInfo }}>
         <Router>
 
@@ -48,14 +49,19 @@ function App() {
                     <Home search_word={search_word} />
                   </Auth>
                 </Route>
-                <Route path='/:user_id/:page_id'>
+                <Route exact path='/:user_id/ws/:ws_id'>
+                  <Auth>
+                    <Workspace search_word={search_word} />
+                  </Auth>
+                </Route>
+                <Route exact path='/:user_id/ws/:ws_id/:page_id'>
                   <Auth>
                     <PageAuth mode="user" />
                   </Auth>
                 </Route>
-                <Route path='/:user_id/:ws_id'>
+                <Route path='/:user_id/:page_id'>
                   <Auth>
-                    
+                    <PageAuth mode="user" />
                   </Auth>
                 </Route>
               </Switch>
