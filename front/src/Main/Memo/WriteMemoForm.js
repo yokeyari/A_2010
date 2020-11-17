@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import ReactPlayer from 'react-player';
 import SendIcon from '@material-ui/icons/Send';
@@ -11,7 +11,10 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import IconButton from '@material-ui/core/IconButton'
-import { CardActions } from "@material-ui/core";
+import { CardActions, FormControl, MenuItem } from "@material-ui/core";
+import Select from "@material-ui/core/Select";
+import UserInfoContext from "../../context";
+
 const useStyles = makeStyles((theme) => ({
   root: {
     minWidth: 300,
@@ -44,28 +47,53 @@ const useStyles = makeStyles((theme) => ({
 ));
 function WriteMemoForm(props) {
   const [text, setText] = useState("");
+  const [attribute, setAttribute] = useState("private");
+  const { userInfo, setUserInfo } = useContext(UserInfoContext);
   const player = props.player;
   const classes = useStyles();
   const handleWriting = () => {
     props.onWriting();
   }
-  const handleWriteEnd = () =>{
+  const handleWriteEnd = () => {
     props.onWriteEnd();
   }
-  
+
   const handleOnclick = () => {
-    props.onSubmit({ text: text, time: player.time, user_id: props.user_id });
+    props.onSubmit({ text: text, time: player.time, user_id: props.user_id, attribute: attribute });
+    console.log({ text: text, time: player.time, user_id: props.user_id, attribute: attribute });
     setText("");
   }
   const deleteMemo = () => {
     setText("");
   }
 
+  const handleChangeAttribute = (event) => {
+    const value = event.target.value;
+    setAttribute(value);
+  }
+
+  console.log("ws_id", userInfo.ws_id);
 
   return (
     //<div>
     <Card className={classes.card}>
       <div id="memo-form" className="Main-memo">
+        <div>
+          {/* ws_idがhomeじゃない時にpublicとprivateの選択肢が出る */}
+          {/* homeの時はprivateでメモが作成される */}
+          {(userInfo.ws_id != "home") && (
+            <FormControl>
+              <Select onChange={handleChangeAttribute}
+                defaultValue="select attribute"
+                className={""}
+                inputProps={{ "aria-label": "Without label" }}
+              >
+                <MenuItem value={"private"}>private</MenuItem>
+                <MenuItem value={"public"}>public</MenuItem>
+              </Select>
+            </FormControl>
+          )}
+        </div>
         <CardHeader
           action={
             <Tooltip title="メモを作成">
