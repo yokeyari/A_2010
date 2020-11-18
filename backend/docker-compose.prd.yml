@@ -17,4 +17,6 @@ services:
       - db
     environment:
       RAILS_ENV: production
+      DISABLE_DATABASE_ENVIRONMENT_CHECK: 1
+
 
