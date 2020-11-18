@@ -47,8 +47,10 @@ function MemoList(props) {
                   key={memo.id.toString()}
                   color={props.colorList[i]}
                   memo={memo}
+                  user_id={props.user_id}
                   onChange={props.onChange}
                   onDelete={props.onDelete}
+                  onSubmit={props.onSubmit}
                   player={player}
                 />
                 <ThreadList

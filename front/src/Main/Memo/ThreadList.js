@@ -32,17 +32,30 @@ function ThreadList(props) {
 	const [isReplyMode, setReplyMode] = useState(true);
 	const memos = props.memos;
 	const parent_memo = props.parent_memo;
-
+	let isEmpty = false;
 	const endReplyMode = () => {
-    setReplyMode(false);
+	setReplyMode(false);
+	console.log("MEMO",memos)
 	}
-
+	const child = memos.filter((memo) => (
+		memo.parent_id === parent_memo.id		
+	))
+	console.log("child",child)
+	if (child.length===0){
+		isEmpty = true
+	}
 	return(
-		<Card className={classes.card}>
+		
+		<>
+		{isEmpty ?
+		<></>
+		:
+		<>
 			{isReplyMode ?
-				<Button onClick={() => { endReplyMode() }}>v</Button> :
+				<Button color ="primary" onClick={() => { endReplyMode() }}>返信を表示</Button> :
+				<Card className={classes.card}>
 				<>
-					<Button onClick={() => { setReplyMode(true)}}>^</Button>
+					<Button color ="primary"　onClick={() => { setReplyMode(true)}}>返信を非表示</Button>
 					{
 						memos.map((memo, i) => (
 							memo.parent_id == parent_memo.id && (
@@ -57,15 +70,23 @@ function ThreadList(props) {
 							)
 						))
 					}
+					{/*
 					<WriteThread 
 						memo={parent_memo}
 						user_id={props.user_id}
 						onSubmit={props.onSubmit}
-					/>
+					/>*/}
 				</>
+				</Card>
 			}
-		</Card>
+		</>
+}
+		</>
+			
+		
 	)
 }
 
 export default ThreadList;
+{/*</Card>*/}
+{/*<Card className={classes.card}>*/}
