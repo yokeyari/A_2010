@@ -12,6 +12,7 @@ Rails.application.routes.draw do
       get 'ws/:workspace_id/pages', to: 'workspaces#all_pages'
       post 'ws', to: 'workspaces#create'
       post 'ws/:workspace_id/add_user', to: 'workspaces#add_user'
+      post 'ws/:workspace_id/add_users', to: 'workspaces#add_users'
       patch 'ws/:workspace_id', to: 'workspaces#update'
       delete 'ws/:workspace_id', to: 'workspaces#destroy'
       
