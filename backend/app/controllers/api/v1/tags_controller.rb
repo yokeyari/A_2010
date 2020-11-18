@@ -1,21 +1,19 @@
 class Api::V1::TagsController < ApplicationController
-  #before_action :logged_in?
+  before_action :current_user
   before_action :find_page, only: [:index, :automate]
   before_action :find_tag, only: [:destroy, :update]
 
   # あるページのタグ一覧のjsonを返す
   def index
-    render json: {"tags": @page.tags}, status: :ok
+    render json: {tags: @page.tags}, status: :ok
   end
   
   # タグを作成する
   def create
-    begin
-      tag = Tag.create!(params.permit(:page_id, :text))
-      render json: {tag: tag}, status: 200
-    rescue => e # 作成できない場合
-      render json: {error: e.record.errors.full_messages}, status: :bad_request
-    end
+    tag = Tag.create!(params.permit(:page_id, :text))
+    render json: {tag: tag}, status: :ok
+  rescue => e # 作成できない場合
+    render json: {error: e.record.errors.full_messages}, status: :bad_request
   end
 
   # タグを削除する

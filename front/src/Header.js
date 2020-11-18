@@ -28,7 +28,7 @@ import EditWorkspaceButton from './Workspace/EditWorkspaceButton';
 //import { MemoryRouter as Router } from "react-router";
 //import { Link as RouterLink } from "react-router-dom";
 import { UserDataSource } from './Main/ProductionApi';
-import GoogleAuth from './GoogleAuth';
+import LoginAuth from './Auth/LoginAuth';
 
 import UserInfoContext from './context'
 
@@ -143,10 +143,7 @@ export default function Header(props) {
 
           <div className={classes.right}>
 
-            <GoogleAuth/>
-            <Button color="inherit" component={Link} to='/login' className={classes.rightLink}>Login</Button>
-            <Button color="inherit" component={Link} to='/login' onClick={()=>{handleLogout()}}  className={classes.rightLink}>Logout</Button>
-            {/* <Button color="inherit" component={Link} to='/signup' className={classes.rightLink}>Signup</Button> */}
+            <LoginAuth/>
           </div>
 
         </Toolbar>

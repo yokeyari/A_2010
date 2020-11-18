@@ -99,18 +99,8 @@ export class UserDataSource {
   constructor() {
   }
 
-  //userのログイン
-  // async loginUser(user) {
-  //   const res = await axios.post(this.API_URL + '/login', {
-  //     email: user.email, password: user.password
-  //   }, {
-  //     withCredentials: true
-  //   });
-  //   console.log(res);
-  //   return res;
-  // }
-  // }
-  async loginUser(id_token, name) {
+  userのメールログイン
+  async loginUser(user) {
     const res = await fetch(SERVER_URL + 'authes/login', {
       method: "POST",
       credentials: 'include', //クレデンシャルを含める指定
@@ -119,7 +109,25 @@ export class UserDataSource {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ id_token: id_token, user: name })
+      body: JSON.stringify({
+        email: user.email, password: user.password
+      })
+    })
+    console.log(res);
+    return res;
+  }
+
+
+  async loginGoogleUser(id_token, name) {
+    const res = await fetch(SERVER_URL + 'authes/login/google', {
+      method: "POST",
+      credentials: 'include', //クレデンシャルを含める指定
+      mode: 'cors',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ id_token: id_token, name: name })
     })
     return res;
     //res.json 成功{"user":user}
@@ -137,11 +145,12 @@ export class UserDataSource {
   }
 
   async logoutUser(user_id) {
-    const res = await fetch(this.API_URL + `/logout?user_id=${user_id}`, {
+    const res = await fetch(SERVER_URL + `authes/logout`, {
       credentials: 'include', //クレデンシャルを含める指定
       mode: 'cors',
-      method: 'POST'
+      method: 'DELETE'
     });
+    return res;
     //成功 200
   }
 

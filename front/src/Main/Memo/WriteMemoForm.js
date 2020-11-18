@@ -59,8 +59,12 @@ function WriteMemoForm(props) {
   }
 
   const handleOnclick = () => {
+    if(text.length==0){
+      text = "空のメモ"
+    }
+
     props.onSubmit({ text: text, time: player.time, user_id: props.user_id, attribute: attribute });
-    console.log({ text: text, time: player.time, user_id: props.user_id, attribute: attribute });
+    // console.log({ text: text, time: player.time, user_id: props.user_id, attribute: attribute });
     setText("");
   }
   const deleteMemo = () => {

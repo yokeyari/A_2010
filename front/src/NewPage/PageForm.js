@@ -6,8 +6,9 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Card from '@material-ui/core/Card';
-import { CardActions } from "@material-ui/core";
+import { CardActions, Input } from "@material-ui/core";
 import { trackPromise } from "react-promise-tracker";
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 
 import { PageDataSource } from "./../Main/ProductionApi";
 import UserInfoContext from "../context";
@@ -36,7 +37,10 @@ const useStyles = makeStyles((theme) => ({
 	},
 	button: {
 		marginLeft: 'auto',
-	}
+	},
+	input: {
+		display: 'none',
+	  },
 }
 ));
 
@@ -87,8 +91,12 @@ export default function NewPageForm(props) {
 						// ここにページが作れなかったときの処理
 					}
 				}));
-	}
 
+	}
+	const onChooseFile = e => {
+		const url = URL.createObjectURL(e.target.files[0])
+		setState({ ...state, url: url })
+	}
 	return (
 		<div>
 			<Card>
@@ -104,7 +112,18 @@ export default function NewPageForm(props) {
 						placeholder="Introduction of memotube"
 						multiline
 						onChange={e => { setState({ ...state, title: e.target.value }) }} value={state.title} />
-
+					<input
+						className={classes.input}
+						id="contained-button-file"
+						multiple
+						onChange={onChooseFile}
+						type="file"
+					/>
+					<label htmlFor="contained-button-file">
+						<Button variant="contained" color="default" startIcon={<CloudUploadIcon />} component="span">
+							Upload
+        				</Button>
+					</label>
 					<Transition to={state.to} ok={state.isLoaded}>
 						<Button className={classes.button} id="submit"
 							variant="contained" color="primary" endIcon={<CreateIcon />}
