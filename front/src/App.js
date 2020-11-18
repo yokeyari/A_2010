@@ -8,7 +8,6 @@ import Footer from './Footer';
 import Header from './Header';
 import { useState } from 'react';
 import UserInfoContext from './context';
-import PageAuth from "./PageAuth";
 import Workspace from "./Workspace/Workspace";
 import Signup from './Top/Signup';
 import Auth from './Auth/Auth';
