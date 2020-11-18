@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_05_133843) do
+ActiveRecord::Schema.define(version: 2020_11_16_040604) do
 
   create_table "memos", force: :cascade do |t|
     t.integer "page_id"
@@ -18,7 +18,10 @@ ActiveRecord::Schema.define(version: 2020_11_05_133843) do
     t.integer "time"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "parent_id"
+    t.integer "user_id"
     t.index ["page_id"], name: "index_memos_on_page_id"
+    t.index ["user_id"], name: "index_memos_on_user_id"
   end
 
   create_table "pages", force: :cascade do |t|
@@ -47,6 +50,9 @@ ActiveRecord::Schema.define(version: 2020_11_05_133843) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "password_digest"
     t.string "token"
+    t.string "provider"
+    t.string "external_id"
   end
 
+  add_foreign_key "memos", "users"
 end

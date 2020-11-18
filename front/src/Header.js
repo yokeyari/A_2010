@@ -27,6 +27,7 @@ import NewPage from './NewPage/NewPage'
 //import { MemoryRouter as Router } from "react-router";
 //import { Link as RouterLink } from "react-router-dom";
 import { UserDataSource } from './Main/ProductionApi';
+import LoginAuth from './Auth/LoginAuth';
 
 import UserInfoContext from './context'
 
@@ -94,6 +95,7 @@ export default function Header(props) {
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
 
   const UserApi = new UserDataSource();
+  const classes = useStyles();
 
   const handleChangeSeachForm = (text) => {
     props.onChange(text);
@@ -111,8 +113,10 @@ export default function Header(props) {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const classes = useStyles();
+  
+
   const handleLogout = () => {
+    // document.cookie = "_session_id=0";
     UserApi.logoutUser(userInfo.id);
   }
 
@@ -121,7 +125,6 @@ export default function Header(props) {
     <div className={classes.root}>
       <AppBar className={classes.root} color="primary" position="static" >
         <Toolbar>
-
           <Button component={Link} to={`/${userInfo.id}`}>
             <img src={logo} className={classes.logo} alt="memotube" />
           </Button>
@@ -135,9 +138,7 @@ export default function Header(props) {
 
           <div className={classes.right}>
 
-            <Button color="inherit" component={Link} to='/login' className={classes.rightLink}>Login</Button>
-            <Button color="inherit" component={Link} to='/login' onClick={()=>{handleLogout()}}  className={classes.rightLink}>Logout</Button>
-            {/* <Button color="inherit" component={Link} to='/signup' className={classes.rightLink}>Signup</Button> */}
+            <LoginAuth/>
           </div>
 
         </Toolbar>

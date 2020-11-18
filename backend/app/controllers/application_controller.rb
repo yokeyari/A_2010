@@ -36,16 +36,13 @@ class ApplicationController < ActionController::API
     res
   end
 
-  # セッションからユーザーを取得
   def current_user
-    @current_user ||= User.find_by(id: session[:user_id])
+    @user ||= User.find(session[:user_id])
+  rescue ActiveRecord::RecordNotFound => e # ユーザーが見つからない，またはsessionが保存されていない時
+    render json: {session: !session[:user_id].nil?}, status: :not_found
   end
 
-  # セッションにユーザーが保存されているか？
-  def logged_in?
-    render status: :unauthorized if current_user.nil?
-  end
-
+=begin
   # トークンがユーザーのと一致するか．一致しない場合 render
   def token_check
     @user = User.find params[:user_id]
@@ -53,4 +50,5 @@ class ApplicationController < ActionController::API
       render status: :unauthorized 
     end
   end
+=end
 end

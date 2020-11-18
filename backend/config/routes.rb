@@ -1,9 +1,10 @@
 Rails.application.routes.draw do
   namespace 'api' do
     namespace 'v1' do
-      post 'users/login', to: 'users#login'
-      #get 'users/logged_in', to: 'users#logged_in?'
-      post 'users/logout', to: 'users#logout'
+      post 'authes/login', to: 'authes#login'
+      post 'authes/login/google', to: 'authes#login_google'
+      get 'authes/islogin', to: 'authes#islogin'
+      delete 'authes/logout', to: 'authes#logout'
       
       get 'users', to: 'users#index'
       get 'users/:user_id', to: 'users#show'

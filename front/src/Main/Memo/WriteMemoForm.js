@@ -52,13 +52,13 @@ function WriteMemoForm(props) {
   const handleWriteEnd = () =>{
     props.onWriteEnd();
   }
-
+  
   const handleOnclick = () => {
     if(text.length==0){
-      text = "空のメモです"
+      text = "空のメモ"
     }
     console.log("TEXT:",text)
-    props.onSubmit({ text: text, time: player.time });
+    props.onSubmit({ text: text, time: player.time, user_id: props.user_id });
     setText("");
   }
   const deleteMemo = () => {
