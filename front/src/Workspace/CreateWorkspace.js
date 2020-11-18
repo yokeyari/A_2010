@@ -95,7 +95,7 @@ export default function CreateWorkspace(props) {
     setFields(values);
   }
 
-
+  
 	return (
 		<div>
 			<Card>

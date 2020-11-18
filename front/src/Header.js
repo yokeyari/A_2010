@@ -24,6 +24,7 @@ import { createMuiTheme } from '@material-ui/core/styles';
 import purple from '@material-ui/core/colors/purple';
 import { ThemeProvider } from '@material-ui/styles';
 import NewPage from './NewPage/NewPage'
+import EditWorkspaceButton from './Workspace/EditWorkspaceButton';
 //import { MemoryRouter as Router } from "react-router";
 //import { Link as RouterLink } from "react-router-dom";
 import { UserDataSource } from './Main/ProductionApi';
@@ -136,7 +137,7 @@ export default function Header(props) {
           {userInfo.permission=="owner" ? 
             <div>
               <NewPage className={classes.search_make} /> 
-              <h2>ワークスペース編集</h2>
+              {userInfo.ws_id!="home" ? <EditWorkspaceButton /> : <></>}
             </div>
             : <></>}
 

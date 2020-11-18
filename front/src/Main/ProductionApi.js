@@ -361,6 +361,11 @@ export class WorkspaceDataSource {
     const res = createData({ name: name, users: users }, this.API_URL );
     return res;
   }
+
+  async getWorkspaceUser(ws_id) {
+    const res = await fetch(this.API_URL + `/ws/${ws_id}/users`, this.init);
+    return res;
+  }
 }
 
 
