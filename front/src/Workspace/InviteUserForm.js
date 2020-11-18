@@ -35,7 +35,7 @@ function InviteUserForm(props) {
                 <Grid item>
                   <FormControl>
                     <Select onChange={e => props.handleChangePermission(idx, e)}
-                      defaultValue="general"
+                      defaultValue={field.permission ? field.permission : "general"}
                       inputProps={{ "aria-label": "Without label" }}>
                       <MenuItem value="guest" key={0}>guest</MenuItem>
                       <MenuItem value="general" key={1}>general</MenuItem>

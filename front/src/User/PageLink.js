@@ -157,7 +157,7 @@ export default function PageLink(props) {
             </Typography>
           </CardContent>
         </CardActionArea>
-        <Button className={classes.button} color="secondary" startIcon={<DeleteIcon />} onClick={() => { handleDelete(page) }}></Button>
+        {userInfo.permission=="owner" ? <Button className={classes.button} color="secondary" startIcon={<DeleteIcon />} onClick={() => { handleDelete(page) }}></Button> : <></>}
       </Card>
     </>
   )
