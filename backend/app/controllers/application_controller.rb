@@ -2,6 +2,7 @@ require 'net/https'
 
 class ApplicationController < ActionController::API
   include ActionController::Cookies
+  include Res
 
   def find_user
     @user = User.find(params[:user_id])
@@ -39,13 +40,13 @@ class ApplicationController < ActionController::API
   def current_user
     @user ||= User.find(session[:user_id])
   rescue ActiveRecord::RecordNotFound => e # ユーザーが見つからない，またはsessionが保存されていない時
-    render json: {session: !session[:user_id].nil?}, status: :not_found
+    res_not_found session: !session[:user_id].nil?
   end
 
   Rel_UAW = RelUserAndWorkspace
 
   def permission_check
-    
+
   end
 
 =begin

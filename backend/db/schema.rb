@@ -61,7 +61,7 @@ ActiveRecord::Schema.define(version: 2020_11_17_060656) do
     t.string "password_digest"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["email", "provider", "external_id"], name: "index_users_on_email_and_provider_and_external_id"
+    t.index ["email", "provider", "external_id"], name: "index_users_on_email_and_provider_and_external_id", unique: true
   end
 
   create_table "workspaces", force: :cascade do |t|

@@ -3,6 +3,7 @@ class RelUserAndWorkspace < ApplicationRecord
 
   belongs_to :user
   belongs_to :workspace
+  validates :user_id, uniqueness: {scope: :workspace}
   enum permission: {guest: 0, general: 1, owner: 2}
 
 private
