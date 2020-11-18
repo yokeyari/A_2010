@@ -351,6 +351,16 @@ export class WorkspaceDataSource {
     console.log(res.pages);
     return res;
   }
+
+  async createWorkspace(name, users) {
+    const res = createData({ name: name, users: users }, this.API_URL );
+    return res;
+  }
+
+  async updateWorkspace(name, users) {
+    const res = createData({ name: name, users: users }, this.API_URL );
+    return res;
+  }
 }
 
 

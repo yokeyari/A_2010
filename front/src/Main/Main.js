@@ -79,7 +79,16 @@ function Main(props) {
   }, [reloader, page_id])
 
   useEffect(() => {
+    // 本番用
+    // workspaceDataSource.getWorkspace(ws_id).then(res => {
+    //   const ws = res.workspace;
+    //   setUserInfo({...userInfo, ws_id: (ws_id ? ws_id : "home"), permission: ws.permission});
+    //   setWsInfo({...wsInfo, name: ws.name});
+    // })
+
+    // テスト用 (permissionの更新なし)
     setUserInfo({...userInfo, ws_id: (ws_id ? ws_id : "home")});
+
     // ここでタイトルなどの読み込み
     segtIsLoading(true);
     PageApi.getPage(page_id).then(json => {
@@ -229,7 +238,7 @@ function Main(props) {
                 <VideoPlayer className="" url={page.page.url} players={{ player, setPlayer }} />
               </Grid>
               <Grid item xs={12}>
-                <WriteMemoForm onSubmit={handleSubmit} player={player} user_id={page.page.user_id} onWriting={handleWriting} onWriteEnd={handleWriteEnd} />
+                <WriteMemoForm onSubmit={handleSubmit} player={player} user_id={userInfo.id} onWriting={handleWriting} onWriteEnd={handleWriteEnd} />
               </Grid>
             </Grid>
           </Grid>
@@ -268,7 +277,7 @@ function Main(props) {
                   onDelete={handleDelete}
                   onSubmit={handleSubmit}
                   player={player}
-                  user_id={page.page.user_id}
+                  user_id={userInfo.id}
                 />
               </Grid>
             </Grid>

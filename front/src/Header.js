@@ -133,8 +133,12 @@ export default function Header(props) {
             <SearchForm className={classes.search_make} onChange={handleChangeSeachForm} search_word={state.search_word} onClick={handleSeach} />
           </Hidden>
 
-          <NewPage className={classes.search_make} />
-
+          {userInfo.permission=="owner" ? 
+            <div>
+              <NewPage className={classes.search_make} /> 
+              <h2>ワークスペース編集</h2>
+            </div>
+            : <></>}
 
           <div className={classes.right}>
 

@@ -63,6 +63,7 @@ function Workspace(props) {
 
     // テスト用
     setUserInfo({...userInfo, ws_id: ws_id, permission: "general"});
+    // setUserInfo({...userInfo, ws_id: ws_id, permission: "owner"});
     setWsInfo({...wsInfo, name: "テストワークスペース"});
   }, [])
 

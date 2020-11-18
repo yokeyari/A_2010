@@ -87,11 +87,14 @@ function MemoComponent(props) {
   return (
     <Card className={classes.card} key={memo.id}>
       <CardActions >
+        {userInfo.ws_id!="home" ? <p>[{memo.user_id}さん]</p> : <></>}
         <Button className="timeButton" startIcon={<AccessTimeIcon />} onClick={() => { handleJump() }} >{formatSec2Str(memo.time)}</Button>
         {isEditMode ?
-          <Button className="edit" startIcon={<DoneIcon />} onClick={() => { endEditMode() }}>done</Button> :
-          <Button className="edit" color="primary" startIcon={<EditIcon />} onClick={() => { setEditMode(true) }}>edit</Button>}
-        <Button className="delete" color="secondary" startIcon={<DeleteIcon />} onClick={() => { props.onDelete(memo) }}>delete</Button>
+          ( <Button className="edit" startIcon={<DoneIcon />} onClick={() => { endEditMode() }}>done</Button> ) :
+          ( (userInfo.id==memo.user_id || userInfo.permission=="owner") ?
+            <Button className="edit" color="primary" startIcon={<EditIcon />} onClick={() => { setEditMode(true) }}>edit</Button> : <></> ) } 
+        { (userInfo.id==memo.user_id || userInfo.permission=="owner") ?
+          <Button className="delete" color="secondary" startIcon={<DeleteIcon />} onClick={() => { props.onDelete(memo) }}>delete</Button> : <></> }
         {seletctAttribute}
       </CardActions>
       <CardActions>

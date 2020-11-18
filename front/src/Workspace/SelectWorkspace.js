@@ -1,17 +1,27 @@
-import { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { withRouter, useParams } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import Select from "@material-ui/core/Select";
+import Modal from '@material-ui/core/Modal';
 import { FormControl, MenuItem, InputLabel } from '@material-ui/core';
+import Fade from '@material-ui/core/Fade';
 
 import UserInfoContext from '../context';
 import { WorkspaceDataSource } from '../Main/ProductionApi';
+import CreateWorkspace from "./CreateWorkspace";
 
 
 function SelectWorkspace(props) {
   const [workspaces, setWorkspaces] = useState([])
+  const [open, setOpen] = useState(false);
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
   const { ws_id } = useParams();
+  
+
+  const handleOpen = () => {
+    setOpen(true)
+  }
+
 
   function switchWorkspace(event) {
     // 本番用
@@ -44,6 +54,16 @@ function SelectWorkspace(props) {
     setWorkspaces(test_workspaces);
   }, [])
 
+  const handleClose = () => {
+    setOpen(false);
+  } 
+
+  const modalStyle = {
+		top: '60%',
+		left: '60%',
+		margin: '20vh 20vh',
+	};
+
   return (
     <div className="Select-Workspace-List">
       <Grid item>
@@ -61,10 +81,23 @@ function SelectWorkspace(props) {
                 <MenuItem value={workspace.id} key={workspace.id}>{workspace.name} ({workspace.permission})</MenuItem>
                 ))
             }
-            <MenuItem value={"create"}>create workspace</MenuItem>
+            <MenuItem value={"create"} onClick={handleOpen}>create workspace</MenuItem>
           </Select>
         </FormControl>
       </Grid>
+
+      <Modal
+				open={open}
+				onClose={handleClose}
+				aria-labelledby="simple-modal-title"
+				aria-describedby="simple-modal-description"
+			>
+        <Fade in={open}>
+          <div style={modalStyle}>
+            <CreateWorkspace onClose={handleClose}/>
+          </div>
+        </Fade>
+      </Modal>
     </div>
   )
 }
