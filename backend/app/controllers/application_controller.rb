@@ -42,6 +42,12 @@ class ApplicationController < ActionController::API
     render json: {session: !session[:user_id].nil?}, status: :not_found
   end
 
+  Rel_UAW = RelUserAndWorkspace
+
+  def permission_check
+    
+  end
+
 =begin
   # トークンがユーザーのと一致するか．一致しない場合 render
   def token_check

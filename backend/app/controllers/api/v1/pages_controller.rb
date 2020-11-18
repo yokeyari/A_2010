@@ -15,7 +15,7 @@ class Api::V1::PagesController < ApplicationController
   end
 
   def create
-    page = Page.create!(params.permit(:user_id, :url, :title))
+    page = Page.create!(params.permit(:user_id, :workspace_id, :url, :title))
     render json: {page: page}, status: :ok
   rescue => e
     render json: {error: e.record.errors.full_messages}, status: :bad_request

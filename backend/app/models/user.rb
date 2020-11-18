@@ -1,11 +1,14 @@
 class User < ApplicationRecord
   # 共通
-  before_save {email && email.downcase!}
-  has_secure_token
-  has_secure_password validations: false
+  before_save :fill_null
+
   has_many :pages, dependent: :destroy
   has_many :memos
-  validates :name, presence: true, length: {maximum: 100}
+  has_many :rel_user_and_workspaces, dependent: :destroy
+  
+  has_secure_password validations: false
+  validates :name, presence: true, length: {maximum: 30}
+  enum provider: {own: 0, google: 1}
 
   # google アカウントの時の
   with_options if: :google? do
@@ -13,17 +16,21 @@ class User < ApplicationRecord
   end
   
   # 独自の時の
-  with_options if: :none? do
+  with_options if: :own? do
     validates :email, presence: true, uniqueness: {case_sensitive: false}, format: {with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i}
     validates :password, presence: true, length: {minimum: 6}, on: :create
   end
 
-private
-  def google?
-    provider == 'google'
-  end
+  alias rel_uaws rel_user_and_workspaces
 
-  def none?
-    provider.nil?
+private
+  def fill_null
+    if own?
+      email.downcase!
+      external_id = nil
+    elsif google?
+      email = nil
+      password = nil
+    end
   end
 end
