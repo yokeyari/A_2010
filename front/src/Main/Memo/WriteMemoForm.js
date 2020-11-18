@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
 }
 ));
 function WriteMemoForm(props) {
-  const [text, setText] = useState("");
+  var [text, setText] = useState("");
   const player = props.player;
   const classes = useStyles();
   const handleWriting = () => {
@@ -54,6 +54,10 @@ function WriteMemoForm(props) {
   }
   
   const handleOnclick = () => {
+    if(text.length==0){
+      text = "空のメモ"
+    }
+    console.log("TEXT:",text)
     props.onSubmit({ text: text, time: player.time, user_id: props.user_id });
     setText("");
   }

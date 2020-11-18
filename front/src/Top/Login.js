@@ -20,8 +20,6 @@ import IconButton from '@material-ui/core/IconButton';
 import { UserDataSource } from "../Main/ProductionApi";
 import UserInfoContext from "../context";
 import Transition from "../Transition";
-import transitions from "@material-ui/core/styles/transitions";
-import GoogleAuth from '../GoogleAuth';
 
 const userDataSource = new UserDataSource();
 const useStyles = makeStyles((theme) => ({
@@ -86,10 +84,10 @@ export default function Login() {
               .then(user => {
                 console.log(user);
                 // console.log("getPage", page.page);
-                setUserInfo(user.user)
+                setUserInfo({ ...userInfo, endCheck: true, id: user.user.id, name: user.user.name, isLogin: true });
                 setState({ to: `/${user.user.id}/`, isLoaded: true, isLoading: false });
 
-                localStorage.setItem('user', JSON.stringify(user.user));
+                // localStorage.setItem('user', JSON.stringify(user.user));
                 // props.onClose();
               })
           } else {
@@ -108,15 +106,14 @@ export default function Login() {
     event.preventDefault();
   };
   return (
-
     <div className={classes.paper}>
-      <GoogleAuth />
       <Avatar className={classes.avatar}>
         <LockOutlinedIcon />
       </Avatar>
       <Typography component="h1" variant="h5">
         Log In
       </Typography>
+
       <form className={classes.form} noValidate>
 
         <TextField
@@ -158,22 +155,3 @@ export default function Login() {
     </div>
   );
 }
-{/*<div className="Login">
-      <div className="Login-form">
-        <h1>Login</h1>
-        mail address
-        <TextField required id="standard-required" label="Required" defaultValue="e-mail" value={email} onChange={(e) => { setEmail(e.target.value) }} />
-        <TextField
-          id="standard-password-input"
-          label="Password"
-          type="password"
-          // autoComplete="current-password"
-          value={password} onChange={(e) => setPassword(e.target.value)}
-        />
-
-        <Transition to={state.to} ok={state.isLoaded} isLoading={state.isLoading}>
-            <Button id="submit" variant="contained" onClick={handleLogin}>submit</Button>
-        </Transition>
-
-      </div>
-  </div>*/}

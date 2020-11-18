@@ -10,15 +10,16 @@ import Header from './Header';
 import { useState } from 'react';
 import UserInfoContext from './context';
 import Signup from './Top/Signup';
-import Auth from './Auth';
-import PageAuth from "./PageAuth";
+import Auth from './Auth/Auth';
+import PageAuth from "./Auth/PageAuth";
 
 function App() {
   const [userInfo, setUserInfo] = useState({
     id: "",
     thema: "normal",
     token: null,
-    isLogin: false
+    isLogin: false,
+    endCheck: false
   })
   const [search_word, setSearch_word] = useState("");
 
@@ -31,7 +32,6 @@ function App() {
       {/* {console.log("userInfo", userInfo, "---------------")} */}
       <UserInfoContext.Provider value={{ userInfo, setUserInfo }}>
         <Router>
-
           <Header onChange={(value) => { handleSearchChange(value) }} />
 
           <Switch>
@@ -41,20 +41,12 @@ function App() {
             <Route exact path='/page/:token'>
               <PageAuth mode="token" />
             </Route>
-            {/* <Auth> */}
-              <Switch>
-                <Route exact path='/:user_id'>
-                  <Auth>
-                    <Home search_word={search_word} />
-                  </Auth>
-                </Route>
-                <Route path='/:user_id/:page_id'>
-                  <Auth>
-                    <PageAuth mode="user" />
-                  </Auth>
-                </Route>
-              </Switch>
-            {/* </Auth> */}
+            <Route exact path='/:user_id'>
+              <Auth><Home search_word={search_word} /></Auth>
+            </Route>
+            <Route path='/:user_id/:page_id'>
+              <Auth><PageAuth mode="user" /></Auth>
+            </Route>
           </Switch>
 
           <Footer />

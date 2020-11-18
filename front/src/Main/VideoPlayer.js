@@ -19,16 +19,21 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import EditIcon from '@material-ui/icons/Edit';
 import Box from '@material-ui/core/Box';
+import { Autorenew } from "@material-ui/icons";
 
 
 const useStyles = (theme) => ({
   video: {
-    //width: '30vw',
-    //maxHeight: '60vh',
-    overflow: 'auto',
-    margin: theme.spacing(1),
-    // padding: theme.spacing(0),
+    //overflow: 'auto',
+    margin: 'auto',
+
     //backgroundColor:"#ffffff",
+
+    //margin: theme.spacing(1),
+      width: '480px',
+      height: '270px',
+      //なんだかわからんけど、ここをこうすると広告とか関連動画とか出なくなる
+      //サイズが一定より小さいと表示しないようにしてる？
   },
 }
 );
@@ -181,7 +186,7 @@ class VideoPlayer extends React.Component {
           // }}
           width='100%'
           //minWidth='800px'
-          //height='60%'
+          height='100%'
           playing={playing}
           onProgress={this.onProgress}
           onPause={this.handlePause}

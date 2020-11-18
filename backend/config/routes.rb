@@ -5,6 +5,15 @@ Rails.application.routes.draw do
       post 'authes/login/google', to: 'authes#login_google'
       get 'authes/islogin', to: 'authes#islogin'
       delete 'authes/logout', to: 'authes#logout'
+
+      get 'ws', to: 'workspaces#index'
+      get 'ws/:workspace_id', to: 'workspaces#show'
+      get 'ws/:workspace_id/users', to: 'workspaces#all_users'
+      get 'ws/:workspace_id/pages', to: 'workspaces#all_pages'
+      post 'ws', to: 'workspaces#create'
+      post 'ws/:workspace_id/add_user', to: 'workspaces#add_user'
+      patch 'ws/:workspace_id', to: 'workspaces#update'
+      delete 'ws/:workspace_id', to: 'workspaces#destroy'
       
       get 'users', to: 'users#index'
       get 'users/:user_id', to: 'users#show'
