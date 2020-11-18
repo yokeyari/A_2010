@@ -7,7 +7,8 @@ import TextField from '@material-ui/core/TextField';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import DoneIcon from '@material-ui/icons/Done';
-
+import ReplyIcon from '@material-ui/icons/Reply';
+import WriteThread from './WriteThread'; 
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import Select from "@material-ui/core/Select";
 import { CardActions, FormControl, MenuItem } from "@material-ui/core";
@@ -32,6 +33,7 @@ const useStyles = makeStyles((theme) => ({
 function MemoComponent(props) {
   const classes = useStyles();
   const [isEditMode, setEditMode] = useState(false);
+  const [isReplyMode, setReplyMode] = useState(false);
   const [text, setText] = useState(props.memo.text)
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
   const memo = props.memo
@@ -42,7 +44,6 @@ function MemoComponent(props) {
     props.onChange({ ...memo, text: text });
     setEditMode(false);
   }
-
   const handleJump = () => {
     player.player.player.seekTo(memo.time)
   }
@@ -96,10 +97,30 @@ function MemoComponent(props) {
         { (userInfo.id==memo.user_id || userInfo.permission=="owner") ?
           <Button className="delete" color="secondary" startIcon={<DeleteIcon />} onClick={() => { props.onDelete(memo) }}>delete</Button> : <></> }
         {seletctAttribute}
+        
+        {isReplyMode ?
+        <Button className="reply" startIcon={<ReplyIcon />} onClick={() => { setReplyMode(false) }}>返信</Button>
+        :
+        <Button className="reply" startIcon={<ReplyIcon />} onClick={() => { setReplyMode(true) }}>返信</Button>
+        
+        } 
       </CardActions>
       <CardActions>
         {body}
       </CardActions>
+
+      {isReplyMode ?
+      <>
+        <WriteThread 
+						memo={memo}
+						user_id={props.user_id}
+						onSubmit={props.onSubmit}
+					/>
+        <Button onClick={() => { setReplyMode(false)  }}>キャンセル</Button>
+        </>
+      :
+      <></>
+      }
     </Card>
     //</div>
   )
