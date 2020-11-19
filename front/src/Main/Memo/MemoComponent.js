@@ -47,24 +47,28 @@ function MemoComponent(props) {
     player.player.player.seekTo(memo.time)
   }
 
-  const handleChangeAttribute = (event) => {
-    const attribute = event.target.value;
-    props.onChange({ ...memo, attribute: attribute });
+  const handleChangeStatus = (event) => {
+    const status = event.target.value;
+    props.onChange({ ...memo, status: status });
   }
 
-  const seletctAttribute =
+  const selectStatus =
     (userInfo.workspace_id != "home") ?
-      <FormControl>
-        <Select onChange={handleChangeAttribute}
-          defaultValue={memo.attribute}
-          className={""}
-          inputProps={{ "aria-label": "Without label" }}
-        >
-          <MenuItem value={"private"}>private</MenuItem>
-          <MenuItem value={"public"}>public</MenuItem>
-        </Select>
-      </FormControl>
-      : <></>
+      (isEditMode ? 
+        <FormControl>
+          <Select onChange={handleChangeStatus}
+            defaultValue={memo.status}
+            className={""}
+            inputProps={{ "aria-label": "Without label" }}
+          >
+            <MenuItem value={"pli"}>private</MenuItem>
+            <MenuItem value={"pub"}>public</MenuItem>
+          </Select>
+        </FormControl> : 
+        <div>{memo.status=="pub" ? "public" : "private"}</div>
+      ) : 
+      <></>
+      
 
   const body =
     isEditMode ?
@@ -95,7 +99,7 @@ function MemoComponent(props) {
             <Button className="edit" color="primary" startIcon={<EditIcon />} onClick={() => { setEditMode(true) }}>edit</Button> : <></> ) } 
         { (userInfo.id==memo.user_id || userInfo.permission=="owner") ?
           <Button className="delete" color="secondary" startIcon={<DeleteIcon />} onClick={() => { props.onDelete(memo) }}>delete</Button> : <></> }
-        {seletctAttribute}
+        {selectStatus}
       </CardActions>
       <CardActions>
         {body}

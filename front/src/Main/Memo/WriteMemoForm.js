@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
 ));
 function WriteMemoForm(props) {
   const [text, setText] = useState("");
-  const [attribute, setAttribute] = useState("private");
+  const [status, setStatus] = useState("pli");
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
   const player = props.player;
   const classes = useStyles();
@@ -63,29 +63,29 @@ function WriteMemoForm(props) {
       text = "空のメモ"
     }
 
-    props.onSubmit({ text: text, time: player.time, user_id: props.user_id, attribute: attribute });
-    // console.log({ text: text, time: player.time, user_id: props.user_id, attribute: attribute });
+    props.onSubmit({ text: text, time: player.time, user_id: props.user_id, status: status });
+    // console.log({ text: text, time: player.time, user_id: props.user_id, status: status });
     setText("");
   }
   const deleteMemo = () => {
     setText("");
   }
 
-  const handleChangeAttribute = (event) => {
+  const handleChangeStatus = (event) => {
     const value = event.target.value;
-    setAttribute(value);
+    setStatus(value);
   }
 
-  const seletctAttribute =
+  const seletctStatus =
     (userInfo.workspace_id != "home") ?
       <FormControl>
-        <Select onChange={handleChangeAttribute}
-          defaultValue="private"
+        <Select onChange={handleChangeStatus}
+          defaultValue="pli"
           className={""}
           inputProps={{ "aria-label": "Without label" }}
         >
-          <MenuItem value={"private"}>private</MenuItem>
-          <MenuItem value={"public"}>public</MenuItem>
+          <MenuItem value={"pli"}>private</MenuItem>
+          <MenuItem value={"pub"}>public</MenuItem>
         </Select>
       </FormControl>
       : <></>
@@ -94,7 +94,7 @@ function WriteMemoForm(props) {
     //<div>
     <Card className={classes.card}>
       <div id="memo-form" className="Main-memo">
-        {seletctAttribute}
+        {seletctStatus}
         <CardHeader
           action={
             <Tooltip title="メモを作成">

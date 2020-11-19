@@ -36,7 +36,7 @@ function Workspace(props) {
       })
 
       // テスト用
-      const test_pages = [{id: 4, url:"demo", title: "demo", tags: [], memos: []}];
+      const test_pages = [{id: 28, url:"demo", title: "demo", tags: [], memos: []}];
       setState({...state , pages: test_pages});
     }else{
       // 本番用 要API確認

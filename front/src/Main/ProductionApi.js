@@ -74,14 +74,14 @@ export class MemoDataSource {
 
   //メモの新規作成
   async createMemo(memo, page_id) {
-    const res = createData({ text: memo.text, time: memo.time, parent_id: memo.parent_id, user_id: memo.user_id, attribute: memo.attribute },
+    const res = createData({ text: memo.text, time: memo.time, parent_id: memo.parent_id, user_id: memo.user_id, status: memo.status },
       this.API_URL + `?page_id=${page_id}`);
     return res;
   }
 
   //メモの更新
   async updateMemo(memo) {
-    const res = updateData({ text: memo.text, time: memo.time },
+    const res = updateData({ text: memo.text, time: memo.time, status: memo.status },
       this.API_URL + '/' + memo.id);
     return res;
   }
