@@ -45,7 +45,7 @@ function NewPage() {
 	return (
 		<div className="Create-NewPage-Modal">
 			<Tooltip title="新規メモ作成">
-				<Fab className={classes.fab} aria-label="新規メモ作成" variant="contained" color="primary" onClick={handleOpen}>
+				<Fab className={classes.fab} aria-label="新規作成" variant="contained" color="primary" onClick={handleOpen}>
 					<AddIcon fontSize="large" />
 				</Fab>
 			</Tooltip>

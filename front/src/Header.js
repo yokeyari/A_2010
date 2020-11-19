@@ -3,6 +3,7 @@ import { makeStyles, withStyles } from '@material-ui/core/styles';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import logo from './memotubelogo_orange.png';
 import Menu from "@material-ui/core/Menu";
+import Tooltip from '@material-ui/core/Tooltip';
 import MenuItem from "@material-ui/core/MenuItem";
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -83,7 +84,7 @@ const useStyles = makeStyles((theme) => ({
   search_make: {
     //marginLeft: 'auto',
     //marginRight: 'auto'
-    width: '60vw'
+    width: '100vw'
   },
   title: {
     flexGrow: 1,
@@ -94,7 +95,7 @@ export default function Header(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [state, setState] = useState({ search_word: "", pages: [] });
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
-
+  const [isSearchMode, setSearchMode] = useState(false);
   const UserApi = new UserDataSource();
   const classes = useStyles();
 
@@ -123,24 +124,72 @@ export default function Header(props) {
 
 
   return (
-    <div className={classes.root}>
+    <div >
       <AppBar className={classes.root} color="primary" position="static" >
         <Toolbar>
+       
+        <IconButton variant="contained" onClick={handleClick} edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+            <MenuIcon />
+          </IconButton>
+          <StyledMenu
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={handleClose}
+          >
+            <Link to={`/${userInfo.id}/home`} >
+              <MenuItem button onClick={handleClose}>
+                <ListItemIcon>
+                  <PersonIcon />
+                </ListItemIcon>
+                <ListItemText primary="ユーザーページ" />
+              </MenuItem>
+            </Link>
+            <Link to={`/${userInfo.id}/main`}>
+              <MenuItem Button onClick={handleClose}>
+                <ListItemIcon>
+                  <MovieIcon />
+                </ListItemIcon>
+                <ListItemText primary="動画メモページ" />
+              </MenuItem>
+            </Link>
+          </StyledMenu>
+        
           <Button component={Link} to={`/${userInfo.id}`}>
             <img src={logo} className={classes.logo} alt="memotube" />
           </Button>
 
-          <Hidden xsDown>
-            <SearchForm className={classes.search_make} onChange={handleChangeSeachForm} search_word={state.search_word} onClick={handleSeach} />
+          <Hidden smDown>
+            <SearchForm  onChange={handleChangeSeachForm} search_word={state.search_word} onClick={handleSeach} />
           </Hidden>
 
+        
           {userInfo.permission=="owner" ? 
             <div>
               <NewPage className={classes.search_make} /> 
               {userInfo.ws_id!="home" ? <EditWorkspaceButton /> : <></>}
             </div>
             : <></>}
+  <Hidden mdUp>
+            {isSearchMode ?
+            <>
+            <Tooltip title="検索窓を非表示">
+            <IconButton  color="inherit" type="submit" onClick={() => { setSearchMode(false) }} aria-label="search">
+          <SearchIcon/>
 
+              </IconButton> 
+              </Tooltip>
+              </>
+            :
+            <Tooltip title="検索窓を表示">
+          <IconButton  color="inherit" type="submit" onClick={() => { setSearchMode(true) }} aria-label="search">
+          <SearchIcon/>
+
+              </IconButton> 
+              </Tooltip>
+              
+          }
+          
+          </Hidden>
           <div className={classes.right}>
 
             <LoginAuth/>
@@ -148,7 +197,16 @@ export default function Header(props) {
 
         </Toolbar>
       </AppBar>
-
+      <Hidden mdUp>
+      {isSearchMode ?
+            <>
+            <SearchForm className={classes.search_make} onChange={handleChangeSeachForm} search_word={state.search_word} onClick={handleSeach} />
+              </>
+            :
+          <></>
+              
+          }
+          </Hidden>
     </div>
   );
 }
