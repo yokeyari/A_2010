@@ -7,7 +7,7 @@ class Api::V1::WorkspacesController < ApplicationController
   end
 
   def show
-    rel = Rel_UAW.find_by(user_id: @user.id, workspace_id: @wsapce.id)
+    rel = Rel_UAW.find_by(user_id: @user.id, workspace_id: @wspace.id)
     if rel.nil?
       render json: {rel: false}, status: :bad_request
     else
@@ -37,11 +37,11 @@ class Api::V1::WorkspacesController < ApplicationController
   end
 
   def all_users
-    render json: {users: @wsapce.rel_uaws.map(&:user)}, status: :ok
+    render json: {users: @wspace.rel_uaws.map(&:user)}, status: :ok
   end
 
   def all_pages
-    render json: {pages: @wsapce.pages}, status: :ok
+    render json: {pages: @wspace.pages}, status: :ok
   end
 
   def add_user
