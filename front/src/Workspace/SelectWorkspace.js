@@ -41,7 +41,6 @@ function SelectWorkspace(props) {
 
   useEffect(() => {
     console.log('load workspace list');
-    // 本番用
     workspacesDataSource.getWorkspaceIndex().then(res => {
       res.json().then(json => {
         console.log('load workspace list');
@@ -49,10 +48,6 @@ function SelectWorkspace(props) {
         setWorkspaces(json.workspaces);
       })
     })
-
-    // テスト用
-    // const test_workspaces = [{id: 1, name: "ws1", permission: "general"}]
-    // setWorkspaces(test_workspaces);
   }, [])
 
   const handleClose = () => {
