@@ -1,9 +1,12 @@
 .User-Top{
-  padding:5vh;
+  padding:2vh 0 5vh 0;
+  /*margin: 2vh;*/
   width:100%;
   background-color: #e7ecec;
 }
-
+.User-name{
+  padding:2vh
+}
 @media (prefers-reduced-motion: no-preference) {/*
   .App-logo {
     animation: App-logo-spin infinite 20s linear;

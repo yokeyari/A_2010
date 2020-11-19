@@ -5,18 +5,23 @@ import Select from "@material-ui/core/Select";
 import Modal from '@material-ui/core/Modal';
 import { FormControl, MenuItem, InputLabel } from '@material-ui/core';
 import Fade from '@material-ui/core/Fade';
-
+import { makeStyles, withStyles } from '@material-ui/core/styles';
 import UserInfoContext from '../context';
 import { WorkspaceDataSource } from '../Main/ProductionApi';
 import CreateWorkspace from "./CreateWorkspace";
 
-
+const useStyles = makeStyles((theme) => ({
+	root: {
+		padding: '20px'
+	},
+}
+));
 function SelectWorkspace(props) {
   const [workspaces, setWorkspaces] = useState([])
   const [open, setOpen] = useState(false);
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
   const { ws_id } = useParams();
-  
+  const classes = useStyles();
 
   const handleOpen = () => {
     setOpen(true)
@@ -29,6 +34,7 @@ function SelectWorkspace(props) {
     // workspace_id=="main_page" ? props.history.push(`/${userInfo.id}`) : props.history.push(`/${userInfo.id}/ws/${workspace_id}`)
 
     // テスト用
+    
     const workspace_id = event.target.value;
     console.log(workspace_id);
     switch (workspace_id) {
@@ -65,7 +71,7 @@ function SelectWorkspace(props) {
 	};
 
   return (
-    <div className="Select-Workspace-List">
+    <div className={classes.root}>
       <Grid item>
         <FormControl>
           <InputLabel id="demo-simple-select-label">workspace</InputLabel>

@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: theme.shape.borderRadius,
     backgroundColor: fade(theme.palette.common.white, 0.15),
     '&:hover': {
-      backgroundColor: fade(theme.palette.common.white, 0.15),
+      backgroundColor: fade(theme.palette.common.white, 0.25),
     },
     marginLeft: 0,
     width: '100%',
@@ -54,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 120,
   },
   iconButton: {
-    padding: 10,
+    //padding: 10,
   },
 
   inputRoot: {
@@ -68,6 +68,12 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     [theme.breakpoints.up('sm')]: {
       width: '30ch',
+      '&:focus': {
+        width: '35ch',
+      },
+    },
+    [theme.breakpoints.up('lg')]: {
+      width: '40ch',
       '&:focus': {
         width: '50ch',
       },
@@ -102,7 +108,7 @@ export default function SearchForm(props) {
         />
 
         <Link to={`/${userInfo.id}/`}>
-          <IconButton size="large" type="submit" className={classes.iconButton} onClick={props.onClick} aria-label="search">
+          <IconButton  type="submit" className={classes.iconButton} onClick={props.onClick} aria-label="search">
             <SearchIcon />
           </IconButton>
         </Link>
