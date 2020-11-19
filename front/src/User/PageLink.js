@@ -94,10 +94,10 @@ export default function PageLink(props) {
 
 
   const handleClick = () => {
-    if (userInfo.ws_id=="home") {
+    if (userInfo.workspace_id=="home") {
       setState({ to: `/${userInfo.id}/${page.id}`, isLoaded: true, isLoading: false })
     } else {
-      setState({ to: `/${userInfo.id}/ws/${userInfo.ws_id}/${page.id}`, isLoaded: true, isLoading: false })
+      setState({ to: `/${userInfo.id}/ws/${userInfo.workspace_id}/${page.id}`, isLoaded: true, isLoading: false })
     }
   }
   const handleDelete = (page) => {

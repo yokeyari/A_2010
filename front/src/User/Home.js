@@ -36,7 +36,7 @@ function Home(props) {
 
   const loadPages = () => {
     if(props.search_word==""){
-      // ws_id?"home"???????
+      // workspace_id?"home"???????
       pageDataSource.getPageIndex(user).then(res=>{
       // workspaceDataSource.getPageIndex("home").then(res=>{
         if(res===undefined){
@@ -48,7 +48,7 @@ function Home(props) {
         }
       })
     }else{
-      // ws_id?"home"???????
+      // workspace_id?"home"???????
       pageDataSource.searchPage(user, props.search_word.split(' '))
       // workspaceDataSource.searchPage("home", props.search_word.split(' '))
       .then(res=>{
@@ -62,7 +62,7 @@ function Home(props) {
   }
 
   useEffect(() => {
-    setUserInfo({...userInfo, ws_id: "home", permission: "owner"});
+    setUserInfo({...userInfo, workspace_id: "home", permission: "owner"});
   }, [])
 
   useEffect(() => {

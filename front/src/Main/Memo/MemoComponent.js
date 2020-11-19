@@ -53,7 +53,7 @@ function MemoComponent(props) {
   }
 
   const seletctAttribute =
-    (userInfo.ws_id != "home") ?
+    (userInfo.workspace_id != "home") ?
       <FormControl>
         <Select onChange={handleChangeAttribute}
           defaultValue={memo.attribute}
@@ -87,7 +87,7 @@ function MemoComponent(props) {
   return (
     <Card className={classes.card} key={memo.id}>
       <CardActions >
-        {userInfo.ws_id!="home" ? <p>[{memo.user_id}さん]</p> : <></>}
+        {userInfo.workspace_id!="home" ? <p>[{memo.user_id}さん]</p> : <></>}
         <Button className="timeButton" startIcon={<AccessTimeIcon />} onClick={() => { handleJump() }} >{formatSec2Str(memo.time)}</Button>
         {isEditMode ?
           ( <Button className="edit" startIcon={<DoneIcon />} onClick={() => { endEditMode() }}>done</Button> ) :

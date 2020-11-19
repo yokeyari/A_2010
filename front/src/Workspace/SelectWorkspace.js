@@ -16,7 +16,7 @@ function SelectWorkspace(props) {
   const [workspaces, setWorkspaces] = useState([])
   const [open, setOpen] = useState(false);
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
-  const { ws_id } = useParams();
+  const { workspace_id } = useParams();
   
 
   const handleOpen = () => {
@@ -29,12 +29,12 @@ function SelectWorkspace(props) {
     console.log(workspace_id);
     switch (workspace_id) {
       case "home":
-        setUserInfo({...userInfo, ws_id: "home"});
+        setUserInfo({...userInfo, workspace_id: "home"});
         props.history.push(`/${userInfo.id}`); break;
       case "create":
         break;
       default:
-        setUserInfo({...userInfo, ws_id: workspace_id});
+        setUserInfo({...userInfo, workspace_id: workspace_id});
         props.history.push(`/${userInfo.id}/ws/${workspace_id}`);
     }
   }
@@ -71,7 +71,7 @@ function SelectWorkspace(props) {
         <FormControl>
           <InputLabel id="demo-simple-select-label">workspace</InputLabel>
           <Select onChange={switchWorkspace}
-            defaultValue={ws_id ? ws_id : "home"}
+            defaultValue={workspace_id ? workspace_id : "home"}
             className={""}
             inputProps={{ "aria-label": "Without label" }}
           >

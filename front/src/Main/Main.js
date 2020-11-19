@@ -57,7 +57,7 @@ function Main(props) {
   const [colorList, setColorList] = useState([]);
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
   const [visMemos, SetVisMemos] = useState({memos: []});
-  const { ws_id } = useParams();
+  const { workspace_id } = useParams();
 
   const page_id = props.page_id;
 
@@ -80,14 +80,14 @@ function Main(props) {
 
   useEffect(() => {
     // 本番用
-    // workspaceDataSource.getWorkspace(ws_id).then(res => {
+    // workspaceDataSource.getWorkspace(workspace_id).then(res => {
     //   const ws = res.workspace;
-    //   setUserInfo({...userInfo, ws_id: (ws_id ? ws_id : "home"), permission: ws.permission});
+    //   setUserInfo({...userInfo, workspace_id: (workspace_id ? workspace_id : "home"), permission: ws.permission});
     //   setWsInfo({...wsInfo, name: ws.name});
     // })
 
     // テスト用 (permissionの更新なし)
-    setUserInfo({...userInfo, ws_id: (ws_id ? ws_id : "home")});
+    setUserInfo({...userInfo, workspace_id: (workspace_id ? workspace_id : "home")});
 
     // ここでタイトルなどの読み込み
     segtIsLoading(true);
@@ -189,7 +189,7 @@ function Main(props) {
   }
 
   const VisMemoHamburger = 
-    (userInfo.ws_id != "home") ?
+    (userInfo.workspace_id != "home") ?
       <Grid container direction="row" justify="center" alignItems="center">
         <Grid item>
           <Box style={{ marginRight: "20px" }}>メモの表示切替</Box>

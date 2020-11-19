@@ -77,7 +77,7 @@ function WriteMemoForm(props) {
   }
 
   const seletctAttribute =
-    (userInfo.ws_id != "home") ?
+    (userInfo.workspace_id != "home") ?
       <FormControl>
         <Select onChange={handleChangeAttribute}
           defaultValue="private"

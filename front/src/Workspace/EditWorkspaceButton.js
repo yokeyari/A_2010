@@ -42,7 +42,7 @@ function EditWorkspaceButton() {
   const getInitFields = () => {
     // 本番用
     // //ワークスペースの名前も取得
-    // workspaceDataSource.getWorkspaceUser(userInfo.ws_id).then(res => {
+    // workspaceDataSource.getWorkspaceUser(userInfo.workspace_id).then(res => {
     //   const users = res.users;
     //   setFields(users);
     // })

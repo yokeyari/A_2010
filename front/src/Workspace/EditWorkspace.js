@@ -96,7 +96,7 @@ export default function EditWorkspace(props) {
 	}
 
 	const handleCloseWs = () => {
-		workspaceDataSource.deleteWorkspace(userInfo.ws_id)
+		workspaceDataSource.deleteWorkspace(userInfo.workspace_id)
 		.then(() => {
 			setState({ ...state, to: `/${userInfo.id}/`, isLoaded: true });
 		})

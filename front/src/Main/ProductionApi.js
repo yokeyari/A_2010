@@ -235,9 +235,13 @@ export class PageDataSource {
   }
 
   async createPage(page) {
-    const res = createData({ url: page.url, title: page.title, ws_id: page.ws_id },
-      this.API_URL + `?user_id=${page.user_id}`);
-    return res;
+    const workspace_id = page.workspace_id;
+    let res =null;
+    if (workspace_id=="home"){
+      return res = createData({ url: page.url, title: page.title }, this.API_URL + `?user_id=${page.user_id}`);
+    } else {
+      return res = createData({ url: page.url, title: page.title, workspace_id: page.workspace_id }, this.API_URL);
+    }
   }
 
   //pageの更新
@@ -334,17 +338,17 @@ export class WorkspaceDataSource {
     return res;
   }
 
-  async getWorkspace(ws_id) {
-    const res = await fetch(this.API_URL + `/${ws_id}`, this.init);
+  async getWorkspace(workspace_id) {
+    const res = await fetch(this.API_URL + `/${workspace_id}`, this.init);
     return res;
   }
 
-  async getPageIndex(ws_id) {
-    const res = await fetch(this.API_URL + `/${ws_id}/pages`, this.init);
+  async getPageIndex(workspace_id) {
+    const res = await fetch(this.API_URL + `/${workspace_id}/pages`, this.init);
     return res;
   }
 
-  async searchPage(ws_id, keywords) {
+  async searchPage(workspace_id, keywords) {
     const res = await fetch(this.API_URL + '/search', {
       method: "POST",
       credentials: 'include', 
@@ -353,7 +357,7 @@ export class WorkspaceDataSource {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ ws_id: ws_id, keywords: keywords })
+      body: JSON.stringify({ workspace_id: workspace_id, keywords: keywords })
     })
       // .then(res => console.log(res))
       .then(res => res.json());
@@ -372,13 +376,13 @@ export class WorkspaceDataSource {
     return res;
   }
 
-  async deleteWorkspace(ws_id) {
-    const res = deleteData(this.API_URL + `/${ws_id}`);
+  async deleteWorkspace(workspace_id) {
+    const res = deleteData(this.API_URL + `/${workspace_id}`);
     return res;
   }
 
-  async getWorkspaceUser(ws_id) {
-    const res = await fetch(this.API_URL + `/ws/${ws_id}/users`, this.init);
+  async getWorkspaceUser(workspace_id) {
+    const res = await fetch(this.API_URL + `/ws/${workspace_id}/users`, this.init);
     return res;
   }
 }
