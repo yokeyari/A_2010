@@ -330,7 +330,7 @@ export class WorkspaceDataSource {
   }
 
   async getWorkspaceIndex() {
-    const res = await fetch(this.API_URL + "/index", this.init);
+    const res = await fetch(this.API_URL, this.init);
     return res;
   }
 
@@ -361,13 +361,19 @@ export class WorkspaceDataSource {
     return res;
   }
 
-  async createWorkspace(name, users) {
-    const res = createData({ name: name, users: users }, this.API_URL );
+  async createWorkspace(workspace) {
+    // const res = createData({ name: workspace.name, users: workspace.users }, this.API_URL );
+    const res = createData({ name: workspace.name }, this.API_URL );
     return res;
   }
 
   async updateWorkspace(name, users) {
     const res = createData({ name: name, users: users }, this.API_URL );
+    return res;
+  }
+
+  async deleteWorkspace(ws_id) {
+    const res = deleteData(this.API_URL + `/${ws_id}`);
     return res;
   }
 

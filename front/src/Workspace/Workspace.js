@@ -16,6 +16,7 @@ function Workspace(props) {
   const [wsInfo, setWsInfo] = useState({name: ""}) 
   const user = userInfo;
 
+  console.log(userInfo.ws_id);
 
   // ユーザーの権限が必要なところで呼び出す
   const checkUserPermission = () => {
@@ -25,7 +26,7 @@ function Workspace(props) {
 
   const loadPages = () => {
     if(props.search_word==""){
-      // 本番用
+      // // 本番用
       // // ワークスペース用に変更
       // // pageDataSource.getPageIndex(user).then(res=>{
       // workspaceDataSource.getPageIndex(ws_id).then( res => {
@@ -54,18 +55,14 @@ function Workspace(props) {
   }
 
   useEffect(() => {
-    // 本番用
-    // workspaceDataSource.getWorkspace(ws_id).then(res => {
-    //   const ws = res.workspace;
-    //   setUserInfo({...userInfo, ws_id: ws_id, permission: ws.permission});
-    //   setWsInfo({...wsInfo, name: ws.name});
-    // })
-
-    // テスト用
-    setUserInfo({...userInfo, ws_id: ws_id, permission: "general"});
-    // setUserInfo({...userInfo, ws_id: ws_id, permission: "owner"});
-    setWsInfo({...wsInfo, name: "テストワークスペース"});
-  }, [])
+    workspaceDataSource.getWorkspace(ws_id).then(res => {
+      res.json().then(json => {
+        const ws = json.workspace;
+        setUserInfo({...userInfo, ws_id: ws_id, permission: ws.permission});
+        setWsInfo({...wsInfo, name: ws.name});
+      })
+    })
+  }, [userInfo.ws_id])
 
   useEffect(() => {
     // setUserInfo({...userInfo,...user});

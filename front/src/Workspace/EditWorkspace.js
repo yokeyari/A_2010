@@ -95,6 +95,13 @@ export default function EditWorkspace(props) {
 		setFields(values);
 	}
 
+	const handleCloseWs = () => {
+		workspaceDataSource.deleteWorkspace(userInfo.ws_id)
+		.then(() => {
+			setState({ ...state, to: `/${userInfo.id}/`, isLoaded: true });
+		})
+	}
+
   console.log(fields);
 
 	return (
@@ -113,9 +120,11 @@ export default function EditWorkspace(props) {
 						<Button className={classes.button} id="submit"
 							variant="contained" color="primary" endIcon={<CreateIcon />}
 							onClick={handleClick}>
-							決定
+							change
 						</Button>
 					</Transition>
+
+					<Button onClick={handleCloseWs}>close this workspace</Button>
 				</div>
 			</Card>
 		</div>
