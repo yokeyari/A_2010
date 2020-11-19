@@ -79,7 +79,7 @@ function Main(props) {
   }, [reloader, page_id])
 
   useEffect(() => {
-    // 本番用
+    // 本番用 要API確認
     // workspaceDataSource.getWorkspace(workspace_id).then(res => {
     //   const ws = res.workspace;
     //   setUserInfo({...userInfo, workspace_id: (workspace_id ? workspace_id : "home"), permission: ws.permission});

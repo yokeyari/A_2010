@@ -36,9 +36,7 @@ function Home(props) {
 
   const loadPages = () => {
     if(props.search_word==""){
-      // workspace_id?"home"???????
       pageDataSource.getPageIndex(user).then(res=>{
-      // workspaceDataSource.getPageIndex("home").then(res=>{
         if(res===undefined){
           
         }else{
@@ -48,9 +46,8 @@ function Home(props) {
         }
       })
     }else{
-      // workspace_id?"home"???????
-      pageDataSource.searchPage(user, props.search_word.split(' '))
-      // workspaceDataSource.searchPage("home", props.search_word.split(' '))
+      // ?API??
+      pageDataSource.searchPage(user, props.search_word.split(' '), userInfo.workspace_id)
       .then(res=>{
         // console.log(props.search_word)
         console.log("load page");

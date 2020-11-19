@@ -257,7 +257,7 @@ export class PageDataSource {
     return res;
   }
 
-  async searchPage(user, keywords) {
+  async searchPage(user, keywords, workspace_id) {
     const res = await fetch(this.API_URL + '/\search', {
       method: "POST",
       credentials: 'include', //クレデンシャルを含める指定
@@ -267,6 +267,7 @@ export class PageDataSource {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({ user_id: user.id, keywords: keywords })
+      // body: JSON.stringify({ user_id: user.id, keywords: keywords, workspace_id: workspace_id })
     })
       // .then(res => console.log(res))
       .then(res => res.json());
@@ -366,8 +367,8 @@ export class WorkspaceDataSource {
   }
 
   async createWorkspace(workspace) {
-    // const res = createData({ name: workspace.name, users: workspace.users }, this.API_URL );
-    const res = createData({ name: workspace.name }, this.API_URL );
+    const res = createData({ name: workspace.name, users: workspace.users }, this.API_URL );
+    // const res = createData({ name: workspace.name }, this.API_URL );
     return res;
   }
 
@@ -381,8 +382,8 @@ export class WorkspaceDataSource {
     return res;
   }
 
-  async getWorkspaceUser(workspace_id) {
-    const res = await fetch(this.API_URL + `/ws/${workspace_id}/users`, this.init);
+  async getWorkspaceUsers(workspace_id) {
+    const res = await fetch(this.API_URL + `/${workspace_id}/users`, this.init);
     return res;
   }
 }

@@ -26,29 +26,22 @@ function Workspace(props) {
 
   const loadPages = () => {
     if(props.search_word==""){
-      // 本番用
-      // ワークスペース用に変更
-      // pageDataSource.getPageIndex(user).then(res=>{
+      // 本番用 要API確認
       workspaceDataSource.getPageIndex(workspace_id).then( res => {
         res.json().then(json => {
-          // setState({...state , pages: json.pages})
-          console.log("ws pages", json.pages)
+          const pages = json.pages;
+          // setState({...state , pages: pages})
+          console.log("ws pages", pages)
         })
-
-        // if(res===undefined){
-          
-        // }else{
-        //   setState({...state , pages:res.pages})
-        // }
       })
 
       // テスト用
       const test_pages = [{id: 4, url:"demo", title: "demo", tags: [], memos: []}];
       setState({...state , pages: test_pages});
     }else{
-      // ワークスペース用に変更
-      // pageDataSource.searchPage(user, props.search_word.split(' '))
-      workspaceDataSource.searchPage(workspace_id, props.search_word.split(' '))
+      // 本番用 要API確認
+      // workspaceDataSource.searchPage(workspace_id, props.search_word.split(' '))
+      pageDataSource.searchPage(user, props.search_word.split(' '), userInfo.workspace_id)
       .then(res=>{
         // console.log(props.search_word)
         console.log("load page");
@@ -60,11 +53,13 @@ function Workspace(props) {
   }
 
   useEffect(() => {
+    // 要API確認
     workspaceDataSource.getWorkspace(workspace_id).then(res => {
       res.json().then(json => {
         const ws = json.workspace;
         setUserInfo({...userInfo, workspace_id: workspace_id, permission: ws.permission});
         setWsInfo({...wsInfo, name: ws.name});
+        console.log("get workspace and permission")
       })
     })
   }, [userInfo.workspace_id])

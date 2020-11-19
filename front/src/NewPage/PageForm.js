@@ -72,6 +72,7 @@ export default function NewPageForm(props) {
 		}
 
 		trackPromise(
+			// 要API確認
 			pageDataSource.createPage({ url: state.url, title: state.title, user_id: userInfo.id, workspace_id: userInfo.workspace_id })
 				.then(res => {
 					console.log("create page")

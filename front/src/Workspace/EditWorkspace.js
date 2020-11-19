@@ -56,6 +56,7 @@ export default function EditWorkspace(props) {
 	const handleClick = () => {
 
 		trackPromise(
+			// 要API確認
 			workspaceDataSource.updateWorkspace({ name: state.name, users: fields })
 				.then(res => {
 					if (res.statusText == "OK") {
@@ -114,7 +115,7 @@ export default function EditWorkspace(props) {
 						multiline
 						onChange={e => { setState({ ...state, name: e.target.value }) }} value={state.name} />
 
-					<InviteUserForm fields={props.initFields} handleChangeUserId={handleChangeUserId} handleChangePermission={handleChangePermission} handleAdd={handleAdd} handleRemove={handleRemove} />
+					<InviteUserForm users={props.initFields.users} handleChangeUserId={handleChangeUserId} handleChangePermission={handleChangePermission} handleAdd={handleAdd} handleRemove={handleRemove} />
 
 					<Transition to={state.to} ok={state.isLoaded}>
 						<Button className={classes.button} id="submit"
