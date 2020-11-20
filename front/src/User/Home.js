@@ -29,6 +29,19 @@ function Home(props) {
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
   const user = userInfo;
 
+  var filteredpages=[];
+
+  //ダミーデータ
+  var tags= ["めろんぱん","猫","はじめまして松尾です"];
+
+  // pageDataSource.getAllTagIndex(user).then(res=>{
+  //   var tags = JSON.parse(JSON.stringify(res));
+  //   tags = tags.map(tag => tag.text);
+  //   console.log(tags);
+  // });
+
+
+
   // const { user_id } = useParams();
   // const user = {...userInfo,id: user_id };
 
@@ -87,16 +100,6 @@ function Home(props) {
   }
 
 
-  var filteredpages=[];
-  var tags= ["めろんぱん","猫","はじめまして松尾です"];
-  
-  // pageDataSource.getAllTagIndex(user).then(res=>{
-  //   var tags = JSON.parse(JSON.stringify(res));
-  //   tags = tags.map(tag => tag.text);
-  //   console.log(tags);
-  // });
-
-
   return (
     <div className="User-Top">
       {/*className="User-To"*/}
@@ -120,7 +123,6 @@ function Home(props) {
       ))}
       {/*<PageList pages={state.pages} withUpdate={withUpdate} /> */}
     </div>
-
   );
 }
 
