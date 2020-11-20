@@ -84,9 +84,9 @@ export default function NewPageForm(props) {
 								// console.log("getPage", page.page);
 								// homeにいる時とworkspaceにいる時で場合分け
 								if (userInfo.workspace_id == "home") {
-									setState({ ...state, to: `/${userInfo.id}/${page.page.id}`, isLoaded: true });
+									setState({ ...state, to: `/${userInfo.id}/${page.id}`, isLoaded: true });
 								} else {
-									setState({ ...state, to: `/${userInfo.id}/ws/${userInfo.workspace_id}/${page.page.id}`, isLoaded: true });
+									setState({ ...state, to: `/${userInfo.id}/ws/${userInfo.workspace_id}/${page.id}`, isLoaded: true });
 								}
 								
 								props.onClose();
