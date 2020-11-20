@@ -1,31 +1,37 @@
 class Api::V1::MemosController < ApplicationController
   before_action :current_user
-  before_action :find_page, only: [:index]
   before_action :find_memo, only: [:update, :destroy]
 
   # あるメモページのメモ一覧のJSONを返す．
   def index
-    render json: {memos: @page.memos}, status: :ok
+    res_ok Memo.where(params.permit(:page_id))
   end
 
   # メモを作成する．
   def create
-    memo = Memo.create!(params.permit(:user_id, :page_id, :parent_id, :text, :time))
-    render json: {memo: memo}, status: :ok
-  rescue => e # 作成できない場合
-    render json: {error: e.record.errors.full_messages}, status: :bad_request
+    memo = Memo.create!(params.permit(:user_id, :page_id, :parent_id, :text, :time, :status))
+    res_ok memo
+  rescue ActiveRecord::RecordInvalid => e # 作成できない場合
+    res_errors e.record
   end
 
   def update
-    if @memo.update(params.permit(:text, :time))
-      render json: {memo: @memo}, status: :ok
+    if @memo.update(params.permit(:text, :time, :status))
+      res_ok @memo
     else
-      render json: {error: @memo.errors.full_messages}, status: :bad_request
+      res_errors @memo
     end
   end
 
   def destroy
     @memo.destroy
-    render status: :ok
+    res_ok
+  end
+
+private
+  def find_memo
+    @memo = Memo.find(params[:memo_id])
+  rescue ActiveRecord::RecordNotFound => e
+    res_not_found
   end
 end
