@@ -7,8 +7,8 @@ module Res
     render json: hash, status: :not_found # 404
   end
 
-  def res_bad_resuest **hash
-    render json: hash, status: :bad_resuest # 400
+  def res_bad_request **hash
+    render json: hash, status: :bad_request # 400
   end
 
   def res_unauthorized **hash
@@ -20,6 +20,6 @@ module Res
   end
 
   def res_errors(e)
-    res_bad_resuest errors: e.errors.messages, model: e.class.name
+    res_bad_request errors: e.errors.messages, model: e.class.name
   end
 end

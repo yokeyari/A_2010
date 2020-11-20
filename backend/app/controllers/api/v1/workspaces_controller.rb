@@ -17,11 +17,10 @@ class Api::V1::WorkspacesController < ApplicationController
 
   # ownerはparamsに含まれるかどうか？
   def create
-    wsapce = Workspace.create!(params.permit(:name))
-    wspace_id = wspace.id
+    ActiveRecord::Base.transaction do 
+      wspace = Workspace.create!(params.permit(:name))
+      wspace_id = wspace.id
 
-    # 1つでも作成できなければ巻き戻って例外発生
-    Rel_UAW.transaction do
       params[:users].each {|user_id, perm| Rel_UAW.create!(user_id: user_id, workspace_id: wspace_id, permission: perm)}
     end
 
@@ -31,11 +30,10 @@ class Api::V1::WorkspacesController < ApplicationController
   end
 
   def update
-    @wspace.update!(name: params[:name]) if params[:name]
-    wspace_id = @wspace.id
+    ActiveRecord::Base.transaction do
+      @wspace.update!(name: params[:name]) if params[:name]
+      wspace_id = @wspace.id
 
-    # 1つでも作成できなければ巻き戻って例外発生
-    Rel_UAW.transaction do
       params[:users].each do |user_id, perm| 
         rel = Rel_UAW.find_by(user_id: user_id, workspace_id: wspace_id)
         raise ActiveRecord::RecordNotFound if rel.nil? # 無い場合は例外処理
