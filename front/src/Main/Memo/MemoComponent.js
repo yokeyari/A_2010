@@ -61,7 +61,7 @@ function MemoComponent(props) {
             className={""}
             inputProps={{ "aria-label": "Without label" }}
           >
-            <MenuItem value={"pli"}>private</MenuItem>
+            <MenuItem value={"pri"}>private</MenuItem>
             <MenuItem value={"pub"}>public</MenuItem>
           </Select>
         </FormControl> : 

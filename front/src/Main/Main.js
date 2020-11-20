@@ -140,8 +140,8 @@ function Main(props) {
       case 'pub': 
         const public_memos = mymemos.filter(memo => memo.status=="pub" ? true : false); 
         SetVisMemos({memos: public_memos}); break;
-      case 'pli':
-        const private_memos = mymemos.filter(memo => memo.status=="pli" ? true : false);
+      case 'pri':
+        const private_memos = mymemos.filter(memo => memo.status=="pri" ? true : false);
         SetVisMemos({memos: private_memos}); break;
       default:
         SetVisMemos(memos)
@@ -205,7 +205,7 @@ function Main(props) {
               <MenuItem value="all">全員</MenuItem>
               <MenuItem value="onlyme">自分</MenuItem>
               <MenuItem value="pub">public</MenuItem>
-              <MenuItem value="pli">private</MenuItem>
+              <MenuItem value="pri">private</MenuItem>
             </Select>
           </FormControl>
         </Grid>

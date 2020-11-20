@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
 ));
 function WriteMemoForm(props) {
   const [text, setText] = useState("");
-  const [status, setStatus] = useState("pli");
+  const [status, setStatus] = useState("pri");
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
   const player = props.player;
   const classes = useStyles();
@@ -80,11 +80,11 @@ function WriteMemoForm(props) {
     (userInfo.workspace_id != "home") ?
       <FormControl>
         <Select onChange={handleChangeStatus}
-          defaultValue="pli"
+          defaultValue="pri"
           className={""}
           inputProps={{ "aria-label": "Without label" }}
         >
-          <MenuItem value={"pli"}>private</MenuItem>
+          <MenuItem value={"pri"}>private</MenuItem>
           <MenuItem value={"pub"}>public</MenuItem>
         </Select>
       </FormControl>
