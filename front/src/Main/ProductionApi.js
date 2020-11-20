@@ -213,16 +213,16 @@ export class PageDataSource {
     }
   }
 
-  async getAllTagIndex(user) {
-    const pages = (await this.getPageIndex(user)).pages;
-    console.log(pages)
-    const tags = [];
-    (pages).forEach(page => {
-      tags.push(...(page.tags))
-    });
-    console.log("all tag",tags)
-    return tags
-  }
+  // async getAllTagIndex(user) {
+  //   const pages = (await this.getPageIndex(user)).pages;
+  //   console.log(pages)
+  //   const tags = [];
+  //   (pages).forEach(page => {
+  //     tags.push(...(page.tags))
+  //   });
+  //   console.log("all tag",tags)
+  //   return tags
+  // }
 
   //pageの取得
   async getPage(page_id) {

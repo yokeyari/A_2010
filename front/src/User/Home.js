@@ -25,21 +25,18 @@ const pageDataSource = new PageDataSource();
 const workspaceDataSource = new WorkspaceDataSource();
 
 function Home(props) {
-  const [state, setState] = useState({ search_word: "", pages: []});
+  const [state, setState] = useState({ search_word: "", pages: [] });
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
   const user = userInfo;
 
-  var filteredpages=[];
 
-  //ダミーデータ
-  var tags= ["めろんぱん","猫","はじめまして松尾です"];
-
-  // pageDataSource.getAllTagIndex(user).then(res=>{
-  //   var tags = JSON.parse(JSON.stringify(res));
-  //   tags = tags.map(tag => tag.text);
-  //   console.log(tags);
-  // });
-
+  const tags = Array.from((pages => {
+    let tags = new Set();
+    (pages).forEach(page => {
+      (page.tags).forEach(tag => tags.add(tag.text))
+    })
+    return tags
+  })(state.pages));
 
 
   // const { user_id } = useParams();
@@ -49,37 +46,37 @@ function Home(props) {
   // console.log("search",props.search_word)
 
   const loadPages = () => {
-    
-    if(props.search_word==""){
+
+    if (props.search_word == "") {
       // ws_id?"home"???????
-      pageDataSource.getPageIndex(user).then(res=>{
-      // workspaceDataSource.getPageIndex("home").then(res=>{
-        if(res===undefined){
-          
-        }else{
-          setState({...state , pages:res.pages})
+      pageDataSource.getPageIndex(user).then(res => {
+        // workspaceDataSource.getPageIndex("home").then(res=>{
+        if (res === undefined) {
+
+        } else {
+          setState({ ...state, pages: res.pages })
           console.log("----------");
           console.log(res.pages);
         }
       })
 
-    }else{
+    } else {
       // ws_id?"home"???????
       pageDataSource.searchPage(user, props.search_word.split(' '))
-      // workspaceDataSource.searchPage("home", props.search_word.split(' '))
-      .then(res=>{
-        // console.log(props.search_word)
-        console.log("load page");
-        console.log(res);
-        setState({...state , pages:res.pages});
-      })
+        // workspaceDataSource.searchPage("home", props.search_word.split(' '))
+        .then(res => {
+          // console.log(props.search_word)
+          console.log("load page");
+          console.log(res);
+          setState({ ...state, pages: res.pages });
+        })
     }
     // PageAPI.fetchMemos().then(json => { setState({ ...state, pages: json }) })
   }
 
 
   useEffect(() => {
-    setUserInfo({...userInfo, ws_id: "home", permission: "owner"});
+    setUserInfo({ ...userInfo, ws_id: "home", permission: "owner" });
   }, [])
 
   useEffect(() => {
@@ -99,6 +96,22 @@ function Home(props) {
     loadPages();
   }
 
+  let filteredpages = [];
+  const pageListsWithTag =
+    tags.map(tag => (
+      filteredpages = [],
+      <>
+        <h1>{tag}</h1>
+        {state.pages.map(page => (
+          page.tags.map(e => (
+            tag == e.text && filteredpages.push(page),
+            <></>
+          ))
+        ))}
+        <PageList pages={filteredpages} withUpdate={withUpdate} />
+      </>
+    ))
+
 
   return (
     <div className="User-Top">
@@ -108,19 +121,7 @@ function Home(props) {
 
       <SelectWorkspace />
 
-      {tags.map(tag =>(
-        filteredpages=[],
-        <>
-          <h1>{tag}</h1>
-          {state.pages.map(page =>(
-            page.tags.map(e =>(
-              tag == e.text && filteredpages.push(page),
-              <></>
-            ))
-          ))}
-          <PageList pages={filteredpages} withUpdate={withUpdate} />
-        </>
-      ))}
+      {pageListsWithTag}
       {/*<PageList pages={state.pages} withUpdate={withUpdate} /> */}
     </div>
   );
