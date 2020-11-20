@@ -45,7 +45,7 @@ class Api::V1::WorkspacesController < ApplicationController
 
     res_ok @wspace, inc: {users: [:user]}
   rescue ActiveRecord::RecordNotFound
-    res_forbidden
+    res_not_found
   rescue ActiveRecord::RecordInvalid => e
     res_errors e.record
   end
@@ -71,7 +71,7 @@ class Api::V1::WorkspacesController < ApplicationController
       end
     end
 
-    res_ok @wspace inc: {users: [:user]}
+    res_ok @wspace, inc: {users: [:user]}
   rescue ActiveRecord::RecordInvalid => e
     res_errors e.record
   end

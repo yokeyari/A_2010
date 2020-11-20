@@ -12,16 +12,14 @@ class Api::V1::MemosController < ApplicationController
     memo = Memo.create!(params.permit(:user_id, :page_id, :parent_id, :text, :time, :status))
     res_ok memo
   rescue ActiveRecord::RecordInvalid => e # 作成できない場合
-    # res_errors e.record
-    render json: {error: e.record.errors.full_messages}, status: :bad_request
+    res_errors e.record
   end
 
   def update
     if @memo.update(params.permit(:text, :time, :status))
       res_ok @memo
     else
-      # res_errors @memo
-      render json: {error: @memo.errors.full_messages}, status: :bad_request
+      res_errors @memo
     end
   end
 

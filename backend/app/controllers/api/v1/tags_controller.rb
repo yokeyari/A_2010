@@ -12,8 +12,7 @@ class Api::V1::TagsController < ApplicationController
     tag = Tag.create!(params.permit(:page_id, :text))
     res_ok tag
   rescue ActiveRecord::RecordInvalid => e # 作成できない場合
-    # res_errors e.record
-    render json: {error: e.record.errors.full_messages}, status: :bad_request
+    res_errors e.record
   end
 
   # タグを削除する
@@ -29,8 +28,7 @@ class Api::V1::TagsController < ApplicationController
     elsif @tag.update(params.permit(:text))
       res_ok @tag
     else
-      # res_errors @tag
-      render json: {error: @tag.errors.full_messages}, status: :bad_request
+      res_errors @tag
     end
   end
 
@@ -47,10 +45,9 @@ class Api::V1::TagsController < ApplicationController
     
     res_ok tags
   rescue ActiveRecord::RecordNotFound => e
-    res_bad_request
+    res_not_found
   rescue ActiveRecord::RecordInvalid => e
-    # res_errors e.record
-    render json: {error: e.record.errors.full_messages}, status: :bad_request
+    res_errors e.record
   end
 
 private

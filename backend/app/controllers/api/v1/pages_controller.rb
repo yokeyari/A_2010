@@ -16,16 +16,14 @@ class Api::V1::PagesController < ApplicationController
     page = Page.create!(params.permit(:user_id, :workspace_id, :url, :title))
     res_ok page, inc: {} # まだ中身ないのでincしない
   rescue ActiveRecord::RecordInvalid => e
-    # res_errors e.record
-    render json: {error: e.record.errors.full_messages}, status: :bad_request
+    res_errors e.record
   end
 
   def update
     if @page.update(params.permit(:url, :title))
       res_ok @page, inc: {}
     else
-      # res_errors @page
-      render json: {error: @page.errors.full_messages}, status: :bad_request
+      res_errors @page
     end
   end
 
