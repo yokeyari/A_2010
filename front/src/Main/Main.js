@@ -92,8 +92,8 @@ function Main(props) {
 
     // ここでタイトルなどの読み込み
     setIsLoading(true);
-    PageApi.getPage(page_id).then(json => {
-      json.json().then(json => {
+    PageApi.getPage(page_id).then(res => {
+      res.json().then(json => {
         setIsLoading(false);
         setPage({ ...json });
       }
