@@ -26,8 +26,8 @@ function GoogleLogin(props) {
               res.json()
                 .then(user => {
                   console.log('response user', user);
-                  setUserInfo({ ...userInfo, endCheck: true, id: user.user.id, name: user.user.name, isLogin: true });
-                  props.history.push(`/${user.user.id}/`);
+                  setUserInfo({ ...userInfo, endCheck: true, id: user.id, name: user.name, isLogin: true });
+                  props.history.push(`/${user.id}/`);
                 })
             } else {
               console.log(res);
