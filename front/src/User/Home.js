@@ -38,24 +38,24 @@ function Home(props) {
     console.log(pageDataSource.getAllTagIndex(user))
     if(props.search_word==""){
       // ws_id?"home"???????
-      pageDataSource.getPageIndex(user).then(res=>{
+      pageDataSource.getPageIndex(user).then(pages=>{
       // workspaceDataSource.getPageIndex("home").then(res=>{
-        if(res===undefined){
+        if(pages===undefined){
           
         }else{
-          setState({...state , pages:res.pages})
+          setState({...state , pages:pages})
           console.log("----------");
-          console.log(res.pages);
+          console.log(pages);
         }
       })
     }else{
       // ws_id?"home"???????
       pageDataSource.searchPage(user, props.search_word.split(' '))
       // workspaceDataSource.searchPage("home", props.search_word.split(' '))
-      .then(res=>{
+      .then(pages=>{
         // console.log(props.search_word)
         console.log("load page");
-        setState({...state , pages:res.pages});
+        setState({...state , pages:pages});
       })
     }
     // PageAPI.fetchMemos().then(json => { setState({ ...state, pages: json }) })

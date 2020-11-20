@@ -36,11 +36,12 @@ function LoginAuth(props) {
   const isLogin = (userInfo.isLogin == true) ? true : false;
 
   useEffect(() => {
+    console.log("start auth")
     userDataSource.isLogIn().then(res => {
       console.log("first login check", res);
       if (res.statusText == "OK") {
-        res.json().then(res => {
-          const user = res.user
+        res.json().then(user => {
+          // const user = res.user
           console.log("logged in user", user);
           setUserInfo({ ...userInfo, endCheck: true, id: user.id, name: user.name, isLogin: true });
         })

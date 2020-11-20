@@ -214,7 +214,7 @@ export class PageDataSource {
   }
 
   async getAllTagIndex(user) {
-    const pages = (await this.getPageIndex(user)).pages;
+    const pages = (await this.getPageIndex(user));
     console.log(pages)
     const tags = [];
     (pages).forEach(page => {
