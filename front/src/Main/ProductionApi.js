@@ -74,14 +74,14 @@ export class MemoDataSource {
 
   //メモの新規作成
   async createMemo(memo, page_id) {
-    const res = createData({ text: memo.text, time: memo.time, parent_id: memo.parent_id, user_id: memo.user_id, attribute: memo.attribute },
+    const res = createData({ text: memo.text, time: memo.time, parent_id: memo.parent_id, user_id: memo.user_id, status: memo.status },
       this.API_URL + `?page_id=${page_id}`);
     return res;
   }
 
   //メモの更新
   async updateMemo(memo) {
-    const res = updateData({ text: memo.text, time: memo.time },
+    const res = updateData({ text: memo.text, time: memo.time, status: memo.status },
       this.API_URL + '/' + memo.id);
     return res;
   }
@@ -99,7 +99,7 @@ export class UserDataSource {
   constructor() {
   }
 
-  userのメールログイン
+  // userのメールログイン
   async loginUser(user) {
     const res = await fetch(SERVER_URL + 'authes/login', {
       method: "POST",
@@ -246,9 +246,13 @@ export class PageDataSource {
   }
 
   async createPage(page) {
-    const res = createData({ url: page.url, title: page.title, ws_id: page.ws_id },
-      this.API_URL + `?user_id=${page.user_id}`);
-    return res;
+    const workspace_id = page.workspace_id;
+    let res =null;
+    if (workspace_id=="home"){
+      return res = createData({ url: page.url, title: page.title }, this.API_URL + `?user_id=${page.user_id}`);
+    } else {
+      return res = createData({ url: page.url, title: page.title, workspace_id: page.workspace_id }, this.API_URL);
+    }
   }
 
   //pageの更新
@@ -264,7 +268,7 @@ export class PageDataSource {
     return res;
   }
 
-  async searchPage(user, keywords) {
+  async searchPage(user, keywords, workspace_id) {
     const res = await fetch(this.API_URL + '/\search', {
       method: "POST",
       credentials: 'include', //クレデンシャルを含める指定
@@ -274,6 +278,7 @@ export class PageDataSource {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({ user_id: user.id, keywords: keywords })
+      // body: JSON.stringify({ user_id: user.id, keywords: keywords, workspace_id: workspace_id })
     })
       // .then(res => console.log(res))
       .then(res => res.json());
@@ -341,21 +346,21 @@ export class WorkspaceDataSource {
   }
 
   async getWorkspaceIndex() {
-    const res = await fetch(this.API_URL + "/index", this.init);
+    const res = await fetch(this.API_URL, this.init);
     return res;
   }
 
-  async getWorkspace(ws_id) {
-    const res = await fetch(this.API_URL + `/${ws_id}`, this.init);
+  async getWorkspace(workspace_id) {
+    const res = await fetch(this.API_URL + `/${workspace_id}`, this.init);
     return res;
   }
 
-  async getPageIndex(ws_id) {
-    const res = await fetch(this.API_URL + `/${ws_id}/pages`, this.init);
+  async getPageIndex(workspace_id) {
+    const res = await fetch(this.API_URL + `/${workspace_id}/pages`, this.init);
     return res;
   }
 
-  async searchPage(ws_id, keywords) {
+  async searchPage(workspace_id, keywords) {
     const res = await fetch(this.API_URL + '/search', {
       method: "POST",
       credentials: 'include',
@@ -364,7 +369,7 @@ export class WorkspaceDataSource {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ ws_id: ws_id, keywords: keywords })
+      body: JSON.stringify({ workspace_id: workspace_id, keywords: keywords })
     })
       // .then(res => console.log(res))
       .then(res => res.json());
@@ -372,8 +377,9 @@ export class WorkspaceDataSource {
     return res;
   }
 
-  async createWorkspace(name, users) {
-    const res = createData({ name: name, users: users }, this.API_URL);
+  async createWorkspace(workspace) {
+    const res = createData({ name: workspace.name, users: workspace.users }, this.API_URL );
+    // const res = createData({ name: workspace.name }, this.API_URL );
     return res;
   }
 
@@ -382,8 +388,13 @@ export class WorkspaceDataSource {
     return res;
   }
 
-  async getWorkspaceUser(ws_id) {
-    const res = await fetch(this.API_URL + `/ws/${ws_id}/users`, this.init);
+  async deleteWorkspace(workspace_id) {
+    const res = deleteData(this.API_URL + `/${workspace_id}`);
+    return res;
+  }
+
+  async getWorkspaceUsers(workspace_id) {
+    const res = await fetch(this.API_URL + `/${workspace_id}/users`, this.init);
     return res;
   }
 }

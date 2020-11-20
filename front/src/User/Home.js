@@ -50,7 +50,7 @@ function Home(props) {
       })
     }else{
       // ws_id?"home"???????
-      pageDataSource.searchPage(user, props.search_word.split(' '))
+      pageDataSource.searchPage(user, props.search_word.split(' '), userInfo.workspace_id)
       // workspaceDataSource.searchPage("home", props.search_word.split(' '))
       .then(pages=>{
         // console.log(props.search_word)
@@ -63,7 +63,7 @@ function Home(props) {
   }
 
   useEffect(() => {
-    setUserInfo({...userInfo, ws_id: "home", permission: "owner"});
+    setUserInfo({...userInfo, workspace_id: "home", permission: "owner"});
   }, [])
 
   useEffect(() => {

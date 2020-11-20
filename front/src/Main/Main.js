@@ -53,11 +53,11 @@ function Main(props) {
     playing: false
   });
   const [page, setPage] = useState({ page: { title: "", url: "" }, tags: [] });
-  const [isLoading, segtIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [colorList, setColorList] = useState([]);
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
   const [visMemos, SetVisMemos] = useState([]);
-  const { ws_id } = useParams();
+  const { workspace_id } = useParams();
 
   const page_id = props.page_id;
 
@@ -71,7 +71,7 @@ function Main(props) {
       //これがないとメモ以外が即座に更新されない
       PageApi.getPage(page_id).then(json => {
         json.json().then(json => {
-          segtIsLoading(false);
+          setIsLoading(false);
           setPage({ ...json });
         }
         )
@@ -80,21 +80,21 @@ function Main(props) {
   }, [reloader, page_id])
 
   useEffect(() => {
-    // 本番用
-    // workspaceDataSource.getWorkspace(ws_id).then(res => {
+    // 本番用 要API確認
+    // workspaceDataSource.getWorkspace(workspace_id).then(res => {
     //   const ws = res.workspace;
-    //   setUserInfo({...userInfo, ws_id: (ws_id ? ws_id : "home"), permission: ws.permission});
+    //   setUserInfo({...userInfo, workspace_id: (workspace_id ? workspace_id : "home"), permission: ws.permission});
     //   setWsInfo({...wsInfo, name: ws.name});
     // })
 
     // テスト用 (permissionの更新なし)
-    setUserInfo({...userInfo, ws_id: (ws_id ? ws_id : "home")});
+    setUserInfo({...userInfo, workspace_id: (workspace_id ? workspace_id : "home")});
 
     // ここでタイトルなどの読み込み
-    segtIsLoading(true);
+    setIsLoading(true);
     PageApi.getPage(page_id).then(json => {
       json.json().then(json => {
-        segtIsLoading(false);
+        setIsLoading(false);
         setPage({ ...json });
       }
       )
@@ -109,11 +109,13 @@ function Main(props) {
     withUpdate(MemoAPI.deleteMemo(memo));
   }
   function handleChange(memo) {
+    // 要API確認
     withUpdate(MemoAPI.updateMemo(memo));
   }
 
   function handleSubmit(memo) {
     console.log(memo);
+    // 要API確認
     withUpdate(MemoAPI.createMemo(memo, page_id));
   }
 
@@ -130,17 +132,17 @@ function Main(props) {
     }
   }
 
-  function changeMemoByAttribute(event) {
+  function changeMemoByStatus(event) {
     const mode = event.target.value;
     const mymemos = memos.filter(memo => memo.user_id==userInfo.id ? true : false)
     switch (mode) {
       case 'onlyme':
-        SetVisMemos(memos); break;
-      case 'public': 
-        const public_memos = mymemos.filter(memo => memo.attribute=="public" ? true : false); 
+        SetVisMemos(mymemos); break;
+      case 'pub': 
+        const public_memos = mymemos.filter(memo => memo.status=="pub" ? true : false); 
         SetVisMemos(public_memos); break;
-      case 'private':
-        const private_memos = mymemos.filter(memo => memo.attribute=="private" ? true : false);
+      case 'pri':
+        const private_memos = mymemos.filter(memo => memo.status=="pri" ? true : false);
         SetVisMemos(private_memos); break;
       default:
         SetVisMemos(memos)
@@ -190,21 +192,21 @@ function Main(props) {
   }
 
   const VisMemoHamburger = 
-    (userInfo.ws_id != "home") ?
+    (userInfo.workspace_id != "home") ?
       <Grid container direction="row" justify="center" alignItems="center">
         <Grid item>
           <Box style={{ marginRight: "20px" }}>メモの表示切替</Box>
         </Grid>
         <Grid item>
           <FormControl className={classes.formControl}>
-            <Select onChange={changeMemoByAttribute}
+            <Select onChange={changeMemoByStatus}
               defaultValue="all"
               className={classes.selectEmpty}
               inputProps={{ "aria-label": "Without label" }}>
               <MenuItem value="all">全員</MenuItem>
               <MenuItem value="onlyme">自分</MenuItem>
-              <MenuItem value="public">public</MenuItem>
-              <MenuItem value="private">private</MenuItem>
+              <MenuItem value="pub">public</MenuItem>
+              <MenuItem value="pri">private</MenuItem>
             </Select>
           </FormControl>
         </Grid>

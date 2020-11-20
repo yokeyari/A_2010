@@ -16,11 +16,13 @@ const useStyles = makeStyles((theme) => ({
 	},
 }
 ));
+const workspacesDataSource = new WorkspaceDataSource();
+
 function SelectWorkspace(props) {
   const [workspaces, setWorkspaces] = useState([])
   const [open, setOpen] = useState(false);
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
-  const { ws_id } = useParams();
+  const { workspace_id } = useParams();
   const classes = useStyles();
 
   const handleOpen = () => {
@@ -29,35 +31,29 @@ function SelectWorkspace(props) {
 
 
   function switchWorkspace(event) {
-    // 本番用
-    // const workspace_id = event.target.value;
-    // workspace_id=="main_page" ? props.history.push(`/${userInfo.id}`) : props.history.push(`/${userInfo.id}/ws/${workspace_id}`)
-
-    // テスト用
-    
     const workspace_id = event.target.value;
     console.log(workspace_id);
     switch (workspace_id) {
       case "home":
+        setUserInfo({...userInfo, workspace_id: "home"});
         props.history.push(`/${userInfo.id}`); break;
       case "create":
         break;
       default:
+        setUserInfo({...userInfo, workspace_id: workspace_id});
         props.history.push(`/${userInfo.id}/ws/${workspace_id}`);
     }
   }
 
   useEffect(() => {
     console.log('load workspace list');
-    // 本番用
-    // workspacesDataSource.getWorkspaceIndex().then(res => {
-    //   console.log('load workspace list');
-    //   setState({...state, workspaces: res.workspaces});
-    // })
-
-    // テスト用
-    const test_workspaces = [{id: 1, name: "ws1", permission: "general"}]
-    setWorkspaces(test_workspaces);
+    workspacesDataSource.getWorkspaceIndex().then(res => {
+      res.json().then(json => {
+        console.log('load workspace list');
+        console.log(json.workspaces);
+        setWorkspaces(json.workspaces);
+      })
+    })
   }, [])
 
   const handleClose = () => {
@@ -75,9 +71,8 @@ function SelectWorkspace(props) {
       <Grid item>
         <FormControl>
           <InputLabel id="demo-simple-select-label">workspace</InputLabel>
-          {console.log(userInfo.ws_id)}
           <Select onChange={switchWorkspace}
-            defaultValue={ws_id ? ws_id : "home"}
+            defaultValue={workspace_id ? workspace_id : "home"}
             className={""}
             inputProps={{ "aria-label": "Without label" }}
           >

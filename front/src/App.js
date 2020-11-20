@@ -19,7 +19,7 @@ function App() {
     thema: "normal",
     token: null,
     isLogin: false,
-    ws_id: "home", 
+    workspace_id: "home", 
     permission: "owner",
     endCheck: false
   })
@@ -50,12 +50,12 @@ function App() {
                     <Home search_word={search_word} />
                   </Auth>
                 </Route>
-                <Route exact path='/:user_id/ws/:ws_id'>
+                <Route exact path='/:user_id/ws/:workspace_id'>
                   <Auth>
                     <Workspace search_word={search_word} />
                   </Auth>
                 </Route>
-                <Route exact path='/:user_id/ws/:ws_id/:page_id'>
+                <Route exact path='/:user_id/ws/:workspace_id/:page_id'>
                   <Auth>
                     <PageAuth mode="user" />
                   </Auth>

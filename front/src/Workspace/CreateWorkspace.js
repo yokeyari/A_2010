@@ -56,16 +56,21 @@ export default function CreateWorkspace(props) {
 	const handleClick = () => {
 
 		trackPromise(
+			// ?API??
 			workspaceDataSource.createWorkspace({ name: state.name, users: fields })
 				.then(res => {
 					if (res.statusText == "OK") {
 						res.json()
-							.then(workspace => {
-								setState({ ...state, to: `/${userInfo.id}/ws/${workspace.id}`, isLoaded: true });
+							.then(json => {
+								setState({ ...state, to: `/${userInfo.id}/ws/${json.workspace.id}`, isLoaded: true });
 								props.onClose();
 							})
+							
 					} else {
-						// ここにページが作れなかったときの処理
+						res.json()
+							.then(error => {
+								console.log(error);
+							})
 					}
 				}));
   }
