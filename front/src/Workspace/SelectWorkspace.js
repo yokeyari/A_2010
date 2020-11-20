@@ -46,12 +46,12 @@ function SelectWorkspace(props) {
   }
 
   useEffect(() => {
-    console.log('load workspace list');
     workspacesDataSource.getWorkspaceIndex().then(res => {
+      console.log("aaaaa", res)
       res.json().then(json => {
-        console.log('load workspace list');
-        console.log(json.workspaces);
-        setWorkspaces(json.workspaces);
+        const workspaces = json.workspaces;
+        console.log('load workspace list', workspaces);
+        setWorkspaces(workspaces);
       })
     })
   }, [])
