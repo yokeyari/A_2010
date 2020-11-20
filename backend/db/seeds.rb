@@ -5,3 +5,7 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
+user1 = User.create(name: 'hoge', email: 'hoge@example.com', password: 'qwerty', password_confirmation: 'qwerty')
+ws1 = Workspace.create(name: 'first')
+RelUserAndWorkspace.create(user_id: user1.id, workspace_id: ws1.id, permission: 'owner')

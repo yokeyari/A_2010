@@ -6,6 +6,7 @@ services:
       - ~/volume/db:/var/lib/postgresql/data
     environment:
       POSTGRES_PASSWORD: 'postgres'
+    restart: always
   web:
     build: .
     command: bash -c "bundle install  && rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
@@ -17,4 +18,6 @@ services:
       - db
     environment:
       RAILS_ENV: production
+      DISABLE_DATABASE_ENVIRONMENT_CHECK: 1
+    restart: always
 
