@@ -1,5 +1,5 @@
 module Res
-  def res_ok(body, inc: nil)
+  def res_ok(body=nil, inc: nil)
     render json: body, include: inc, status: :ok # 200
   end
 
