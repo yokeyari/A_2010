@@ -3,6 +3,8 @@ import { Redirect, useParams, withRouter } from 'react-router-dom'
 import UserInfoContext from '../context';
 import { UserDataSource } from '../Main/ProductionApi';
 
+import Button from '@material-ui/core/Button';
+import blue_logo from '../btn_google_signin_dark_pressed_web.png'
 const userDataSource = new UserDataSource();
 
 function GoogleLogin(props) {
@@ -84,9 +86,9 @@ function GoogleLogin(props) {
 
   // 実際のレンダリング
   return (
-    <button onClick={onSignInClick}>
-      Sign In With Google
-    </button>
+      <Button onClick={onSignInClick}>
+        <img src={blue_logo} alt="google" />
+      </Button>
   );
 
 

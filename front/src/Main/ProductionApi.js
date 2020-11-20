@@ -213,6 +213,17 @@ export class PageDataSource {
     }
   }
 
+  async getAllTagIndex(user) {
+    const pages = (await this.getPageIndex(user));
+    console.log(pages)
+    const tags = [];
+    (pages).forEach(page => {
+      tags.push(...(page.tags))
+    });
+    console.log("all tag",tags)
+    return tags
+  }
+
   //pageの取得
   async getPage(page_id) {
     const res = await fetch(this.API_URL + '/' + page_id, {
@@ -325,7 +336,7 @@ export class TagDataSource {
 export class WorkspaceDataSource {
   API_URL = SERVER_URL + 'ws';
   init = {
-    credentials: 'include', 
+    credentials: 'include',
     mode: 'cors',
   }
 
@@ -347,7 +358,7 @@ export class WorkspaceDataSource {
   async searchPage(ws_id, keywords) {
     const res = await fetch(this.API_URL + '/search', {
       method: "POST",
-      credentials: 'include', 
+      credentials: 'include',
       mode: 'cors',
       headers: {
         'Accept': 'application/json',
@@ -362,12 +373,12 @@ export class WorkspaceDataSource {
   }
 
   async createWorkspace(name, users) {
-    const res = createData({ name: name, users: users }, this.API_URL );
+    const res = createData({ name: name, users: users }, this.API_URL);
     return res;
   }
 
   async updateWorkspace(name, users) {
-    const res = createData({ name: name, users: users }, this.API_URL );
+    const res = createData({ name: name, users: users }, this.API_URL);
     return res;
   }
 

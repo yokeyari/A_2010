@@ -56,15 +56,16 @@ function Main(props) {
   const [isLoading, segtIsLoading] = useState(false);
   const [colorList, setColorList] = useState([]);
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
-  const [visMemos, SetVisMemos] = useState({memos: []});
+  const [visMemos, SetVisMemos] = useState([]);
   const { ws_id } = useParams();
 
   const page_id = props.page_id;
 
-  //const page_id = page.page_id;
+  //const page_id = page_id;
 
   useEffect(() => {
     MemoAPI.getMemoIndex(page_id).then(json => {
+      // console.log(json)
       setMemos(json);
       SetVisMemos(json);
       //これがないとメモ以外が即座に更新されない
@@ -118,9 +119,9 @@ function Main(props) {
 
   function handleChangeTitle(title) {
     // post server
-    console.log({ tags: page.tags, page: { ...page.page, title: title } });
-    // setPage({tags:page.tags,page:{...page.page,title:title}});
-    // withUpdate(PageApi.updatePage({ url: page.page.url, title: title, id: page_id }));
+    console.log({ tags: page.tags, page: { ...page, title: title } });
+    // setPage({tags:page.tags,page:{...page,title:title}});
+    // withUpdate(PageApi.updatePage({ url: page.url, title: title, id: page_id }));
   }
 
   function handleWriting() {
@@ -131,16 +132,16 @@ function Main(props) {
 
   function changeMemoByAttribute(event) {
     const mode = event.target.value;
-    const mymemos = memos.memos.filter(memo => memo.user_id==userInfo.id ? true : false)
+    const mymemos = memos.filter(memo => memo.user_id==userInfo.id ? true : false)
     switch (mode) {
       case 'onlyme':
-        SetVisMemos({memos: mymemos}); break;
+        SetVisMemos(memos); break;
       case 'public': 
         const public_memos = mymemos.filter(memo => memo.attribute=="public" ? true : false); 
-        SetVisMemos({memos: public_memos}); break;
+        SetVisMemos(public_memos); break;
       case 'private':
         const private_memos = mymemos.filter(memo => memo.attribute=="private" ? true : false);
-        SetVisMemos({memos: private_memos}); break;
+        SetVisMemos(private_memos); break;
       default:
         SetVisMemos(memos)
     }
@@ -218,7 +219,7 @@ function Main(props) {
       <main className={classes.root}>
         {/* <timeContext.Provider value={{ time, setTime }}> */}
         <Grid item>
-          <Title title={page.page.title} onChange={handleChangeTitle} />
+          <Title title={page.title} onChange={handleChangeTitle} />
         </Grid>
 
         <Grid container className={classes.grid} direction="row">
@@ -231,11 +232,11 @@ function Main(props) {
             </Grid>
             <Grid container className={classes.grid} direction="row">
               <Grid item xs={12} md={12}>
-                <TagForm page_id={page.page.id} withUpdate={withUpdate} />
+                <TagForm page_id={page.id} withUpdate={withUpdate} />
               </Grid>
 
               <Grid item xs={12}>
-                <VideoPlayer className="" url={page.page.url} players={{ player, setPlayer }} />
+                <VideoPlayer className="" url={page.url} players={{ player, setPlayer }} />
               </Grid>
               <Grid item xs={12}>
                 <WriteMemoForm onSubmit={handleSubmit} player={player} user_id={userInfo.id} onWriting={handleWriting} onWriteEnd={handleWriteEnd} />

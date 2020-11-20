@@ -27,7 +27,7 @@ function MemoList(props) {
     return "Loading";
   }
 
-  const memos = props.memos.memos.sort((a, b) => {
+  const memos = props.memos.sort((a, b) => {
     return a.time - b.time
   })
 
@@ -47,8 +47,10 @@ function MemoList(props) {
                   key={memo.id.toString()}
                   color={props.colorList[i]}
                   memo={memo}
+                  user_id={props.user_id}
                   onChange={props.onChange}
                   onDelete={props.onDelete}
+                  onSubmit={props.onSubmit}
                   player={player}
                 />
                 <ThreadList
