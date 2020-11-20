@@ -5,13 +5,14 @@ class Page < ApplicationRecord
   belongs_to :user, optional: true
   belongs_to :workspace, optional: true
   has_secure_token
+  validates :user_id, presence: true
   validates :url, presence: :true
   validates :title, presence: :true
-  validate :require_either_user_or_workspace
+  validate :workspace_id_validation
 
 private
-  def require_either_user_or_workspace
-    return if (user.nil? ^ workspace.nil?) && (user.present? || workspace.present?)
-    errors.add(:base, "require either user_id or workspace_id")
+  def workspace_id_validation
+    return if workspace.nil? || workspace.present?
+    errors.add(:base, "require workspace_id either null or present")
   end
 end

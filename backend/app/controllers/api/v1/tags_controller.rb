@@ -1,54 +1,70 @@
 class Api::V1::TagsController < ApplicationController
   before_action :current_user
-  before_action :find_page, only: [:index, :automate]
   before_action :find_tag, only: [:destroy, :update]
 
   # あるページのタグ一覧のjsonを返す
   def index
-    render json: {tags: @page.tags}, status: :ok
+    res_ok Tag.where(params.permit(:page_id))
   end
   
   # タグを作成する
   def create
     tag = Tag.create!(params.permit(:page_id, :text))
-    render json: {tag: tag}, status: :ok
-  rescue => e # 作成できない場合
+    res_ok tag
+  rescue ActiveRecord::RecordInvalid => e # 作成できない場合
+    # res_errors e.record
     render json: {error: e.record.errors.full_messages}, status: :bad_request
   end
 
   # タグを削除する
   def destroy
     @tag.destroy
-    render status: :ok
+    res_ok
   end
 
   # 手動タグを更新する
   def update
     if @tag.is_automated # 自動タグを更新しようとした場合
-      render status: :forbidden
+      res_forbidden
     elsif @tag.update(params.permit(:text))
-      render json: {tag: @tag}, status: :ok
+      res_ok @tag
     else
+      # res_errors @tag
       render json: {error: @tag.errors.full_messages}, status: :bad_request
     end
   end
 
   # 自動タグを取得し、データベース中の自動タグを更新する
   def automate
-    @page.tags.where(is_automated: true).destroy_all # 自動タグを全消去する
-    keywords = tagging(@page)[0, 3]
+    page = Page.find(params[:page_id])
+
+    tags = []
+    Tag.transaction do
+      page.tags.where(is_automated: true).destroy_all # 自動タグを全消去する
+      keywords = tagging(page)[0, 3]
+      tags = keywords.map {|keyword| Tag.create!(page_id: page.id, text: keyword, is_automated: true)}
+    end
     
-    # 保存に失敗した時を想定していない
-    tags = keywords.map {|keyword| Tag.create(page_id: params[:page_id], text: keyword, is_automated: true)}
-    render json: {tags: tags}, status: :ok
+    res_ok tags
+  rescue ActiveRecord::RecordNotFound => e
+    res_bad_request
+  rescue ActiveRecord::RecordInvalid => e
+    # res_errors e.record
+    render json: {error: e.record.errors.full_messages}, status: :bad_request
   end
 
-  private
+private
   # page以下の全てのメモからキーワード抽出
   def tagging(page)
     all_memo_text = page.memos.map(&:text).join(' ')
     post_hash = {app_id: 0, title: page.title, body: all_memo_text}
     tags = JSON.parse(post_api(post_hash).body)['keywords']
     tags.map! {|tag| tag.keys[0]} # タグの整形
+  end
+  
+  def find_tag
+    @tag = Tag.find(params[:tag_id])
+  rescue ActiveRecord::RecordNotFound => e
+    res_not_found
   end
 end

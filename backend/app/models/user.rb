@@ -22,6 +22,7 @@ class User < ApplicationRecord
   end
 
   alias rel_uaws rel_user_and_workspaces
+  alias workspaces rel_user_and_workspaces
 
 private
   def fill_null
