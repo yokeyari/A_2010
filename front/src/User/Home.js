@@ -15,6 +15,7 @@ import { PageDataSource, WorkspaceDataSource } from './../Main/ProductionApi'
 import User from './User';
 //import './User.css';
 import PageList from './PageList';
+import PageLink from './PageLink';
 import SearchForm from './SeachForm';
 import SelectWorkspace from '../Workspace/SelectWorkspace';
 import UserInfoContext from '../context'
@@ -82,6 +83,8 @@ function Home(props) {
     loadPages();
   }
 
+  const tags = ["はじめまして松尾です","猫","めろんぱん"];
+  var filteredpages=[];
 
   return (
     <div className="User-Top">
@@ -90,7 +93,19 @@ function Home(props) {
       {/* <SearchForm onChange={handleChangeSeachForm} search_word={state.search_word}　onClick={() => {handleSeach(state.search_word)}} /> */}
 
       <SelectWorkspace />
-      <PageList pages={state.pages} withUpdate={withUpdate} />
+      {tags.map(tag =>(
+        <>
+          <h1>{tag}</h1> 
+          {filteredpages=[]}
+          {state.pages.map(page =>(
+            tag == page.tags[0].text &&
+            filteredpages.push(page)
+          ))}
+          {console.log(tag)}
+          {console.log(filteredpages)}
+          <PageList pages={filteredpages} withUpdate={withUpdate} />
+        </>
+      ))}
     </div>
 
   );
