@@ -35,6 +35,7 @@ function Home(props) {
   // console.log("search",props.search_word)
 
   const loadPages = () => {
+    console.log(pageDataSource.getAllTagIndex(user))
     if(props.search_word==""){
       // ws_id?"home"???????
       pageDataSource.getPageIndex(user).then(res=>{
