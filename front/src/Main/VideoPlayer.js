@@ -27,9 +27,8 @@ import withWidth from "@material-ui/core/withWidth";
 const useStyles = ((theme) => ({
   video: {
     //overflow: 'auto',
-    margin: 'auto',
-    padding: '10vh',
-    // backgroundColor:"#ff3fff",
+    //backgroundColor:"#ff3fff",
+    position: 'relative',
     //margin: theme.spacing(1),
     width: '720px',
     height: '405px',
@@ -64,7 +63,11 @@ class VideoPlayer extends React.Component {
     console.log(this.props.width)
     // let size = this.props.width / 480
     return {
-      transform:`scale(${size}) translate(30px,-5px)`,
+      transform:`scale(${size})`,
+      position: 'absolute',
+      top: 'calc(50% - 135px)',
+      left: 'calc(50% - 240px)',
+
     }
   }
 
