@@ -2,22 +2,7 @@ require 'net/https'
 
 class ApplicationController < ActionController::API
   include ActionController::Cookies
-
-  def find_user
-    @user = User.find(params[:user_id])
-  end
-
-  def find_page
-    @page = Page.find(params[:page_id])
-  end
-
-  def find_memo
-    @memo = Memo.find(params[:memo_id])
-  end
-
-  def find_tag
-    @tag = Tag.find(params[:tag_id])
-  end
+  include TypicalRes
 
   GOO_LAB_URL = "https://labs.goo.ne.jp/api/keyword"
 
@@ -38,17 +23,9 @@ class ApplicationController < ActionController::API
 
   def current_user
     @user ||= User.find(session[:user_id])
-  rescue ActiveRecord::RecordNotFound => e # ユーザーが見つからない，またはsessionが保存されていない時
-    render json: {session: !session[:user_id].nil?}, status: :not_found
+  rescue ActiveRecord::RecordNotFound # ユーザーが見つからない，またはsessionが保存されていない時
+    res_unauthorized
   end
 
-=begin
-  # トークンがユーザーのと一致するか．一致しない場合 render
-  def token_check
-    @user = User.find params[:user_id]
-    if params[:user_token].nil? || @user.token != params[:user_token]
-      render status: :unauthorized 
-    end
-  end
-=end
+  Rel_UAW = RelUserAndWorkspace
 end

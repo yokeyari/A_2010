@@ -48,24 +48,28 @@ function MemoComponent(props) {
     player.player.player.seekTo(memo.time)
   }
 
-  const handleChangeAttribute = (event) => {
-    const attribute = event.target.value;
-    props.onChange({ ...memo, attribute: attribute });
+  const handleChangeStatus = (event) => {
+    const status = event.target.value;
+    props.onChange({ ...memo, status: status });
   }
 
-  const seletctAttribute =
-    (userInfo.ws_id != "home") ?
-      <FormControl>
-        <Select onChange={handleChangeAttribute}
-          defaultValue={memo.attribute}
-          className={""}
-          inputProps={{ "aria-label": "Without label" }}
-        >
-          <MenuItem value={"private"}>private</MenuItem>
-          <MenuItem value={"public"}>public</MenuItem>
-        </Select>
-      </FormControl>
-      : <></>
+  const selectStatus =
+    (userInfo.workspace_id != "home") ?
+      (isEditMode ? 
+        <FormControl>
+          <Select onChange={handleChangeStatus}
+            defaultValue={memo.status}
+            className={""}
+            inputProps={{ "aria-label": "Without label" }}
+          >
+            <MenuItem value={"pri"}>private</MenuItem>
+            <MenuItem value={"pub"}>public</MenuItem>
+          </Select>
+        </FormControl> : 
+        <div>{memo.status=="pub" ? "public" : "private"}</div>
+      ) : 
+      <></>
+      
 
   const body =
     isEditMode ?
@@ -88,7 +92,7 @@ function MemoComponent(props) {
   return (
     <Card className={classes.card} key={memo.id}>
       <CardActions >
-        {userInfo.ws_id!="home" ? <p>[{memo.user_id}さん]</p> : <></>}
+        {userInfo.workspace_id!="home" ? <p>[{memo.user_id}さん]</p> : <></>}
         <Button className="timeButton" startIcon={<AccessTimeIcon />} onClick={() => { handleJump() }} >{formatSec2Str(memo.time)}</Button>
         {isEditMode ?
           ( <Button className="edit" startIcon={<DoneIcon />} onClick={() => { endEditMode() }}>done</Button> ) :
@@ -96,7 +100,8 @@ function MemoComponent(props) {
             <Button className="edit" color="primary" startIcon={<EditIcon />} onClick={() => { setEditMode(true) }}>edit</Button> : <></> ) } 
         { (userInfo.id==memo.user_id || userInfo.permission=="owner") ?
           <Button className="delete" color="secondary" startIcon={<DeleteIcon />} onClick={() => { props.onDelete(memo) }}>delete</Button> : <></> }
-        {seletctAttribute}
+        
+        {selectStatus}
         
         {isReplyMode ?
         <Button className="reply" startIcon={<ReplyIcon />} onClick={() => { setReplyMode(false) }}>返信</Button>

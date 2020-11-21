@@ -25,7 +25,7 @@ import TagList from './Tag/TagList';
 import TagForm from './Tag/TagForm';
 
 //import * as MemoAPI from './LocalApi';
-import { MemoDataSource, PageDataSource, TagDataSource, BertDataSource } from './ProductionApi';
+import { MemoDataSource, PageDataSource, TagDataSource, BertDataSource, WorkspaceDataSource } from './ProductionApi';
 
 import UserInfoContext from '../context'
 
@@ -42,6 +42,7 @@ const useStyles = makeStyles((theme) => ({
 const MemoAPI = new MemoDataSource();
 const PageApi = new PageDataSource();
 const BertApi = new BertDataSource();
+const workspaceApi = new WorkspaceDataSource();
 
 function Main(props) {
   const classes = useStyles();
@@ -53,24 +54,25 @@ function Main(props) {
     playing: false
   });
   const [page, setPage] = useState({ page: { title: "", url: "" }, tags: [] });
-  const [isLoading, segtIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [colorList, setColorList] = useState([]);
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
-  const [visMemos, SetVisMemos] = useState({memos: []});
-  const { ws_id } = useParams();
+  const [visMemos, SetVisMemos] = useState([]);
+  const { workspace_id } = useParams();
 
   const page_id = props.page_id;
 
-  //const page_id = page.page_id;
+  //const page_id = page_id;
 
   useEffect(() => {
     MemoAPI.getMemoIndex(page_id).then(json => {
+      // console.log(json)
       setMemos(json);
       SetVisMemos(json);
       //これがないとメモ以外が即座に更新されない
       PageApi.getPage(page_id).then(json => {
         json.json().then(json => {
-          segtIsLoading(false);
+          setIsLoading(false);
           setPage({ ...json });
         }
         )
@@ -79,21 +81,21 @@ function Main(props) {
   }, [reloader, page_id])
 
   useEffect(() => {
-    // 本番用
-    // workspaceDataSource.getWorkspace(ws_id).then(res => {
-    //   const ws = res.workspace;
-    //   setUserInfo({...userInfo, ws_id: (ws_id ? ws_id : "home"), permission: ws.permission});
-    //   setWsInfo({...wsInfo, name: ws.name});
-    // })
-
-    // テスト用 (permissionの更新なし)
-    setUserInfo({...userInfo, ws_id: (ws_id ? ws_id : "home")});
+    // 本番用 要API確認
+    workspaceApi.getWorkspace(workspace_id).then(res => {
+      res.json().then(workspace => {
+        console.log("get workspace and permission", workspace);
+        // 後でログインユーザーのワークスペースの権限だけもらうAPIを用意する
+        const permission = workspace.users.map(user_p => user_p.user.id==userInfo.id ? user_p.permission : false)[0]
+        setUserInfo({...userInfo, workspace_id: (workspace_id ? workspace_id : "home"), permission: permission});
+      })
+    })
 
     // ここでタイトルなどの読み込み
-    segtIsLoading(true);
-    PageApi.getPage(page_id).then(json => {
-      json.json().then(json => {
-        segtIsLoading(false);
+    setIsLoading(true);
+    PageApi.getPage(page_id).then(res => {
+      res.json().then(json => {
+        setIsLoading(false);
         setPage({ ...json });
       }
       )
@@ -118,9 +120,9 @@ function Main(props) {
 
   function handleChangeTitle(title) {
     // post server
-    console.log({ tags: page.tags, page: { ...page.page, title: title } });
-    // setPage({tags:page.tags,page:{...page.page,title:title}});
-    // withUpdate(PageApi.updatePage({ url: page.page.url, title: title, id: page_id }));
+    console.log({ tags: page.tags, page: { ...page, title: title } });
+    // setPage({tags:page.tags,page:{...page,title:title}});
+    // withUpdate(PageApi.updatePage({ url: page.url, title: title, id: page_id }));
   }
 
   function handleWriting() {
@@ -129,18 +131,18 @@ function Main(props) {
     }
   }
 
-  function changeMemoByAttribute(event) {
+  function changeMemoByStatus(event) {
     const mode = event.target.value;
-    const mymemos = memos.memos.filter(memo => memo.user_id==userInfo.id ? true : false)
+    const mymemos = memos.filter(memo => memo.user_id==userInfo.id ? true : false)
     switch (mode) {
       case 'onlyme':
-        SetVisMemos({memos: mymemos}); break;
-      case 'public': 
-        const public_memos = mymemos.filter(memo => memo.attribute=="public" ? true : false); 
-        SetVisMemos({memos: public_memos}); break;
-      case 'private':
-        const private_memos = mymemos.filter(memo => memo.attribute=="private" ? true : false);
-        SetVisMemos({memos: private_memos}); break;
+        SetVisMemos(mymemos); break;
+      case 'pub': 
+        const public_memos = mymemos.filter(memo => memo.status=="pub" ? true : false); 
+        SetVisMemos(public_memos); break;
+      case 'pri':
+        const private_memos = mymemos.filter(memo => memo.status=="pri" ? true : false);
+        SetVisMemos(private_memos); break;
       default:
         SetVisMemos(memos)
     }
@@ -189,21 +191,21 @@ function Main(props) {
   }
 
   const VisMemoHamburger = 
-    (userInfo.ws_id != "home") ?
+    (userInfo.workspace_id != "home") ?
       <Grid container direction="row" justify="center" alignItems="center">
         <Grid item>
           <Box style={{ marginRight: "20px" }}>メモの表示切替</Box>
         </Grid>
         <Grid item>
           <FormControl className={classes.formControl}>
-            <Select onChange={changeMemoByAttribute}
+            <Select onChange={changeMemoByStatus}
               defaultValue="all"
               className={classes.selectEmpty}
               inputProps={{ "aria-label": "Without label" }}>
               <MenuItem value="all">全員</MenuItem>
               <MenuItem value="onlyme">自分</MenuItem>
-              <MenuItem value="public">public</MenuItem>
-              <MenuItem value="private">private</MenuItem>
+              <MenuItem value="pub">public</MenuItem>
+              <MenuItem value="pri">private</MenuItem>
             </Select>
           </FormControl>
         </Grid>
@@ -218,7 +220,7 @@ function Main(props) {
       <main className={classes.root}>
         {/* <timeContext.Provider value={{ time, setTime }}> */}
         <Grid item>
-          <Title title={page.page.title} onChange={handleChangeTitle} />
+          <Title title={page.title} onChange={handleChangeTitle} />
         </Grid>
 
         <Grid container className={classes.grid} direction="row">
@@ -231,11 +233,11 @@ function Main(props) {
             </Grid>
             <Grid container className={classes.grid} direction="row">
               <Grid item xs={12} md={12}>
-                <TagForm page_id={page.page.id} withUpdate={withUpdate} />
+                <TagForm page_id={page.id} withUpdate={withUpdate} />
               </Grid>
 
               <Grid item xs={12}>
-                <VideoPlayer className="" url={page.page.url} players={{ player, setPlayer }} />
+                <VideoPlayer className="" url={page.url} players={{ player, setPlayer }} />
               </Grid>
               <Grid item xs={12}>
                 <WriteMemoForm onSubmit={handleSubmit} player={player} user_id={userInfo.id} onWriting={handleWriting} onWriteEnd={handleWriteEnd} />

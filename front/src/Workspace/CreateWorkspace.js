@@ -48,7 +48,7 @@ export default function CreateWorkspace(props) {
 		to: "",
 		isLoaded: false
   })
-  const [fields, setFields] = useState([{ user_id: null, permission: null }]);
+  const [users, setUsers] = useState([{ user_id: null, permission: null }]);
 	const { userInfo } = useContext(UserInfoContext);
 	const classes = useStyles();
 
@@ -56,43 +56,50 @@ export default function CreateWorkspace(props) {
 	const handleClick = () => {
 
 		trackPromise(
-			workspaceDataSource.createWorkspace({ name: state.name, users: fields })
+			// ?API??
+			workspaceDataSource.createWorkspace({ name: state.name, users: users })
 				.then(res => {
 					if (res.statusText == "OK") {
 						res.json()
 							.then(workspace => {
+								console.log("create workspace", workspace);
 								setState({ ...state, to: `/${userInfo.id}/ws/${workspace.id}`, isLoaded: true });
 								props.onClose();
 							})
+							
 					} else {
-						// ここにページが作れなかったときの処理
+						res.json()
+							.then(error => {
+								console.log(error);
+							})
 					}
 				}));
   }
   
 
   const handleChangeUserId = (i, event) => {
-    const values = [...fields];
-    values[i].user_id = event.target.value;
-    setFields(values);
+    const values = [...users];
+	values[i].user_id = parseInt( event.target.value );
+	console.log(typeof(values[i].user_id));
+    setUsers(values);
   }
 
   const handleChangePermission = (i, event) => {
-    const values = [...fields];
+    const values = [...users];
     values[i].permission = event.target.value;
-    setFields(values);
+    setUsers(values);
   }
 
   const handleAdd = () => {
-    const values = [...fields];
+    const values = [...users];
     values.push({ value: null, permission: null });
-    setFields(values);
+    setUsers(values);
   }
 
   const handleRemove = (i) => {
-    const values = [...fields];
+    const values = [...users];
     values.splice(i, 1);
-    setFields(values);
+    setUsers(values);
   }
 
   
@@ -106,7 +113,7 @@ export default function CreateWorkspace(props) {
 						multiline
 						onChange={e => { setState({ ...state, name: e.target.value }) }} value={state.name} />
 
-          <InviteUserForm fields={fields} handleChangeUserId={handleChangeUserId} handleChangePermission={handleChangePermission} handleAdd={handleAdd} handleRemove={handleRemove} />
+          <InviteUserForm users={users} handleChangeUserId={handleChangeUserId} handleChangePermission={handleChangePermission} handleAdd={handleAdd} handleRemove={handleRemove} />
 
 					<Transition to={state.to} ok={state.isLoaded}>
 						<Button className={classes.button} id="submit"

@@ -49,34 +49,33 @@ function Home(props) {
 
     if (props.search_word == "") {
       // ws_id?"home"???????
-      pageDataSource.getPageIndex(user).then(res => {
-        // workspaceDataSource.getPageIndex("home").then(res=>{
-        if (res === undefined) {
-
-        } else {
-          setState({ ...state, pages: res.pages })
+      pageDataSource.getPageIndex(user).then(pages=>{
+      // workspaceDataSource.getPageIndex("home").then(res=>{
+        if(pages===undefined){
+          
+        }else{
+          setState({...state , pages:pages})
           console.log("----------");
-          console.log(res.pages);
+          console.log(pages);
         }
       })
 
     } else {
       // ws_id?"home"???????
-      pageDataSource.searchPage(user, props.search_word.split(' '))
-        // workspaceDataSource.searchPage("home", props.search_word.split(' '))
-        .then(res => {
-          // console.log(props.search_word)
-          console.log("load page");
-          console.log(res);
-          setState({ ...state, pages: res.pages });
-        })
+      pageDataSource.searchPage(user, props.search_word.split(' '), userInfo.workspace_id)
+      // workspaceDataSource.searchPage("home", props.search_word.split(' '))
+      .then(pages=>{
+        // console.log(props.search_word)
+        console.log("load page");
+        setState({...state , pages:pages});
+      })
     }
     // PageAPI.fetchMemos().then(json => { setState({ ...state, pages: json }) })
   }
 
 
   useEffect(() => {
-    setUserInfo({ ...userInfo, ws_id: "home", permission: "owner" });
+    setUserInfo({...userInfo, workspace_id: "home", permission: "owner"});
   }, [])
 
   useEffect(() => {

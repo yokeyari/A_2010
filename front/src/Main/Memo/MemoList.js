@@ -27,7 +27,7 @@ function MemoList(props) {
     return "Loading";
   }
 
-  const memos = props.memos.memos.sort((a, b) => {
+  const memos = props.memos.sort((a, b) => {
     return a.time - b.time
   })
 

@@ -10,8 +10,6 @@ import { FormControl, InputLabel, MenuItem, Button, Grid } from '@material-ui/co
 
 function InviteUserForm(props) {
 
-  const [fields, setFields] = useState([{user_id: null, permission: null}]);
-
   useEffect(() => {
   })
 
@@ -26,16 +24,16 @@ function InviteUserForm(props) {
         </Grid>
       </Grid>
 
-      {props.fields.map((field, idx) => {
+      {props.users.map((user, idx) => {
         return (
           <div>
-            <Grid key={`${field}-${idx}`}>
+            <Grid key={`${user}-${idx}`}>
               <Grid container direction="row">
 
                 <Grid item>
                   <FormControl>
                     <Select onChange={e => props.handleChangePermission(idx, e)}
-                      defaultValue={field.permission ? field.permission : "general"}
+                      defaultValue={user.permission ? user.permission : "general"}
                       inputProps={{ "aria-label": "Without label" }}>
                       <MenuItem value="guest" key={0}>guest</MenuItem>
                       <MenuItem value="general" key={1}>general</MenuItem>
@@ -48,7 +46,7 @@ function InviteUserForm(props) {
                   <TextField
                     type="text"
                     placeholder="Enter user_id"
-                    defaultValue={field.user_id}
+                    defaultValue={user.user_id}
                     onChange={e => props.handleChangeUserId(idx, e)}
                   />
                   <Button type="button" startIcon={<DeleteIcon />} onClick={() => props.handleRemove(idx)} />

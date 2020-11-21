@@ -72,23 +72,29 @@ export default function NewPageForm(props) {
 		}
 
 		trackPromise(
-			pageDataSource.createPage({ url: state.url, title: state.title, user_id: userInfo.id, ws_id: userInfo.ws_id })
+			// 要API確認
+			pageDataSource.createPage({ url: state.url, title: state.title, user_id: userInfo.id, workspace_id: userInfo.workspace_id })
 				.then(res => {
+					console.log("create page")
+					console.log("ws id", userInfo.workspace_id)
+					console.log("res", res);
 					if (res.statusText == "OK") {
 						res.json()
 							.then(page => {
 								// console.log("getPage", page.page);
 								// homeにいる時とworkspaceにいる時で場合分け
-								if (userInfo.ws_id == "home") {
-									setState({ ...state, to: `/${userInfo.id}/${page.page.id}`, isLoaded: true });
+								if (userInfo.workspace_id == "home") {
+									setState({ ...state, to: `/${userInfo.id}/${page.id}`, isLoaded: true });
 								} else {
-									setState({ ...state, to: `/${userInfo.id}/ws/${userInfo.ws_id}/${page.page.id}`, isLoaded: true });
+									setState({ ...state, to: `/${userInfo.id}/ws/${userInfo.workspace_id}/${page.id}`, isLoaded: true });
 								}
 								
 								props.onClose();
 							})
 					} else {
-						// ここにページが作れなかったときの処理
+						res.json().then(error => {
+							console.log(error);
+						})
 					}
 				}));
 

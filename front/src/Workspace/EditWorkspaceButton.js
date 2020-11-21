@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import Modal from '@material-ui/core/Modal';
 import CreateIcon from '@material-ui/icons/Create';
 import { makeStyles } from '@material-ui/core/styles';
@@ -12,6 +12,7 @@ import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import EditWorkspace from './EditWorkspace';
 import { WorkspaceDataSource } from '../Main/ProductionApi'
+import UserInfoContext from '../context';
 
 const workspaceDataSource = new WorkspaceDataSource();
 
@@ -34,21 +35,32 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function EditWorkspaceButton() {
-	const classes = useStyles();
+  const classes = useStyles();
   const [open, setOpen] = React.useState(false);
-  const [initFields, setInitFields] = useState([{user_id: null, permission: null}])
+  const [initFields, setInitFields] = useState({name: null, users: [{user_id: null, permission: null}]})
+  const {userInfo, setUserInfo} = useContext(UserInfoContext);
 
 
   const getInitFields = () => {
-    // 本番用
-    // //ワークスペースの名前も取得
-    // workspaceDataSource.getWorkspaceUser(userInfo.ws_id).then(res => {
-    //   const users = res.users;
-    //   setFields(users);
-    // })
+    // 本番用 要API確認
+    workspaceDataSource.getWorkspace(userInfo.workspace_id).then(res => {
+      res.json().then(workspace => {
+		console.log("get workspace", workspace);
+		const name = workspace.name
+		setInitFields({...initFields, name: name});
+      })
+    })
+    workspaceDataSource.getWorkspaceUsers(userInfo.workspace_id).then(res => {
+      res.json().then(user_p_list => {
+		console.log("get workspace user and permission", user_p_list);
+		const id_p_list = user_p_list.map((user_p) => { return {user_id: user_p.user.id, permission: user_p.permission} })
+        setInitFields({...initFields, users: id_p_list});
+      })
+    })
 
-    // テスト用
-    setInitFields([{user_id: "test", permission: "general"}]);
+    // // テスト用
+	// setInitFields({users: [{user_id: "test", permission: "general"}]});
+	// console.log("aaaaaa", initFields);
   }
 
 	const handleOpen = () => {
