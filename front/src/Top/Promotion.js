@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import "./Login.css";
 import logo from '../memotubelogo_orange_moji.png';
+import Hidden from '@material-ui/core/Hidden';
 import VideoPlayer from "../Main/VideoPlayer";
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -49,9 +50,11 @@ function Promotion() {
 				MemoTubeは動画を視聴しながらメモを取ることのできるWebアプリです。<br />
 				動画内の時間とメモをリンクさせたり、そのメモを友達と共有できます!<br />
 			</p>
+			<Hidden only={['sm']}>
 			<div className={classes.video}>
 				<VideoPlayer url={url} players={{ player, setPlayer }} />
 			</div>
+			</Hidden>
 			<h2 className={classes.root}>Let's try it !!</h2>
 			<p className={classes.root}>
 				皆さんもさっそくLoginしてMemoTubeを使い始めましょう!
