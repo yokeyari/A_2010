@@ -15,6 +15,7 @@ import { PageDataSource, WorkspaceDataSource } from './../Main/ProductionApi'
 import User from './User';
 //import './User.css';
 import PageList from './PageList';
+import PageLink from './PageLink';
 import SearchForm from './SeachForm';
 import SelectWorkspace from '../Workspace/SelectWorkspace';
 import UserInfoContext from '../context'
@@ -28,6 +29,16 @@ function Home(props) {
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
   const user = userInfo;
 
+
+  const tags = Array.from((pages => {
+    let tags = new Set();
+    (pages).forEach(page => {
+      (page.tags).forEach(tag => tags.add(tag.text))
+    })
+    return tags
+  })(state.pages));
+
+
   // const { user_id } = useParams();
   // const user = {...userInfo,id: user_id };
 
@@ -35,8 +46,8 @@ function Home(props) {
   // console.log("search",props.search_word)
 
   const loadPages = () => {
-    console.log(pageDataSource.getAllTagIndex(user))
-    if(props.search_word==""){
+
+    if (props.search_word == "") {
       // ws_id?"home"???????
       pageDataSource.getPageIndex(user).then(pages=>{
       // workspaceDataSource.getPageIndex("home").then(res=>{
@@ -48,7 +59,8 @@ function Home(props) {
           console.log(pages);
         }
       })
-    }else{
+
+    } else {
       // ws_id?"home"???????
       pageDataSource.searchPage(user, props.search_word.split(' '), userInfo.workspace_id)
       // workspaceDataSource.searchPage("home", props.search_word.split(' '))
@@ -59,8 +71,8 @@ function Home(props) {
       })
     }
     // PageAPI.fetchMemos().then(json => { setState({ ...state, pages: json }) })
-
   }
+
 
   useEffect(() => {
     setUserInfo({...userInfo, workspace_id: "home", permission: "owner"});
@@ -83,6 +95,22 @@ function Home(props) {
     loadPages();
   }
 
+  let filteredpages = [];
+  const pageListsWithTag =
+    tags.map(tag => (
+      filteredpages = [],
+      <>
+        <h1>{tag}</h1>
+        {state.pages.map(page => (
+          page.tags.map(e => (
+            tag == e.text && filteredpages.push(page),
+            <></>
+          ))
+        ))}
+        <PageList pages={filteredpages} withUpdate={withUpdate} />
+      </>
+    ))
+
 
   return (
     <div className="User-Top">
@@ -91,12 +119,12 @@ function Home(props) {
       {/* <SearchForm onChange={handleChangeSeachForm} search_word={state.search_word}　onClick={() => {handleSeach(state.search_word)}} /> */}
 
       <SelectWorkspace />
-      <PageList pages={state.pages} withUpdate={withUpdate} />
-    </div>
 
+      {pageListsWithTag}
+      {/*<PageList pages={state.pages} withUpdate={withUpdate} /> */}
+    </div>
   );
 }
-
 
 export default Home
 {/*  const newPageButton =
