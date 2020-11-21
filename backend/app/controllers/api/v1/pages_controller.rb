@@ -1,5 +1,5 @@
 class Api::V1::PagesController < ApplicationController
-  before_action :current_user
+  before_action :current_user, except: [:share]
   before_action :find_page, only: [:show, :update, :destroy, :reset_token]
 
   # メモページ一覧とメモ一覧を返す
@@ -50,6 +50,15 @@ class Api::V1::PagesController < ApplicationController
   def reset_token
     @page.regenerate_token
     res_ok @page, inc: {}
+  end
+
+  def share
+    page = Page.find_by(token: params[:page_token])
+    if page.nil?
+      res_not_found
+    else
+      res_ok page, inc: [:tags, :memos]
+    end
   end
 
 private
