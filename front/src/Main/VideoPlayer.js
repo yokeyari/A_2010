@@ -29,7 +29,7 @@ const useStyles = ((theme) => ({
     //overflow: 'auto',
     margin: 'auto',
     padding: '10vh',
-    backgroundColor:"#ff3fff",
+    // backgroundColor:"#ff3fff",
     //margin: theme.spacing(1),
     width: '720px',
     height: '405px',
