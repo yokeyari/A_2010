@@ -246,13 +246,8 @@ export class PageDataSource {
   }
 
   async createPage(page) {
-    const workspace_id = page.workspace_id;
-    let res =null;
-    if (workspace_id=="home"){
-      return res = createData({ url: page.url, title: page.title }, this.API_URL + `?user_id=${page.user_id}`);
-    } else {
-      return res = createData({ url: page.url, title: page.title, workspace_id: page.workspace_id }, this.API_URL);
-    }
+    const res = createData({ url: page.url, title: page.title, workspace_id: page.workspace_id }, this.API_URL + `?user_id=${page.user_id}`);
+    return res
   }
 
   //pageの更新
