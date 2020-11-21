@@ -401,15 +401,6 @@ export class WorkspaceDataSource {
     return res;
   }
 
-  async createToken(workspace_id) {
-    const res =  await fetch(this.API_URL + `/${workspace_id}/token`, {
-      method: "POST", 
-      credentials: "include", 
-      mode: "cors"
-    })
-    return res
-  }
-
   async getWorkspaceByToken(token) {
     const res = await fetch(this.API_URL + `/${token}`, {
       method: "POST",

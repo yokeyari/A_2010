@@ -21,7 +21,7 @@ export default function PageAuth(props) {
 
   useEffect(() => {
     if (mode == "user") {
-      setUserInfo({ ...userInfo, id: user_id });
+      // setUserInfo({ ...userInfo, id: user_id });
       setIsLoading(false);
     } else {
       workspaceDataSource.getWorkspaceByToken(token)

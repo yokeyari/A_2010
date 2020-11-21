@@ -42,24 +42,6 @@ function EditWorkspaceButton(props) {
 
 
   const getInitFields = () => {
-    // 本番用 要API確認
-    // workspaceDataSource.getWorkspace(userInfo.workspace_id).then(res => {
-    //   res.json().then(workspace => {
-	// 	console.log("get workspace", workspace);
-	// 	const name = workspace.name
-	// 	setInitFields({...initFields, name: name});
-    //   })
-    // })
-    workspaceDataSource.getWorkspaceUsers(userInfo.workspace_id).then(res => {
-      res.json().then(user_p_list => {
-		console.log("get workspace user and permission", user_p_list);
-		const id_p_list = user_p_list.map((user_p) => { return {user_id: user_p.user.id, permission: user_p.permission} })
-        setInitFields({...initFields, users: id_p_list});
-      })
-    })    // // テスト用
-	// setInitFields({users: [{user_id: "test", permission: "general"}]});
-	// setInitFields({...initFields, name: props.workspace.name});
-	
 	if (props.workspace && props.user_p_list) {
 		const id_p_list = props.user_p_list.map((user_p) => { return { user_id: user_p.user.id, permission: user_p.permission } })
         setInitFields({ ...initFields, name: props.workspace.name, users: id_p_list });
