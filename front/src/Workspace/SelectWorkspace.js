@@ -77,8 +77,8 @@ function SelectWorkspace(props) {
           >
             <MenuItem value={"home"}>user page</MenuItem>
             {
-                workspaces.map((workspace) => (
-                <MenuItem value={workspace.id} key={workspace.id}>{workspace.name} ({workspace.permission})</MenuItem>
+                workspaces.map((ws_p) => (
+                <MenuItem value={ws_p.workspace.id} key={ws_p.workspace.id}>{ws_p.workspace.name} ({ws_p.permission})</MenuItem>
                 ))
             }
             <MenuItem value={"create"} onClick={handleOpen}>create workspace</MenuItem>
