@@ -46,15 +46,12 @@ function Home(props) {
   const user = userInfo;
   const [isTagMode, setTagMode] = useState(false);
   const classes = useStyles();
-  const [searchTag, setSearchTag] = useState('');
+  const [searchTag, setSearchTag] = useState('all');
 
-  const handleChange = (event) => {
+  const handleTagChange = (event) => {
     setSearchTag(event.target.value);
   };
 
-  //const handleChange = (event, newValue) => {
-  //setValue(newValue);
-  //};
 
   const tags = Array.from((pages => {
     let tags = new Set();
@@ -64,12 +61,6 @@ function Home(props) {
     return tags
   })(state.pages));
 
-
-  // const { user_id } = useParams();
-  // const user = {...userInfo,id: user_id };
-
-  // console.log("userinco",userInfo);
-  // console.log("search",props.search_word)
 
   const loadPages = () => {
 
@@ -81,8 +72,6 @@ function Home(props) {
 
         } else {
           setState({ ...state, pages: pages })
-          console.log("----------");
-          console.log(pages);
         }
       })
 
@@ -113,43 +102,40 @@ function Home(props) {
     doSomething.then(() => { loadPages() })
   }
 
-  const handleChangeSeachForm = (text) => {
-    setState({ ...state, search_word: text })
-  }
+  // const handleChangeSeachForm = (text) => {
+  //   setState({ ...state, search_word: text })
+  // }
 
-  const handleSeach = () => {
-    loadPages();
-  }
-  let tag_variant = "";
-  let normal_variant = "contained";
+  // const handleSeach = () => {
+  //   loadPages();
+  // }
+
   if (isTagMode) {
-    tag_variant = "contained"
-    normal_variant = ""
+    var tag_variant = "contained"
+    var normal_variant = ""
+  } else {
+    var tag_variant = "";
+    var normal_variant = "contained";
   }
-  let filteredpages = [];
-  console.log("tag", tags)
-  let filtered_tag;
-  console.log("searchTag", searchTag)
   if (searchTag === "all") {
-    filtered_tag = tags;
+    var filtered_tag = tags;
+  } else {
+    var filtered_tag = [searchTag]
   }
-  else {
-    filtered_tag = [searchTag]
-  }
-  const pageListsWithTag =
-    filtered_tag.map(tag => (
-      filteredpages = [],
+  const pageListsWithTag = filtered_tag.map(tag => {
+    let filteredpages = [];
+    state.pages.forEach(page => (
+      page.tags.forEach(e => (
+        tag == e.text && filteredpages.push(page)
+      ))
+    ))
+    return (
       <>
         <h1>{tag}</h1>
-        {state.pages.map(page => (
-          page.tags.map(e => (
-            tag == e.text && filteredpages.push(page),
-            <></>
-          ))
-        ))}
         <PageList pages={filteredpages} withUpdate={withUpdate} />
       </>
-    ))
+    )
+  })
 
 
   return (
@@ -158,11 +144,8 @@ function Home(props) {
       <h2 className="User-name">Welcome {userInfo.name}!</h2>
       {/* <SearchForm onChange={handleChangeSeachForm} search_word={state.search_word}　onClick={() => {handleSeach(state.search_word)}} /> */}
       <ButtonGroup color="primary" aria-label="outlined primary button group">
-        <Button variant={tag_variant} onClick={() => { setTagMode(true); setState({ ...state, search_word: "" }) }}>タグごと</Button>
-        <Button variant={normal_variant} onClick={() => { setTagMode(false); setState({ ...state, search_word: "" }) }}>作った順</Button>
-
-
-
+        <Button variant={normal_variant} onClick={() => { setTagMode(false); }}>all</Button>
+        <Button variant={tag_variant} onClick={() => { setTagMode(true); }}>タグごと</Button>
       </ButtonGroup>
       {isTagMode ?
         <FormControl className={classes.formControl}>
@@ -171,7 +154,7 @@ function Home(props) {
             labelId="demo-simple-select-label"
             id="demo-simple-select"
             value={searchTag}
-            onChange={handleChange}
+            onChange={handleTagChange}
             defaultValue="all"
           >
             <MenuItem value="all">全てを表示</MenuItem>

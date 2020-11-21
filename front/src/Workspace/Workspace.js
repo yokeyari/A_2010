@@ -89,7 +89,7 @@ function Workspace(props) {
       {/* <SearchForm onChange={handleChangeSeachForm} search_word={state.search_word}ã€€onClick={() => {handleSeach(state.search_word)}} /> */}
 
       <SelectWorkspace />
-      {userInfo.workspace_id != "home" ? <EditWorkspaceButton workspace={workspace} user_p_list={userPermissionList} /> : <></>}
+      {userInfo.workspace_id !== "home" ? <EditWorkspaceButton workspace={workspace} user_p_list={userPermissionList} /> : <></>}
       <PageList pages={state.pages} withUpdate={withUpdate} />
     </div>
   );

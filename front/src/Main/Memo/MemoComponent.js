@@ -54,7 +54,7 @@ function MemoComponent(props) {
   }
 
   const selectStatus =
-    (userInfo.workspace_id != "home") ?
+    (userInfo.workspace_id !== "home") ?
       (isEditMode ? 
         <FormControl>
           <Select onChange={handleChangeStatus}

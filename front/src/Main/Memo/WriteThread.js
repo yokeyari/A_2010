@@ -38,8 +38,8 @@ function WriteThread(props) {
 		}
 		setText("");
 	}
-	console.log("親のメモ:",parent_memo)
-	console.log("提出予定：" ,text,parent_memo.time,parent_memo.id,props.user_id )
+	// console.log("親のメモ:",parent_memo)
+	// console.log("提出予定：" ,text,parent_memo.time,parent_memo.id,props.user_id )
 	//console.log("返信状態",props.thread)
 	return (
 		<>
