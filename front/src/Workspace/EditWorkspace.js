@@ -53,7 +53,7 @@ export default function EditWorkspace(props) {
   const classes = useStyles();
   
 
-	const handleClick = () => {
+	const handleSubmit = () => {
 
 		trackPromise(
 			workspaceDataSource.updateWorkspace({ name: state.name, users: fields })
@@ -85,7 +85,7 @@ export default function EditWorkspace(props) {
 
 	const handleAdd = () => {
 		const values = [...fields];
-		values.push({ value: null, permission: null });
+		values.push({ user_id: null, permission: null });
 		setFields(values);
 	}
 
@@ -121,7 +121,7 @@ export default function EditWorkspace(props) {
 					<Transition to={state.to} ok={state.isLoaded}>
 						<Button className={classes.button} id="submit"
 							variant="contained" color="primary" endIcon={<CreateIcon />}
-							onClick={handleClick}>
+							onClick={handleSubmit}>
 							change
 						</Button>
 					</Transition>
