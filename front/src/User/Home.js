@@ -96,6 +96,8 @@ function Home(props) {
   }
 
   let filteredpages = [];
+
+
   const pageListsWithTag =
     tags.map(tag => (
       filteredpages = [],
@@ -120,8 +122,8 @@ function Home(props) {
 
       <SelectWorkspace />
 
-      {pageListsWithTag}
-      {/*<PageList pages={state.pages} withUpdate={withUpdate} /> */}
+      {/* {pageListsWithTag} */}
+      <PageList pages={state.pages} withUpdate={withUpdate} />
     </div>
   );
 }
