@@ -34,25 +34,16 @@ class Api::V1::PagesController < ApplicationController
 
   # キーワード検索
   def search
-    keywords = params[:keywords]
-
-    re = []
-    @user.pages.each do |page|
-      a = page.memos.filter do |memo| 
-        keywords.any? {|keyword| memo.text.include?(keyword)}
-      end
-
-      b = page.tags.filter do |tag|
-        keywords.any? {|keyword| tag.text.include?(keyword)}
-      end
-
-      c = keywords.any? {|keyword| page.title.include?(keyword)}
-
-      next if a.empty? && b.empty? && !c
-      re << page.attributes.merge(memos: a, tags: b)
+    if ws_id = params[:workspace_id]
+      pages = Workspace.find(ws_id).pages
+    else
+      pages = @user.pages
     end
-
+    
+    re = internal_search(pages, params[:keywords])
     res_ok re
+  rescue ActiveRecord::RecordNotFound
+    res_not_found
   end
 
   # トークン再生成
@@ -66,5 +57,24 @@ private
     @page = Page.find(params[:page_id])
   rescue ActiveRecord::RecordNotFound => e
     res_not_found
+  end
+
+  def internal_search(pages, keywords)
+    re = []
+    pages.each do |page|
+      a = page.memos.filter do |memo| 
+        keywords.any? {|keyword| memo.text.include?(keyword)}
+      end
+
+      b = page.tags.filter do |tag|
+        keywords.any? {|keyword| tag.text.include?(keyword)}
+      end
+
+      c = keywords.any? {|keyword| page.title.include?(keyword)}
+
+      next if a.empty? && b.empty? && !c
+      re << page.attributes.merge(memos: a, tags: b)
+    end
+    re
   end
 end
