@@ -112,7 +112,8 @@ function MemoComponent(props) {
       {isReplyMode ?
       <>
         <WriteThread 
-						memo={memo}
+            memo={memo}
+            isthread={false}
 						user_id={props.user_id}
 						onSubmit={props.onSubmit}
 					/>
