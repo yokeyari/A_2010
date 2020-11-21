@@ -81,7 +81,7 @@ function EditWorkspaceButton(props) {
 			>
 				<Fade in={open}>
 					<div style={modalStyle}>
-						<EditWorkspace onClose={handleClose} initFields={initFields} />
+						<EditWorkspace onClose={handleClose} initFields={initFields} workspace={props.workspace} />
 					</div>
 				</Fade>
 			</Modal>
