@@ -22,6 +22,10 @@ module TypicalRes
   end
 
   def res_errors(e)
-    res_bad_request errors: e.errors.messages, model: e.class.name
+    render json: {errors: e.errors.messages, model: e.class.name}, status: :bad_request
+  end
+  
+  def res_errors_record(e)
+    res_errors e.record
   end
 end
