@@ -60,11 +60,11 @@ function EditWorkspaceButton(props) {
 	// setInitFields({users: [{user_id: "test", permission: "general"}]});
 	// setInitFields({...initFields, name: props.workspace.name});
 	
-	if (props.workspace) setInitFields({...initFields, name: props.workspace.name});
-	if (props.user_p_list) {
+	if (props.workspace && props.user_p_list) {
 		const id_p_list = props.user_p_list.map((user_p) => { return { user_id: user_p.user.id, permission: user_p.permission } })
-        setInitFields({ ...initFields, users: id_p_list });
+        setInitFields({ ...initFields, name: props.workspace.name, users: id_p_list });
 	}
+
 	console.log("initFields", initFields);
 	console.log(props.workspace);
   }
