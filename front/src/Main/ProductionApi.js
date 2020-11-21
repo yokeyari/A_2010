@@ -379,7 +379,9 @@ export class WorkspaceDataSource {
 
   async createWorkspace(workspace) {
     // const res = createData({ name: workspace.name, users: workspace.users }, this.API_URL );
-    const res = createData({ name: "test2", users: [[1, "owner"]] }, this.API_URL );
+    const users = workspace.users.map((user_p) => { return( [user_p.user_id, user_p.permission] ) })
+    const res = createData({ name: workspace.name, users: users }, this.API_URL );
+    // const res = createData({ name: "test2", users: [[1, "owner"]] }, this.API_URL );
     // const res = createData({ name: workspace.name }, this.API_URL );
     return res;
   }
