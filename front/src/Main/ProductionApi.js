@@ -246,7 +246,12 @@ export class PageDataSource {
   }
 
   async createPage(page) {
-    const res = createData({ url: page.url, title: page.title, workspace_id: page.workspace_id }, this.API_URL + `?user_id=${page.user_id}`);
+    let res;
+    if (page.workspace_id=="home") {
+      res = createData({ url: page.url, title: page.title }, this.API_URL + `?user_id=${page.user_id}`);
+    } else {
+      res = createData({ url: page.url, title: page.title, workspace_id: page.workspace_id }, this.API_URL + `?user_id=${page.user_id}`);
+    }
     return res
   }
 
