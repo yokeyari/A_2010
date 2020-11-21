@@ -57,7 +57,7 @@ function Main(props) {
   const [isLoading, setIsLoading] = useState(false);
   const [colorList, setColorList] = useState([]);
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
-  const [visMemos, SetVisMemos] = useState([]);
+  const [memoMode, setMemoMode] = useState('all');
   const { workspace_id } = useParams();
 
   const page_id = props.page_id;
@@ -66,14 +66,13 @@ function Main(props) {
 
   useEffect(() => {
     MemoAPI.getMemoIndex(page_id).then(json => {
-      // console.log(json)
       setMemos(json);
-      SetVisMemos(json);
       //これがないとメモ以外が即座に更新されない
-      PageApi.getPage(page_id).then(json => {
-        json.json().then(json => {
+      PageApi.getPage(page_id).then(res=> {
+        res.json().then(page => {
           setIsLoading(false);
-          setPage({ ...json });
+          setPage({ ...page });
+          console.log("all page ",page)
         }
         )
       })
@@ -86,8 +85,8 @@ function Main(props) {
       res.json().then(workspace => {
         console.log("get workspace and permission", workspace);
         // 後でログインユーザーのワークスペースの権限だけもらうAPIを用意する
-        const permission = workspace.users.map(user_p => user_p.user.id==userInfo.id ? user_p.permission : false)[0]
-        setUserInfo({...userInfo, workspace_id: (workspace_id ? workspace_id : "home"), permission: permission});
+        const permission = workspace.users.map(user_p => user_p.user.id == userInfo.id ? user_p.permission : false)[0]
+        setUserInfo({ ...userInfo, workspace_id: (workspace_id ? workspace_id : "home"), permission: permission });
       })
     })
 
@@ -133,19 +132,7 @@ function Main(props) {
 
   function changeMemoByStatus(event) {
     const mode = event.target.value;
-    const mymemos = memos.filter(memo => memo.user_id==userInfo.id ? true : false)
-    switch (mode) {
-      case 'onlyme':
-        SetVisMemos(mymemos); break;
-      case 'pub': 
-        const public_memos = mymemos.filter(memo => memo.status=="pub" ? true : false); 
-        SetVisMemos(public_memos); break;
-      case 'pri':
-        const private_memos = mymemos.filter(memo => memo.status=="pri" ? true : false);
-        SetVisMemos(private_memos); break;
-      default:
-        SetVisMemos(memos)
-    }
+    setMemoMode(mode);
   }
 
   function changeMemoColor(event) {
@@ -190,7 +177,23 @@ function Main(props) {
     }
   }
 
-  const VisMemoHamburger = 
+  const mymemos = memos.filter(memo => memo.user_id == userInfo.id);
+  switch (memoMode) {
+    case 'onlyme':
+      var visMemos = mymemos;
+      break;
+    case 'pub':
+      var visMemos = mymemos.filter(memo => memo.status == "pub");
+      break;
+    case 'pri':
+      var visMemos = mymemos.filter(memo => memo.status == "pri");
+      break;
+    default:
+      var visMemos = memos;
+  }
+
+
+  const VisMemoHamburger =
     (userInfo.workspace_id != "home") ?
       <Grid container direction="row" justify="center" alignItems="center">
         <Grid item>
@@ -210,8 +213,8 @@ function Main(props) {
           </FormControl>
         </Grid>
       </Grid>
-      : <></>
-  
+      : null
+
 
   return (
     <div className="Main">

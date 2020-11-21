@@ -87,7 +87,7 @@ function Top() {
       null
     )
   } else {
-    if (userInfo.id != "") {
+    if (userInfo.id !== "") {
       return (
         <Redirect to={`/${userInfo.id}/`} />
       )

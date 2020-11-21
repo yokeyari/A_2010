@@ -77,7 +77,7 @@ function WriteMemoForm(props) {
   }
 
   const seletctStatus =
-    (userInfo.workspace_id != "home") ?
+    (userInfo.workspace_id !== "home") ?
       <FormControl>
         <Select onChange={handleChangeStatus}
           defaultValue="pri"

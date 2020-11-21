@@ -145,12 +145,12 @@ export default function PageLink(props) {
             <Typography variant="body2" color="textSecondary" component="p">
               {page.url}
               {
-                page.memos[0]!=undefined && (
+                page.memos[0]!==undefined && (
                 <p>{page.memos[0].text}</p>
                 )
               }
               {
-                page.tags[0]!=undefined && (
+                page.tags[0]!==undefined && (
                 <p># {page.tags[0].text}</p>
                 )
               }
