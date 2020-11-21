@@ -23,18 +23,19 @@ Rails.application.routes.draw do
       delete 'users/:user_id', to: 'users#destroy'
 
       get  'pages',            to: 'pages#index'
+      get 'pages/token',       to: 'pages#reset_token'
+      get 'pages/share',       to: 'pages#share'
       get  'pages/:page_id',   to: 'pages#show'
       post 'pages',            to: 'pages#create'
       patch 'pages/:page_id',  to: 'pages#update'
       delete 'pages/:page_id', to: 'pages#destroy'
       post 'pages/search',     to: 'pages#search'
-      get 'pages/token',       to: 'pages#reset_token'
 
       get 'tags',            to: 'tags#index'
+      get 'tags/automate',   to: 'tags#automate'
       post 'tags',           to: 'tags#create'
       delete 'tags/:tag_id', to: 'tags#destroy'
       patch 'tags/:tag_id',  to: 'tags#update'
-      get 'tags/automate',   to: 'tags#automate'
 
       get 'memos',             to: 'memos#index'
       post 'memos',            to: 'memos#create'
