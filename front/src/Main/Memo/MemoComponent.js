@@ -96,9 +96,9 @@ function MemoComponent(props) {
         <Button className="timeButton" startIcon={<AccessTimeIcon />} onClick={() => { handleJump() }} >{formatSec2Str(memo.time)}</Button>
         {isEditMode ?
           ( <Button className="edit" startIcon={<DoneIcon />} onClick={() => { endEditMode() }}>done</Button> ) :
-          ( (userInfo.id==memo.user_id || userInfo.permission=="owner") ?
+          ( (userInfo.id==memo.user_id || userInfo.permission=="owner" || userInfo.permission=="sup") ?
             <Button className="edit" color="primary" startIcon={<EditIcon />} onClick={() => { setEditMode(true) }}>edit</Button> : <></> ) } 
-        { (userInfo.id==memo.user_id || userInfo.permission=="owner") ?
+        { (userInfo.id==memo.user_id || userInfo.permission=="owner" || userInfo.permission=="sup") ?
           <Button className="delete" color="secondary" startIcon={<DeleteIcon />} onClick={() => { props.onDelete(memo) }}>delete</Button> : <></> }
         
         {selectStatus}

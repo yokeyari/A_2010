@@ -163,7 +163,7 @@ export default function Header(props) {
           </Hidden>
 
         
-          {userInfo.permission=="owner" ? 
+          {(userInfo.permission=="owner" || userInfo.permission=="sup") ? 
             <div>
               <NewPage className={classes.search_make} /> 
               {/* {userInfo.workspace_id!="home" ? <EditWorkspaceButton /> : <></>} */}

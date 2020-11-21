@@ -37,7 +37,7 @@ function InviteUserForm(props) {
                       inputProps={{ "aria-label": "Without label" }}>
                       <MenuItem value="guest" key={0}>guest</MenuItem>
                       <MenuItem value="general" key={1}>general</MenuItem>
-                      <MenuItem value="owner" key={2}>owner</MenuItem>
+                      <MenuItem value="sup" key={2}>owner</MenuItem>
                     </Select>
                   </FormControl>
                 </Grid>
