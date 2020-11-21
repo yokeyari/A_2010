@@ -43,6 +43,7 @@ function MemoComponent(props) {
   const auth = props.auth;
 
 
+
   const endEditMode = () => {
     props.onChange({ ...memo, text: text });
     setEditMode(false);
@@ -90,52 +91,57 @@ function MemoComponent(props) {
         InputProps={{
           readOnly: true,
         }}
-      />
-    ;
-  return (
-    <Card className={classes.card} key={memo.id}>
-      <CardActions >
-        {userInfo.workspace_id != "home" ? <p>[{memo.user_id}さん]</p> : null}
-        <Button className="timeButton" startIcon={<AccessTimeIcon />} onClick={() => { handleJump() }} >{formatSec2Str(memo.time)}</Button>
-        {isEditMode ?
-          (<Button className="edit" startIcon={<DoneIcon />} onClick={() => { endEditMode() }}>done</Button>)
-          :
-          ((auth.canEdit) ?
-            <Button className="edit" color="primary" startIcon={<EditIcon />} onClick={() => { setEditMode(true) }}>edit</Button>
-            : null)
-        }
-        {(auth.canDelete) ?
-          <Button className="delete" color="secondary" startIcon={<DeleteIcon />} onClick={() => { props.onDelete(memo) }}>delete</Button> : null}
+      />;
 
-        {selectStatus}
+  if (auth.canRead == false) {
+    return null;
+  } else {
+    return (
+      <Card className={classes.card} key={memo.id}>
+        <CardActions >
+          {userInfo.workspace_id != "home" ? <p>[{memo.user_id}さん]</p> : null}
+          <Button className="timeButton" startIcon={<AccessTimeIcon />} onClick={() => { handleJump() }} >{formatSec2Str(memo.time)}</Button>
+          {isEditMode ?
+            (<Button className="edit" startIcon={<DoneIcon />} onClick={() => { endEditMode() }}>done</Button>)
+            :
+            ((auth.canEdit) ?
+              <Button className="edit" color="primary" startIcon={<EditIcon />} onClick={() => { setEditMode(true) }}>edit</Button>
+              : null)
+          }
+          {(auth.canDelete) ?
+            <Button className="delete" color="secondary" startIcon={<DeleteIcon />} onClick={() => { props.onDelete(memo) }}>delete</Button> : null}
+
+          {selectStatus}
+
+          {isReplyMode ?
+            <Button className="reply" startIcon={<ReplyIcon />} onClick={() => { setReplyMode(false) }}>返信</Button>
+            :
+            <Button className="reply" startIcon={<ReplyIcon />} onClick={() => { setReplyMode(true) }}>返信</Button>
+
+          }
+        </CardActions>
+        <CardActions>
+          {body}
+        </CardActions>
 
         {isReplyMode ?
-          <Button className="reply" startIcon={<ReplyIcon />} onClick={() => { setReplyMode(false) }}>返信</Button>
+          <>
+            <WriteThread
+              memo={memo}
+              isthread={false}
+              user_id={props.user_id}
+              onSubmit={props.onSubmit}
+            />
+            <Button onClick={() => { setReplyMode(false) }}>キャンセル</Button>
+          </>
           :
-          <Button className="reply" startIcon={<ReplyIcon />} onClick={() => { setReplyMode(true) }}>返信</Button>
-
+          null
         }
-      </CardActions>
-      <CardActions>
-        {body}
-      </CardActions>
+      </Card>
+      //</div>
+    )
+  }
 
-      {isReplyMode ?
-        <>
-          <WriteThread
-            memo={memo}
-            isthread={false}
-            user_id={props.user_id}
-            onSubmit={props.onSubmit}
-          />
-          <Button onClick={() => { setReplyMode(false) }}>キャンセル</Button>
-        </>
-        :
-        null
-      }
-    </Card>
-    //</div>
-  )
 }
 
 export default MemoComponent;

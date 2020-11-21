@@ -49,7 +49,7 @@ function Workspace(props) {
       res.json().then(workspace => {
         console.log("get workspace and permission", workspace);
         // 後でログインユーザーのワークスペースの権限だけもらうAPIを用意する
-        const permission = workspace.users.map(user_p => user_p.user.id == userInfo.id ? user_p.permission : false)[0]
+        const permission = workspace.users.filter(user_p => user_p.user.id == userInfo.id ? true : false)[0].permission;
         setUserInfo({ ...userInfo, workspace_id: workspace_id, permission: permission });
         setWorkspace(workspace);
         loadPages();
@@ -88,7 +88,7 @@ function Workspace(props) {
       <h2>{workspace.name} ({userInfo.permission})</h2>
       {/* <SearchForm onChange={handleChangeSeachForm} search_word={state.search_word}ã€€onClick={() => {handleSeach(state.search_word)}} /> */}
 
-      <SelectWorkspace />
+      {/* <SelectWorkspace /> */}
       {userInfo.workspace_id !== "home" ? <EditWorkspaceButton workspace={workspace} user_p_list={userPermissionList} /> : <></>}
       <PageList pages={state.pages} withUpdate={withUpdate} />
     </div>

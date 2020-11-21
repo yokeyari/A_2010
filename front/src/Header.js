@@ -30,6 +30,7 @@ import EditWorkspaceButton from './Workspace/EditWorkspaceButton';
 //import { Link as RouterLink } from "react-router-dom";
 import { UserDataSource } from './Main/ProductionApi';
 import LoginAuth from './Auth/LoginAuth';
+import SelectWorkspace from "./Workspace/SelectWorkspace";
 
 import UserInfoContext from './context'
 
@@ -64,9 +65,9 @@ const useStyles = makeStyles((theme) => ({
     //backgroundColor:"#7cfc00",
     backgroundColor: "#4F5D75" //青っぽい黒でいい感じ
   },
-  logo :{
+  logo: {
     height: "10vh",
-    float:"left",
+    float: "left",
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -92,7 +93,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Header(props) {
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = React.useState(false);
   const [state, setState] = useState({ search_word: "", pages: [] });
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
   const [isSearchMode, setSearchMode] = useState(false);
@@ -115,98 +116,105 @@ export default function Header(props) {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  
+
 
   const handleLogout = () => {
     // document.cookie = "_session_id=0";
     UserApi.logoutUser(userInfo.id);
   }
 
+  const Hamburger = (
+    <>
+      <IconButton variant="contained" onClick={handleClick} edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+        <MenuIcon />
+      </IconButton>
+      <StyledMenu
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+      >
+        <Link to={`/${userInfo.id}/`} >
+          <MenuItem button onClick={handleClose}>
+            <ListItemIcon>
+              <PersonIcon />
+            </ListItemIcon>
+            <ListItemText primary="ユーザーページ" />
+          </MenuItem>
+        </Link>
+        {/* <Link to={`/${userInfo.id}/main`}>
+          <MenuItem Button onClick={handleClose}>
+            <ListItemIcon>
+              <MovieIcon />
+            </ListItemIcon>
+            <ListItemText primary="動画メモページ" />
+          </MenuItem>
+        </Link> */}
+        <SelectWorkspace onClose={handleClose}/>
+      </StyledMenu>
+    </>)
+
+
 
   return (
     <div >
       <AppBar className={classes.root} color="primary" position="static" >
         <Toolbar>
-       
-        <IconButton variant="contained" onClick={handleClick} edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-            <MenuIcon />
-          </IconButton>
-          <StyledMenu
-            anchorEl={anchorEl}
-            open={Boolean(anchorEl)}
-            onClose={handleClose}
-          >
-            <Link to={`/${userInfo.id}/home`} >
-              <MenuItem button onClick={handleClose}>
-                <ListItemIcon>
-                  <PersonIcon />
-                </ListItemIcon>
-                <ListItemText primary="ユーザーページ" />
-              </MenuItem>
-            </Link>
-            <Link to={`/${userInfo.id}/main`}>
-              <MenuItem Button onClick={handleClose}>
-                <ListItemIcon>
-                  <MovieIcon />
-                </ListItemIcon>
-                <ListItemText primary="動画メモページ" />
-              </MenuItem>
-            </Link>
-          </StyledMenu>
-        
+
+
+          {Hamburger}
           <Button component={Link} to={`/${userInfo.id}`}>
             <img src={logo} className={classes.logo} alt="memotube" />
           </Button>
 
           <Hidden smDown>
-            <SearchForm  onChange={handleChangeSeachForm} search_word={state.search_word} onClick={handleSeach} />
+            <SearchForm onChange={handleChangeSeachForm} search_word={state.search_word} onClick={handleSeach} />
           </Hidden>
 
-        
-          {userInfo.permission=="owner" ? 
+
+          {userInfo.permission == "owner" ?
             <div>
-              <NewPage className={classes.search_make} /> 
+              <NewPage className={classes.search_make} />
               {/* {userInfo.workspace_id!="home" ? <EditWorkspaceButton /> : <></>} */}
             </div>
             : <></>}
-  <Hidden mdUp>
+          <Hidden mdUp>
             {isSearchMode ?
-            <>
-            <Tooltip title="検索窓を非表示">
-            <IconButton  color="inherit" type="submit" onClick={() => { setSearchMode(false) }} aria-label="search">
-          <SearchIcon/>
+              <>
+                <Tooltip title="検索窓を非表示">
+                  <IconButton color="inherit" type="submit" onClick={() => { setSearchMode(false) }} aria-label="search">
+                    <SearchIcon />
 
-              </IconButton> 
-              </Tooltip>
+                  </IconButton>
+                </Tooltip>
               </>
-            :
-            <Tooltip title="検索窓を表示">
-          <IconButton  color="inherit" type="submit" onClick={() => { setSearchMode(true) }} aria-label="search">
-          <SearchIcon/>
+              :
+              <Tooltip title="検索窓を表示">
+                <IconButton color="inherit" type="submit" onClick={() => { setSearchMode(true) }} aria-label="search">
+                  <SearchIcon />
 
-              </IconButton> 
+                </IconButton>
               </Tooltip>
-              
-          }
-          
+
+            }
+
           </Hidden>
           <div className={classes.right}>
 
-            <LoginAuth/>
+            <LoginAuth />
           </div>
 
         </Toolbar>
       </AppBar>
       <Hidden mdUp>
-      {isSearchMode ?
-            <>
+        {isSearchMode ?
+          <>
             <SearchForm className={classes.search_make} onChange={handleChangeSeachForm} search_word={state.search_word} onClick={handleSeach} />
-              </>
-            :
+          </>
+          :
           <></>
-              
-          }
-          </Hidden>
+
+        }
+      </Hidden>
     </div>
   );
 }

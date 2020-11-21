@@ -174,7 +174,7 @@ function Home(props) {
         </FormControl>
         :
         <></>}
-      <SelectWorkspace />
+      {/* <SelectWorkspace /> */}
 
       {isTagMode ?
         pageListsWithTag

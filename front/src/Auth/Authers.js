@@ -9,7 +9,7 @@ class BaseAuther {
     if (user.workspace_id == "home") {
       user.level = "owner"
     } else {
-      user.leel = user.permission
+      user.level = user.permission
     }
     this.user = user
     this.target = target
@@ -78,6 +78,17 @@ class BaseAuther {
 class MemoAuther extends BaseAuther {
   constructor(user) {
     super(user);
+  }
+
+  canRead = (target) => {
+    console.log(target)
+    if(target.status=="pri"){
+      // console.log("is pri",target.user_id.toString(),this.user,target.user_id.toString() == this.user.id)
+      return (target.user_id.toString() == this.user.id)
+    }else if(target.status=="pub"){
+      return true
+    }
+    
   }
 }
 
