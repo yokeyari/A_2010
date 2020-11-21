@@ -64,8 +64,11 @@ function ThreadList(props) {
 									key={memo.id.toString()}
 									//color={props.colorList[i]}
 									memo={memo}
+									parent={parent_memo}
+									user_id={props.user_id}
 									onChange={props.onChange}
 									onDelete={props.onDelete}
+									onSubmit={props.onSubmit}
 								/>
 							)
 						))
