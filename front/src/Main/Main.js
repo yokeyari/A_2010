@@ -29,6 +29,7 @@ import { MemoDataSource, PageDataSource, TagDataSource, BertDataSource, Workspac
 
 import UserInfoContext from '../context'
 
+
 const useStyles = makeStyles((theme) => ({
   root: {
     //padding: '2vh 1vw',
@@ -61,6 +62,7 @@ function Main(props) {
   const { workspace_id } = useParams();
 
   const page_id = props.page_id;
+
 
   //const page_id = page_id;
 

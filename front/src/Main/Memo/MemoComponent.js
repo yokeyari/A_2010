@@ -8,7 +8,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import DoneIcon from '@material-ui/icons/Done';
 import ReplyIcon from '@material-ui/icons/Reply';
-import WriteThread from './WriteThread'; 
+import WriteThread from './WriteThread';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import Select from "@material-ui/core/Select";
 import { CardActions, FormControl, MenuItem } from "@material-ui/core";
@@ -19,6 +19,8 @@ import UserInfoContext from "../../context";
 //   time = 0;
 //   id = 0;
 // }
+
+
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -38,6 +40,7 @@ function MemoComponent(props) {
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
   const memo = props.memo
   const player = props.player
+  const auth = props.auth;
 
 
   const endEditMode = () => {
@@ -55,7 +58,7 @@ function MemoComponent(props) {
 
   const selectStatus =
     (userInfo.workspace_id !== "home") ?
-      (isEditMode ? 
+      (isEditMode ?
         <FormControl>
           <Select onChange={handleChangeStatus}
             defaultValue={memo.status}
@@ -65,11 +68,11 @@ function MemoComponent(props) {
             <MenuItem value={"pri"}>private</MenuItem>
             <MenuItem value={"pub"}>public</MenuItem>
           </Select>
-        </FormControl> : 
-        <div>{memo.status=="pub" ? "public" : "private"}</div>
-      ) : 
-      <></>
-      
+        </FormControl> :
+        <div>{memo.status == "pub" ? "public" : "private"}</div>
+      ) :
+      null
+
 
   const body =
     isEditMode ?
@@ -92,40 +95,43 @@ function MemoComponent(props) {
   return (
     <Card className={classes.card} key={memo.id}>
       <CardActions >
-        {userInfo.workspace_id!="home" ? <p>[{memo.user_id}さん]</p> : <></>}
+        {userInfo.workspace_id != "home" ? <p>[{memo.user_id}さん]</p> : null}
         <Button className="timeButton" startIcon={<AccessTimeIcon />} onClick={() => { handleJump() }} >{formatSec2Str(memo.time)}</Button>
         {isEditMode ?
-          ( <Button className="edit" startIcon={<DoneIcon />} onClick={() => { endEditMode() }}>done</Button> ) :
-          ( (userInfo.id==memo.user_id || userInfo.permission=="owner") ?
-            <Button className="edit" color="primary" startIcon={<EditIcon />} onClick={() => { setEditMode(true) }}>edit</Button> : <></> ) } 
-        { (userInfo.id==memo.user_id || userInfo.permission=="owner") ?
-          <Button className="delete" color="secondary" startIcon={<DeleteIcon />} onClick={() => { props.onDelete(memo) }}>delete</Button> : <></> }
-        
+          (<Button className="edit" startIcon={<DoneIcon />} onClick={() => { endEditMode() }}>done</Button>)
+          :
+          ((auth.canEdit) ?
+            <Button className="edit" color="primary" startIcon={<EditIcon />} onClick={() => { setEditMode(true) }}>edit</Button>
+            : null)
+        }
+        {(auth.canDelete) ?
+          <Button className="delete" color="secondary" startIcon={<DeleteIcon />} onClick={() => { props.onDelete(memo) }}>delete</Button> : null}
+
         {selectStatus}
-        
+
         {isReplyMode ?
-        <Button className="reply" startIcon={<ReplyIcon />} onClick={() => { setReplyMode(false) }}>返信</Button>
-        :
-        <Button className="reply" startIcon={<ReplyIcon />} onClick={() => { setReplyMode(true) }}>返信</Button>
-        
-        } 
+          <Button className="reply" startIcon={<ReplyIcon />} onClick={() => { setReplyMode(false) }}>返信</Button>
+          :
+          <Button className="reply" startIcon={<ReplyIcon />} onClick={() => { setReplyMode(true) }}>返信</Button>
+
+        }
       </CardActions>
       <CardActions>
         {body}
       </CardActions>
 
       {isReplyMode ?
-      <>
-        <WriteThread 
+        <>
+          <WriteThread
             memo={memo}
             isthread={false}
-						user_id={props.user_id}
-						onSubmit={props.onSubmit}
-					/>
-        <Button onClick={() => { setReplyMode(false)  }}>キャンセル</Button>
+            user_id={props.user_id}
+            onSubmit={props.onSubmit}
+          />
+          <Button onClick={() => { setReplyMode(false) }}>キャンセル</Button>
         </>
-      :
-      <></>
+        :
+        null
       }
     </Card>
     //</div>
