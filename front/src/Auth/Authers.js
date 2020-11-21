@@ -55,7 +55,7 @@ class BaseAuther {
     return this.calcAuth(target, 'read')
   }
   canCreate = (target) => {
-    return this.calcAuth(target, 'create')
+    return this.calcAuth(target,'create')
   }
   canEdit = (target) => {
     return this.calcAuth(target, 'edit')
@@ -79,6 +79,9 @@ class MemoAuther extends BaseAuther {
   constructor(user) {
     super(user);
   }
+  canCreate = (page) => {
+    return this.calcAuth(page,'create')
+  }
 
   canRead = (target) => {
     console.log(target)
@@ -88,7 +91,6 @@ class MemoAuther extends BaseAuther {
     }else if(target.status=="pub"){
       return true
     }
-    
   }
 }
 

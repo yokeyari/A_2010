@@ -28,7 +28,7 @@ import TagForm from './Tag/TagForm';
 import { MemoDataSource, PageDataSource, TagDataSource, BertDataSource, WorkspaceDataSource } from './ProductionApi';
 
 import UserInfoContext from '../context'
-
+import { MemoAuther } from '../Auth/Authers';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -60,6 +60,8 @@ function Main(props) {
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
   const [memoMode, setMemoMode] = useState('all');
   const { workspace_id } = useParams();
+
+  const memoAuther = new MemoAuther(userInfo);
 
   const page_id = props.page_id;
 
@@ -239,7 +241,11 @@ function Main(props) {
                 <VideoPlayer className="" url={page.url} players={{ player, setPlayer }} />
               </Grid>
               <Grid item xs={12}>
-                <WriteMemoForm onSubmit={handleSubmit} player={player} user_id={userInfo.id} onWriting={handleWriting} onWriteEnd={handleWriteEnd} />
+                {memoAuther.canCreate(page) ?
+                  <WriteMemoForm onSubmit={handleSubmit} player={player} user_id={userInfo.id} onWriting={handleWriting} onWriteEnd={handleWriteEnd} />
+                  :
+                  null
+                }
               </Grid>
             </Grid>
           </Grid>

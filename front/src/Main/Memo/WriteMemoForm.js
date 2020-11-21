@@ -15,6 +15,7 @@ import { CardActions, FormControl, MenuItem } from "@material-ui/core";
 import Select from "@material-ui/core/Select";
 import UserInfoContext from "../../context";
 
+
 const useStyles = makeStyles((theme) => ({
   root: {
     minWidth: 300,
@@ -48,9 +49,12 @@ const useStyles = makeStyles((theme) => ({
 function WriteMemoForm(props) {
   const [text, setText] = useState("");
   const [status, setStatus] = useState("pri");
-  const { userInfo, setUserInfo } = useContext(UserInfoContext);
+  const { userInfo } = useContext(UserInfoContext);
   const player = props.player;
   const classes = useStyles();
+  
+
+
   const handleWriting = () => {
     props.onWriting();
   }
