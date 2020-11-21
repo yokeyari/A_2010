@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function EditWorkspace(props) {
 	const [state, setState] = useState({
-		name: "",
+		name: props.initFields.name,
 		to: "",
 		isLoaded: false
 	})
@@ -56,7 +56,6 @@ export default function EditWorkspace(props) {
 	const handleClick = () => {
 
 		trackPromise(
-			// 要API確認
 			workspaceDataSource.updateWorkspace({ name: state.name, users: fields })
 				.then(res => {
 					if (res.statusText == "OK") {

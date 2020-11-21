@@ -37,29 +37,30 @@ const useStyles = makeStyles((theme) => ({
 function EditWorkspaceButton() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
-  const [initFields, setInitFields] = useState({users: [{user_id: null, permission: null}]})
+  const [initFields, setInitFields] = useState({name: null, users: [{user_id: null, permission: null}]})
   const {userInfo, setUserInfo} = useContext(UserInfoContext);
 
 
   const getInitFields = () => {
     // 本番用 要API確認
     workspaceDataSource.getWorkspace(userInfo.workspace_id).then(res => {
-      res.json().then(json => {
-        const ws = json.workspace;
-        // setInitFields(users);
-        console.log("get workspace name", ws.name);
+      res.json().then(workspace => {
+		console.log("get workspace", workspace);
+		const name = workspace.name
+		setInitFields({...initFields, name: name});
       })
     })
     workspaceDataSource.getWorkspaceUsers(userInfo.workspace_id).then(res => {
-      res.json().then(json => {
-        const users = json.users
-        // setInitFields(users);
-        console.log("get workspace user", users);
+      res.json().then(user_p_list => {
+		console.log("get workspace user and permission", user_p_list);
+		const id_p_list = user_p_list.map((user_p) => { return {user_id: user_p.user.id, permission: user_p.permission} })
+        setInitFields({...initFields, users: id_p_list});
       })
     })
 
-    // テスト用
-    setInitFields({users: [{user_id: "test", permission: "general"}]});
+    // // テスト用
+	// setInitFields({users: [{user_id: "test", permission: "general"}]});
+	// console.log("aaaaaa", initFields);
   }
 
 	const handleOpen = () => {
