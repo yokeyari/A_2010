@@ -47,7 +47,6 @@ function SelectWorkspace(props) {
 
   useEffect(() => {
     workspacesDataSource.getWorkspaceIndex().then(res => {
-      console.log("aaaaa", res)
       res.json().then(json => {
         const workspaces = json.workspaces;
         console.log('load workspace list', workspaces);

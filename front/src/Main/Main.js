@@ -25,7 +25,7 @@ import TagList from './Tag/TagList';
 import TagForm from './Tag/TagForm';
 
 //import * as MemoAPI from './LocalApi';
-import { MemoDataSource, PageDataSource, TagDataSource, BertDataSource } from './ProductionApi';
+import { MemoDataSource, PageDataSource, TagDataSource, BertDataSource, WorkspaceDataSource } from './ProductionApi';
 
 import UserInfoContext from '../context'
 
@@ -42,6 +42,7 @@ const useStyles = makeStyles((theme) => ({
 const MemoAPI = new MemoDataSource();
 const PageApi = new PageDataSource();
 const BertApi = new BertDataSource();
+const workspaceApi = new WorkspaceDataSource();
 
 function Main(props) {
   const classes = useStyles();
@@ -81,10 +82,11 @@ function Main(props) {
 
   useEffect(() => {
     // 本番用 要API確認
-    // workspaceDataSource.getWorkspace(workspace_id).then(res => {
+    // workspaceApi.getWorkspace(workspace_id).then(res => {
+    //   // console.log("-----", ws)
     //   const ws = res.workspace;
     //   setUserInfo({...userInfo, workspace_id: (workspace_id ? workspace_id : "home"), permission: ws.permission});
-    //   setWsInfo({...wsInfo, name: ws.name});
+    //   // setWsInfo({...wsInfo, name: ws.name});
     // })
 
     // テスト用 (permissionの更新なし)

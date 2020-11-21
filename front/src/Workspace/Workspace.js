@@ -56,6 +56,7 @@ function Workspace(props) {
     // 要API確認
     workspaceDataSource.getWorkspace(workspace_id).then(res => {
       res.json().then(json => {
+        console.log("aaaa", json);
         const ws = json.workspace;
         setUserInfo({...userInfo, workspace_id: workspace_id, permission: ws.permission});
         setWsInfo({...wsInfo, name: ws.name});
