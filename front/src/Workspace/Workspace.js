@@ -26,41 +26,31 @@ function Workspace(props) {
 
   const loadPages = () => {
     if(props.search_word==""){
-      // 本番用 要API確認
       workspaceDataSource.getPageIndex(workspace_id).then( res => {
-        res.json().then(json => {
-          const pages = json.pages;
-          // setState({...state , pages: pages})
+        res.json().then(pages => {
           console.log("ws pages", pages)
+          setState({...state , pages: pages})
         })
       })
 
-      // テスト用
-      const test_pages = [{id: 28, url:"demo", title: "demo", tags: [], memos: []}];
-      setState({...state , pages: test_pages});
     }else{
-      // 本番用 要API確認
-      // workspaceDataSource.searchPage(workspace_id, props.search_word.split(' '))
       pageDataSource.searchPage(user, props.search_word.split(' '), userInfo.workspace_id)
-      .then(res=>{
-        // console.log(props.search_word)
-        console.log("load page");
-        setState({...state , pages:res.pages});
+      .then(pages =>{
+        console.log("load page", pages);
+        setState({...state , pages: pages});
       })
     }
-    // PageAPI.fetchMemos().then(json => { setState({ ...state, pages: json }) })
-
   }
 
   useEffect(() => {
-    // 要API確認
     workspaceDataSource.getWorkspace(workspace_id).then(res => {
-      res.json().then(json => {
-        console.log("aaaa", json);
-        const ws = json.workspace;
-        setUserInfo({...userInfo, workspace_id: workspace_id, permission: ws.permission});
-        setWsInfo({...wsInfo, name: ws.name});
-        console.log("get workspace and permission")
+      res.json().then(workspace => {
+        console.log("get workspace and permission", workspace);
+        // 後でログインユーザーのワークスペースの権限だけもらうAPIを用意する
+        const name = workspace.name;
+        const permission = workspace.users.map(user_p => user_p.user.id==userInfo.id ? user_p.permission : false)[0]
+        setUserInfo({...userInfo, workspace_id: workspace_id, permission: permission});
+        setWsInfo({...wsInfo, name: name});
       })
     })
   }, [userInfo.workspace_id])
