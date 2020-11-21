@@ -109,6 +109,8 @@ export default function EditWorkspace(props) {
 			<Card>
 				<h2 id="">Edit Workspace</h2>
 				<div>
+					{/* <h1>workspace token: {props.workspace.token}</h1> */}
+
 					<TextField type="text" id="ws-input" className={classes.root}
 						label="Workspace Name"
 						multiline

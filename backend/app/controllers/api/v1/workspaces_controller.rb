@@ -49,7 +49,7 @@ class Api::V1::WorkspacesController < ApplicationController
     res_errors e.record
   end
 
-  def delete 
+  def destroy
     @wspace.destroy
     res_ok
   end
