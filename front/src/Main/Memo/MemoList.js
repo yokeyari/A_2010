@@ -40,11 +40,10 @@ function MemoList(props) {
       <Card className={classes.card}>
         {
           memos.map((memo, i) => (
-            
-            memo.parent_id==null&&(
-              <>
+
+            memo.parent_id == null && (
+              <div key={memo.id.toString()}>
                 <MemoComponent
-                  key={memo.id.toString()}
                   color={props.colorList[i]}
                   memo={memo}
                   user_id={props.user_id}
@@ -61,7 +60,7 @@ function MemoList(props) {
                   onDelete={props.onDelete}
                   onSubmit={props.onSubmit}
                 />
-              </>
+              </div>
             )
           ))
         }

@@ -53,7 +53,7 @@ function Main(props) {
     player: null,
     playing: false
   });
-  const [page, setPage] = useState({ page: { title: "", url: "" }, tags: [] });
+  const [page, setPage] = useState({ title: "", url: "", tags: [] });
   const [isLoading, setIsLoading] = useState(false);
   const [colorList, setColorList] = useState([]);
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
@@ -68,11 +68,11 @@ function Main(props) {
     MemoAPI.getMemoIndex(page_id).then(json => {
       setMemos(json);
       //これがないとメモ以外が即座に更新されない
-      PageApi.getPage(page_id).then(res=> {
+      PageApi.getPage(page_id).then(res => {
         res.json().then(page => {
           setIsLoading(false);
           setPage({ ...page });
-          console.log("all page ",page)
+          console.log("all page ", page)
         }
         )
       })
@@ -119,8 +119,6 @@ function Main(props) {
 
   function handleChangeTitle(title) {
     // post server
-    console.log({ tags: page.tags, page: { ...page, title: title } });
-    // setPage({tags:page.tags,page:{...page,title:title}});
     // withUpdate(PageApi.updatePage({ url: page.url, title: title, id: page_id }));
   }
 
