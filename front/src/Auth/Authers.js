@@ -85,6 +85,14 @@ class PageAuther extends BaseAuther {
   constructor(user) {
     super(user);
   }
+  canRead = (target) => {
+    if(this.user.workspace_id=="home"){
+      return (target.workspace_id==null);
+    }else{
+      return this.calcAuth(target, 'read')
+    }
+    
+  }
 }
 
 class WSAuther extends BaseAuther {
@@ -95,4 +103,4 @@ class WSAuther extends BaseAuther {
 
 
 
-export { MemoAuther,PageAuther,WSAuther };
+export { MemoAuther, PageAuther, WSAuther };

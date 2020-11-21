@@ -25,6 +25,7 @@ import SearchForm from './SeachForm';
 import SelectWorkspace from '../Workspace/SelectWorkspace';
 import UserInfoContext from '../context'
 import NewPage from '../NewPage/NewPage';
+import {PageAuther} from '../Auth/Authers';
 
 const pageDataSource = new PageDataSource();
 const workspaceDataSource = new WorkspaceDataSource();
@@ -48,10 +49,7 @@ function Home(props) {
   const classes = useStyles();
   const [searchTag, setSearchTag] = useState('all');
 
-  const handleTagChange = (event) => {
-    setSearchTag(event.target.value);
-  };
-
+  const pageAuther = new PageAuther(user);
 
   const tags = Array.from((pages => {
     let tags = new Set();
@@ -60,6 +58,12 @@ function Home(props) {
     })
     return tags
   })(state.pages));
+
+  const pages = state.pages.map(page=>{
+    page.auth = pageAuther.makeAuth(page);
+    return page
+  }).filter(p=>p.auth.canRead);
+
 
 
   const loadPages = () => {
@@ -102,6 +106,10 @@ function Home(props) {
     doSomething.then(() => { loadPages() })
   }
 
+  const handleTagChange = (event) => {
+    setSearchTag(event.target.value);
+  };
+
   // const handleChangeSeachForm = (text) => {
   //   setState({ ...state, search_word: text })
   // }
@@ -124,7 +132,7 @@ function Home(props) {
   }
   const pageListsWithTag = filtered_tag.map(tag => {
     let filteredpages = [];
-    state.pages.forEach(page => (
+    pages.forEach(page => (
       page.tags.forEach(e => (
         tag == e.text && filteredpages.push(page)
       ))
@@ -170,7 +178,7 @@ function Home(props) {
 
       {isTagMode ?
         pageListsWithTag
-        : <PageList pages={state.pages} withUpdate={withUpdate} />
+        : <PageList pages={pages} withUpdate={withUpdate} />
       }
 
 
