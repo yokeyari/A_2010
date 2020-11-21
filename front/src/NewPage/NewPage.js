@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Modal from '@material-ui/core/Modal';
 import CreateIcon from '@material-ui/icons/Create';
 import { makeStyles } from '@material-ui/core/styles';
@@ -10,6 +10,10 @@ import Fab from '@material-ui/core/Fab';
 import Tooltip from '@material-ui/core/Tooltip';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
+
+import UserInfoContext from "../context";
+import { PageAuther } from "../Auth/Authers"
+
 const useStyles = makeStyles((theme) => ({
 	fab: {
 		margin: theme.spacing(2),
@@ -29,6 +33,8 @@ const useStyles = makeStyles((theme) => ({
 function NewPage() {
 	const classes = useStyles();
 	const [open, setOpen] = React.useState(false);
+	const { userInfo } = useContext(UserInfoContext);
+
 	const handleOpen = () => {
 		setOpen(true);
 	};
@@ -42,26 +48,34 @@ function NewPage() {
 		margin: '20vh 20vh',
 	};
 
-	return (
-		<div className="Create-NewPage-Modal">
-			<Tooltip title="新規メモ作成">
-				<Fab className={classes.fab} aria-label="新規作成" variant="round" color="primary" onClick={handleOpen}>
-					<AddIcon fontSize="large" />
-				</Fab>
-			</Tooltip>
-			<Modal
-				open={open}
-				onClose={handleClose}
-				aria-labelledby="simple-modal-title"
-				aria-describedby="simple-modal-description"
-			>
-				<Fade in={open}>
-					<div style={modalStyle}>
-						<NewPageForm onClose={handleClose} />
-					</div>
-				</Fade>
-			</Modal>
-		</div>
-	);
+	const pageAuther = new PageAuther(userInfo);
+
+	if (pageAuther.canCreate == false) {
+		return null;
+	} else {
+		return (
+			<div className="Create-NewPage-Modal">
+				<Tooltip title="新規メモ作成">
+					<Fab className={classes.fab} aria-label="新規作成" variant="round" color="primary" onClick={handleOpen}>
+						<AddIcon fontSize="large" />
+					</Fab>
+				</Tooltip>
+				<Modal
+					open={open}
+					onClose={handleClose}
+					aria-labelledby="simple-modal-title"
+					aria-describedby="simple-modal-description"
+				>
+					<Fade in={open}>
+						<div style={modalStyle}>
+							<NewPageForm onClose={handleClose} />
+						</div>
+					</Fade>
+				</Modal>
+			</div>
+		);
+	}
+
+
 }
 export default NewPage;

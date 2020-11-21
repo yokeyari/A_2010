@@ -25,7 +25,7 @@ class BaseAuther {
         break;
       case "sup":
         this.default = {
-          read: PERM.ALL, create: PERM.ALL, edit: PERM.ALL, delete: PERM.ALL
+          read: PERM.ALL, create: PERM.ALL, edit: PERM.OWN, delete: PERM.OWN
         }
         break;
       case "general":
@@ -40,6 +40,7 @@ class BaseAuther {
         }
     }
   }
+
 
   calcAuth = (target, action) => {
     if (target == null) target = this.target;
@@ -97,6 +98,9 @@ class MemoAuther extends BaseAuther {
 class PageAuther extends BaseAuther {
   constructor(user) {
     super(user);
+    if(user.level=="general"){
+      this.default = {...this.default,create:PERM.NO}
+    }
   }
   canRead = (target) => {
     if(this.user.workspace_id=="home"){
@@ -104,7 +108,10 @@ class PageAuther extends BaseAuther {
     }else{
       return this.calcAuth(target, 'read')
     }
-    
+  }
+
+  canCreate = () => {
+    return this.default['create'] >= PERM.ALL
   }
 }
 
