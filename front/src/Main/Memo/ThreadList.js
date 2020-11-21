@@ -36,9 +36,7 @@ function ThreadList(props) {
 		setReplyMode(false);
 		// console.log("MEMO",memos)
 	}
-	const children = (memos.filter((memo) => (
-		memo.parent_id === parent_memo.id
-	))).sort((a,b)=>a.id-b.id)
+	const children = memos.sort((a,b)=>a.id-b.id)
 
 
 	return (

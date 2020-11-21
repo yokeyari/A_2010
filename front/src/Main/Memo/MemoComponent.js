@@ -81,7 +81,7 @@ function MemoComponent(props) {
         multiline
         //rows={4}
         fullWidth
-        style={{ backgroundColor: props.color }}
+        style={{ backgroundColor: props.memo.color }}
         value={memo.text}
         variant="outlined"
         InputProps={{

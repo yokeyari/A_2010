@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect, useContext, memo } from 'react'
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box'
 import Select from "@material-ui/core/Select";
@@ -65,31 +65,29 @@ function Main(props) {
   //const page_id = page_id;
 
   useEffect(() => {
-    MemoAPI.getMemoIndex(page_id).then(json => {
-      setMemos(json);
-      //これがないとメモ以外が即座に更新されない
-      PageApi.getPage(page_id).then(res => {
-        res.json().then(page => {
-          setIsLoading(false);
-          setPage({ ...page });
-          console.log("all page ", page)
-        }
-        )
-      })
+    PageApi.getPage(page_id).then(res => {
+      res.json().then(page => {
+        console.log(page)
+        setPage({ ...page });
+        setMemos(page.memos)
+        setIsLoading(false);
+      }
+      )
     })
   }, [reloader, page_id])
 
   useEffect(() => {
     // 本番用 要API確認
-    workspaceApi.getWorkspace(workspace_id).then(res => {
-      res.json().then(workspace => {
-        console.log("get workspace and permission", workspace);
-        // 後でログインユーザーのワークスペースの権限だけもらうAPIを用意する
-        const permission = workspace.users.map(user_p => user_p.user.id == userInfo.id ? user_p.permission : false)[0]
-        setUserInfo({ ...userInfo, workspace_id: (workspace_id ? workspace_id : "home"), permission: permission });
+    if (workspace_id) {
+      workspaceApi.getWorkspace(workspace_id).then(res => {
+        res.json().then(workspace => {
+          console.log("get workspace and permission", workspace);
+          // 後でログインユーザーのワークスペースの権限だけもらうAPIを用意する
+          const permission = workspace.users.map(user_p => user_p.user.id == userInfo.id ? user_p.permission : false)[0]
+          setUserInfo({ ...userInfo, workspace_id: (workspace_id ? workspace_id : "home"), permission: permission });
+        })
       })
-    })
-
+    }
     // ここでタイトルなどの読み込み
     setIsLoading(true);
     PageApi.getPage(page_id).then(res => {
@@ -135,35 +133,33 @@ function Main(props) {
 
   function changeMemoColor(event) {
     const mode = event.target.value;
-    const tmp_memos = memos.memos;
-    let text_list = [];
-    for (let i = 0; i < tmp_memos.length; i++) {
-      console.log(tmp_memos[i].text);
-      text_list.push(tmp_memos[i].text);
-    }
-    const np_scores = BertApi.getSentment(text_list).then(res => {
+    const text_list = memos.map(t => t.text);
+    BertApi.getSentment(text_list).then(res => {
       console.log(res);
-      let tmp_colorList = [];
-      if (mode === "positive") {
-        tmp_colorList = res.map((np) => {
+
+      const calcColorFromSentiment = (mode, np) => {
+        if (mode === "positive") {
           if (np.positiveness > 1.0) {
             return "#FFB300";
-            // return "#FFE4C4"
           } else if (np.positiveness > 0.5) {
-            // return "#E6EE9C";
             return "#FFD54F"
           }
-        })
-      } else if (mode === "negative") {
-        tmp_colorList = res.map((np) => {
+        } else if (mode === "negative") {
           if (np.negativeness > 1.0) {
             return "#33C7FF";
           } else if (np.negativeness > 0.5) {
             return "#33F2FF";
           }
-        })
+        }
       }
-      setColorList(tmp_colorList)
+
+      var new_memos = memos.map((memo, i) => {
+        return {
+          ...memo,
+          color: calcColorFromSentiment(mode, res[i])
+        }
+      })
+      setMemos(new_memos);
     }
 
     );
@@ -275,7 +271,6 @@ function Main(props) {
               <Grid item>
                 <MemoList
                   memos={visMemos}
-                  colorList={colorList}
                   onChange={handleChange}
                   onDelete={handleDelete}
                   onSubmit={handleSubmit}

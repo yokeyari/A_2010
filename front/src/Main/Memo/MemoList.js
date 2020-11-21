@@ -39,30 +39,26 @@ function MemoList(props) {
     <>
       <Card className={classes.card}>
         {
-          memos.map((memo, i) => (
-
-            memo.parent_id == null && (
-              <div key={memo.id.toString()}>
-                <MemoComponent
-                  color={props.colorList[i]}
-                  memo={memo}
-                  user_id={props.user_id}
-                  onChange={props.onChange}
-                  onDelete={props.onDelete}
-                  onSubmit={props.onSubmit}
-                  player={player}
-                />
-                <ThreadList
-                  memos={memos}
-                  parent_memo={memo}
-                  user_id={props.user_id}
-                  onChange={props.onChange}
-                  onDelete={props.onDelete}
-                  onSubmit={props.onSubmit}
-                />
-              </div>
-            )
-          ))
+          memos.filter(m => m.parent_id == null).map(parent =>
+            <div key={parent.id.toString()}>
+              <MemoComponent
+                memo={parent}
+                user_id={props.user_id}
+                onChange={props.onChange}
+                onDelete={props.onDelete}
+                onSubmit={props.onSubmit}
+                player={player}
+              />
+              <ThreadList
+                memos={memos.filter(t => t.parent_id == parent.id)}
+                parent_memo={parent}
+                user_id={props.user_id}
+                onChange={props.onChange}
+                onDelete={props.onDelete}
+                onSubmit={props.onSubmit}
+              />
+            </div>
+          )
         }
       </Card>
     </>
