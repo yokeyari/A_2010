@@ -5,36 +5,39 @@ import UserInfoContext from '../context';
 import Main from '../Main/Main';
 import Transition from "../Transition";
 import Loading from "../Loading";
-import { PageDataSource } from '../Main/ProductionApi';
+import Workspace from '../Workspace/Workspace';
+import { WorkspaceDataSource } from '../Main/ProductionApi';
 
-const pageDataSource = new PageDataSource();
+const workspaceDataSource = new WorkspaceDataSource();
 
 export default function PageAuth(props) {
   const [isLoading, setIsLoading] = useState(true);
-  const { token, user_id, page_id } = useParams();
+  const { token } = useParams();
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
 
 
   const mode = props.mode;
-  // 将来的には閲覧のみのトークンも発行してここでモードを切り替える
+  const search_word = props.search_word;
 
   useEffect(() => {
     if (mode == "user") {
-      setUserInfo({ ...userInfo, id: user_id });
+      // setUserInfo({ ...userInfo, id: user_id });
       setIsLoading(false);
     } else {
-      pageDataSource.getPageByToken(token)
+      workspaceDataSource.getWorkspaceByToken(token)
         .then(res => {
-          console.log("not ok",res)
+          console.log("search ws by token")
           if (res.statusText == "OK") {
+            console.log("find ws",res)
             res.json()
-              .then(page => {
-                console.log("getPage", page.page);
+              .then(workspace => {
+                console.log("get workspace", workspace);
                 setIsLoading(false);
-                // setState({ ...state, to: `/${userInfo.id}/${page.page.id}`, isLoaded: true });
+                // setState({ ...state, to: `${userInfo.id}/ws/${workspace.id}`, isLoaded: true });
               })
           } else {
-            // ここにページが作れなかったときの処理
+            // ここにワークスペースがなかった時の処理
+
           }
         });
     }
@@ -47,12 +50,13 @@ export default function PageAuth(props) {
   }
   if (mode == "user") {
     return (
-
-      <Main mode="user" page_id={page_id} />
+      // modeは何もやってない
+      <Workspace mode="user" search_word={search_word} />
     )
   } else if (mode == "token") {
     return (
-      <Main mode="token" page_id={page_id} />
+      // modeはまだ何もやってない
+      <Workspace mode="token" search_word={search_word} />
     )
   }
 }
