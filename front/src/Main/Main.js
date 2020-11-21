@@ -82,15 +82,14 @@ function Main(props) {
 
   useEffect(() => {
     // 本番用 要API確認
-    // workspaceApi.getWorkspace(workspace_id).then(res => {
-    //   // console.log("-----", ws)
-    //   const ws = res.workspace;
-    //   setUserInfo({...userInfo, workspace_id: (workspace_id ? workspace_id : "home"), permission: ws.permission});
-    //   // setWsInfo({...wsInfo, name: ws.name});
-    // })
-
-    // テスト用 (permissionの更新なし)
-    setUserInfo({...userInfo, workspace_id: (workspace_id ? workspace_id : "home")});
+    workspaceApi.getWorkspace(workspace_id).then(res => {
+      res.json().then(workspace => {
+        console.log("get workspace and permission", workspace);
+        // 後でログインユーザーのワークスペースの権限だけもらうAPIを用意する
+        const permission = workspace.users.map(user_p => user_p.user.id==userInfo.id ? user_p.permission : false)[0]
+        setUserInfo({...userInfo, workspace_id: (workspace_id ? workspace_id : "home"), permission: permission});
+      })
+    })
 
     // ここでタイトルなどの読み込み
     setIsLoading(true);
@@ -111,13 +110,11 @@ function Main(props) {
     withUpdate(MemoAPI.deleteMemo(memo));
   }
   function handleChange(memo) {
-    // 要API確認
     withUpdate(MemoAPI.updateMemo(memo));
   }
 
   function handleSubmit(memo) {
     console.log(memo);
-    // 要API確認
     withUpdate(MemoAPI.createMemo(memo, page_id));
   }
 
