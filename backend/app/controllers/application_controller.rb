@@ -2,7 +2,7 @@ require 'net/https'
 
 class ApplicationController < ActionController::API
   include ActionController::Cookies
-  include Res
+  include TypicalRes
 
   GOO_LAB_URL = "https://labs.goo.ne.jp/api/keyword"
 
@@ -23,8 +23,8 @@ class ApplicationController < ActionController::API
 
   def current_user
     @user ||= User.find(session[:user_id])
-  rescue ActiveRecord::RecordNotFound => e # ユーザーが見つからない，またはsessionが保存されていない時
-    res_unauthorized session: !session[:user_id].nil?
+  rescue ActiveRecord::RecordNotFound # ユーザーが見つからない，またはsessionが保存されていない時
+    res_unauthorized
   end
 
   Rel_UAW = RelUserAndWorkspace
