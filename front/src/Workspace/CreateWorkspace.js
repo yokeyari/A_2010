@@ -49,7 +49,7 @@ export default function CreateWorkspace(props) {
 		isLoaded: false
   })
 	const { userInfo } = useContext(UserInfoContext);
-	const [users, setUsers] = useState([{ user_id: userInfo.id, permission: userInfo.permission }]);
+	const [users, setUsers] = useState([{ user_id: "", permission: "" }]);
 	const classes = useStyles();
 
 

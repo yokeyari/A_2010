@@ -43,6 +43,7 @@ const userDataSource = new UserDataSource();
 export default function Signup() {
   const classes = useStyles();
   const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordRetype, setPasswordRetype] = useState("");
@@ -61,7 +62,7 @@ export default function Signup() {
       // 本当はここにバリデーションをつける？ 
       setState({ ...state, isLoading: true });
       // userDataSource.createUser({ name, email, password, passwordRetype })
-      userDataSource.createUser({ name, email, password, password_confirmation: passwordRetype })
+      userDataSource.createUser({ name, username, email, password, password_confirmation: passwordRetype })
         .then(res => {
           if (res.statusText == "OK") {
             res.json()
@@ -108,6 +109,20 @@ export default function Signup() {
                   autoFocus
                   onChange={(e) => setName(e.target.value)}
                   value={name}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  autoComplete="fname"
+                  name="UserName"
+                  variant="outlined"
+                  required
+                  fullWidth
+                  id="UserName"
+                  label="UserName"
+                  autoFocus
+                  onChange={(e) => setUsername(e.target.value)}
+                  value={username}
                 />
               </Grid>
               <Grid item xs={12}>

@@ -166,9 +166,9 @@ export class UserDataSource {
   }
 
   //userの新規作成
-  async createUser(user_name, access_token) {
+  async createUser(user, access_token) {
     const res = await createData(
-      user_name,
+      user,
       this.API_URL,
       access_token
     );
@@ -383,8 +383,10 @@ export class WorkspaceDataSource {
     return res;
   }
 
-  async updateWorkspace(name, users) {
-    const res = createData({ name: name, users: users }, this.API_URL);
+  async updateWorkspace(workspace) {
+    const users = workspace.users.map((user_p) => { return( [user_p.user_id, user_p.permission] ) })
+    console.log(users)
+    const res = updateData({ name: workspace.name, users: users }, this.API_URL + `/${workspace.id}`);
     return res;
   }
 
@@ -405,7 +407,12 @@ export class WorkspaceDataSource {
       mode: 'cors',
     });
     return res;
-    //成功 200 {"page": page,  
+  }
+
+  async updateOwner(user_id, workspace_id) {
+    console.log(user_id, workspace_id);
+    const res = updateData({ user_id: user_id }, this.API_URL + `/${workspace_id}/owner`)
+    return res;
   }
 }
 

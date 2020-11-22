@@ -43,7 +43,9 @@ function EditWorkspaceButton(props) {
 
   const getInitFields = () => {
 	if (props.workspace && props.user_p_list) {
-		const id_p_list = props.user_p_list.map((user_p) => { return { user_id: user_p.user.id, permission: user_p.permission } })
+		let id_p_list = props.user_p_list.map((user_p) => { return { user_id: user_p.user.id, permission: user_p.permission } });
+		// owner権限のユーザーをリストから抜く
+		// id_p_list = id_p_list.filter(id_p => id_p.permission!="owner");
         setInitFields({ ...initFields, name: props.workspace.name, users: id_p_list });
 	}
 

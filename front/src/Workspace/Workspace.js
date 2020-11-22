@@ -49,7 +49,7 @@ function Workspace(props) {
       res.json().then(workspace => {
         console.log("get workspace and permission", workspace);
         // 後でログインユーザーのワークスペースの権限だけもらうAPIを用意する
-        const permission = workspace.users.map(user_p => user_p.user.id == userInfo.id ? user_p.permission : false)[0]
+        const permission = workspace.users.find(user_p => user_p.user.id==userInfo.id).permission;
         setUserInfo({ ...userInfo, workspace_id: workspace_id, permission: permission });
         setWorkspace(workspace);
         loadPages();
