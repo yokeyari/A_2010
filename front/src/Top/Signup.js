@@ -69,7 +69,7 @@ export default function Signup() {
               .then(user => {
                 console.log(user);
                 // console.log("getPage", page.page);
-                setUserInfo(user);
+                // setUserInfo(user);
                 setState({ to: `/${user.id}/`, isLoaded: true, isLoading: false });
                 // props.onClose();
               })

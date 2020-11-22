@@ -94,7 +94,7 @@ function Home(props) {
 
 
   useEffect(() => {
-    setUserInfo({ ...userInfo, workspace_id: "home", permission: "owner" });
+    // setUserInfo({ ...userInfo, workspace_id: "home", permission: "owner" });
   }, [])
 
   useEffect(() => {

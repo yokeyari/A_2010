@@ -20,7 +20,7 @@ class BaseAuther {
     switch (user.level) {
       case "owner":
         this.default = {
-          read: PERM.ALL, create: PERM.ALL, edit: PERM.ALL, delete: PERM.ALL
+          read: PERM.ALL, create: PERM.ALL, edit: PERM.OWN, delete: PERM.ALL
         }
         break;
       case "sup":
@@ -106,7 +106,11 @@ class PageAuther extends BaseAuther {
     if(this.user.workspace_id=="home"){
       return (target.workspace_id==null);
     }else{
-      return this.calcAuth(target, 'read')
+      if(target.workspace_id==this.user.workspace_id){
+        return this.calcAuth(target, 'read');
+      }else{
+        return false
+      }
     }
   }
 

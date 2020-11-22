@@ -54,7 +54,7 @@ function Workspace(props) {
   useEffect(() => {
     workspaceDataSource.getWorkspace(workspace_id).then(res => {
       res.json().then(workspace => {
-        console.log("get workspace and permission", workspace);
+        console.log("get workspace and permission", workspace,"userinfo",userInfo);
         // 後でログインユーザーのワークスペースの権限だけもらうAPIを用意する
         const permission = workspace.users.find(user_p => user_p.user.id==userInfo.id).permission;
         setUserInfo({ ...userInfo, workspace_id: workspace_id, permission: permission });
@@ -62,14 +62,14 @@ function Workspace(props) {
         loadPages();
       })
     })
-    workspaceDataSource.getWorkspaceUsers(userInfo.workspace_id).then(res => {
-      res.json().then(user_p_list => {
-        console.log("get workspace user and permission", user_p_list);
-        setUserPermissionList(user_p_list)
-        // const id_p_list = user_p_list.map((user_p) => { return { user_id: user_p.user.id, permission: user_p.permission } })
-        // setInitFields({ ...initFields, users: id_p_list });
-      })
-    })
+    // workspaceDataSource.getWorkspaceUsers(userInfo.workspace_id).then(res => {
+    //   res.json().then(user_p_list => {
+    //     console.log("get workspace user and permission", user_p_list);
+    //     setUserPermissionList(user_p_list)
+    //     // const id_p_list = user_p_list.map((user_p) => { return { user_id: user_p.user.id, permission: user_p.permission } })
+    //     // setInitFields({ ...initFields, users: id_p_list });
+    //   })
+    // })
   }, [workspace_id])
 
   useEffect(() => {

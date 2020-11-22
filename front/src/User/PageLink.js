@@ -15,6 +15,7 @@ import Button from '@material-ui/core/Button';
 import UserInfoContext from "../context";
 import Transition from "../Transition";
 import { PageDataSource } from "../Main/ProductionApi";
+import { PageAuther } from '../Auth/Authers';
 
 const pageDataSource = new PageDataSource();
 
@@ -90,6 +91,7 @@ export default function PageLink(props) {
   // const [url, setUrl] = useState("");
   // const [title, setTitle] = useState("");
   const { userInfo } = React.useContext(UserInfoContext);
+  const pageAuther = new PageAuther(userInfo);
   const page = props.page;
   const img = props.img
   const classes = useStyles();
@@ -160,7 +162,7 @@ export default function PageLink(props) {
             </Typography>
           </CardContent>
         </CardActionArea>
-        {userInfo.permission == "owner" ? <Button className={classes.button} color="secondary" startIcon={<DeleteIcon />} onClick={() => { handleDelete(page) }}></Button> : <></>}
+        {pageAuther.canDelete(page)  ? <Button className={classes.button} color="secondary" startIcon={<DeleteIcon />} onClick={() => { handleDelete(page) }}></Button> : <></>}
       </Card>
     </>
   )

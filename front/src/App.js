@@ -12,6 +12,11 @@ import Workspace from "./Workspace/Workspace";
 import Signup from './Top/Signup';
 import Auth from './Auth/Auth';
 import PageAuth from "./Auth/PageAuth";
+import UserAuth from "./Auth/UserAuth";
+import WSAuth from "./Auth/WSAuth";
+// import { WSAuther } from './Auth/Authers';
+import Main from './Main/Main';
+
 
 function App() {
   const [userInfo, setUserInfo] = useState({
@@ -19,7 +24,7 @@ function App() {
     thema: "normal",
     token: null,
     isLogin: false,
-    workspace_id: "home", 
+    workspace_id: "home",
     permission: "owner",
     endCheck: false
   })
@@ -43,34 +48,43 @@ function App() {
             <Route exact path='/page/:token'>
               <PageAuth mode="token" />
             </Route>
-            {/* <Auth> */}
-              <Switch>
-                <Route exact path='/:user_id'>
-                  <Auth>
+
+
+            <Route path='/:user_id'>
+              <UserAuth>
+                <Switch>
+                  <Route exact path='/:user_id/'>
                     <Home search_word={search_word} />
-                  </Auth>
-                </Route>
-                <Route exact path='/:user_id/ws/:workspace_id'>
-                  <Auth>
-                    <Workspace search_word={search_word} />
-                  </Auth>
-                </Route>
-                <Route exact path='/:user_id/ws/:workspace_id/:page_id'>
-                  <Auth>
-                    <PageAuth mode="user" />
-                  </Auth>
-                </Route>
-                <Route path='/:user_id/:page_id'>
-                  <Auth>
-                    <PageAuth mode="user" />
-                  </Auth>
-                </Route>
-              </Switch>
-            {/* </Auth> */}
+                  </Route>
+
+                  <Route exact path='/:user_id/:page_id'>
+                    <PageAuth mode="user" >
+                      <Main />
+                    </PageAuth>
+                  </Route>
+
+                  <Route path='/:user_id/ws/'>
+                    <WSAuth>
+                      <Switch>
+                        <Route exact path='/:user_id/ws/:workspace_id'>
+                          <Workspace search_word={search_word} />
+                        </Route>
+
+                        <Route exact path='/:user_id/ws/:workspace_id/:page_id'>
+                          <PageAuth mode="user">
+                            <Main />
+                          </PageAuth>
+                        </Route>
+                      </Switch>
+                    </WSAuth>
+                  </Route>
+                </Switch>
+              </UserAuth>
+            </Route>
+
           </Switch>
 
           <Footer />
-
         </Router>
 
       </UserInfoContext.Provider>
