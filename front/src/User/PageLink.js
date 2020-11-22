@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     justify: 'flex-end',
     alignItems: 'center',
     justifyContent: 'right',
-    
+
     //width: 400,
 
   },
@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
     //marginLeft: 'auto',
     float: 'right',
     minWidth: 120,
-    
+
   },
   card: {
     //maxWidth: 2000,
@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
     // minWidth:"25%",
     // maxWidth:"240px",
     // maxHeight: "100%",
-    minHeight:"95%",
+    minHeight: "95%",
     margin: theme.spacing(1),
     position: "relative",
     //padding: theme.spacing(2),
@@ -53,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
   media: {
     //height: 140,
     paddingTop: '56.25%',
-    
+
   },
   iconButton: {
     padding: 10,
@@ -61,7 +61,7 @@ const useStyles = makeStyles((theme) => ({
   divider: {
     height: 28,
     margin: 4,
-    
+
   },
 
   button: {
@@ -74,7 +74,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
+const PREVIEW_MEMO_MAX = 30;
+const PREVIEW_MEMO_NUM = 2;
+const PREVIEW_TAG_NUM = 4;
 
 export default function PageLink(props) {
   const PageApi = new PageDataSource();
@@ -94,7 +96,7 @@ export default function PageLink(props) {
 
 
   const handleClick = () => {
-    if (userInfo.workspace_id=="home") {
+    if (userInfo.workspace_id == "home") {
       setState({ to: `/${userInfo.id}/${page.id}`, isLoaded: true, isLoading: false })
     } else {
       setState({ to: `/${userInfo.id}/ws/${userInfo.workspace_id}/${page.id}`, isLoaded: true, isLoading: false })
@@ -130,36 +132,35 @@ export default function PageLink(props) {
 
       </Transition>
       <Card className={classes.card}>
-        <CardActionArea  onClick={handleClick}>
+        <CardActionArea onClick={handleClick}>
           <CardMedia
             className={classes.media}
             //component="img"
             image={img}
             title="動画のサムネイル"
-            
           />
           <CardContent>
             <Typography gutterBottom variant="h5" component="h2">
               {page.title}
             </Typography>
             <Typography variant="body2" color="textSecondary" component="p">
-              {page.url}
+              {/* {page.url} */}
               {
-                page.memos[0]!=undefined && (
-                <p>{page.memos[0].text}</p>
-                )
+
+                  page.memos.slice(0, PREVIEW_MEMO_NUM).map((memo, i) => (
+                    memo.text.slice(0, PREVIEW_MEMO_MAX)
+                  ))
+
               }
               {
-                page.tags[0]!=undefined && (
-                <p># {page.tags[0].text}</p>
-                )
+                page.tags.slice(0,PREVIEW_TAG_NUM).map(tag=>(
+                  "#"+tag.text+' '
+                ))
               }
             </Typography>
           </CardContent>
         </CardActionArea>
-        {(userInfo.permission=="owner" || userInfo.permission=="sup") ? 
-          <Button className={classes.button} color="secondary" startIcon={<DeleteIcon />} onClick={() => { handleDelete(page) }}></Button> 
-          : <></>}
+        {userInfo.permission == "owner" ? <Button className={classes.button} color="secondary" startIcon={<DeleteIcon />} onClick={() => { handleDelete(page) }}></Button> : <></>}
       </Card>
     </>
   )

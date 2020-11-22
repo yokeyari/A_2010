@@ -6,6 +6,7 @@ import PageList from '../User/PageList';
 import SelectWorkspace from '../Workspace/SelectWorkspace';
 import EditWorkspaceButton from '../Workspace/EditWorkspaceButton';
 import UserInfoContext from '../context'
+import {PageAuther} from '../Auth/Authers'
 
 const pageDataSource = new PageDataSource();
 const workspaceDataSource = new WorkspaceDataSource();
@@ -18,13 +19,19 @@ function Workspace(props) {
   const [userPermissionList, setUserPermissionList] = useState([]);
   const user = userInfo;
 
-  console.log(userInfo.workspace_id);
+  const pageAuther = new PageAuther(user);
+  // console.log("aa",userInfo.workspace_id);
 
   // ユーザーの権限が必要なところで呼び出す
   const checkUserPermission = () => {
     // 権限を持っていたら何もしない
     // 権限がなかったらエラー分を出すなどする
   }
+
+  const pages = state.pages.map(page=>{
+    page.auth = pageAuther.makeAuth(page);
+    return page
+  }).filter(p=>p.auth.canRead);
 
   const loadPages = () => {
     if (props.search_word == "") {
@@ -63,7 +70,7 @@ function Workspace(props) {
         // setInitFields({ ...initFields, users: id_p_list });
       })
     })
-  }, [userInfo.workspace_id])
+  }, [workspace_id])
 
   useEffect(() => {
     // setUserInfo({...userInfo,...user});
@@ -88,9 +95,9 @@ function Workspace(props) {
       <h2>{workspace.name} ({userInfo.permission})</h2>
       {/* <SearchForm onChange={handleChangeSeachForm} search_word={state.search_word}ã€€onClick={() => {handleSeach(state.search_word)}} /> */}
 
-      <SelectWorkspace />
-      {userInfo.workspace_id != "home" ? <EditWorkspaceButton workspace={workspace} user_p_list={userPermissionList} /> : <></>}
-      <PageList pages={state.pages} withUpdate={withUpdate} />
+      {/* <SelectWorkspace /> */}
+      {userInfo.workspace_id !== "home" ? <EditWorkspaceButton workspace={workspace} user_p_list={userPermissionList} /> : <></>}
+      <PageList pages={pages} withUpdate={withUpdate} />
     </div>
   );
 }

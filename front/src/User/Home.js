@@ -25,6 +25,7 @@ import SearchForm from './SeachForm';
 import SelectWorkspace from '../Workspace/SelectWorkspace';
 import UserInfoContext from '../context'
 import NewPage from '../NewPage/NewPage';
+import {PageAuther} from '../Auth/Authers';
 
 const pageDataSource = new PageDataSource();
 const workspaceDataSource = new WorkspaceDataSource();
@@ -45,16 +46,10 @@ function Home(props) {
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
   const user = userInfo;
   const [isTagMode, setTagMode] = useState(false);
-  const classes=useStyles();
-  const [searchTag, setSearchTag] = useState('');
+  const classes = useStyles();
+  const [searchTag, setSearchTag] = useState('all');
 
-  const handleChange = (event) => {
-    setSearchTag(event.target.value);
-  };
-  
-  //const handleChange = (event, newValue) => {
-    //setValue(newValue);
-  //};
+  const pageAuther = new PageAuther(user);
 
   const tags = Array.from((pages => {
     let tags = new Set();
@@ -64,44 +59,42 @@ function Home(props) {
     return tags
   })(state.pages));
 
+  const pages = state.pages.map(page=>{
+    page.auth = pageAuther.makeAuth(page);
+    return page
+  }).filter(p=>p.auth.canRead);
 
-  // const { user_id } = useParams();
-  // const user = {...userInfo,id: user_id };
 
-  // console.log("userinco",userInfo);
-  // console.log("search",props.search_word)
 
   const loadPages = () => {
 
     if (props.search_word == "") {
       // ws_id?"home"???????
-      pageDataSource.getPageIndex(user).then(pages=>{
-      // workspaceDataSource.getPageIndex("home").then(res=>{
-        if(pages===undefined){
-          
-        }else{
-          setState({...state , pages:pages})
-          console.log("----------");
-          console.log(pages);
+      pageDataSource.getPageIndex(user).then(pages => {
+        // workspaceDataSource.getPageIndex("home").then(res=>{
+        if (pages === undefined) {
+
+        } else {
+          setState({ ...state, pages: pages })
         }
       })
 
     } else {
       // ws_id?"home"???????
       pageDataSource.searchPage(user, props.search_word.split(' '), userInfo.workspace_id)
-      // workspaceDataSource.searchPage("home", props.search_word.split(' '))
-      .then(pages=>{
-        // console.log(props.search_word)
-        console.log("load page");
-        setState({...state , pages:pages});
-      })
+        // workspaceDataSource.searchPage("home", props.search_word.split(' '))
+        .then(pages => {
+          // console.log(props.search_word)
+          console.log("load page");
+          setState({ ...state, pages: pages });
+        })
     }
     // PageAPI.fetchMemos().then(json => { setState({ ...state, pages: json }) })
   }
 
 
   useEffect(() => {
-    setUserInfo({...userInfo, workspace_id: "home", permission: "owner"});
+    setUserInfo({ ...userInfo, workspace_id: "home", permission: "owner" });
   }, [])
 
   useEffect(() => {
@@ -113,90 +106,88 @@ function Home(props) {
     doSomething.then(() => { loadPages() })
   }
 
-  const handleChangeSeachForm = (text) => {
-    setState({ ...state, search_word: text })
-  }
+  const handleTagChange = (event) => {
+    setSearchTag(event.target.value);
+  };
 
-  const handleSeach = () => {
-    loadPages();
+  // const handleChangeSeachForm = (text) => {
+  //   setState({ ...state, search_word: text })
+  // }
+
+  // const handleSeach = () => {
+  //   loadPages();
+  // }
+
+  if (isTagMode) {
+    var tag_variant = "contained"
+    var normal_variant = ""
+  } else {
+    var tag_variant = "";
+    var normal_variant = "contained";
   }
-  let tag_variant="";
-  let normal_variant="contained";
-  if(isTagMode){
-    tag_variant="contained"
-    normal_variant=""
+  if (searchTag === "all") {
+    var filtered_tag = tags;
+  } else {
+    var filtered_tag = [searchTag]
   }
-  let filteredpages = [];
-  console.log("tag",tags)
-  let filtered_tag;
-  console.log("searchTag",searchTag)
-  if(searchTag==="all"){
-    filtered_tag=tags;
-  }
-  else{
-    filtered_tag=[searchTag]
-  }
-  const pageListsWithTag =
-    filtered_tag.map(tag => (
-      filteredpages = [],
+  const pageListsWithTag = filtered_tag.map(tag => {
+    let filteredpages = [];
+    pages.forEach(page => (
+      page.tags.forEach(e => (
+        tag == e.text && filteredpages.push(page)
+      ))
+    ))
+    return (
       <>
         <h1>{tag}</h1>
-        {state.pages.map(page => (
-          page.tags.map(e => (
-            tag == e.text && filteredpages.push(page),
-            <></>
-          ))
-        ))}
         <PageList pages={filteredpages} withUpdate={withUpdate} />
       </>
-    ))
-          
+    )
+  })
+
 
   return (
     <div className="User-Top">
       {/*className="User-To"*/}
       <h2 className="User-name">Welcome {userInfo.name}!</h2>
       {/* <SearchForm onChange={handleChangeSeachForm} search_word={state.search_word}　onClick={() => {handleSeach(state.search_word)}} /> */}
-      <ButtonGroup  color="primary" aria-label="outlined primary button group">
-        <Button variant={tag_variant} onClick={() => { setTagMode(true);setState({...state,search_word:""}) }}>タグごと</Button>
-        <Button variant={normal_variant} onClick={() => { setTagMode(false);setState({...state,search_word:""}) }}>作った順</Button>
-
-        
-        
+      <ButtonGroup color="primary" aria-label="outlined primary button group">
+        <Button variant={normal_variant} onClick={() => { setTagMode(false); }}>all</Button>
+        <Button variant={tag_variant} onClick={() => { setTagMode(true); }}>タグごと</Button>
       </ButtonGroup>
       {isTagMode ?
-      <FormControl className={classes.formControl}>
-      {/*InputLabel id="demo-simple-select-label">タグを検索</InputLabel>*/}
-      <Select
-        labelId="demo-simple-select-label"
-        id="demo-simple-select"
-        value={searchTag}
-        onChange={handleChange}
-        defaultValue="all"
-      >
-        <MenuItem value="all">全てを表示</MenuItem>
-        {tags.map(tag => (
-        <MenuItem value={tag}>{tag}</MenuItem>
+        <FormControl className={classes.formControl}>
+          {/*InputLabel id="demo-simple-select-label">タグを検索</InputLabel>*/}
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={searchTag}
+            onChange={handleTagChange}
+            defaultValue="all"
+          >
+            <MenuItem value="all">全てを表示</MenuItem>
+            {tags.map(tag => (
+              <MenuItem value={tag}>{tag}</MenuItem>
 
-        ))}
-      </Select>
-    </FormControl>
-    :
-    <></>}
-      <SelectWorkspace />
-   
-    {isTagMode ?
-      pageListsWithTag
-      :<PageList pages={state.pages} withUpdate={withUpdate} />
+            ))}
+          </Select>
+        </FormControl>
+        :
+        <></>}
+      {/* <SelectWorkspace /> */}
+
+      {isTagMode ?
+        pageListsWithTag
+        : <PageList pages={pages} withUpdate={withUpdate} />
       }
-    
+
 
     </div>
   );
 }
 
 export default Home
-{/**/}
+{/**/ }
 
 {/*  const newPageButton =
     <Button id="New">
@@ -208,5 +199,5 @@ export default Home
 {/*<h2 className="User-name">Welcome {"user"}!</h2>
         {newPageButton}*/}
 {/*</div>*/ }
-{/*{isTagMode ?*/}
-{/*:<PageList pages={state.pages} withUpdate={withUpdate} />}*/}
+{/*{isTagMode ?*/ }
+{/*:<PageList pages={state.pages} withUpdate={withUpdate} />}*/ }

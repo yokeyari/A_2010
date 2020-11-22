@@ -20,12 +20,12 @@ function ThreadComponent(props) {
 	const [isReplyMode, setReplyMode] = useState(false);
 	//console.log("memo", props.memo)
 	//console.log("parent_memo", props.parent)
-	console.log("名前:",userInfo.name)
+	// console.log("名前:",userInfo.name)
 	return (
 		<>
 			<Card>
-				<p> [{memo.user_id}さん]: {memo.text}</p>
-				{/*<p> [{userInfo.name}さん]: {memo.text}</p>*/}
+				<p> [{memo.user_id}]: {memo.text}</p>
+				{/* todo ここを名前にする */}
 				<Button className="delete" color="secondary" startIcon={<DeleteIcon />} onClick={() => { props.onDelete(memo) }}>delete</Button>
 				{isReplyMode ?
 					<Button className="reply" startIcon={<ReplyIcon />} onClick={() => { setReplyMode(false) }}>返信</Button>
@@ -37,11 +37,10 @@ function ThreadComponent(props) {
 					<>
 						<WriteThread
 							thread_memo={memo}
-						
 							isthread={true}
 							memo={props.parent}
 							user_id={props.user_id}
-							onSubmit={props.onSubmit}
+							onSubmit={(e)=>{setReplyMode(false);props.onSubmit(e)}}
 						/>
 						<Button onClick={() => { setReplyMode(false) }}>キャンセル</Button>
 					</>

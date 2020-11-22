@@ -420,13 +420,13 @@ export class BertDataSource {
   async getSentment(text_list) {
     let np_scores = [];
     for (let text of text_list) {
-      console.log("before", text)
+      // console.log("before", text)
       const res = await fetch(BERT_URL + `?text=${text}`, {
         mode: 'cors',
       });
-      console.log("after,", res)
+      // console.log("after,", res)
       const json = await res.json();
-      console.log(json)
+      // console.log(json)
       np_scores.push(json.body)
     }
     return np_scores;

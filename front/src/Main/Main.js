@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect, useContext, memo } from 'react'
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box'
 import Select from "@material-ui/core/Select";
@@ -28,6 +28,7 @@ import TagForm from './Tag/TagForm';
 import { MemoDataSource, PageDataSource, TagDataSource, BertDataSource, WorkspaceDataSource } from './ProductionApi';
 
 import UserInfoContext from '../context'
+import { MemoAuther } from '../Auth/Authers';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -53,44 +54,44 @@ function Main(props) {
     player: null,
     playing: false
   });
-  const [page, setPage] = useState({ page: { title: "", url: "" }, tags: [] });
+  const [page, setPage] = useState({ title: "", url: "", tags: [] });
   const [isLoading, setIsLoading] = useState(false);
   const [colorList, setColorList] = useState([]);
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
-  const [visMemos, SetVisMemos] = useState([]);
+  const [memoMode, setMemoMode] = useState('all');
   const { workspace_id } = useParams();
 
+  const memoAuther = new MemoAuther(userInfo);
+
   const page_id = props.page_id;
+
 
   //const page_id = page_id;
 
   useEffect(() => {
-    MemoAPI.getMemoIndex(page_id).then(json => {
-      // console.log(json)
-      setMemos(json);
-      SetVisMemos(json);
-      //これがないとメモ以外が即座に更新されない
-      PageApi.getPage(page_id).then(json => {
-        json.json().then(json => {
-          setIsLoading(false);
-          setPage({ ...json });
-        }
-        )
-      })
+    PageApi.getPage(page_id).then(res => {
+      res.json().then(page => {
+        console.log(page)
+        setPage({ ...page });
+        setMemos(page.memos)
+        setIsLoading(false);
+      }
+      )
     })
   }, [reloader, page_id])
 
   useEffect(() => {
     // 本番用 要API確認
-    workspaceApi.getWorkspace(workspace_id).then(res => {
-      res.json().then(workspace => {
-        console.log("get workspace and permission", workspace);
-        // 後でログインユーザーのワークスペースの権限だけもらうAPIを用意する
-        const permission = workspace.users.map(user_p => user_p.user.id==userInfo.id ? user_p.permission : false)[0]
-        setUserInfo({...userInfo, workspace_id: (workspace_id ? workspace_id : "home"), permission: permission});
+    if (workspace_id) {
+      workspaceApi.getWorkspace(workspace_id).then(res => {
+        res.json().then(workspace => {
+          console.log("get workspace and permission", workspace);
+          // 後でログインユーザーのワークスペースの権限だけもらうAPIを用意する
+          const permission = workspace.users.filter(user_p => user_p.user.id == userInfo.id ? true : false)[0].permission;
+          setUserInfo({ ...userInfo, workspace_id: (workspace_id ? workspace_id : "home"), permission: permission });
+        })
       })
-    })
-
+    }
     // ここでタイトルなどの読み込み
     setIsLoading(true);
     PageApi.getPage(page_id).then(res => {
@@ -120,8 +121,6 @@ function Main(props) {
 
   function handleChangeTitle(title) {
     // post server
-    console.log({ tags: page.tags, page: { ...page, title: title } });
-    // setPage({tags:page.tags,page:{...page,title:title}});
     // withUpdate(PageApi.updatePage({ url: page.url, title: title, id: page_id }));
   }
 
@@ -133,52 +132,38 @@ function Main(props) {
 
   function changeMemoByStatus(event) {
     const mode = event.target.value;
-    const mymemos = memos.filter(memo => memo.user_id==userInfo.id ? true : false)
-    switch (mode) {
-      case 'onlyme':
-        SetVisMemos(mymemos); break;
-      case 'pub': 
-        const public_memos = mymemos.filter(memo => memo.status=="pub" ? true : false); 
-        SetVisMemos(public_memos); break;
-      case 'pri':
-        const private_memos = mymemos.filter(memo => memo.status=="pri" ? true : false);
-        SetVisMemos(private_memos); break;
-      default:
-        SetVisMemos(memos)
-    }
+    setMemoMode(mode);
   }
 
   function changeMemoColor(event) {
     const mode = event.target.value;
-    const tmp_memos = memos.memos;
-    let text_list = [];
-    for (let i = 0; i < tmp_memos.length; i++) {
-      console.log(tmp_memos[i].text);
-      text_list.push(tmp_memos[i].text);
-    }
-    const np_scores = BertApi.getSentment(text_list).then(res => {
+    const text_list = memos.map(t => t.text);
+    BertApi.getSentment(text_list).then(res => {
       console.log(res);
-      let tmp_colorList = [];
-      if (mode === "positive") {
-        tmp_colorList = res.map((np) => {
+
+      const calcColorFromSentiment = (mode, np) => {
+        if (mode === "positive") {
           if (np.positiveness > 1.0) {
             return "#FFB300";
-            // return "#FFE4C4"
           } else if (np.positiveness > 0.5) {
-            // return "#E6EE9C";
             return "#FFD54F"
           }
-        })
-      } else if (mode === "negative") {
-        tmp_colorList = res.map((np) => {
+        } else if (mode === "negative") {
           if (np.negativeness > 1.0) {
             return "#33C7FF";
           } else if (np.negativeness > 0.5) {
             return "#33F2FF";
           }
-        })
+        }
       }
-      setColorList(tmp_colorList)
+
+      var new_memos = memos.map((memo, i) => {
+        return {
+          ...memo,
+          color: calcColorFromSentiment(mode, res[i])
+        }
+      })
+      setMemos(new_memos);
     }
 
     );
@@ -190,7 +175,23 @@ function Main(props) {
     }
   }
 
-  const VisMemoHamburger = 
+  const mymemos = memos.filter(memo => memo.user_id == userInfo.id);
+  switch (memoMode) {
+    case 'onlyme':
+      var visMemos = mymemos;
+      break;
+    case 'pub':
+      var visMemos = mymemos.filter(memo => memo.status == "pub");
+      break;
+    case 'pri':
+      var visMemos = mymemos.filter(memo => memo.status == "pri");
+      break;
+    default:
+      var visMemos = memos;
+  }
+
+
+  const VisMemoHamburger =
     (userInfo.workspace_id != "home") ?
       <Grid container direction="row" justify="center" alignItems="center">
         <Grid item>
@@ -210,8 +211,8 @@ function Main(props) {
           </FormControl>
         </Grid>
       </Grid>
-      : <></>
-  
+      : null
+
 
   return (
     <div className="Main">
@@ -240,7 +241,11 @@ function Main(props) {
                 <VideoPlayer className="" url={page.url} players={{ player, setPlayer }} />
               </Grid>
               <Grid item xs={12}>
-                <WriteMemoForm onSubmit={handleSubmit} player={player} user_id={userInfo.id} onWriting={handleWriting} onWriteEnd={handleWriteEnd} />
+                {memoAuther.canCreate(page) ?
+                  <WriteMemoForm onSubmit={handleSubmit} player={player} user_id={userInfo.id} onWriting={handleWriting} onWriteEnd={handleWriteEnd} />
+                  :
+                  null
+                }
               </Grid>
             </Grid>
           </Grid>
@@ -274,7 +279,6 @@ function Main(props) {
               <Grid item>
                 <MemoList
                   memos={visMemos}
-                  colorList={colorList}
                   onChange={handleChange}
                   onDelete={handleDelete}
                   onSubmit={handleSubmit}

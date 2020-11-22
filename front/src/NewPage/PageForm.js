@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 	input: {
 		display: 'none',
-	  },
+	},
 }
 ));
 
@@ -88,7 +88,7 @@ export default function NewPageForm(props) {
 								} else {
 									setState({ ...state, to: `/${userInfo.id}/ws/${userInfo.workspace_id}/${page.id}`, isLoaded: true });
 								}
-								
+
 								props.onClose();
 							})
 					} else {
@@ -128,7 +128,7 @@ export default function NewPageForm(props) {
 					<label htmlFor="contained-button-file">
 						<Button variant="contained" color="default" startIcon={<CloudUploadIcon />} component="span">
 							Upload
-        				</Button>
+						</Button>
 					</label>
 					<Transition to={state.to} ok={state.isLoaded}>
 						<Button className={classes.button} id="submit"
