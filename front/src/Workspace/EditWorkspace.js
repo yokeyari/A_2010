@@ -81,7 +81,7 @@ export default function EditWorkspace(props) {
 		);
 		console.log("new ownerId", newOwnerId);
 		console.log("workspace_id", userInfo.workspace_id);
-		workspaceDataSource.updateOwner({user_id: newOwnerId, workspace_id: userInfo.workspace_id})
+		workspaceDataSource.updateOwner(newOwnerId, userInfo.workspace_id)
 	}
 
 

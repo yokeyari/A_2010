@@ -410,8 +410,7 @@ export class WorkspaceDataSource {
   }
 
   async updateOwner(user_id, workspace_id) {
-    console.log(user_id, workspace_id);
-    const res = updateData({ user_id: user_id }, this.API_URL + `/${workspace_id}/owner`)
+    const res = updateData({ user_id: user_id }, this.API_URL + `/${workspace_id}/owner`);
     return res;
   }
 }

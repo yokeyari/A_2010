@@ -64,7 +64,7 @@ class Api::V1::PagesController < ApplicationController
 private
   def find_page
     @page = Page.find(params[:page_id])
-    raise if @page.user_id == @user.id || join_ws?(@user, @page.workspace)
+    raise unless @page.user_id == @user.id || join_ws?(@user, @page.workspace)
   rescue ActiveRecord::RecordNotFound => e
     res_not_found
   rescue
