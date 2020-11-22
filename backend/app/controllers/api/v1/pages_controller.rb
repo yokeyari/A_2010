@@ -5,7 +5,6 @@ class Api::V1::PagesController < ApplicationController
   # メモページ一覧とメモ一覧を返す
   def index
     res_ok @user.pages, inc: [:tags, :memos]
-    # res_ok @user, inc: {pages: [:tags, :memos]} # ユーザー情報も入れる場合
   end
 
   def show
@@ -15,13 +14,11 @@ class Api::V1::PagesController < ApplicationController
   def create
     page = Page.create!(params.permit(:user_id, :workspace_id, :url, :title))
     res_ok page, inc: {} # まだ中身ないのでincしない
-  rescue ActiveRecord::RecordInvalid => e
-    res_errors e.record
   end
 
   def update
     if @page.update(params.permit(:url, :title))
-      res_ok @page, inc: {}
+      res_ok @page, inc: [:tags, :memos]
     else
       res_errors @page
     end
@@ -42,14 +39,12 @@ class Api::V1::PagesController < ApplicationController
     
     re = internal_search(pages, params[:keywords])
     res_ok re
-  rescue ActiveRecord::RecordNotFound
-    res_not_found
   end
 
   # トークン再生成
   def reset_token
     @page.regenerate_token
-    res_ok @page, inc: {}
+    res_ok @page, inc: [:tags, :memos]
   end
 
   def share
@@ -64,11 +59,7 @@ class Api::V1::PagesController < ApplicationController
 private
   def find_page
     @page = Page.find(params[:page_id])
-    raise unless @page.user_id == @user.id || join_ws?(@user, @page.workspace)
-  rescue ActiveRecord::RecordNotFound => e
-    res_not_found
-  rescue
-    res_forbidden
+    raise MyForbidden unless @page.user_id == @user.id || join_ws?(@user, @page.workspace)
   end
 
   def internal_search(pages, keywords)

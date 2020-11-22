@@ -7,13 +7,17 @@ class ApplicationController < ActionController::API
   GOO_LAB_URL = "https://labs.goo.ne.jp/api/keyword"
   Rel_UAW = RelUserAndWorkspace
 
+  # オリジナルエラー
   class MyForbidden < Exception; end
   class MyUnauthorized < Exception; end
+  class MyOwnerChangeError < Exception; end
 
+  # 例外処理
   rescue_from ActiveRecord::RecordNotFound, with: :res_not_found
   rescue_from ActiveRecord::RecordInvalid,  with: :res_errors_record
   rescue_from MyForbidden,                  with: :res_forbidden
   rescue_from MyUnauthorized,               with: :res_unauthorized
+  rescue_from MyOwnerChangeError,           with: :res_bad_request
 
   # api に何かを投げつける
   def post_api(post_hash, url = GOO_LAB_URL)
@@ -33,7 +37,7 @@ class ApplicationController < ActionController::API
   def current_user
     @user ||= User.find(session[:user_id])
   rescue ActiveRecord::RecordNotFound # ユーザーが見つからない，またはsessionが保存されていない時
-    res_unauthorized
+    render status: 600
   end
 
   def join_ws?(user, ws)
