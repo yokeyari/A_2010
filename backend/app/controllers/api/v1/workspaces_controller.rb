@@ -1,16 +1,15 @@
 class Api::V1::WorkspacesController < ApplicationController
   before_action :current_user
-  before_action :find_workspace, except: [:index, :create]
+  before_action :find_workspace, except: [:index, :create, :join]
 
   def index
     res_ok @user, inc: {workspaces: [:workspace]}
   end
 
   def show
-    res_ok @wspace, inc: {users: [:user]}
+    res_ok @wspace, inc: {users: :user, pages: [:tags, :memos]}
   end
 
-  # ownerはparamsに含まれるかどうか？
   def create
     wspace = nil
     ActiveRecord::Base.transaction do 
@@ -20,16 +19,12 @@ class Api::V1::WorkspacesController < ApplicationController
       Rel_UAW.create!(user_id: @user.id, workspace_id: wspace_id, permission: :owner)
 
       params[:users].each do |user_id, perm| 
-        raise if perm == 'owner'
+        raise MyOwnerChangeError if perm == 'owner'
         Rel_UAW.create!(user_id: user_id, workspace_id: wspace_id, permission: perm)
       end
     end
 
-    res_ok wspace, inc: {users: [:user]}
-  rescue ActiveRecord::RecordInvalid => e
-    res_errors e.record
-  rescue 
-    res_bad_request
+    res_ok wspace, inc: {users: :user, pages: [:tags, :memos]}
   end
 
   def update
@@ -40,18 +35,12 @@ class Api::V1::WorkspacesController < ApplicationController
       params[:users].each do |user_id, perm| 
         rel = Rel_UAW.find_by(user_id: user_id, workspace_id: wspace_id)
         raise ActiveRecord::RecordNotFound if rel.nil? # 無い場合は例外処理
-        raise if perm == 'owner' || rel.permission == 'owner'
+        raise MyOwnerChangeError if perm == 'owner' || rel.permission == 'owner'
         rel.update!(permission: perm)
       end
     end
 
-    res_ok @wspace, inc: {users: [:user]}
-  rescue ActiveRecord::RecordNotFound
-    res_not_found
-  rescue ActiveRecord::RecordInvalid => e
-    res_errors e.record
-  rescue
-    res_bad_request
+    res_ok @wspace, inc: {users: :user, pages: [:tags, :memos]}
   end
 
   def destroy
@@ -60,38 +49,37 @@ class Api::V1::WorkspacesController < ApplicationController
   end
 
   def all_users
-    res_ok @wspace.rel_uaws, inc: [:user]
+    res_ok @wspace.rel_uaws, inc: :user
   end
 
   def all_pages
-    res_ok @wspace.pages, inc: [:tags, :memos]
+    render json: @wspace.pages, include: [:tags, :memos], each_serializer: FewMemoPageSerializer
   end
 
   # sessionの人がWSに参加
   def join
-    raise if params[:perm] == 'owner'
-    rel.create!(user_id: @user.id, workspace_id: @wspace.id, permission: params[:perm])
-    res_ok @wspace, inc: {users: [:user]}
-  rescue ActiveRecord::RecordInvalid => e
-    res_errors e.record
-  rescue
-    res_bad_request
+    wspace = Workspace.find(params[:workspace_id])
+    raise MyOwnerChangeError if params[:perm] == 'owner'
+    rel.create!(user_id: @user.id, workspace_id: wspace.id, permission: params[:perm])
+    res_ok wspace, inc: {users: :user, pages: [:tags, :memos]}
   end
 
   def join_users
     # 1つでも追加できなければ巻き戻って例外発生
     Rel_UAW.transaction do
       params[:users].each do |user_id, perm|
-        raise if perm == 'owner'
+        raise MyOwnerChangeError if perm == 'owner'
         Rel_UAW.create!(user_id: user_id, workspace_id: @wspace.id, permission: perm)
       end
     end
 
-    res_ok @wspace, inc: {users: [:user]}
-  rescue ActiveRecord::RecordInvalid => e
-    res_errors e.record
-  rescue
-    res_bad_request
+    res_ok @wspace, inc: {users: :user, pages: [:tags, :memos]}
+  end
+
+  def quit
+    raise MyOwnerChangeError if @rel.permission == 'owner'
+    @rel.destroy!
+    res_ok
   end
 
   def quit_users
@@ -99,49 +87,39 @@ class Api::V1::WorkspacesController < ApplicationController
       params[:user].each do |user_id|
         rel = Rel_UAW.find_by(user_id: user_id, workspace_id: @wspace.id)
         raise ActiveRecord::RecordNotFound if rel.nil?
-        rel.destroy
+        raise MyOwnerChangeError if rel.permission == 'owner'
+        rel.destroy!
       end
     end
 
-    res_ok 
-  rescue ActiveRecord::RecordNotFound
-    res_not_found
+    res_ok @wspace, inc: {users: :user, pages: [:tags, :memos]}
   end
 
   def change_owner
-    if @rel.permission != 'owner'
+    if @rel.permission != 'owner' || @user.id == params[:user_id]
       res_bad_request
     else
-      # 自分自信を指定した時例外
       user2 = User.find(params[:user_id])
       rel2 = join_ws?(user2, @wspace)
-      raise ActiveRecord::RecordNotFound if rel2.nil?
+      raise MyOwnerChangeError if rel2.nil?
 
       Rel_UAW.transaction do
-        @rel.update!(permission: 'general')
+        @rel.update!(permission: 'sup')
         rel2.update!(permission: 'owner')
       end
-      res_ok @wspace, inc: {users: [:user]}
+      res_ok @wspace, inc: {users: :user, pages: [:tags, :memos]}
     end
-  rescue ActiveRecord::RecordNotFound
-    res_not_found
-  rescue ActiveRecord::RecordInvalid => e
-    res_errors e.record
   end
 
   def reset_token
     @wspace.regenerate_token
-    res_ok @wspace, inc: {}
+    res_ok @wspace, inc: {users: :user, pages: [:tags, :memos]}
   end
 
 private
   def find_workspace
     @wspace = Workspace.find(params[:workspace_id])
     @rel = join_ws?(@user, @wspace)
-    raise if @rel.nil?
-  rescue ActiveRecord::RecordNotFound
-    res_not_found 
-  rescue
-    res_forbidden
+    raise MyForbidden if @rel.nil?
   end
 end

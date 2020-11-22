@@ -11,9 +11,8 @@ class Api::V1::AuthesController < ApplicationController
     if user.nil? # ユーザーがいない
       res_not_found
     elsif user.authenticate(params[:password])
-      reset_session
       session[:user_id] = user.id
-      res_ok user, inc: {}
+      res_ok user, inc: {workspaces: :workspace, pages: [:tags, :memos]}
     else # パスワードが違う
       res_unauthorized
     end
@@ -31,9 +30,8 @@ class Api::V1::AuthesController < ApplicationController
     # userが無い場合は新規作成
     user ||= User.create!(name: params[:name], provider: 'google', external_id: google_user_id, username: google_username)
 
-    reset_session
     session[:user_id] = user.id
-    res_ok user, inc: {}
+    res_ok user, inc: {workspaces: :workspace, pages: [:tags, :memos]}
   rescue GoogleApis::ServerError => e # tokeninfoの失敗例外，リトライ推奨
     res_bad_request
   rescue GoogleApis::ClientError => e # tokeninfoの失敗例外，リトライ非推奨，バグの存在？
@@ -45,7 +43,7 @@ class Api::V1::AuthesController < ApplicationController
   end
 
   def islogin
-    res_ok @user, inc: {}
+    res_ok @user, inc: {workspaces: :workspace, pages: [:tags, :memos]}
   end
 
   def logout
