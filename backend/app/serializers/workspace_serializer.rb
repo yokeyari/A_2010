@@ -1,5 +1,9 @@
 class WorkspaceSerializer < ActiveModel::Serializer
   attributes :id, :name, :token
-  has_many :users # alias of rel_user_and_workspaces
-  has_many :pages
+  has_many :users
+  has_many :pages, each_serializer: FewMemoPageSerializer
+
+  def users
+    object.rel_uaws
+  end
 end

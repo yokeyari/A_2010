@@ -112,6 +112,7 @@ class Api::V1::WorkspacesController < ApplicationController
     if @rel.permission != 'owner'
       res_bad_request
     else
+      # 自分自信を指定した時例外
       user2 = User.find(params[:user_id])
       rel2 = join_ws?(user2, @wspace)
       raise ActiveRecord::RecordNotFound if rel2.nil?
