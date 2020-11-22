@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_17_060656) do
+ActiveRecord::Schema.define(version: 2020_11_21_114803) do
 
   create_table "memos", force: :cascade do |t|
     t.integer "page_id", null: false
@@ -61,13 +61,15 @@ ActiveRecord::Schema.define(version: 2020_11_17_060656) do
     t.string "password_digest"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["email", "provider", "external_id"], name: "index_users_on_email_and_provider_and_external_id", unique: true
+    t.string "username"
+    t.index ["email", "provider", "external_id", "username"], name: "index_users_on_email_and_provider_and_external_id_and_username", unique: true
   end
 
   create_table "workspaces", force: :cascade do |t|
     t.string "name", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "token"
   end
 
   add_foreign_key "memos", "pages"

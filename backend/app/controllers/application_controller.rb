@@ -5,6 +5,10 @@ class ApplicationController < ActionController::API
   include TypicalRes
 
   GOO_LAB_URL = "https://labs.goo.ne.jp/api/keyword"
+  Rel_UAW = RelUserAndWorkspace
+
+  #rescue_from ActiveRecord::RecordNotFound, :res_not_found
+  #rescue_from ActiveRecord::RecordInvalid, :res_errors
 
   # api に何かを投げつける
   def post_api(post_hash, url = GOO_LAB_URL)
@@ -27,5 +31,7 @@ class ApplicationController < ActionController::API
     res_unauthorized
   end
 
-  Rel_UAW = RelUserAndWorkspace
+  def join_ws?(user, ws)
+    user && ws && Rel_UAW.find_by(user_id: user.id, workspace_id: ws.id)
+  end
 end

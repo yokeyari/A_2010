@@ -9,6 +9,7 @@ class User < ApplicationRecord
   has_secure_password validations: false
   validates :name, presence: true, length: {maximum: 30}
   enum provider: {own: 0, google: 1}
+  validates :username, presence: true, length: {maximum: 100}, uniqueness: true
 
   # google アカウントの時の
   with_options if: :google? do
@@ -22,7 +23,6 @@ class User < ApplicationRecord
   end
 
   alias rel_uaws rel_user_and_workspaces
-  alias workspaces rel_user_and_workspaces
 
 private
   def fill_null

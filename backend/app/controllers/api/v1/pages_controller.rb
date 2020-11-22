@@ -64,8 +64,11 @@ class Api::V1::PagesController < ApplicationController
 private
   def find_page
     @page = Page.find(params[:page_id])
+    raise unless @page.user_id == @user.id || join_ws?(@user, @page.workspace)
   rescue ActiveRecord::RecordNotFound => e
     res_not_found
+  rescue
+    res_forbidden
   end
 
   def internal_search(pages, keywords)
@@ -82,7 +85,7 @@ private
       c = keywords.any? {|keyword| page.title.include?(keyword)}
 
       next if a.empty? && b.empty? && !c
-      re << page.attributes.merge(memos: a, tags: b)
+      re << page.attributes.merge(memos: a, tags: page.tags)
     end
     re
   end

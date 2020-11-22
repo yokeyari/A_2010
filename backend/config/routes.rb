@@ -11,8 +11,11 @@ Rails.application.routes.draw do
       get 'ws/:workspace_id/users',    to: 'workspaces#all_users'
       get 'ws/:workspace_id/pages',    to: 'workspaces#all_pages'
       post 'ws',                       to: 'workspaces#create'
+      post 'ws/:workspace_id',         to: 'workspaces#join'
       post 'ws/:workspace_id/users',   to: 'workspaces#join_users'
       patch 'ws/:workspace_id',        to: 'workspaces#update'
+      patch 'ws/:workspace_id/token',  to: 'workspaces#reset_token'
+      patch 'ws/:workspace_id/owner',  to: 'workspaces#change_owner'
       delete 'ws/:workspace_id',       to: 'workspaces#destroy'
       delete 'ws/:workspace_id/users', to: 'workspaces#quit_users'
       
@@ -22,9 +25,9 @@ Rails.application.routes.draw do
       patch 'users/:user_id',  to: 'users#update'
       delete 'users/:user_id', to: 'users#destroy'
 
-      get  'pages',                 to: 'pages#index'
+      get 'pages',                  to: 'pages#index'
       get 'pages/share',            to: 'pages#share'
-      get  'pages/:page_id',        to: 'pages#show'
+      get 'pages/:page_id',         to: 'pages#show'
       post 'pages',                 to: 'pages#create'
       post 'pages/search',          to: 'pages#search'
       patch 'pages/:page_id',       to: 'pages#update'
@@ -34,8 +37,8 @@ Rails.application.routes.draw do
       get 'tags',            to: 'tags#index'
       get 'tags/automate',   to: 'tags#automate'
       post 'tags',           to: 'tags#create'
-      delete 'tags/:tag_id', to: 'tags#destroy'
       patch 'tags/:tag_id',  to: 'tags#update'
+      delete 'tags/:tag_id', to: 'tags#destroy'
 
       get 'memos',             to: 'memos#index'
       post 'memos',            to: 'memos#create'
