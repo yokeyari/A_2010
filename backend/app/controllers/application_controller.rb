@@ -41,7 +41,7 @@ class ApplicationController < ActionController::API
     @bug_bug_bug = 0
     @user ||= User.find(session[:user_id])
   rescue ActiveRecord::RecordNotFound # ユーザーが見つからない，またはsessionが保存されていない時
-    render json: 1, status: 600
+    render status: 600
   end
 
   def set_bug_bug_bug
