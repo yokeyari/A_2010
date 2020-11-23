@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :brouwse_day do
+  factory :browse_day do
     
   end
 end

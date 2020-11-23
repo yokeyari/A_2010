@@ -1,6 +1,6 @@
-class CreateBrouwseDays < ActiveRecord::Migration[6.0]
+class CreateBrowseDays < ActiveRecord::Migration[6.0]
   def change
-    create_table :brouwse_days do |t|
+    create_table :browse_days do |t|
       t.references :user, foreign_key: true, index: false, null: false
       t.references :page, foreign_key: true, index: false, null: false
       t.integer :day, null: false
@@ -11,6 +11,6 @@ class CreateBrouwseDays < ActiveRecord::Migration[6.0]
       t.timestamps
     end
 
-    add_index :brouwse_days, [:user_id, :page_id, :day], unique: true
+    add_index :browse_days, [:user_id, :page_id, :day], unique: true
   end
 end

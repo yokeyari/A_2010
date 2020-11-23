@@ -12,7 +12,7 @@
 
 ActiveRecord::Schema.define(version: 2020_11_23_073522) do
 
-  create_table "brouwse_days", force: :cascade do |t|
+  create_table "browse_days", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "page_id", null: false
     t.integer "day", null: false
@@ -21,7 +21,7 @@ ActiveRecord::Schema.define(version: 2020_11_23_073522) do
     t.integer "total_else", default: 0, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["user_id", "page_id", "day"], name: "index_brouwse_days_on_user_id_and_page_id_and_day", unique: true
+    t.index ["user_id", "page_id", "day"], name: "index_browse_days_on_user_id_and_page_id_and_day", unique: true
   end
 
   create_table "browse_times", force: :cascade do |t|
@@ -96,8 +96,8 @@ ActiveRecord::Schema.define(version: 2020_11_23_073522) do
     t.string "token"
   end
 
-  add_foreign_key "brouwse_days", "pages"
-  add_foreign_key "brouwse_days", "users"
+  add_foreign_key "browse_days", "pages"
+  add_foreign_key "browse_days", "users"
   add_foreign_key "browse_times", "pages"
   add_foreign_key "browse_times", "users"
   add_foreign_key "memos", "pages"
