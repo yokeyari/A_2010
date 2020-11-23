@@ -30,6 +30,7 @@ import { MemoDataSource, PageDataSource, BertDataSource, WorkspaceDataSource } f
 import UserInfoContext from '../context'
 import { MemoAuther } from '../Auth/Authers';
 import Analytics from '../Analytics/Analytics';
+import useInterval from 'use-interval';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -61,33 +62,37 @@ function Main(props) {
   const [colorList, setColorList] = useState([]);
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
   const [memoMode, setMemoMode] = useState('all');
+  const [isWriting, setIsWriting] = useState(0);
   const { workspace_id } = useParams();
 
   const memoAuther = new MemoAuther(userInfo);
   const page_id = props.page_id;
 
+  
   // For Analytics
-  var dayTime = new Date();
-  var writing = 0;
+  useInterval(() => {
+    var dayTime = new Date();
+    var nowState;
+    if (player.playing == true){nowState = 'Playing'}
+    else if(isWriting == 1){nowState = 'Writing'}
+    else{nowState = 'Pausing'}
+    console.log({
+          page_id: page.id,
+          user_id: page.user_id,
+          state: nowState,
+          time: player.time,
+          dayTime: (dayTime.getMonth()+1) + '/' + dayTime.getDate(),
+        });
+    // APIできたら有効化
+    // PageApi.AnalyticsPage({
+    //   page_id: page.id,
+    //   user_id: page.user_id,
+    //   state: nowState,
+    //   time: player.time,
+    //   dayTime: (dayTime.getMonth()+1) + '/' + dayTime.getDate(),
+    // });
 
-  function startInterval() {
-    setInterval(() => {
-      var userState;
-      if (player.playing == true){userState = 'Playing'}
-      else if(writing == 1){userState = 'Writing'} //writingの判定がうまくいってないかも
-      else{userState = 'Pausing'}
-
-      // APIができたら有効化して
-      // PageApi.AnalysticPage(
-      //   {
-      //     page_id: page.id,
-      //     user_id: page.user_id,
-      //     state: userState,
-      //     time: player.time,
-      //     dayTime: (dayTime.getMonth()+1) + '/' + dayTime.getDate(),
-      //   });
-    }, 5000);
-  }
+  }, 5000);
 
   useEffect(() => {
     PageApi.getPage(page_id).then(res => {
@@ -147,7 +152,7 @@ function Main(props) {
 
   function handleWriting() {
     if (true) {
-      writing =1;
+      setIsWriting(1)
       setPlayer({ ...player, playing: false })
     }
   }
@@ -193,7 +198,7 @@ function Main(props) {
 
   function handleWriteEnd() {
     if (true) {
-      writing = 0;
+      setIsWriting(0)
       setPlayer({ ...player, playing: true })
     }
   }
@@ -250,8 +255,7 @@ function Main(props) {
         <Grid item>
           <Title title={page.title} onChange={handleChangeTitle} />
         </Grid>
-        {startInterval()}
-
+        
         <Grid container className={classes.grid} direction="row">
           <Grid item xs={10} md={6}>
             <Grid container className={classes.grid} direction="column">

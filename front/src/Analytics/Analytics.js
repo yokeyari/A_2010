@@ -4,6 +4,8 @@ import React, { useState, useEffect } from 'react';
 
 export default function Analytics(props) {
 
+  const player = props.player;
+
   // テスト用
   const demoX = Array(100).fill(0).map((_, i) => (i + 1) / 10);
   const demoY = [demoX.map(v => Math.sin(v)), demoX.map(v => Math.cos(v))]
@@ -28,10 +30,6 @@ export default function Analytics(props) {
   const handleChangeGraph = (event) => {
     const graph_name = event.target.value;
     setData(data_list[graph_name]);
-  }
-
-  const handleJump = () => {
-    props.player.seekTo()
   }
 
   return (
