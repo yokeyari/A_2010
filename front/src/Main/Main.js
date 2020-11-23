@@ -25,7 +25,7 @@ import TagList from './Tag/TagList';
 import TagForm from './Tag/TagForm';
 
 //import * as MemoAPI from './LocalApi';
-import { MemoDataSource, PageDataSource, TagDataSource, BertDataSource, WorkspaceDataSource } from './ProductionApi';
+import { MemoDataSource, PageDataSource, BertDataSource, WorkspaceDataSource } from './ProductionApi';
 
 import UserInfoContext from '../context'
 import { MemoAuther } from '../Auth/Authers';
@@ -64,11 +64,30 @@ function Main(props) {
   const { workspace_id } = useParams();
 
   const memoAuther = new MemoAuther(userInfo);
-
   const page_id = props.page_id;
 
+  // For Analytics
+  var dayTime = new Date();
+  var writing = 0;
 
-  //const page_id = page_id;
+  function startInterval() {
+    setInterval(() => {
+      var userState;
+      if (player.playing == true){userState = 'Playing'}
+      else if(writing == 1){userState = 'Writing'} //writingの判定がうまくいってないかも
+      else{userState = 'Pausing'}
+
+      // APIができたら有効化して
+      // PageApi.AnalysticPage(
+      //   {
+      //     page_id: page.id,
+      //     user_id: page.user_id,
+      //     state: userState,
+      //     time: player.time,
+      //     dayTime: (dayTime.getMonth()+1) + '/' + dayTime.getDate(),
+      //   });
+    }, 5000);
+  }
 
   useEffect(() => {
     PageApi.getPage(page_id).then(res => {
@@ -128,6 +147,7 @@ function Main(props) {
 
   function handleWriting() {
     if (true) {
+      writing =1;
       setPlayer({ ...player, playing: false })
     }
   }
@@ -173,6 +193,7 @@ function Main(props) {
 
   function handleWriteEnd() {
     if (true) {
+      writing = 0;
       setPlayer({ ...player, playing: true })
     }
   }
@@ -191,7 +212,6 @@ function Main(props) {
     default:
       var visMemos = memos;
   }
-
 
   const VisMemoHamburger =
     (userInfo.workspace_id != "home") ?
@@ -220,16 +240,17 @@ function Main(props) {
     <div className="Main">
       <Loading open={isLoading}>
       </Loading>
-      
+
+      <Route exact path='/:user_id/:page_id/analytics'>
+        <Analytics page= {page} player={player}/>
+      </Route>
+
       <main className={classes.root}>
         {/* <timeContext.Provider value={{ time, setTime }}> */}
         <Grid item>
           <Title title={page.title} onChange={handleChangeTitle} />
         </Grid>
-
-        <Route exact path='/:user_id/:page_id/analytics'>
-          <Analytics page= {page} />
-        </Route>
+        {startInterval()}
 
         <Grid container className={classes.grid} direction="row">
           <Grid item xs={10} md={6}>
@@ -263,7 +284,7 @@ function Main(props) {
               <Grid container direction="row" justify="center" alignItems="center">
 
                 <Grid item >
-                  <Button component={Link} to={`/${userInfo.id}/${page.id}/analytics`}>Analystic</Button>
+                  <Button component={Link} to={`/${userInfo.id}/${page.id}/analytics` } >Analystic</Button>
                   <Box style={{ marginRight: "20px" }}>AIによるハイライト</Box>
                   <FormControl className={classes.formControl}>
                     <Select onChange={changeMemoColor}

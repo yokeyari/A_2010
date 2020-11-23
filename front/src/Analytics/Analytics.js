@@ -30,6 +30,10 @@ export default function Analytics(props) {
     setData(data_list[graph_name]);
   }
 
+  const handleJump = () => {
+    props.player.seekTo()
+  }
+
   return (
     <div>
       <h1>グラフテスト</h1>
@@ -45,7 +49,7 @@ export default function Analytics(props) {
           </Select>
         </FormControl>
       </Grid>
-      {data ? <Graph2D X={data.X} Y_list={data.Y_list} labels={data.labels} categories={data.categories} colors={data.colors} /> : null}
+      {data ? <Graph2D X={data.X} Y_list={data.Y_list} labels={data.labels} categories={data.categories} colors={data.colors}  /> : null}
     </div>
   )
 }
