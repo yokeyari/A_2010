@@ -148,7 +148,10 @@ export default function PageLink(props) {
               {
 
                   page.memos.slice(0, PREVIEW_MEMO_NUM).map((memo, i) => (
-                    memo.text.slice(0, PREVIEW_MEMO_MAX)
+                    <>
+                      {memo.text.slice(0, PREVIEW_MEMO_MAX)}
+                      <br/>
+                    </>
                   ))
 
               }

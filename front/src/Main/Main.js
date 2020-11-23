@@ -29,6 +29,8 @@ import { MemoDataSource, PageDataSource, TagDataSource, BertDataSource, Workspac
 
 import UserInfoContext from '../context'
 import { MemoAuther } from '../Auth/Authers';
+import Analytics from '../Analytics/Analytics';
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -218,11 +220,16 @@ function Main(props) {
     <div className="Main">
       <Loading open={isLoading}>
       </Loading>
+      
       <main className={classes.root}>
         {/* <timeContext.Provider value={{ time, setTime }}> */}
         <Grid item>
           <Title title={page.title} onChange={handleChangeTitle} />
         </Grid>
+
+        <Route exact path='/:user_id/:page_id/analytics'>
+          <Analytics page= {page} />
+        </Route>
 
         <Grid container className={classes.grid} direction="row">
           <Grid item xs={10} md={6}>
@@ -256,10 +263,8 @@ function Main(props) {
               <Grid container direction="row" justify="center" alignItems="center">
 
                 <Grid item >
+                  <Button component={Link} to={`/${userInfo.id}/${page.id}/analytics`}>Analystic</Button>
                   <Box style={{ marginRight: "20px" }}>AIによるハイライト</Box>
-                </Grid>
-
-                <Grid item>
                   <FormControl className={classes.formControl}>
                     <Select onChange={changeMemoColor}
                       defaultValue="None"
