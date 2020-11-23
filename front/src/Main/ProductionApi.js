@@ -287,6 +287,29 @@ export class PageDataSource {
     //res.json 成功{"pages" (page とmemoの配列)の配列}
     //res.status 成功200, 失敗400
   }
+
+  // 誰か書いておいてください
+  
+  // async AnalysticPage(user, page, ) {
+  //   const res = await fetch(this.API_URL + '/'+ page.id + '/' + 'browse_state', {
+  //     method: "POST",
+  //     credentials: 'include', //クレデンシャルを含める指定
+  //     mode: 'cors',
+  //     headers: {
+  //       'Accept': 'application/json',
+  //       'Content-Type': 'application/json'
+  //     },
+  //     body: JSON.stringify({user_id: user.id, page_id: page.id, state:state, time, daytime})
+  //     // body: JSON.stringify({ user_id: user.id, keywords: keywords, workspace_id: workspace_id })
+  //   })
+  //     // .then(res => console.log(res))
+  //     .then(res => res.json());
+  //   console.log(res.pages);
+  //   return res;
+  //   //res.json 成功{"pages" (page とmemoの配列)の配列}
+  //   //res.status 成功200, 
+  // }
+
 }
 
 //tagのapiクラス
