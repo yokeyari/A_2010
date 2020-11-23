@@ -10,7 +10,31 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_21_114803) do
+ActiveRecord::Schema.define(version: 2020_11_23_073522) do
+
+  create_table "brouwse_days", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "page_id", null: false
+    t.integer "day", null: false
+    t.integer "total_play", default: 0, null: false
+    t.integer "total_write_memo", default: 0, null: false
+    t.integer "total_else", default: 0, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id", "page_id", "day"], name: "index_brouwse_days_on_user_id_and_page_id_and_day", unique: true
+  end
+
+  create_table "browse_times", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "page_id", null: false
+    t.integer "time", null: false
+    t.integer "total_play", default: 0, null: false
+    t.integer "total_write_memo", default: 0, null: false
+    t.integer "total_else", default: 0, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id", "page_id", "time"], name: "index_browse_times_on_user_id_and_page_id_and_time", unique: true
+  end
 
   create_table "memos", force: :cascade do |t|
     t.integer "page_id", null: false
@@ -72,6 +96,10 @@ ActiveRecord::Schema.define(version: 2020_11_21_114803) do
     t.string "token"
   end
 
+  add_foreign_key "brouwse_days", "pages"
+  add_foreign_key "brouwse_days", "users"
+  add_foreign_key "browse_times", "pages"
+  add_foreign_key "browse_times", "users"
   add_foreign_key "memos", "pages"
   add_foreign_key "memos", "users"
   add_foreign_key "pages", "users"

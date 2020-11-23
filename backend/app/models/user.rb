@@ -5,6 +5,8 @@ class User < ApplicationRecord
   has_many :pages, dependent: :destroy
   has_many :memos
   has_many :rel_user_and_workspaces, dependent: :destroy
+  has_many :browse_days, dependent: :destroy
+  has_many :browse_times, dependent: :destroy
   
   has_secure_password validations: false
   validates :name, presence: true, length: {maximum: 30}

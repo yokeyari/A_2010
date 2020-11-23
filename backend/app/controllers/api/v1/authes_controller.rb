@@ -2,6 +2,7 @@ require 'google/apis/oauth2_v2'
 
 class Api::V1::AuthesController < ApplicationController
   before_action :current_user, only: [:islogin]
+  before_action :set_bug_bug_bug
 
   GoogleApis = Google::Apis
 
