@@ -12,6 +12,7 @@ import Workspace from "./Workspace/Workspace";
 import Signup from './Top/Signup';
 import Auth from './Auth/Auth';
 import PageAuth from "./Auth/PageAuth";
+import Analytics from "./Analytics/Analytics";
 
 function App() {
   const [userInfo, setUserInfo] = useState({
@@ -19,7 +20,7 @@ function App() {
     thema: "normal",
     token: null,
     isLogin: false,
-    workspace_id: "home", 
+    workspace_id: "home",
     permission: "owner",
     endCheck: false
   })
@@ -43,29 +44,30 @@ function App() {
             <Route exact path='/page/:token'>
               <PageAuth mode="token" />
             </Route>
+            <Route exact path='/analytics' component={Analytics} />
             {/* <Auth> */}
-              <Switch>
-                <Route exact path='/:user_id'>
-                  <Auth>
-                    <Home search_word={search_word} />
-                  </Auth>
-                </Route>
-                <Route exact path='/:user_id/ws/:workspace_id'>
-                  <Auth>
-                    <Workspace search_word={search_word} />
-                  </Auth>
-                </Route>
-                <Route exact path='/:user_id/ws/:workspace_id/:page_id'>
-                  <Auth>
-                    <PageAuth mode="user" />
-                  </Auth>
-                </Route>
-                <Route path='/:user_id/:page_id'>
-                  <Auth>
-                    <PageAuth mode="user" />
-                  </Auth>
-                </Route>
-              </Switch>
+            <Switch>
+              <Route exact path='/:user_id'>
+                <Auth>
+                  <Home search_word={search_word} />
+                </Auth>
+              </Route>
+              <Route exact path='/:user_id/ws/:workspace_id'>
+                <Auth>
+                  <Workspace search_word={search_word} />
+                </Auth>
+              </Route>
+              <Route exact path='/:user_id/ws/:workspace_id/:page_id'>
+                <Auth>
+                  <PageAuth mode="user" />
+                </Auth>
+              </Route>
+              <Route path='/:user_id/:page_id'>
+                <Auth>
+                  <PageAuth mode="user" />
+                </Auth>
+              </Route>
+            </Switch>
             {/* </Auth> */}
           </Switch>
 
