@@ -7,7 +7,7 @@ RSpec.describe BrowseDay, type: :model do
   end
 
   it 'is valid with user_id, page_id and day' do
-    browse_day = BrowseDay.new(user_id: @user.id, page_id: @page.id, day: Time.now)
+    browse_day = BrowseDay.new(user_id: @user.id, page_id: @page.id, day: Date.today)
     expect(browse_day).to be_valid
   end
 
@@ -21,15 +21,15 @@ RSpec.describe BrowseDay, type: :model do
   end
 
   it 'dose not allow same [user_id, page_id, day]' do
-    now = Time.now
+    now = Date.today
     BrowseDay.create(user_id: @user.id, page_id: @page.id, day: now)
     browse_day = BrowseDay.new(user_id: @user.id, page_id: @page.id, day: now)
     expect(browse_day).not_to be_valid
   end
 
   it 'is valid different day' do
-    BrowseDay.create(user_id: @user.id, page_id: @page.id, day: Time.now)
-    browse_day = BrowseDay.new(user_id: @user.id, page_id: @page.id, day: Time.now)
+    BrowseDay.create(user_id: @user.id, page_id: @page.id, day: Date.today)
+    browse_day = BrowseDay.new(user_id: @user.id, page_id: @page.id, day: Date.tomorrow)
     expect(browse_day).to be_valid
   end
 end
