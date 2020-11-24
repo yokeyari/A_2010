@@ -24,8 +24,8 @@ export default function GraphBarSentiment(props) {
       return (
         <div className="custom-tooltip" style={tooltip}>
           <p className="label">{`${label} (s)`}</p>
-          <p className="label">{`positiveness : ${payload[1].value.toFixed(1)}`}</p>
-          <p className="label">{`negativeness : ${payload[0].value.toFixed(1)}`}</p>
+          <p className="label">{`positiveness : ${payload[0].value.toFixed(1)}`}</p>
+          <p className="label">{`negativeness : ${payload[1].value.toFixed(1)}`}</p>
           <p className="desc">{data.find(record => record.xValue==label).text}</p>
         </div>
       );
@@ -53,8 +53,8 @@ export default function GraphBarSentiment(props) {
           <Legend verticalAlign="top" wrapperStyle={{ lineHeight: '40px' }} />
           <ReferenceLine y={0} stroke='#000' />
           <Brush dataKey='xValue' height={30} stroke="#8884d8" />
-          <Bar dataKey="positiveness" fill="#8884d8" onClick={handleJump} />
-          <Bar dataKey="negativeness" fill="#82ca9d" onClick={handleJump} />
+          <Bar dataKey="positiveness" fill="#82ca9d" onClick={handleJump} />
+          <Bar dataKey="negativeness" fill="#8884d8" onClick={handleJump} />
         </BarChart>
       </ResponsiveContainer>
       <h4>time</h4>

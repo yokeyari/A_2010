@@ -85,7 +85,7 @@ function Main(props) {
           user_id: page.user_id,
           state: nowState,
           time: parseInt(player.time),
-          dayTime: (dayTime.getMonth()+1) + '/' + dayTime.getDate(),
+          dayTime: dayTime.getFullYear() + '/' + (dayTime.getMonth()+1) + '/' + dayTime.getDate(),
         });
     // APIできたら有効化
     // PageApi.AnalyticsPage({
