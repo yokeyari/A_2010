@@ -19,6 +19,7 @@ class ApplicationController < ActionController::API
   rescue_from MyForbidden,                  with: :res_forbidden
   rescue_from MyUnauthorized,               with: :res_unauthorized
   rescue_from MyOwnerChangeError,           with: :res_bad_request
+  # rescue_from ArgumentError,                with: :bad_request      # enumに無い物を指定すると発生
 
   # api に何かを投げつける
   def post_api(post_hash, url = GOO_LAB_URL)
