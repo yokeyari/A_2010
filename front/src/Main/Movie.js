@@ -99,7 +99,7 @@ class Movie extends React.Component {
   handleSubmit(list, value, time) {
     //const memoTime = <Duration seconds={duration*played} />
     //this.setState({ isSubmitted: true });
-    if (value != '') {
+    if (value !== '') {
       var tmp = list.slice(0, list.length)
       tmp.push({ memo: value, time: time })
       //return tmp

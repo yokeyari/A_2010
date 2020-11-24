@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { TextField } from '@material-ui/core';
 import Card from '@material-ui/core/Card'
 import { makeStyles } from '@material-ui/core/styles';
@@ -18,10 +18,12 @@ const useStyles = makeStyles((theme) => ({
 export default function Title(props) {
   const classes = useStyles();
 
+  const title = props.title;
   return (
     <TextField className={classes.card}
-      value={props.title}
+      value={title}
       onChange={(e) => {
+        // setTitle(e.target.value)
         props.onChange(e.target.value);
       }}
       fullWidth

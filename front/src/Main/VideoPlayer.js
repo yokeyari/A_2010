@@ -20,23 +20,21 @@ import CardMedia from '@material-ui/core/CardMedia';
 import EditIcon from '@material-ui/icons/Edit';
 import Box from '@material-ui/core/Box';
 import { Autorenew } from "@material-ui/icons";
+import Container from "@material-ui/core/Container";
+import withWidth from "@material-ui/core/withWidth";
 
 
-const useStyles = (theme) => ({
+const useStyles = ((theme) => ({
   video: {
     //overflow: 'auto',
-    margin: 'auto',
-
-    //backgroundColor:"#ffffff",
-
+    //backgroundColor:"#ff3fff",
+    position: 'relative',
     //margin: theme.spacing(1),
-      width: '480px',
-      height: '270px',
-      //なんだかわからんけど、ここをこうすると広告とか関連動画とか出なくなる
-      //サイズが一定より小さいと表示しないようにしてる？
+    width: '720px',
+    height: '405px',
   },
 }
-);
+));
 
 
 
@@ -57,6 +55,20 @@ class VideoPlayer extends React.Component {
       playbackRate: 1.0,
       loop: false
     };
+  }
+
+
+  // width を変数にして scale と tarnslate を計算すればいい感じにできそう
+  reactplayerSize = (size=1.5) => {
+    //console.log(this.props.width)
+    // let size = this.props.width / 480
+    return {
+      transform:`scale(${size})`,
+      position: 'absolute',
+      top: 'calc(50% - 135px)',
+      left: 'calc(50% - 240px)',
+
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -128,7 +140,6 @@ class VideoPlayer extends React.Component {
   }
 
   ref = player => {
-    // console.log('set ref',player);
     this.player = player
     this.props.players.setPlayer({ ...this.props.players.player, player: { player } })
   }
@@ -170,31 +181,39 @@ class VideoPlayer extends React.Component {
     const playing = this.props.players.player.playing;
     const { classes } = this.props;
     return (
-      <div className={classes.video}>
-        <ReactPlayer
-          className='react-player'
-          url={url}
-          ref={this.ref}
-          controls={true}
-          onPlay={this.handlePlay}
-          volume={volume}
-          muted={muted}
-          // config={{
-          //   youtube: {
-          //     playerVars: { showinfo: 0 ,modestbranding: 1,rel:0,iv_load_policy:0 }
-          //   }
-          // }}
-          width='100%'
-          //minWidth='800px'
-          height='100%'
-          playing={playing}
-          onProgress={this.onProgress}
-          onPause={this.handlePause}
-          onBuffer={() => console.log('onBuffer')}
-        />
+      <>
+        <Container
+          className={classes.video}
+        >
+          <ReactPlayer
+            style={this.reactplayerSize()} //この関数の引数に倍率を指定できる
+            url={url}
+            ref={this.ref}
+            controls={true}
+            onPlay={this.handlePlay}
+            volume={volume}
+            muted={muted}
+            // config={{
+            //   youtube: {
+            //     playerVars: { showinfo: 0 ,modestbranding: 1,rel:0,iv_load_policy:0 }
+            //   }
+            // }}
+            // width='100%'
+            // height='100%'
+            //minWidth='800px'
 
+            //ここの値は固定(広告対策)
+            width='480px'
+            height='270px'
+
+            playing={playing}
+            onProgress={this.onProgress}
+            onPause={this.handlePause}
+            onBuffer={() => console.log('onBuffer')}
+          />
+        </Container>
         {this.renderCntrols()}
-      </div>
+      </>
     )
   }
 }
@@ -229,4 +248,4 @@ class VideoPlayer extends React.Component {
 
 // }
 
-export default withStyles(useStyles)(VideoPlayer);
+export default withWidth()(withStyles(useStyles)(VideoPlayer));
