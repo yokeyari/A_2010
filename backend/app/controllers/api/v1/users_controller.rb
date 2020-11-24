@@ -1,12 +1,13 @@
 class Api::V1::UsersController < ApplicationController
   before_action :current_user, except: [:index, :create]
+  before_action :set_bug_bug_bug
 
   def index
-    res_ok User.all, inc: {}
+    res_ok User.all, inc: {} 
   end
 
   def show
-    res_ok @user, inc: {}
+    res_ok @user, inc: {workspaces: :workspace, pages: [:tags, :memos]}
   end
 
   def create
@@ -14,13 +15,11 @@ class Api::V1::UsersController < ApplicationController
     reset_session
     session[:user_id] = user.id
     res_ok user, inc: {} # 作成時は空っぽ
-  rescue ActiveRecord::RecordInvalid => e
-    res_errors e.record
   end
 
   def update
     if @user.update(params.permit(:name, :email, :username))
-      res_ok @user, inc: {}
+      res_ok @user, inc: {workspaces: :workspace, pages: [:tags, :memos]}
     else
       res_errors @user
     end

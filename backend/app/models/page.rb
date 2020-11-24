@@ -1,6 +1,8 @@
 class Page < ApplicationRecord
   has_many :memos, dependent: :destroy
   has_many :tags, dependent: :destroy
+  has_many :browse_days, dependent: :destroy
+  has_many :browse_times, dependent: :destroy
 
   belongs_to :user, optional: true
   belongs_to :workspace, optional: true
