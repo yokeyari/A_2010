@@ -74,7 +74,7 @@ export default function Graph2D(props) {
   }
 
   return (
-    <div style={{ width: '100%', height: 430 }}>
+    <div style={{ width: '100%', height: 400 }}>
       <h4>frequency</h4>
       <ResponsiveContainer>
         <LineChart width={600} height={300} data={data}
