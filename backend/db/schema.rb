@@ -15,7 +15,7 @@ ActiveRecord::Schema.define(version: 2020_11_23_073522) do
   create_table "browse_days", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "page_id", null: false
-    t.time "day", null: false
+    t.date "day", null: false
     t.integer "total_play", default: 0, null: false
     t.integer "total_write_memo", default: 0, null: false
     t.integer "total_else", default: 0, null: false

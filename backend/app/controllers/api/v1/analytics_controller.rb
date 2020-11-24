@@ -1,5 +1,3 @@
-require 'time'
-
 class Api::V1::AnalyticsController < ApplicationController
   before_action :current_user
   # before_action :set_bug_bug_bug
@@ -7,7 +5,8 @@ class Api::V1::AnalyticsController < ApplicationController
 
   def update
     state = "total_#{params[:state]}".to_sym
-    day = Time.parse(params[:day])
+    day = Date.parse(params[:day])
+    # day = Date.today
     
     b_time = BrowseTime.find_or_create_by(user_id: @user.id, page_id: @page.id, time: params[:time])
     b_day = BrowseDay.find_or_create_by(user_id: @user.id, page_id: @page.id, day: day)
