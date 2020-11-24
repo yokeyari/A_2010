@@ -10,6 +10,7 @@ import TagList from '../Tag/TagList';
 import TagForm from '../Tag/TagForm';
 import { makeStyles } from '@material-ui/core/styles';
 import { BertDataSource, PageDataSource } from "../ProductionApi";
+import { dummy_browseDays, dummy_browseTimes, dummy_memos } from "./demoData"
 
 
 const useStyles = makeStyles((theme) => ({
@@ -51,15 +52,15 @@ export default function Analytics(props) {
   const [visUser, setVisUser] = useState("any");
   const classes = useStyles();
 
-  const states = ["total_play", "total_write_memo", "total_else"]  
+  const states = ["total_play", "total_write_memo", "total_else"]
   const memos = props.memos;
   const page = props.page;
 
 
   function createData(table, xlabel) {
     const user_ids = [...new Set(table.map(record => record.user_id))];
-    let X = [...new Set(table.map(record => record[xlabel]))]; 
-    X.sort((a,b)=>a-b);
+    let X = [...new Set(table.map(record => record[xlabel]))];
+    X.sort((a, b) => a - b);
     const Y_all = Object.fromEntries(
       Array.prototype.concat.apply([],
         states.map(state => {
@@ -87,40 +88,10 @@ export default function Analytics(props) {
 
 
   useEffect(() => {
-    // const browseTimes = [
-    //   { user_id: 1, time: 1, total_play: 5, total_write_memo: 3, total_else: 0 },
-    //   { user_id: 1, time: 2, total_play: 4, total_write_memo: 3, total_else: 0 },
-    //   { user_id: 1, time: 3, total_play: 3, total_write_memo: 3, total_else: 0 },
-    //   { user_id: 1, time: 4, total_play: 2, total_write_memo: 3, total_else: 0 },
-    //   { user_id: 1, time: 5, total_play: 1, total_write_memo: 3, total_else: 0 },
-    //   { user_id: 2, time: 1, total_play: 5, total_write_memo: 3, total_else: 0 },
-    //   { user_id: 2, time: 2, total_play: 4, total_write_memo: 3, total_else: 0 },
-    //   // {user_id: 2, time: 3, total_play: 3, total_write_memo: 3, total_else: 0},
-    //   { user_id: 2, time: 4, total_play: 2, total_write_memo: 3, total_else: 0 },
-    //   { user_id: 2, time: 5, total_play: 1, total_write_memo: 3, total_else: 0 },
-    // ]
-    // const browseDays = [
-    //   { user_id: 1, day: 1, total_play: 5, total_write_memo: 3, total_else: 0 },
-    //   { user_id: 1, day: 2, total_play: 4, total_write_memo: 3, total_else: 0 },
-    //   { user_id: 1, day: 3, total_play: 3, total_write_memo: 3, total_else: 0 },
-    //   { user_id: 1, day: 4, total_play: 2, total_write_memo: 3, total_else: 0 },
-    //   { user_id: 1, day: 5, total_play: 1, total_write_memo: 3, total_else: 0 },
-    //   { user_id: 2, day: 1, total_play: 5, total_write_memo: 3, total_else: 0 },
-    //   { user_id: 2, day: 2, total_play: 4, total_write_memo: 3, total_else: 0 },
-    //   { user_id: 2, day: 3, total_play: 3, total_write_memo: 3, total_else: 0 },
-    //   { user_id: 2, day: 4, total_play: 2, total_write_memo: 3, total_else: 0 },
-    //   { user_id: 2, day: 5, total_play: 1, total_write_memo: 3, total_else: 0 },
-    // ]
-    // const memos = [
-    //   { user_id: 1, text: "今日はいい天気", time: 0 },
-    //   { user_id: 1, text: "今日はいい天気", time: 1 },
-    //   { user_id: 1, text: "今日は悪い天気", time: 2.5 },
-    //   { user_id: 1, text: "今日は悪い天気", time: 3 },
-    //   { user_id: 2, text: "今日はいい天気", time: 2 },
-    //   { user_id: 2, text: "今日はいい天気", time: 1.8 },
-    //   { user_id: 2, text: "今日は悪い天気", time: 2.2 },
-    //   { user_id: 2, text: "今日は悪い天気", time: 3.5 },
-    // ]
+    // ダミーデータ
+    // const browseTimes = dummy_browseTimes;
+    // const browseDays = dummy_browseDays;
+    // const memos = dummy_memos;
 
     let browseTimes = [];
     let browseDays = [];
@@ -130,21 +101,30 @@ export default function Analytics(props) {
         browseTimes = json.browse_times
         browseDays = json.browse_days
 
-        const [user_ids, data_time] = createData(browseTimes, "time");
-        const [_, data_day] = createData(browseDays, "day");
+        if (browseTimes.length && browseDays.length) {
+          console.log(browseTimes, browseDays)
+          const [user_ids, data_time] = createData(browseTimes, "time");
+          const [_, data_day] = createData(browseDays, "day");
 
-        setDataList({ ...dataList, browse_times: data_time, browse_dates: data_day });
-        setUserIds(user_ids);
-        setData(dataList["browse_times"]);
+          setDataList({ ...dataList, browse_times: data_time, browse_dates: data_day });
+          setUserIds(user_ids);
+          setData(dataList["browse_times"]);
+        }
       })
     })
 
-    const text_list = memos.map(memo => memo.text)
-    BertApi.getSentment(text_list).then(res => {
-      setMemoSentiment(res.map((score, i) => {
-        return { time: memos[i].time, text: memos[i].text, positiveness: score.positiveness, negativeness: score.negativeness }
-      }))
-    })
+    console.log(memos)
+    if (memos.length) {
+      const text_list = memos.map(memo => memo.text)
+      BertApi.getSentment(text_list).then(res => {
+        setMemoSentiment(res.map((score, i) => {
+          return { user_id: memos[i].user_id, time: memos[i].time, text: memos[i].text, positiveness: score.positiveness, negativeness: score.negativeness }
+        }))
+      })
+    } else {
+      setMemoSentiment([{user_id:null, text:null, time:null, positiveness:null, negativeness:null}])
+    }
+
   }, [])
 
   const handleChangeGraph = (event) => {
@@ -166,7 +146,7 @@ export default function Analytics(props) {
 
   const body =
     graphName == "memoSentiment"
-      ? <GraphBarSentiment data={memoSentiment} onClick={props.onClick} player={player} xmin={0} xmax={player.duration} />
+      ? <GraphBarSentiment data={memoSentiment} vis_user={visUser} onClick={props.onClick} player={player} xmin={0} xmax={player.duration} />
       : data ? <Graph2D X={data.X} Y_list={data.Y_list} vis_state={visState} vis_user={visUser} onClick={props.onClick} player={player} xmin={0} xmax={player.duration} /> : null
 
   return (
@@ -213,23 +193,20 @@ export default function Analytics(props) {
             }
           </Grid>
           <Grid item>
-            {graphName != "memoSentiment" ?
-              <FormControl className={classes.form}>
-                <InputLabel id="demo-simple-select-label">user_id</InputLabel>
-                <Select onChange={handleChangeUser}
-                  defaultValue={"any"}
-                  className={""}
-                  inputProps={{ "aria-label": "Without label" }}
-                >
-                  <MenuItem value={"any"} key={0} >すべて表示</MenuItem>
-                  {
-                    userIds.map(user_id => <MenuItem value={user_id} key={user_id} >{user_id}</MenuItem>)
-                  }
-                  <MenuItem value={"sum"} key={-1} >sum</MenuItem>
-                </Select>
-              </FormControl>
-              : null
-            }
+            <FormControl className={classes.form}>
+              <InputLabel id="demo-simple-select-label">user_id</InputLabel>
+              <Select onChange={handleChangeUser}
+                defaultValue={"any"}
+                className={""}
+                inputProps={{ "aria-label": "Without label" }}
+              >
+                <MenuItem value={"any"} key={0} >すべて表示</MenuItem>
+                {
+                  userIds.map(user_id => <MenuItem value={user_id} key={user_id} >{user_id}</MenuItem>)
+                }
+                {graphName != "memoSentiment" ? <MenuItem value={"sum"} key={-1} >sum</MenuItem> : null}
+              </Select>
+            </FormControl>
           </Grid>
         </Grid>
       </Card>

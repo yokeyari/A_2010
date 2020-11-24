@@ -7,7 +7,12 @@ import React from 'react';
 
 export default function GraphBarSentiment(props) {
 
-  const data = props.data.map(memoSentiment => { return { xValue: memoSentiment.time, text: memoSentiment.text, positiveness: memoSentiment.positiveness, negativeness: memoSentiment.negativeness } });
+  const vis_user = props.vis_user;
+  const data = props.data.map(memoSentiment => { 
+    return (vis_user=="any" || vis_user==memoSentiment.user_id)
+      ? { xValue: memoSentiment.time, text: memoSentiment.text, positiveness: memoSentiment.positiveness, negativeness: memoSentiment.negativeness } 
+      : {xValue: null, text: null, positiveness: null, negativeness: null}
+    });
   const player = props.player;
 
   const CustomTooltip = ({ active, payload, label }) => {
@@ -20,7 +25,7 @@ export default function GraphBarSentiment(props) {
       paddingRight:'10px'
     }
 
-    if (active) {
+    if (active && payload && typeof(payload[0])!="undefined") {
       return (
         <div className="custom-tooltip" style={tooltip}>
           <p className="label">{`${label} (s)`}</p>

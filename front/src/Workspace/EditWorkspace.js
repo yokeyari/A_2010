@@ -58,7 +58,6 @@ export default function EditWorkspace(props) {
 	const owner_id = props.initFields.users.find(user_p => user_p.permission == "owner").user_id;
 
 	const handleSubmit = () => {
-		// console.log("aaaaaa", newOwnerId);
 
 		trackPromise(
 			workspaceDataSource.updateWorkspace({name: state.name, users: fields, id: userInfo.workspace_id})
