@@ -5,6 +5,7 @@ class ApplicationController < ActionController::API
   include TypicalRes
 
   GOO_LAB_URL = "https://labs.goo.ne.jp/api/keyword"
+  WorkSpace = Workspace
   Rel_UAW = RelUserAndWorkspace
 
   # オリジナルエラー
@@ -29,9 +30,7 @@ class ApplicationController < ActionController::API
     http.use_ssl = true
     http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 
-    res = nil
-    http.start {|h| res = h.request(req)}
-    res
+    http.request(req)
   end
 
   # bug 
