@@ -7,6 +7,7 @@ export default function Graph2D(props) {
 
   const vis_state = props.vis_state;
   const vis_user = props.vis_user;
+  const player = props.player;
   const X = props.X;
   const Y_list = Object.entries( props.Y_list ).filter(Y => {
     console.log(Y)
@@ -66,12 +67,14 @@ export default function Graph2D(props) {
   ]
 
 
-  const handleClickLine = (event) => {
-    console.log("click event", event);
+  const handleJump = (event) => {
+    //console.log(player.player.player);
+    //console.log(event);
+    player.player.player.seekTo(event.payload.name);
   }
 
   return (
-    <div style={{ width: '90%', height: 500 }}>
+    <div style={{ width: '100%', height: 430 }}>
       <h4>frequency</h4>
       <ResponsiveContainer>
         <LineChart width={600} height={300} data={data}
@@ -83,7 +86,7 @@ export default function Graph2D(props) {
           <Legend />
           {Y_list.map((Y, i) => {
             return (
-              <Line type="monotone" dataKey={Y[0]} stroke={colors[i]} activeDot={{ onClick: handleClickLine, r: 8 }} />
+              <Line type="monotone" dataKey={Y[0]} stroke={colors[i]} activeDot={ {onClick: handleJump , r: 8 }} />
             )
           })}
         </LineChart>

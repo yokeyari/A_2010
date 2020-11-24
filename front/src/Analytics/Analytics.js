@@ -1,6 +1,7 @@
 import Graph2D from "./Graph2D";
 import { Button, FormControl, InputLabel, MenuItem, Grid, Select } from '@material-ui/core';
 import React, { useState, useEffect } from 'react';
+import Card from '@material-ui/core/Card';
 
 export default function Analytics(props) {
 
@@ -123,8 +124,7 @@ export default function Analytics(props) {
   }
 
   return (
-    <div>
-      <h1>動画分析</h1>
+    <Card>
       <Grid container direction="row" justify="center" alignItems="center">
         <Grid item>
           <FormControl>
@@ -171,8 +171,8 @@ export default function Analytics(props) {
           </FormControl>
         </Grid>
       </Grid>
-      {data ? <Graph2D X={data.X} Y_list={data.Y_list} vis_state={visState} vis_user={visUser} /> : null}
+      {data ? <Graph2D X={data.X} Y_list={data.Y_list} vis_state={visState} vis_user={visUser} player={player}/> : null}
       {/* {body} */}
-    </div>
+    </Card>
   )
 }
