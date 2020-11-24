@@ -8,8 +8,8 @@ class Api::V1::AnalyticsController < ApplicationController
     day = Date.parse(params[:day])
     # day = Date.today
     
-    b_time = BrowseTime.find_or_create_by(user_id: @user.id, page_id: @page.id, time: params[:time])
-    b_day = BrowseDay.find_or_create_by(user_id: @user.id, page_id: @page.id, day: day)
+    b_time = BrowseTime.find_or_create_by!(user_id: @user.id, page_id: @page.id, time: params[:time])
+    b_day = BrowseDay.find_or_create_by!(user_id: @user.id, page_id: @page.id, day: day)
 
     b_time.increment! state, 1
     b_day.increment! state, 1
