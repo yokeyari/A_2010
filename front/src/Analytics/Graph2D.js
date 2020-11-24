@@ -17,7 +17,7 @@ export default function Graph2D(props) {
   console.log(Y_list)
   const data = Object.values(X)[0].map( (v, i) => 
     Object.assign( 
-      { name: v, r: 8 }, 
+      { xValue: v, r: 8 }, 
       Object.fromEntries( Y_list.map( Y =>  [Y[0], Y[1][i]] )) 
     )
   );
@@ -76,7 +76,7 @@ export default function Graph2D(props) {
       <ResponsiveContainer>
         <LineChart width={600} height={300} data={data}
           margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-          <XAxis dataKey="name" />
+          <XAxis dataKey="xValue" />
           <YAxis />
           <CartesianGrid strokeDasharray="3 3" />
           <Tooltip />
