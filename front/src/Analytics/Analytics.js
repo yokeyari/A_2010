@@ -17,6 +17,9 @@ const useStyles = makeStyles((theme) => ({
     height: '70%',
     //backgroundColor:"#ffffff",
     backgroundColor: "#e7ecec",
+  },
+  form: {
+    padding: '15px',
   }
 }));
 
@@ -152,14 +155,59 @@ export default function Analytics(props) {
           <Grid item>
             <Title title={page.title}/>
           </Grid>
+          
+          <Card>
+            <Grid container direction="row" justify="center" alignItems="center">
+              <Button color="primary" onClick={() => { props.onClick() }}>Back</Button>
+              <Grid item>
+                <FormControl className={classes.form}>
+                  <InputLabel id="demo-simple-select-label">graph type</InputLabel>
+                  <Select onChange={handleChangeGraph}
+                    defaultValue={"none"}
+                    className={""}
+                    inputProps={{ "aria-label": "Without label" }}
+                  >
+                    <MenuItem value={"none"} key={0} >none</MenuItem>
+                    <MenuItem value={"browse_times"} key={1} >browse time</MenuItem>
+                    <MenuItem value={"browse_dates"} key={2} >browse date</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
+              <Grid item>
+                <FormControl className={classes.form}>
+                  <InputLabel id="demo-simple-select-label">state</InputLabel>
+                  <Select onChange={handleChangeState}
+                    defaultValue={"any"}
+                    className={""}
+                    inputProps={{ "aria-label": "Without label" }}
+                  >
+                    <MenuItem value={"any"} key={0} >all</MenuItem>
+                    <MenuItem value={"total_play"} key={1} >total play</MenuItem>
+                    <MenuItem value={"total_write_memo"} key={2} >total write memo</MenuItem>
+                    <MenuItem value={"total_else"} key={3} >total else</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
+              <Grid item>
+                <FormControl className={classes.form}>
+                  <InputLabel id="demo-simple-select-label">user_id</InputLabel>
+                  <Select onChange={handleChangeUser}
+                    defaultValue={"any"}
+                    className={""}
+                    inputProps={{ "aria-label": "Without label" }}
+                  >
+                    <MenuItem value={"any"} key={0} >all</MenuItem>
+                    {
+                      userIds.map(user_id => <MenuItem value={user_id} key={user_id} >{user_id}</MenuItem>)
+                    }
+                  </Select>
+                </FormControl>
+              </Grid>
+            </Grid>
+          </Card>
+
           <Grid container className={classes.grid} direction="row">
             <Grid item xs={10} md={6}>
-              <Grid container className={classes.grid} direction="column">
-                <Grid item xs={10} md={12}>
-                  <TagList tags={page.tags}/>
-                </Grid>
-                <p> </p>
-              </Grid>
               <Grid container className={classes.grid} direction="row">
                 <Grid item xs={12}>
                   <VideoPlayer className="" url={page.url} players={{ player, setPlayer }} />
@@ -171,53 +219,7 @@ export default function Analytics(props) {
               <Grid item xs={12}>
 
                 {/* 元々のAnalytics */}
-                <Grid container direction="row" justify="center" alignItems="center">
-                  <Button color="primary" onClick={() => { props.onClick() }}>Back</Button>
-                  <Grid item>
-                    <FormControl>
-                      <InputLabel id="demo-simple-select-label">graph type</InputLabel>
-                      <Select onChange={handleChangeGraph}
-                        defaultValue={"none"}
-                        className={""}
-                        inputProps={{ "aria-label": "Without label" }}
-                      >
-                        <MenuItem value={"none"} key={0} >none</MenuItem>
-                        <MenuItem value={"browse_times"} key={1} >browse time</MenuItem>
-                        <MenuItem value={"browse_dates"} key={2} >browse date</MenuItem>
-                      </Select>
-                    </FormControl>
-                  </Grid>
-                  <Grid item>
-                    <FormControl>
-                      <InputLabel id="demo-simple-select-label">state</InputLabel>
-                      <Select onChange={handleChangeState}
-                        defaultValue={"any"}
-                        className={""}
-                        inputProps={{ "aria-label": "Without label" }}
-                      >
-                        <MenuItem value={"any"} key={0} >all</MenuItem>
-                        <MenuItem value={"total_play"} key={1} >total play</MenuItem>
-                        <MenuItem value={"total_write_memo"} key={2} >total write memo</MenuItem>
-                        <MenuItem value={"total_else"} key={3} >total else</MenuItem>
-                      </Select>
-                    </FormControl>
-                  </Grid>
-                  <Grid item>
-                    <FormControl>
-                      <InputLabel id="demo-simple-select-label">user_id</InputLabel>
-                      <Select onChange={handleChangeUser}
-                        defaultValue={"any"}
-                        className={""}
-                        inputProps={{ "aria-label": "Without label" }}
-                      >
-                        <MenuItem value={"any"} key={0} >all</MenuItem>
-                        {
-                          userIds.map(user_id => <MenuItem value={user_id} key={user_id} >{user_id}</MenuItem>)
-                        }
-                      </Select>
-                    </FormControl>
-                  </Grid>
-                </Grid>
+                
                 <Card>
                   {data ? <Graph2D X={data.X} Y_list={data.Y_list} vis_state={visState} vis_user={visUser} player={player}/> : null}
                   {/* {body} */}
@@ -227,6 +229,7 @@ export default function Analytics(props) {
               </Grid>
             </Grid>
           </Grid>
+
         </main>
   )
 }
