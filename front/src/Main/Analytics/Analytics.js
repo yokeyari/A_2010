@@ -31,25 +31,14 @@ const PageApi = new PageDataSource();
 
 export default function Analytics(props) {
 
-  const page = props.page;
-  const classes = useStyles();
   const [player, setPlayer] = useState({
     time: 0,
     player: null,
     playing: false,
     duration: null
   });
-
-  const states = ["total_play", "total_write_memo", "total_else"]
-  // テスト用
-  const demoX = { "float number": Array(100).fill(0).map((_, i) => (i + 1) / 10) };
-  const demoY = { "sin": Object.values(demoX)[0].map(v => Math.sin(v)), "cos": Object.values(demoX)[0].map(v => Math.cos(v)) }
-  const demoData = { X: demoX, Y_list: demoY }
-  const demoSentiment = [{ time: 0, positiveness: 0.5, negativeness: -0.5 }, { time: 3, positiveness: 1.2, negativeness: -0.7 }, { time: 5, positiveness: -0.5, negativeness: 1.2 }]
-
   const [dataList, setDataList] = useState(
     {
-      // demo: demoData,
       browse_times: null,
       browse_dates: null
     }
@@ -60,7 +49,12 @@ export default function Analytics(props) {
   const [graphName, setGraphName] = useState("");
   const [visState, setVisState] = useState("any");
   const [visUser, setVisUser] = useState("any");
-  // const [body, setBody] = useState(null);
+  const classes = useStyles();
+
+  const states = ["total_play", "total_write_memo", "total_else"]  
+  const memos = props.memos;
+  const page = props.page;
+
 
   function createData(table, xlabel) {
     const user_ids = [...new Set(table.map(record => record.user_id))];
@@ -117,16 +111,16 @@ export default function Analytics(props) {
     //   { user_id: 2, day: 4, total_play: 2, total_write_memo: 3, total_else: 0 },
     //   { user_id: 2, day: 5, total_play: 1, total_write_memo: 3, total_else: 0 },
     // ]
-    const memos = [
-      { user_id: 1, text: "今日はいい天気", time: 0 },
-      { user_id: 1, text: "今日はいい天気", time: 1 },
-      { user_id: 1, text: "今日は悪い天気", time: 2.5 },
-      { user_id: 1, text: "今日は悪い天気", time: 3 },
-      { user_id: 2, text: "今日はいい天気", time: 2 },
-      { user_id: 2, text: "今日はいい天気", time: 1.8 },
-      { user_id: 2, text: "今日は悪い天気", time: 2.2 },
-      { user_id: 2, text: "今日は悪い天気", time: 3.5 },
-    ]
+    // const memos = [
+    //   { user_id: 1, text: "今日はいい天気", time: 0 },
+    //   { user_id: 1, text: "今日はいい天気", time: 1 },
+    //   { user_id: 1, text: "今日は悪い天気", time: 2.5 },
+    //   { user_id: 1, text: "今日は悪い天気", time: 3 },
+    //   { user_id: 2, text: "今日はいい天気", time: 2 },
+    //   { user_id: 2, text: "今日はいい天気", time: 1.8 },
+    //   { user_id: 2, text: "今日は悪い天気", time: 2.2 },
+    //   { user_id: 2, text: "今日は悪い天気", time: 3.5 },
+    // ]
 
     let browseTimes = [];
     let browseDays = [];
@@ -172,8 +166,8 @@ export default function Analytics(props) {
 
   const body =
     graphName == "memoSentiment"
-      ? <GraphBarSentiment data={memoSentiment} onClick={props.onClick} player={player} />
-      : data ? <Graph2D X={data.X} Y_list={data.Y_list} vis_state={visState} vis_user={visUser} onClick={props.onClick} player={player} /> : null
+      ? <GraphBarSentiment data={memoSentiment} onClick={props.onClick} player={player} xmin={0} xmax={player.duration} />
+      : data ? <Graph2D X={data.X} Y_list={data.Y_list} vis_state={visState} vis_user={visUser} onClick={props.onClick} player={player} xmin={0} xmax={player.duration} /> : null
 
   return (
     <main className={classes.root}>
@@ -252,14 +246,9 @@ export default function Analytics(props) {
         <Grid item xs={10} md={6}>
           <Grid item xs={12}>
 
-            {/* 元々のAnalytics */}
-
             <Card>
-              {/* {data ? <Graph2D X={data.X} Y_list={data.Y_list} vis_state={visState} vis_user={visUser} /> : null} */}
-              {/* <GraphBarSentiment data={memoSentiment} /> */}
               {body}
             </Card>
-
 
           </Grid>
         </Grid>

@@ -77,7 +77,7 @@ export default function Graph2D(props) {
       <ResponsiveContainer>
         <LineChart width={600} height={300} data={data}
           margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-          <XAxis dataKey="xValue" />
+          <XAxis dataKey="xValue" type="number" domain={[props.xmin, props.xmax]} />
           <YAxis />
           <CartesianGrid strokeDasharray="3 3" />
           <Tooltip />

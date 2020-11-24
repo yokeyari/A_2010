@@ -47,7 +47,7 @@ export default function GraphBarSentiment(props) {
         <BarChart width={600} height={300} data={data}
           margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="xValue" />
+          <XAxis dataKey="xValue" type="number" domain={[props.xmin, props.xmax]} />
           <YAxis />
           <Tooltip content={<CustomTooltip/>}/>
           <Legend verticalAlign="top" wrapperStyle={{ lineHeight: '40px' }} />

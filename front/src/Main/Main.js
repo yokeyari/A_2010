@@ -254,7 +254,7 @@ function Main(props) {
 
       {isAnalyticsMode ?
         <Grid item xs={12}>
-          <Analytics page={page} player={player} onClick={endAnalyticsMode} />
+          <Analytics page={page} player={player} memos={memos} onClick={endAnalyticsMode} />
         </Grid>
         :
 
