@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe "UserAPI" do
+RSpec.describe "Api::V1::Users", type: :request do
   context 'not logged in' do
     it 'get all user data' do
       create(:user)
@@ -33,12 +33,26 @@ describe "UserAPI" do
       expect(response.status).to eq 200
     end
 
-    it 'get user data 1' do
+    it 'get user data' do
       get "/api/v1/users/#{@user.id}"
       json = JSON.parse(response.body)
 
       expect(response.status).to eq 200
       expect(json['name']).to eq @user.name
+    end
+
+    it 'update user data' do
+      valid_params = {name: 'huga', email: 'huga@example.com', username: 'huga'}
+      patch "/api/v1/users/#{@user.id}", params: valid_params
+      json = JSON.parse(response.body)
+
+      expect(response.status).to eq 200
+      expect(json['name']).to eq 'huga'
+    end
+
+    it 'destroy user data' do
+      expect {delete "/api/v1/users/#{@user.id}"}.to change(User, :count).by(-1)
+      expect(response.status).to eq 200
     end
   end
 end
