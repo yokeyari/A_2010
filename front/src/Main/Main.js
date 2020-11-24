@@ -250,6 +250,13 @@ function Main(props) {
       <Loading open={isLoading}>
       </Loading>
 
+      
+      {isAnalyticsMode ?
+        <Grid item xs={12}>
+          <Analytics page={page} player={player} onClick={endAnalyticsMode}/>
+        </Grid>
+        :
+
         <main className={classes.root}>
           {/* <timeContext.Provider value={{ time, setTime }}> */}
           <Grid item>
@@ -271,70 +278,54 @@ function Main(props) {
                 <Grid item xs={12}>
                   <VideoPlayer className="" url={page.url} players={{ player, setPlayer }} />
                 </Grid>
-
-                {isAnalyticsMode ?
-                  null
+                <Grid item xs={12}>
+                {memoAuther.canCreate(page) ?
+                  <WriteMemoForm onSubmit={handleSubmit} player={player} user_id={userInfo.id} onWriting={handleWriting} onWriteEnd={handleWriteEnd} />
                   :
-                  <Grid item xs={12}>
-                  {memoAuther.canCreate(page) ?
-                    <WriteMemoForm onSubmit={handleSubmit} player={player} user_id={userInfo.id} onWriting={handleWriting} onWriteEnd={handleWriteEnd} />
-                    :
-                    null
-                  }
-                  </Grid>
+                  null
                 }
+                </Grid>
               </Grid>
             </Grid>
 
             <Grid item xs={10} md={6}>
-
-              {isAnalyticsMode ?
-                <Grid item xs={12}>
-                  <Button color="primary" onClick={() => { endAnalyticsMode() }}>Back</Button>
-                  <Analytics page={page} player={player}/>
-                </Grid>
-                :
-
-                <Grid container direction="column" >
-
-                  <Grid container direction="row" justify="center" alignItems="center">
-
-                    <Grid item >
-                      <Button color="primary" onClick={() => { setAnalyticsMode(true) }}>Analytics Mode</Button>
-                      <Box style={{ marginRight: "20px" }}>AIによるハイライト</Box>
-                      <FormControl className={classes.formControl}>
-                        <Select onChange={changeMemoColor}
-                          defaultValue="None"
-                          className={classes.selectEmpty}
-                          inputProps={{ "aria-label": "Without label" }}>
-                          <MenuItem value="None">None</MenuItem>
-                          <MenuItem value="positive">ポジティブ</MenuItem>
-                          <MenuItem value="negative">ネガティブ</MenuItem>
-                        </Select>
-                      </FormControl>
-                    </Grid>
-
+              <Grid container direction="column" >
+                <Grid container direction="row" justify="center" alignItems="center">
+                  <Grid item >
+                    <Button color="primary" onClick={() => { setAnalyticsMode(true) }}>Analytics Mode</Button>
+                    <Box style={{ marginRight: "20px" }}>AIによるハイライト</Box>
+                    <FormControl className={classes.formControl}>
+                      <Select onChange={changeMemoColor}
+                        defaultValue="None"
+                        className={classes.selectEmpty}
+                        inputProps={{ "aria-label": "Without label" }}>
+                        <MenuItem value="None">None</MenuItem>
+                        <MenuItem value="positive">ポジティブ</MenuItem>
+                        <MenuItem value="negative">ネガティブ</MenuItem>
+                      </Select>
+                    </FormControl>
                   </Grid>
 
-                  {VisMemoHamburger}
-
-                  <Grid item>
-                    <MemoList
-                      memos={visMemos}
-                      onChange={handleChange}
-                      onDelete={handleDelete}
-                      onSubmit={handleSubmit}
-                      player={player}
-                      user_id={userInfo.id}
-                    />
-                  </Grid>
                 </Grid>
-              }
+
+                {VisMemoHamburger}
+
+                <Grid item>
+                  <MemoList
+                    memos={visMemos}
+                    onChange={handleChange}
+                    onDelete={handleDelete}
+                    onSubmit={handleSubmit}
+                    player={player}
+                    user_id={userInfo.id}
+                  />
+                </Grid>
+              </Grid>
             </Grid>
           </Grid>
           {/* </timeContext.Provider> */}
         </main>
-      
+      }
     </div>
   );
 }

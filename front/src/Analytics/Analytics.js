@@ -3,9 +3,33 @@ import { Button, FormControl, InputLabel, MenuItem, Grid, Select } from '@materi
 import React, { useState, useEffect } from 'react';
 import Card from '@material-ui/core/Card';
 
+import VideoPlayer from "../Main/VideoPlayer";
+import Title from '../Main/Memo/Titile'
+import TagList from '../Main/Tag/TagList';
+import TagForm from '../Main/Tag/TagForm';
+import { makeStyles } from '@material-ui/core/styles';
+
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    //padding: '2vh 1vw',
+    width: '100%',
+    height: '70%',
+    //backgroundColor:"#ffffff",
+    backgroundColor: "#e7ecec",
+  }
+}));
+
+
 export default function Analytics(props) {
 
-  const player = props.player;
+  const page=props.page;
+  const classes = useStyles();
+  const [player, setPlayer] = useState({
+    time: 0,
+    player: null,
+    playing: false
+  });
 
   const states = ["total_play", "total_write_memo", "total_else"]
   // テスト用
@@ -25,7 +49,6 @@ export default function Analytics(props) {
   const [visState, setVisState] = useState("any");
   const [visUser, setVisUser] = useState("any");
   // const [body, setBody] = useState(null);
-
 
   function createData(table, xlabel) {
     const user_ids = [...new Set(table.map(record => record.user_id))];
@@ -124,55 +147,90 @@ export default function Analytics(props) {
   }
 
   return (
-    <Card>
-      <Grid container direction="row" justify="center" alignItems="center">
-        <Grid item>
-          <FormControl>
-            <InputLabel id="demo-simple-select-label">graph type</InputLabel>
-            <Select onChange={handleChangeGraph}
-              defaultValue={"none"}
-              className={""}
-              inputProps={{ "aria-label": "Without label" }}
-            >
-              <MenuItem value={"none"} key={0} >none</MenuItem>
-              <MenuItem value={"browse_times"} key={1} >browse time</MenuItem>
-              <MenuItem value={"browse_dates"} key={2} >browse date</MenuItem>
-            </Select>
-          </FormControl>
-        </Grid>
-        <Grid item>
-          <FormControl>
-            <InputLabel id="demo-simple-select-label">state</InputLabel>
-            <Select onChange={handleChangeState}
-              defaultValue={"any"}
-              className={""}
-              inputProps={{ "aria-label": "Without label" }}
-            >
-              <MenuItem value={"any"} key={0} >all</MenuItem>
-              <MenuItem value={"total_play"} key={1} >total play</MenuItem>
-              <MenuItem value={"total_write_memo"} key={2} >total write memo</MenuItem>
-              <MenuItem value={"total_else"} key={3} >total else</MenuItem>
-            </Select>
-          </FormControl>
-        </Grid>
-        <Grid item>
-          <FormControl>
-            <InputLabel id="demo-simple-select-label">user_id</InputLabel>
-            <Select onChange={handleChangeUser}
-              defaultValue={"any"}
-              className={""}
-              inputProps={{ "aria-label": "Without label" }}
-            >
-              <MenuItem value={"any"} key={0} >all</MenuItem>
-              {
-                userIds.map(user_id => <MenuItem value={user_id} key={user_id} >{user_id}</MenuItem>)
-              }
-            </Select>
-          </FormControl>
-        </Grid>
-      </Grid>
-      {data ? <Graph2D X={data.X} Y_list={data.Y_list} vis_state={visState} vis_user={visUser} player={player}/> : null}
-      {/* {body} */}
-    </Card>
+    <main className={classes.root}>
+          {/* <timeContext.Provider value={{ time, setTime }}> */}
+          <Grid item>
+            <Title title={page.title}/>
+          </Grid>
+          <Grid container className={classes.grid} direction="row">
+            <Grid item xs={10} md={6}>
+              <Grid container className={classes.grid} direction="column">
+
+                <Grid item xs={10} md={12}>
+                  <TagList tags={page.tags}/>
+                </Grid>
+              </Grid>
+              <Grid container className={classes.grid} direction="row">
+                <Grid item xs={12} md={12}>
+                  <TagForm page_id={page.id}/>
+                </Grid>
+
+                <Grid item xs={12}>
+                  <VideoPlayer className="" url={page.url} players={{ player, setPlayer }} />
+                </Grid>
+              </Grid>
+            </Grid>
+
+            <Grid item xs={10} md={6}>
+              <Grid item xs={12}>
+                <Button color="primary" onClick={() => { props.onClick() }}>Back</Button>
+                
+                {/* 元々のAnalytics */}
+                <Card>
+                  <Grid container direction="row" justify="center" alignItems="center">
+                    <Grid item>
+                      <FormControl>
+                        <InputLabel id="demo-simple-select-label">graph type</InputLabel>
+                        <Select onChange={handleChangeGraph}
+                          defaultValue={"none"}
+                          className={""}
+                          inputProps={{ "aria-label": "Without label" }}
+                        >
+                          <MenuItem value={"none"} key={0} >none</MenuItem>
+                          <MenuItem value={"browse_times"} key={1} >browse time</MenuItem>
+                          <MenuItem value={"browse_dates"} key={2} >browse date</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Grid>
+                    <Grid item>
+                      <FormControl>
+                        <InputLabel id="demo-simple-select-label">state</InputLabel>
+                        <Select onChange={handleChangeState}
+                          defaultValue={"any"}
+                          className={""}
+                          inputProps={{ "aria-label": "Without label" }}
+                        >
+                          <MenuItem value={"any"} key={0} >all</MenuItem>
+                          <MenuItem value={"total_play"} key={1} >total play</MenuItem>
+                          <MenuItem value={"total_write_memo"} key={2} >total write memo</MenuItem>
+                          <MenuItem value={"total_else"} key={3} >total else</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Grid>
+                    <Grid item>
+                      <FormControl>
+                        <InputLabel id="demo-simple-select-label">user_id</InputLabel>
+                        <Select onChange={handleChangeUser}
+                          defaultValue={"any"}
+                          className={""}
+                          inputProps={{ "aria-label": "Without label" }}
+                        >
+                          <MenuItem value={"any"} key={0} >all</MenuItem>
+                          {
+                            userIds.map(user_id => <MenuItem value={user_id} key={user_id} >{user_id}</MenuItem>)
+                          }
+                        </Select>
+                      </FormControl>
+                    </Grid>
+                  </Grid>
+                  {data ? <Graph2D X={data.X} Y_list={data.Y_list} vis_state={visState} vis_user={visUser} player={player}/> : null}
+                  {/* {body} */}
+                </Card>
+
+
+              </Grid>
+            </Grid>
+          </Grid>
+        </main>
   )
 }
