@@ -12,7 +12,7 @@ import Workspace from "./Workspace/Workspace";
 import Signup from './Top/Signup';
 import Auth from './Auth/Auth';
 import PageAuth from "./Auth/PageAuth";
-import Analytics from "./Analytics/Analytics";
+import Analytics from "./Main/Analytics/Analytics";
 
 function App() {
   const [userInfo, setUserInfo] = useState({

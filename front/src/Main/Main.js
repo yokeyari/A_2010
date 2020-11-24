@@ -29,7 +29,7 @@ import { MemoDataSource, PageDataSource, BertDataSource, WorkspaceDataSource } f
 
 import UserInfoContext from '../context'
 import { MemoAuther } from '../Auth/Authers';
-import Analytics from '../Analytics/Analytics';
+import Analytics from './Analytics/Analytics';
 import useInterval from 'use-interval';
 
 

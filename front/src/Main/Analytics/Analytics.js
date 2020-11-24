@@ -4,12 +4,12 @@ import { Button, FormControl, InputLabel, MenuItem, Grid, Select } from '@materi
 import React, { useState, useEffect } from 'react';
 import Card from '@material-ui/core/Card';
 
-import VideoPlayer from "../Main/VideoPlayer";
-import Title from '../Main/Memo/Titile'
-import TagList from '../Main/Tag/TagList';
-import TagForm from '../Main/Tag/TagForm';
+import VideoPlayer from "../VideoPlayer";
+import Title from '../Memo/Titile'
+import TagList from '../Tag/TagList';
+import TagForm from '../Tag/TagForm';
 import { makeStyles } from '@material-ui/core/styles';
-import { BertDataSource } from "../Main/ProductionApi";
+import { BertDataSource } from "../ProductionApi";
 
 
 const useStyles = makeStyles((theme) => ({
