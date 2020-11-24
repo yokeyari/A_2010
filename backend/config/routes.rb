@@ -45,6 +45,9 @@ Rails.application.routes.draw do
       post 'memos',            to: 'memos#create'
       patch 'memos/:memo_id',  to: 'memos#update'
       delete 'memos/:memo_id', to: 'memos#destroy'
+
+      get  'pages/:page_id/analytics', to: 'analytics#index'
+      post 'pages/:page_id/analytics', to: 'analytics#update'
     end
   end
 end
