@@ -60,7 +60,7 @@ class VideoPlayer extends React.Component {
 
   // width を変数にして scale と tarnslate を計算すればいい感じにできそう
   reactplayerSize = (size=1.5) => {
-    console.log(this.props.width)
+    //console.log(this.props.width)
     // let size = this.props.width / 480
     return {
       transform:`scale(${size})`,

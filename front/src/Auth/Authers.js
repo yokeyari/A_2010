@@ -85,7 +85,7 @@ class MemoAuther extends BaseAuther {
   }
 
   canRead = (target) => {
-    console.log(target)
+    //console.log(target)
     if(target.status=="pri"){
       // console.log("is pri",target.user_id.toString(),this.user,target.user_id.toString() == this.user.id)
       return (target.user_id.toString() == this.user.id)

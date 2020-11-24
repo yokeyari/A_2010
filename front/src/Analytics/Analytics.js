@@ -4,6 +4,8 @@ import React, { useState, useEffect } from 'react';
 
 export default function Analytics(props) {
 
+  const player = props.player;
+
   const states = ["total_play", "total_write_memo", "total_else"]
   // テスト用
   const demoX = { "float number": Array(100).fill(0).map((_, i) => (i + 1) / 10) };
