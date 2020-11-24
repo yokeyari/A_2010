@@ -24,13 +24,13 @@ const dummy_browseDays = [
 ]
 const dummy_memos = [
   { user_id: 1, text: "今日はいい天気", time: 0 },
-  { user_id: 1, text: "今日はいい天気", time: 1 },
-  { user_id: 1, text: "今日は悪い天気", time: 2.5 },
-  { user_id: 1, text: "今日は悪い天気", time: 3 },
-  { user_id: 2, text: "今日はいい天気", time: 2 },
-  { user_id: 2, text: "今日はいい天気", time: 1.8 },
-  { user_id: 2, text: "今日は悪い天気", time: 2.2 },
-  { user_id: 2, text: "今日は悪い天気", time: 3.5 },
+  { user_id: 1, text: "今日はいい天気", time: 30 },
+  { user_id: 1, text: "今日は悪い天気", time: 43 },
+  { user_id: 1, text: "今日は悪い天気", time: 30 },
+  { user_id: 2, text: "今日はいい天気", time: 120 },
+  { user_id: 2, text: "今日はいい天気", time: 180 },
+  { user_id: 2, text: "今日は悪い天気", time: 62 },
+  { user_id: 2, text: "今日は悪い天気", time: 95 },
 ]
 
 export {dummy_browseTimes, dummy_browseDays, dummy_memos};

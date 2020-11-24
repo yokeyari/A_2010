@@ -58,8 +58,8 @@ export default function GraphBarSentiment(props) {
           <Legend verticalAlign="top" wrapperStyle={{ lineHeight: '40px' }} />
           <ReferenceLine y={0} stroke='#000' />
           <Brush dataKey='xValue' height={30} stroke="#8884d8" />
-          <Bar dataKey="positiveness" fill="#82ca9d" onClick={handleJump} />
-          <Bar dataKey="negativeness" fill="#8884d8" onClick={handleJump} />
+          <Bar dataKey="positiveness" fill="#82ca9d" onClick={handleJump} barSize={10} />
+          <Bar dataKey="negativeness" fill="#8884d8" onClick={handleJump} barSize={10} />
         </BarChart>
       </ResponsiveContainer>
       <h4>time</h4>

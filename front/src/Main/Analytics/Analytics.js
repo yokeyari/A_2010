@@ -89,41 +89,54 @@ export default function Analytics(props) {
 
   useEffect(() => {
     // ダミーデータ
-    // const browseTimes = dummy_browseTimes;
-    // const browseDays = dummy_browseDays;
-    // const memos = dummy_memos;
-
-    let browseTimes = [];
-    let browseDays = [];
-    PageApi.getBrowseState(page.id).then(res => {
-      res.json().then(json => {
-        console.log(json)
-        browseTimes = json.browse_times
-        browseDays = json.browse_days
-
-        if (browseTimes.length && browseDays.length) {
-          console.log(browseTimes, browseDays)
-          const [user_ids, data_time] = createData(browseTimes, "time");
-          const [_, data_day] = createData(browseDays, "day");
-
-          setDataList({ ...dataList, browse_times: data_time, browse_dates: data_day });
-          setUserIds(user_ids);
-          setData(dataList["browse_times"]);
-        }
-      })
+    const browseTimes = dummy_browseTimes;
+    const browseDays = dummy_browseDays;
+    const memos = dummy_memos;
+    const [user_ids, data_time] = createData(browseTimes, "time");
+    const [_, data_day] = createData(browseDays, "day");
+    setDataList({ ...dataList, browse_times: data_time, browse_dates: data_day });
+    setUserIds(user_ids);
+    setData(dataList["browse_times"]);
+    const text_list = memos.map(memo => memo.text)
+    BertApi.getSentment(text_list).then(res => {
+      setMemoSentiment(res.map((score, i) => {
+        return { user_id: memos[i].user_id, time: memos[i].time, text: memos[i].text, positiveness: score.positiveness, negativeness: score.negativeness }
+      }))
     })
 
-    console.log(memos)
-    if (memos.length) {
-      const text_list = memos.map(memo => memo.text)
-      BertApi.getSentment(text_list).then(res => {
-        setMemoSentiment(res.map((score, i) => {
-          return { user_id: memos[i].user_id, time: memos[i].time, text: memos[i].text, positiveness: score.positiveness, negativeness: score.negativeness }
-        }))
-      })
-    } else {
-      setMemoSentiment([{user_id:null, text:null, time:null, positiveness:null, negativeness:null}])
-    }
+
+    // 本番用
+    // let browseTimes = [];
+    // let browseDays = [];
+    // PageApi.getBrowseState(page.id).then(res => {
+    //   res.json().then(json => {
+    //     console.log(json)
+    //     browseTimes = json.browse_times
+    //     browseDays = json.browse_days
+
+    //     if (browseTimes.length && browseDays.length) {
+    //       console.log(browseTimes, browseDays)
+    //       const [user_ids, data_time] = createData(browseTimes, "time");
+    //       const [_, data_day] = createData(browseDays, "day");
+
+    //       setDataList({ ...dataList, browse_times: data_time, browse_dates: data_day });
+    //       setUserIds(user_ids);
+    //       setData(dataList["browse_times"]);
+    //     }
+    //   })
+    // })
+
+    // console.log(memos)
+    // if (memos.length) {
+    //   const text_list = memos.map(memo => memo.text)
+    //   BertApi.getSentment(text_list).then(res => {
+    //     setMemoSentiment(res.map((score, i) => {
+    //       return { user_id: memos[i].user_id, time: memos[i].time, text: memos[i].text, positiveness: score.positiveness, negativeness: score.negativeness }
+    //     }))
+    //   })
+    // } else {
+    //   setMemoSentiment([{ user_id: null, text: null, time: null, positiveness: null, negativeness: null }])
+    // }
 
   }, [])
 

@@ -35,7 +35,7 @@ export default function Graph2D(props) {
       <h4>frequency</h4>
       <ResponsiveContainer>
         <LineChart width={600} height={300} data={data}
-          margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+          margin={{ top: 5, right: 30, left: 20, bottom: 60 }}>
           <XAxis dataKey="xValue" />
           <YAxis />
           <CartesianGrid strokeDasharray="3 3" />
