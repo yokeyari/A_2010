@@ -33,7 +33,7 @@ function App() {
     active_ws_id: "",
     workspace_id: "",
     invite_token: "",
-    workspaces:[],
+    workspaces: [],
   })
   const [search_word, setSearch_word] = useState("");
 
@@ -59,11 +59,13 @@ function App() {
               <Route exact path='/analytics' component={Analytics} />
 
               <Route path='/:user_id'>
-
                 <UserAuth>
                   <Switch>
+                  
                     <Route exact path='/:user_id/'>
-                      <UserHome search_word={search_word} />
+                      <WSAuth>
+                        <UserHome search_word={search_word} />
+                      </WSAuth>
                     </Route>
 
                     <Route path='/:user_id/ws/:workspace_id'>

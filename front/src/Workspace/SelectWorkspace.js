@@ -74,7 +74,6 @@ function SelectWorkspace(props) {
             className={""}
             inputProps={{ "aria-label": "Without label" }}
           >
-            <MenuItem value={"home"}>user page</MenuItem>
             {
               workspaces.map((ws_p) => (
                 <MenuItem value={ws_p.workspace.id} key={ws_p.workspace.id}>
