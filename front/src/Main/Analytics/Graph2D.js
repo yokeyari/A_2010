@@ -9,20 +9,18 @@ export default function Graph2D(props) {
   const vis_user = props.vis_user;
   const player = props.player;
   const X = props.X;
+  console.log(X);
   const Y_list = Object.entries( props.Y_list ).filter(Y => {
-    console.log(Y)
     const state = Y[0].split(" ")[0]
     const user_id = Y[0].split("(")[1].split(")")[0]
     return ((vis_state=="any" || state==vis_state) && (vis_user=="any" || user_id==vis_user))
   });
-  console.log(Y_list)
   const data = Object.values(X)[0].map( (v, i) => 
     Object.assign( 
       { xValue: v, r: 8 }, 
       Object.fromEntries( Y_list.map( Y =>  [Y[0], Y[1][i]] )) 
     )
   );
-  console.log(data)
   const colors = [
     "#63b598", "#ce7d78", "#ea9e70", "#a48a9e", "#c6e1e8", "#648177" ,"#0d5ac1" ,
     "#f205e6" ,"#1c0365" ,"#14a9ad" ,"#4ca2f9" ,"#a4e43f" ,"#d298e2" ,"#6119d0",

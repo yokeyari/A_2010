@@ -49,13 +49,16 @@ const BertApi = new BertDataSource();
 const workspaceApi = new WorkspaceDataSource();
 
 function Main(props) {
+  const N_SPLIT = 100;
+  const POST_INTERVAL = 5000;
   const classes = useStyles();
   const [memos, setMemos] = useState([]);
   const [reloader, setReloader] = useState(0);
   const [player, setPlayer] = useState({
     time: 0,
     player: null,
-    playing: false
+    playing: false,
+    duration: null
   });
   const [page, setPage] = useState({ title: "", url: "", tags: [] });
   const [isLoading, setIsLoading] = useState(false);
@@ -70,33 +73,31 @@ function Main(props) {
   const page_id = props.page_id;
 
   const endAnalyticsMode = () => {
-		setAnalyticsMode(false);
-	}
-  
+    setAnalyticsMode(false);
+  }
+
   // For Analytics
   useInterval(() => {
-    var dayTime = new Date();
-    var nowState;
-    if (player.playing == true){nowState = 'Playing'}
-    else if(isWriting == 1){nowState = 'Writing'}
-    else{nowState = 'Pausing'}
-    console.log({
-          page_id: page.id,
-          user_id: page.user_id,
-          state: nowState,
-          time: parseInt(player.time),
-          dayTime: dayTime.getFullYear() + '/' + (dayTime.getMonth()+1) + '/' + dayTime.getDate(),
-        });
-    // APIできたら有効化
-    // PageApi.AnalyticsPage({
-    //   page_id: page.id,
-    //   user_id: page.user_id,
-    //   state: nowState,
-    //   time: player.time,
-    //   dayTime: (dayTime.getMonth()+1) + '/' + dayTime.getDate(),
-    // });
-
-  }, 5000);
+    if (!isAnalyticsMode && player.duration) {
+      var dayTime = new Date();
+      var nowState;
+      if (player.playing == true) { nowState = 'play' }
+      else if (isWriting == 1) { nowState = 'write_memo' }
+      else { nowState = 'else' }
+      let fixed_time = null
+      for (let i=0; i<N_SPLIT; i++) {
+        fixed_time = parseInt(i*player.duration/N_SPLIT);
+        if (fixed_time >= player.time) break
+      }
+      const day = dayTime.getFullYear() + '/' + (dayTime.getMonth() + 1) + '/' + dayTime.getDate()
+      
+      PageApi.postBrowseState(page_id, {
+        state: nowState, 
+        time: fixed_time, 
+        day: day
+      });
+    }
+  }, POST_INTERVAL);
 
   useEffect(() => {
     PageApi.getPage(page_id).then(res => {
@@ -250,10 +251,10 @@ function Main(props) {
       <Loading open={isLoading}>
       </Loading>
 
-      
+
       {isAnalyticsMode ?
         <Grid item xs={12}>
-          <Analytics page={page} player={player} onClick={endAnalyticsMode}/>
+          <Analytics page={page} player={player} onClick={endAnalyticsMode} />
         </Grid>
         :
 
@@ -279,11 +280,11 @@ function Main(props) {
                   <VideoPlayer className="" url={page.url} players={{ player, setPlayer }} />
                 </Grid>
                 <Grid item xs={12}>
-                {memoAuther.canCreate(page) ?
-                  <WriteMemoForm onSubmit={handleSubmit} player={player} user_id={userInfo.id} onWriting={handleWriting} onWriteEnd={handleWriteEnd} />
-                  :
-                  null
-                }
+                  {memoAuther.canCreate(page) ?
+                    <WriteMemoForm onSubmit={handleSubmit} player={player} user_id={userInfo.id} onWriting={handleWriting} onWriteEnd={handleWriteEnd} />
+                    :
+                    null
+                  }
                 </Grid>
               </Grid>
             </Grid>

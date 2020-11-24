@@ -123,6 +123,7 @@ class VideoPlayer extends React.Component {
   handleDuration = (duration) => {
     console.log('onDuration', duration)
     this.setState({ duration })
+    this.props.players.setPlayer({ ...this.props.players.player, duration: duration});
   }
   handlePlay = () => {
     console.log('onPlay')
@@ -210,6 +211,7 @@ class VideoPlayer extends React.Component {
             onProgress={this.onProgress}
             onPause={this.handlePause}
             onBuffer={() => console.log('onBuffer')}
+            onDuration={this.handleDuration}
           />
         </Container>
         {this.renderCntrols()}
