@@ -13,7 +13,7 @@ import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import Select from "@material-ui/core/Select";
 import { CardActions, FormControl, MenuItem } from "@material-ui/core";
 
-import UserInfoContext from "../../context";
+import {UserInfoContext} from "../../context";
 // class Memo{
 //   body = '';
 //   time = 0;

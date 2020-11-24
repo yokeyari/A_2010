@@ -10,7 +10,7 @@ import { CardActions } from "@material-ui/core";
 import { trackPromise } from "react-promise-tracker";
 
 import { WorkspaceDataSource } from "../Main/ProductionApi";
-import UserInfoContext from "../context";
+import {UserInfoContext} from "../context";
 import Transition from "../Transition";
 import InviteUserForm from "./InviteUserForm";
 

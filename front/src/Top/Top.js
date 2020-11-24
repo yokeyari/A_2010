@@ -28,7 +28,7 @@ import Promotion from './Promotion';
 import "./Login.css";
 import { UserDataSource } from '../Main/ProductionApi';
 import Signup from "./Signup";
-import UserInfoContext from '../context';
+import {UserInfoContext} from '../context';
 import { Container } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({

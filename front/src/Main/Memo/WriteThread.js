@@ -9,7 +9,7 @@ import DescriptionIcon from '@material-ui/icons/Description';
 import DeleteIcon from '@material-ui/icons/Delete';
 import DoneIcon from '@material-ui/icons/Done';
 
-//import UserInfoContext from "../../context";
+//import {UserInfoContext} from "../../context";
 import { CardActions } from "@material-ui/core";
 const useStyles = makeStyles((theme) => ({
 	root: {

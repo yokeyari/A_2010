@@ -6,7 +6,7 @@ import Modal from '@material-ui/core/Modal';
 import { FormControl, MenuItem, InputLabel } from '@material-ui/core';
 import Fade from '@material-ui/core/Fade';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
-import UserInfoContext from '../context';
+import { UserInfoContext, WSInfoContext } from '../context';
 import { WorkspaceDataSource } from '../Main/ProductionApi';
 import CreateWorkspace from "./CreateWorkspace";
 
@@ -19,11 +19,14 @@ const useStyles = makeStyles((theme) => ({
 const workspacesDataSource = new WorkspaceDataSource();
 
 function SelectWorkspace(props) {
-  const [workspaces, setWorkspaces] = useState([])
+  const { WSInfo } = useContext(WSInfoContext);
   const [open, setOpen] = useState(false);
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
   const classes = useStyles();
   const workspace_id = userInfo.workspace_id;
+  const workspaces = WSInfo.workspaces;
+
+
 
   const handleOpen = () => {
     setOpen(true)
@@ -35,27 +38,19 @@ function SelectWorkspace(props) {
     // console.log("target ws id", workspace_id);
     switch (workspace_id) {
       case "home":
-        // setUserInfo({ ...userInfo, workspace_id: "home" });
         props.history.push(`/${userInfo.id}`);
         props.onClose()
         break;
       case "create":
         break;
       default:
-        // setUserInfo({ ...userInfo, workspace_id: workspace_id });
         props.history.push(`/${userInfo.id}/ws/${workspace_id}`);
         props.onClose()
     }
   }
 
   useEffect(() => {
-    workspacesDataSource.getWorkspaceIndex().then(res => {
-      res.json().then(json => {
-        const workspaces = json.workspaces;
-        console.log('load workspace list', workspaces);
-        setWorkspaces(workspaces);
-      })
-    })
+
   }, [])
 
   const handleClose = () => {

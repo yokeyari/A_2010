@@ -18,7 +18,7 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import IconButton from '@material-ui/core/IconButton';
 
 import { UserDataSource } from "../Main/ProductionApi";
-import UserInfoContext from "../context";
+import {UserInfoContext} from "../context";
 import Transition from "../Transition";
 
 const userDataSource = new UserDataSource();

@@ -10,7 +10,7 @@ import DoneIcon from '@material-ui/icons/Done';
 import ReplyIcon from '@material-ui/icons/Reply';
 import { CardActions } from "@material-ui/core";
 import WriteThread from './WriteThread';
-import UserInfoContext from "../../context";
+import {UserInfoContext} from "../../context";
 
 function ThreadComponent(props) {
 	//const classes = useStyles();

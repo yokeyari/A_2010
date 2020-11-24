@@ -1,10 +1,7 @@
 // import axios from 'axios';
 
-const SERVER_URL = "http://localhost:5000/api/v1/";
-// const SERVER_URL = "https://api.memotube.xyz/api/v1/";
-// const SERVER_URL = "https://movie-rails.herokuapp.com/api/v1/";
-const BERT_URL = "https://bert.memotube.xyz/sentiment";
-//const SERVER_URL = "https://movie-rails-cors-test.herokuapp.com/api/v1/"
+const BERT_URL = process.env.REACT_APP_SERVER_URL
+const SERVER_URL = process.env.REACT_APP_SERVER_URL
 
 async function createData(body, url) {
   console.log(JSON.stringify(body));
@@ -193,11 +190,13 @@ export class UserDataSource {
 //pageのapiクラス
 export class PageDataSource {
   API_URL = SERVER_URL + "pages";
-  constructor() {
+  constructor(user) {
+    this.user=user
   }
 
   //userに対応するpageのindex
   async getPageIndex(user) {
+    if(!user) user=this.user
     const res = await fetch(this.API_URL + `?user_id=${user.id}`, {
       credentials: 'include', //クレデンシャルを含める指定
       mode: 'cors',
@@ -214,6 +213,7 @@ export class PageDataSource {
   }
 
   async getAllTagIndex(user) {
+    if(!user) user=this.user
     const pages = (await this.getPageIndex(user));
     console.log(pages)
     const tags = [];
@@ -268,7 +268,7 @@ export class PageDataSource {
     return res;
   }
 
-  async searchPage(user, keywords, workspace_id) {
+  async searchPage(user, keywords) {
     const res = await fetch(this.API_URL + '/\search', {
       method: "POST",
       credentials: 'include', //クレデンシャルを含める指定

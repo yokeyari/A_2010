@@ -4,10 +4,11 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import Top from './Top/Top';
 import Home from './User/Home';
+import UserHome from './User/UserHome';
 import Footer from './Footer';
 import Header from './Header';
 import { useState } from 'react';
-import UserInfoContext from './context';
+import { UserInfoContext, WSInfoContext } from './context';
 import Workspace from "./Workspace/Workspace";
 import Signup from './Top/Signup';
 import Auth from './Auth/Auth';
@@ -28,6 +29,12 @@ function App() {
     permission: "owner",
     endCheck: false
   })
+  const [WSInfo, setWSInfo] = useState({
+    active_ws_id: "",
+    workspace_id: "",
+    invite_token: "",
+    workspaces:[],
+  })
   const [search_word, setSearch_word] = useState("");
 
   const handleSearchChange = (value) => {
@@ -38,55 +45,58 @@ function App() {
     <div>
       {console.log("userInfo", userInfo, "---------------")}
       <UserInfoContext.Provider value={{ userInfo, setUserInfo }}>
-        <Router>
-          <Header onChange={(value) => { handleSearchChange(value) }} />
+        <WSInfoContext.Provider value={{ WSInfo, setWSInfo }}>
+          <Router>
+            <Header onChange={(value) => { handleSearchChange(value) }} />
 
-          <Switch>
-            <Route exact path='/' component={Top} />
-            <Route exact path='/login' component={Top} />
-            <Route exact path='/signup' component={Top} />
-            <Route exact path='/page/:token'>
-              <PageAuth mode="token" />
-            </Route>
+            <Switch>
+              <Route exact path='/' component={Top} />
+              <Route exact path='/login' component={Top} />
+              <Route exact path='/signup' component={Top} />
+              <Route exact path='/page/:token'>
+                <PageAuth mode="token" />
+              </Route>
+
+              <Route path='/:user_id'>
+
+                <UserAuth>
+                  <Switch>
+                    <Route exact path='/:user_id/'>
+                      <UserHome search_word={search_word} />
+                    </Route>
+
+                    <Route path='/:user_id/ws/:workspace_id'>
+                      <WSAuth>
+                        <>
+                          <Route exact path='/:user_id/ws/:workspace_id'>
+                            <Workspace search_word={search_word} />
+                          </Route>
+
+                          <Route exact path='/:user_id/ws/:workspace_id/:page_id'>
+                            <PageAuth mode="user">
+                              <Main />
+                            </PageAuth>
+                          </Route>
+                        </>
+                      </WSAuth>
+                    </Route>
+
+                    <Route exact path='/:user_id/:page_id'>
+                      <PageAuth mode="user" >
+                        <Main />
+                      </PageAuth>
+                    </Route>
+                  </Switch>
+                </UserAuth>
 
 
-            <Route path='/:user_id'>
-              <UserAuth>
-                <Switch>
-                  <Route exact path='/:user_id/'>
-                    <Home search_word={search_word} />
-                  </Route>
+              </Route>
 
-                  <Route exact path='/:user_id/:page_id'>
-                    <PageAuth mode="user" >
-                      <Main />
-                    </PageAuth>
-                  </Route>
+            </Switch>
 
-                  <Route path='/:user_id/ws/'>
-                    <WSAuth>
-                      <Switch>
-                        <Route exact path='/:user_id/ws/:workspace_id'>
-                          <Workspace search_word={search_word} />
-                        </Route>
-
-                        <Route exact path='/:user_id/ws/:workspace_id/:page_id'>
-                          <PageAuth mode="user">
-                            <Main />
-                          </PageAuth>
-                        </Route>
-                      </Switch>
-                    </WSAuth>
-                  </Route>
-                </Switch>
-              </UserAuth>
-            </Route>
-
-          </Switch>
-
-          <Footer />
-        </Router>
-
+            <Footer />
+          </Router>
+        </WSInfoContext.Provider>
       </UserInfoContext.Provider>
     </div>
   )

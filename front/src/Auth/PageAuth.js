@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Redirect, useParams } from 'react-router-dom'
 
-import UserInfoContext from '../context';
+import {UserInfoContext} from '../context';
 import Main from '../Main/Main';
 import Transition from "../Transition";
 import Loading from "../Loading";
@@ -16,7 +16,6 @@ export default function PageAuth(props) {
 
 
   const mode = props.mode;
-  // 将来的には閲覧のみのトークンも発行してここでモードを切り替える
 
   useEffect(() => {
     if (mode == "user") {

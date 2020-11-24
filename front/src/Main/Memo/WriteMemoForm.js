@@ -13,7 +13,7 @@ import CardHeader from '@material-ui/core/CardHeader';
 import IconButton from '@material-ui/core/IconButton'
 import { CardActions, FormControl, MenuItem } from "@material-ui/core";
 import Select from "@material-ui/core/Select";
-import UserInfoContext from "../../context";
+import {UserInfoContext} from "../../context";
 
 
 const useStyles = makeStyles((theme) => ({

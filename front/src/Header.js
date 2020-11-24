@@ -32,7 +32,7 @@ import { UserDataSource } from './Main/ProductionApi';
 import LoginAuth from './Auth/LoginAuth';
 import SelectWorkspace from "./Workspace/SelectWorkspace";
 
-import UserInfoContext from './context'
+import {UserInfoContext} from './context'
 
 
 

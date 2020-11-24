@@ -6,7 +6,7 @@ import Card from '@material-ui/core/Card'
 import ThreadList from './ThreadList';
 
 import { MemoAuther } from '../../Auth/Authers';
-import UserInfoContext from "../../context";
+import {UserInfoContext} from "../../context";
 
 const useStyles = makeStyles((theme) => ({
   card: {

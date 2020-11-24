@@ -12,7 +12,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import Button from '@material-ui/core/Button';
 
 
-import UserInfoContext from "../context";
+import {UserInfoContext} from "../context";
 import Transition from "../Transition";
 import { PageDataSource } from "../Main/ProductionApi";
 import { PageAuther } from '../Auth/Authers';

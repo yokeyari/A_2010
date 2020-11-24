@@ -1,7 +1,7 @@
 import { Container } from '@material-ui/core';
 import React, { useContext, useEffect, useState } from 'react'
 import { Redirect, useParams } from 'react-router-dom'
-import UserInfoContext from '../context';
+import {UserInfoContext} from '../context';
 import { UserDataSource } from '../Main/ProductionApi';
 
 const userDataSource = new UserDataSource();
