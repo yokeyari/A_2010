@@ -257,7 +257,7 @@ export class PageDataSource {
 
   //pageの更新
   async updatePage(page) {
-    const res = updateData({ url: page.url, title: page.url },
+    const res = updateData({ url: page.url, title: page.title },
       this.API_URL + '/' + page.id);
     return res;
   }

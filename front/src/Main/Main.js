@@ -151,8 +151,7 @@ function Main(props) {
   }
 
   function handleChangeTitle(title) {
-    // post server
-    // withUpdate(PageApi.updatePage({ url: page.url, title: title, id: page_id }));
+    withUpdate(PageApi.updatePage({ url: page.url, title: title, id: page_id }));
   }
 
   function handleWriting() {
