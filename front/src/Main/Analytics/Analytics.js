@@ -89,6 +89,7 @@ export default function Analytics(props) {
 
   useEffect(() => {
     // ダミーデータ
+    // 本番では下の本番用コードをコメントアウトして、このコードは消す
     const browseTimes = dummy_browseTimes;
     const browseDays = dummy_browseDays;
     const memos = dummy_memos;
@@ -103,6 +104,7 @@ export default function Analytics(props) {
         return { user_id: memos[i].user_id, time: memos[i].time, text: memos[i].text, positiveness: score.positiveness, negativeness: score.negativeness }
       }))
     })
+    // ここまでダミー
 
 
     // 本番用
@@ -137,6 +139,7 @@ export default function Analytics(props) {
     // } else {
     //   setMemoSentiment([{ user_id: null, text: null, time: null, positiveness: null, negativeness: null }])
     // }
+    // ここまで本番用
 
   }, [])
 
