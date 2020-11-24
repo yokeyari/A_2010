@@ -4,7 +4,7 @@ class Page < ApplicationRecord
   has_many :browse_days, dependent: :destroy
   has_many :browse_times, dependent: :destroy
 
-  belongs_to :user, optional: true
+  belongs_to :user
   belongs_to :workspace, optional: true
   has_secure_token
   validates :user_id, presence: true
@@ -14,7 +14,7 @@ class Page < ApplicationRecord
 
 private
   def workspace_id_validation
-    return if workspace.nil? || workspace.present?
-    errors.add(:base, "require workspace_id either null or present")
+    return if workspace_id.nil? || workspace.present?
+    errors.add(:workspace, "require either null or present")
   end
 end
