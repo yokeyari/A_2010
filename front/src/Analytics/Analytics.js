@@ -41,19 +41,11 @@ export default function Analytics(props) {
           const state_count_all_id = []
           for (let i = 0; i < state_count_each_id[0][1].length; i++) {
             let count = 0
-            for (let j = 0; j < user_ids.length; j++) {
-              console.log(count)
-              console.log(state_count_each_id)
-              console.log(state_count_each_id[1])
-              console.log(state_count_each_id[1])
-              console.log(state_count_each_id[1][j][i])
-              count+=state_count_each_id[1][j][i]
-            }
+            for (let j = 0; j < user_ids.length; j++) count+=state_count_each_id[j][1][i]
             state_count_all_id.push(count)
           }
-          console.log(state_count_each_id)
-          console.log(state_count_all_id)
-          return state_count_each_id
+
+          return state_count_each_id.concat( [[state+" (all)", state_count_all_id]] )
         })
       )
     )
@@ -146,7 +138,7 @@ export default function Analytics(props) {
               className={""}
               inputProps={{ "aria-label": "Without label" }}
             >
-              <MenuItem value={"any"} key={0} >all</MenuItem>
+              <MenuItem value={"any"} key={0} >すべて表示</MenuItem>
               <MenuItem value={"total_play"} key={1} >total play</MenuItem>
               <MenuItem value={"total_write_memo"} key={2} >total write memo</MenuItem>
               <MenuItem value={"total_else"} key={3} >total else</MenuItem>
@@ -161,10 +153,11 @@ export default function Analytics(props) {
               className={""}
               inputProps={{ "aria-label": "Without label" }}
             >
-              <MenuItem value={"any"} key={0} >all</MenuItem>
+              <MenuItem value={"any"} key={0} >すべて表示</MenuItem>
               {
                 userIds.map(user_id => <MenuItem value={user_id} key={user_id} >{user_id}</MenuItem>)
               }
+              <MenuItem value={"all"} key={-1} >all user id</MenuItem>
             </Select>
           </FormControl>
         </Grid>
