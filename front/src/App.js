@@ -18,6 +18,7 @@ import WSAuth from "./Auth/WSAuth";
 // import { WSAuther } from './Auth/Authers';
 import Main from './Main/Main';
 
+import Analytics from "./Main/Analytics/Analytics";
 
 function App() {
   const [userInfo, setUserInfo] = useState({
@@ -56,6 +57,7 @@ function App() {
               <Route exact path='/page/:token'>
                 <PageAuth mode="token" />
               </Route>
+              <Route exact path='/analytics' component={Analytics} />
 
               <Route path='/:user_id'>
 

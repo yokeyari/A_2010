@@ -11,8 +11,6 @@ class Api::V1::TagsController < ApplicationController
   def create
     tag = Tag.create!(params.permit(:page_id, :text))
     res_ok tag
-  rescue ActiveRecord::RecordInvalid => e # 作成できない場合
-    res_errors e.record
   end
 
   # タグを削除する
@@ -44,10 +42,6 @@ class Api::V1::TagsController < ApplicationController
     end
     
     res_ok tags
-  rescue ActiveRecord::RecordNotFound => e
-    res_not_found
-  rescue ActiveRecord::RecordInvalid => e
-    res_errors e.record
   end
 
 private
@@ -61,7 +55,5 @@ private
   
   def find_tag
     @tag = Tag.find(params[:tag_id])
-  rescue ActiveRecord::RecordNotFound => e
-    res_not_found
   end
 end

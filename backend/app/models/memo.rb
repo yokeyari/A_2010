@@ -4,4 +4,11 @@ class Memo < ApplicationRecord
   validates :text, presence: :true, length: {maximum: 100}
   validates :time, presence: :true
   enum status: {pri: 0, pub: 1}
+
+  validate :valid_parent_id
+
+  def valid_parent_id
+    return if parent_id.nil? || Memo.find_by(id: parent_id)
+    errors.add(:parent_id, "require either null or present")
+  end
 end

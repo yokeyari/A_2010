@@ -11,8 +11,6 @@ class Api::V1::MemosController < ApplicationController
   def create
     memo = Memo.create!(params.permit(:user_id, :page_id, :parent_id, :text, :time, :status))
     res_ok memo
-  rescue ActiveRecord::RecordInvalid => e # 作成できない場合
-    res_errors e.record
   end
 
   def update
@@ -31,7 +29,5 @@ class Api::V1::MemosController < ApplicationController
 private
   def find_memo
     @memo = Memo.find(params[:memo_id])
-  rescue ActiveRecord::RecordNotFound => e
-    res_not_found
   end
 end

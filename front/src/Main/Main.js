@@ -25,10 +25,13 @@ import TagList from './Tag/TagList';
 import TagForm from './Tag/TagForm';
 
 //import * as MemoAPI from './LocalApi';
-import { MemoDataSource, PageDataSource, TagDataSource, BertDataSource, WorkspaceDataSource } from './ProductionApi';
+import { MemoDataSource, PageDataSource, BertDataSource, WorkspaceDataSource } from './ProductionApi';
 
 import {UserInfoContext} from '../context'
 import { MemoAuther } from '../Auth/Authers';
+import Analytics from './Analytics/Analytics';
+import useInterval from 'use-interval';
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -46,27 +49,55 @@ const BertApi = new BertDataSource();
 const workspaceApi = new WorkspaceDataSource();
 
 function Main(props) {
+  const N_SPLIT = 100;
+  const POST_INTERVAL = 5000;
   const classes = useStyles();
   const [memos, setMemos] = useState([]);
   const [reloader, setReloader] = useState(0);
   const [player, setPlayer] = useState({
     time: 0,
     player: null,
-    playing: false
+    playing: false,
+    duration: null
   });
   const [page, setPage] = useState({ title: "", url: "", tags: [] });
   const [isLoading, setIsLoading] = useState(false);
   const [colorList, setColorList] = useState([]);
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
   const [memoMode, setMemoMode] = useState('all');
+  const [isWriting, setIsWriting] = useState(0);
+  const [isAnalyticsMode, setAnalyticsMode] = useState(false);
   const { workspace_id } = useParams();
 
   const memoAuther = new MemoAuther(userInfo);
-
   const page_id = props.page_id;
 
+  const endAnalyticsMode = () => {
+    setAnalyticsMode(false);
+  }
 
-  //const page_id = page_id;
+  // For Analytics
+  useInterval(() => {
+    if (!isAnalyticsMode && player.duration) {
+      var dayTime = new Date();
+      var nowState;
+      if (player.playing == true) { nowState = 'play' }
+      else if (isWriting == 1) { nowState = 'write_memo' }
+      else { nowState = 'else' }
+      let fixed_time = null
+      for (let i=0; i<N_SPLIT; i++) {
+        fixed_time = parseInt(i*player.duration/N_SPLIT);
+        if (fixed_time >= player.time) break
+      }
+      const day = dayTime.getFullYear() + '/' + (dayTime.getMonth() + 1) + '/' + dayTime.getDate()
+      
+      PageApi.postBrowseState(page_id, {
+        state: nowState, 
+        time: fixed_time, 
+        day: day
+      });
+    }
+  }, POST_INTERVAL);
 
   useEffect(() => {
     PageApi.getPage(page_id).then(res => {
@@ -120,12 +151,12 @@ function Main(props) {
   }
 
   function handleChangeTitle(title) {
-    // post server
-    // withUpdate(PageApi.updatePage({ url: page.url, title: title, id: page_id }));
+    withUpdate(PageApi.updatePage({ url: page.url, title: title, id: page_id }));
   }
 
   function handleWriting() {
     if (true) {
+      setIsWriting(1)
       setPlayer({ ...player, playing: false })
     }
   }
@@ -171,6 +202,7 @@ function Main(props) {
 
   function handleWriteEnd() {
     if (true) {
+      setIsWriting(0)
       setPlayer({ ...player, playing: true })
     }
   }
@@ -189,7 +221,6 @@ function Main(props) {
     default:
       var visMemos = memos;
   }
-
 
   const VisMemoHamburger =
     (userInfo.workspace_id != "home") ?
@@ -218,79 +249,83 @@ function Main(props) {
     <div className="Main">
       <Loading open={isLoading}>
       </Loading>
-      <main className={classes.root}>
-        {/* <timeContext.Provider value={{ time, setTime }}> */}
-        <Grid item>
-          <Title title={page.title} onChange={handleChangeTitle} />
+
+
+      {isAnalyticsMode ?
+        <Grid item xs={12}>
+          <Analytics page={page} player={player} memos={memos} onClick={endAnalyticsMode} />
         </Grid>
+        :
 
-        <Grid container className={classes.grid} direction="row">
-          <Grid item xs={10} md={6}>
-            <Grid container className={classes.grid} direction="column">
-
-              <Grid item xs={10} md={12}>
-                <TagList tags={page.tags} withUpdate={withUpdate} />
-              </Grid>
-            </Grid>
-            <Grid container className={classes.grid} direction="row">
-              <Grid item xs={12} md={12}>
-                <TagForm page_id={page.id} withUpdate={withUpdate} />
-              </Grid>
-
-              <Grid item xs={12}>
-                <VideoPlayer className="" url={page.url} players={{ player, setPlayer }} />
-              </Grid>
-              <Grid item xs={12}>
-                {memoAuther.canCreate(page) ?
-                  <WriteMemoForm onSubmit={handleSubmit} player={player} user_id={userInfo.id} onWriting={handleWriting} onWriteEnd={handleWriteEnd} />
-                  :
-                  null
-                }
-              </Grid>
-            </Grid>
+        <main className={classes.root}>
+          {/* <timeContext.Provider value={{ time, setTime }}> */}
+          <Grid item>
+            <Title title={page.title} onChange={handleChangeTitle} />
           </Grid>
-          <Grid item xs={10} md={6}>
+          <Grid container className={classes.grid} direction="row">
+            <Grid item xs={10} md={6}>
+              <Grid container className={classes.grid} direction="column">
 
-            <Grid container direction="column" >
-
-              <Grid container direction="row" justify="center" alignItems="center">
-
-                <Grid item >
-                  <Box style={{ marginRight: "20px" }}>AIによるハイライト</Box>
+                <Grid item xs={10} md={12}>
+                  <TagList tags={page.tags} withUpdate={withUpdate} />
                 </Grid>
+              </Grid>
+              <Grid container className={classes.grid} direction="row">
+                <Grid item xs={12} md={12}>
+                  <TagForm page_id={page.id} withUpdate={withUpdate} />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <VideoPlayer className="" url={page.url} players={{ player, setPlayer }} />
+                </Grid>
+                <Grid item xs={12}>
+                  {memoAuther.canCreate(page) ?
+                    <WriteMemoForm onSubmit={handleSubmit} player={player} user_id={userInfo.id} onWriting={handleWriting} onWriteEnd={handleWriteEnd} />
+                    :
+                    null
+                  }
+                </Grid>
+              </Grid>
+            </Grid>
+
+            <Grid item xs={10} md={6}>
+              <Grid container direction="column" >
+                <Grid container direction="row" justify="center" alignItems="center">
+                  <Grid item >
+                    <Button color="primary" onClick={() => { setAnalyticsMode(true) }}>Analytics Mode</Button>
+                    <Box style={{ marginRight: "20px" }}>AIによるハイライト</Box>
+                    <FormControl className={classes.formControl}>
+                      <Select onChange={changeMemoColor}
+                        defaultValue="None"
+                        className={classes.selectEmpty}
+                        inputProps={{ "aria-label": "Without label" }}>
+                        <MenuItem value="None">None</MenuItem>
+                        <MenuItem value="positive">ポジティブ</MenuItem>
+                        <MenuItem value="negative">ネガティブ</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Grid>
+
+                </Grid>
+
+                {VisMemoHamburger}
 
                 <Grid item>
-                  <FormControl className={classes.formControl}>
-                    <Select onChange={changeMemoColor}
-                      defaultValue="None"
-                      className={classes.selectEmpty}
-                      inputProps={{ "aria-label": "Without label" }}>
-                      <MenuItem value="None">None</MenuItem>
-                      <MenuItem value="positive">ポジティブ</MenuItem>
-                      <MenuItem value="negative">ネガティブ</MenuItem>
-                    </Select>
-                  </FormControl>
+                  <MemoList
+                    memos={visMemos}
+                    onChange={handleChange}
+                    onDelete={handleDelete}
+                    onSubmit={handleSubmit}
+                    player={player}
+                    user_id={userInfo.id}
+                  />
                 </Grid>
-
-              </Grid>
-
-              {VisMemoHamburger}
-
-              <Grid item>
-                <MemoList
-                  memos={visMemos}
-                  onChange={handleChange}
-                  onDelete={handleDelete}
-                  onSubmit={handleSubmit}
-                  player={player}
-                  user_id={userInfo.id}
-                />
               </Grid>
             </Grid>
           </Grid>
-        </Grid>
-        {/* </timeContext.Provider> */}
-      </main>
+          {/* </timeContext.Provider> */}
+        </main>
+      }
     </div>
   );
 }
