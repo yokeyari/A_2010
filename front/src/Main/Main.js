@@ -63,11 +63,15 @@ function Main(props) {
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
   const [memoMode, setMemoMode] = useState('all');
   const [isWriting, setIsWriting] = useState(0);
+  const [isAnalyticsMode, setAnalyticsMode] = useState(false);
   const { workspace_id } = useParams();
 
   const memoAuther = new MemoAuther(userInfo);
   const page_id = props.page_id;
 
+  const endAnalyticsMode = () => {
+		setAnalyticsMode(false);
+	}
   
   // For Analytics
   useInterval(() => {
@@ -246,81 +250,85 @@ function Main(props) {
       <Loading open={isLoading}>
       </Loading>
 
-      <Route exact path='/:user_id/:page_id/analytics'>
-        <Analytics page= {page} player={player}/>
-      </Route>
-
-      <main className={classes.root}>
-        {/* <timeContext.Provider value={{ time, setTime }}> */}
-        <Grid item>
-          <Title title={page.title} onChange={handleChangeTitle} />
-        </Grid>
-        
-        <Grid container className={classes.grid} direction="row">
-          <Grid item xs={10} md={6}>
-            <Grid container className={classes.grid} direction="column">
-
-              <Grid item xs={10} md={12}>
-                <TagList tags={page.tags} withUpdate={withUpdate} />
-              </Grid>
-            </Grid>
-            <Grid container className={classes.grid} direction="row">
-              <Grid item xs={12} md={12}>
-                <TagForm page_id={page.id} withUpdate={withUpdate} />
-              </Grid>
-
-              <Grid item xs={12}>
-                <VideoPlayer className="" url={page.url} players={{ player, setPlayer }} />
-              </Grid>
-              <Grid item xs={12}>
-                {memoAuther.canCreate(page) ?
-                  <WriteMemoForm onSubmit={handleSubmit} player={player} user_id={userInfo.id} onWriting={handleWriting} onWriteEnd={handleWriteEnd} />
-                  :
-                  null
-                }
-              </Grid>
-            </Grid>
+      {isAnalyticsMode ?
+        <>
+          <Button color="primary" onClick={() => { endAnalyticsMode() }}>Back</Button>
+          <Analytics page= {page} player={player}/>
+        </>
+				:
+        <main className={classes.root}>
+          {/* <timeContext.Provider value={{ time, setTime }}> */}
+          <Grid item>
+            <Title title={page.title} onChange={handleChangeTitle} />
           </Grid>
-          <Grid item xs={10} md={6}>
 
-            <Grid container direction="column" >
+          <Button color="primary" onClick={() => { setAnalyticsMode(true) }}>Analytics Mode</Button>
+          
+          <Grid container className={classes.grid} direction="row">
+            <Grid item xs={10} md={6}>
+              <Grid container className={classes.grid} direction="column">
 
-              <Grid container direction="row" justify="center" alignItems="center">
-
-                <Grid item >
-                  <Button component={Link} to={`/${userInfo.id}/${page.id}/analytics` } >Analystic</Button>
-                  <Box style={{ marginRight: "20px" }}>AIによるハイライト</Box>
-                  <FormControl className={classes.formControl}>
-                    <Select onChange={changeMemoColor}
-                      defaultValue="None"
-                      className={classes.selectEmpty}
-                      inputProps={{ "aria-label": "Without label" }}>
-                      <MenuItem value="None">None</MenuItem>
-                      <MenuItem value="positive">ポジティブ</MenuItem>
-                      <MenuItem value="negative">ネガティブ</MenuItem>
-                    </Select>
-                  </FormControl>
+                <Grid item xs={10} md={12}>
+                  <TagList tags={page.tags} withUpdate={withUpdate} />
+                </Grid>
+              </Grid>
+              <Grid container className={classes.grid} direction="row">
+                <Grid item xs={12} md={12}>
+                  <TagForm page_id={page.id} withUpdate={withUpdate} />
                 </Grid>
 
+                <Grid item xs={12}>
+                  <VideoPlayer className="" url={page.url} players={{ player, setPlayer }} />
+                </Grid>
+                <Grid item xs={12}>
+                  {memoAuther.canCreate(page) ?
+                    <WriteMemoForm onSubmit={handleSubmit} player={player} user_id={userInfo.id} onWriting={handleWriting} onWriteEnd={handleWriteEnd} />
+                    :
+                    null
+                  }
+                </Grid>
               </Grid>
+            </Grid>
+            <Grid item xs={10} md={6}>
 
-              {VisMemoHamburger}
+              <Grid container direction="column" >
 
-              <Grid item>
-                <MemoList
-                  memos={visMemos}
-                  onChange={handleChange}
-                  onDelete={handleDelete}
-                  onSubmit={handleSubmit}
-                  player={player}
-                  user_id={userInfo.id}
-                />
+                <Grid container direction="row" justify="center" alignItems="center">
+
+                  <Grid item >
+                    <Box style={{ marginRight: "20px" }}>AIによるハイライト</Box>
+                    <FormControl className={classes.formControl}>
+                      <Select onChange={changeMemoColor}
+                        defaultValue="None"
+                        className={classes.selectEmpty}
+                        inputProps={{ "aria-label": "Without label" }}>
+                        <MenuItem value="None">None</MenuItem>
+                        <MenuItem value="positive">ポジティブ</MenuItem>
+                        <MenuItem value="negative">ネガティブ</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Grid>
+
+                </Grid>
+
+                {VisMemoHamburger}
+
+                <Grid item>
+                  <MemoList
+                    memos={visMemos}
+                    onChange={handleChange}
+                    onDelete={handleDelete}
+                    onSubmit={handleSubmit}
+                    player={player}
+                    user_id={userInfo.id}
+                  />
+                </Grid>
               </Grid>
             </Grid>
           </Grid>
-        </Grid>
-        {/* </timeContext.Provider> */}
-      </main>
+          {/* </timeContext.Provider> */}
+        </main>
+      }
     </div>
   );
 }
