@@ -191,12 +191,12 @@ export class UserDataSource {
 export class PageDataSource {
   API_URL = SERVER_URL + "pages";
   constructor(user) {
-    this.user=user
+    this.user = user
   }
 
   //userに対応するpageのindex
   async getPageIndex(user) {
-    if(!user) user=this.user
+    if (!user) user = this.user
     const res = await fetch(this.API_URL + `?user_id=${user.id}`, {
       credentials: 'include', //クレデンシャルを含める指定
       mode: 'cors',
@@ -213,14 +213,14 @@ export class PageDataSource {
   }
 
   async getAllTagIndex(user) {
-    if(!user) user=this.user
+    if (!user) user = this.user
     const pages = (await this.getPageIndex(user));
     console.log(pages)
     const tags = [];
     (pages).forEach(page => {
       tags.push(...(page.tags))
     });
-    console.log("all tag",tags)
+    console.log("all tag", tags)
     return tags
   }
 
@@ -247,7 +247,7 @@ export class PageDataSource {
 
   async createPage(page) {
     let res;
-    if (page.workspace_id=="home") {
+    if (page.workspace_id == "home") {
       res = createData({ url: page.url, title: page.title }, this.API_URL + `?user_id=${page.user_id}`);
     } else {
       res = createData({ url: page.url, title: page.title, workspace_id: page.workspace_id }, this.API_URL + `?user_id=${page.user_id}`);
@@ -279,9 +279,7 @@ export class PageDataSource {
       },
       body: JSON.stringify({ user_id: user.id, keywords: keywords })
       // body: JSON.stringify({ user_id: user.id, keywords: keywords, workspace_id: workspace_id })
-    })
-      // .then(res => console.log(res))
-      .then(res => res.json());
+    }).then(res => res.json());
     console.log(res.pages);
     return res;
     //res.json 成功{"pages" (page とmemoの配列)の配列}
@@ -292,7 +290,7 @@ export class PageDataSource {
     const res = createData(post_data, this.API_URL + `/${page_id}/analytics`);
     return res;
   }
-  
+
   async getBrowseState(page_id) {
     const res = await fetch(this.API_URL + `/${page_id}/analytics`, {
       credentials: 'include',
@@ -352,6 +350,40 @@ export class TagDataSource {
   }
 }
 
+export class WSPageDataSource {
+  API_URL = SERVER_URL + 'ws';
+  init = {
+    credentials: 'include',
+    mode: 'cors',
+  }
+
+  constructor(workspace_id) {
+    this.workspace_id = workspace_id;
+  }
+
+  async getPageIndex() {
+    const workspace_id = this.workspace_id
+    const res = await fetch(this.API_URL + `/${workspace_id}/pages`, this.init);
+    return await res.json();
+  }
+
+  async searchPage(keywords) {
+    const workspace_id = this.workspace_id
+    const res = await fetch(this.API_URL + '/search', {
+      method: "POST",
+      credentials: 'include',
+      mode: 'cors',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ workspace_id: workspace_id, keywords: keywords })
+    }).then(res => res.json());
+    console.log(res.pages);
+    return res;
+  }
+}
+
 export class WorkspaceDataSource {
   API_URL = SERVER_URL + 'ws';
   init = {
@@ -369,36 +401,14 @@ export class WorkspaceDataSource {
     return res;
   }
 
-  async getPageIndex(workspace_id) {
-    const res = await fetch(this.API_URL + `/${workspace_id}/pages`, this.init);
-    return res;
-  }
-
-  async searchPage(workspace_id, keywords) {
-    const res = await fetch(this.API_URL + '/search', {
-      method: "POST",
-      credentials: 'include',
-      mode: 'cors',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ workspace_id: workspace_id, keywords: keywords })
-    })
-      // .then(res => console.log(res))
-      .then(res => res.json());
-    console.log(res.pages);
-    return res;
-  }
-
   async createWorkspace(workspace) {
-    const users = workspace.users.map((user_p) => { return( [user_p.user_id, user_p.permission] ) })
-    const res = createData({ name: workspace.name, users: users }, this.API_URL );
+    const users = workspace.users.map((user_p) => { return ([user_p.user_id, user_p.permission]) })
+    const res = createData({ name: workspace.name, users: users }, this.API_URL);
     return res;
   }
 
   async updateWorkspace(workspace) {
-    const users = workspace.users.map((user_p) => { return( [user_p.user_id, user_p.permission] ) })
+    const users = workspace.users.map((user_p) => { return ([user_p.user_id, user_p.permission]) })
     console.log(users)
     const res = updateData({ name: workspace.name, users: users }, this.API_URL + `/${workspace.id}`);
     return res;

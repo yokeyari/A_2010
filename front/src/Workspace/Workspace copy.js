@@ -3,8 +3,8 @@ import { useParams } from 'react-router-dom';
 
 import { PageDataSource, WorkspaceDataSource } from '../Main/ProductionApi'
 import PageList from '../User/PageList';
-import SelectWorkspace from '../Workspace/SelectWorkspace';
-import EditWorkspaceButton from '../Workspace/EditWorkspaceButton';
+import SelectWorkspace from './SelectWorkspace';
+import EditWorkspaceButton from './EditWorkspaceButton';
 import { UserInfoContext } from '../context'
 
 const pageDataSource = new PageDataSource();

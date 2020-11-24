@@ -3,13 +3,12 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 
 import Top from './Top/Top';
-import Home from './User/Home';
 import UserHome from './User/UserHome';
 import Footer from './Footer';
 import Header from './Header';
 import { useState } from 'react';
 import { UserInfoContext, WSInfoContext } from './context';
-import Workspace from "./Workspace/Workspace";
+import WSHome from "./Workspace/WSHome";
 import Signup from './Top/Signup';
 import Auth from './Auth/Auth';
 import PageAuth from "./Auth/PageAuth";
@@ -71,7 +70,7 @@ function App() {
                       <WSAuth>
                         <>
                           <Route exact path='/:user_id/ws/:workspace_id'>
-                            <Workspace search_word={search_word} />
+                            <WSHome search_word={search_word} />
                           </Route>
 
                           <Route exact path='/:user_id/ws/:workspace_id/:page_id'>

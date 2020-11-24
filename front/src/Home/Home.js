@@ -48,6 +48,7 @@ function Home(props) {
   const loadPages = () => {
     if (props.search_word == "") {
       dataSource.getPageIndex().then(pages => {
+        console.log("get pages",pages)
         if (pages === undefined) {
 
         } else {
@@ -68,7 +69,7 @@ function Home(props) {
 
   useEffect(() => {
     loadPages();
-  }, [props.search_word]);
+  }, [props.search_word,userInfo.workspace_id]);
 
   const withUpdate = (doSomething) => {
     doSomething.then(() => { loadPages() })
