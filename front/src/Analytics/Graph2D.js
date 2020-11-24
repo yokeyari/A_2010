@@ -12,7 +12,7 @@ export default function Graph2D(props) {
     console.log(Y)
     const state = Y[0].split(" ")[0]
     const user_id = Y[0].split("(")[1].split(")")[0]
-    return ((vis_state=="all" || state==vis_state) && (vis_user=="all" || user_id==vis_user))
+    return ((vis_state=="any" || state==vis_state) && (vis_user=="any" || user_id==vis_user))
   });
   console.log(Y_list)
   const data = Object.values(X)[0].map( (v, i) => 
