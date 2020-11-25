@@ -1,6 +1,6 @@
 class Api::V1::WorkspacesController < ApplicationController
   before_action :current_user
-  before_action :find_workspace, except: [:index, :create, :join]
+  before_action :find_workspace, except: [:index, :create, :join, :token]
 
   def index
     res_ok @user, inc: {workspaces: [:workspace]}
