@@ -87,7 +87,7 @@ ActiveRecord::Schema.define(version: 2020_11_25_063722) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "account_id"
-    t.index "\"email\", \"provider\", \"external_id\", \"username\"", name: "email_provider_external_id_account_id_index", unique: true
+    t.index ["email", "provider", "external_id", "account_id"], name: "email_provider_external_id_account_id_index", unique: true
   end
 
   create_table "workspaces", force: :cascade do |t|
