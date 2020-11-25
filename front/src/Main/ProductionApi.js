@@ -1,6 +1,6 @@
 // import axios from 'axios';
 
-const BERT_URL = process.env.REACT_APP_SERVER_URL
+const BERT_URL = process.env.REACT_APP_BERT_URL
 const SERVER_URL = process.env.REACT_APP_SERVER_URL
 
 async function createData(body, url) {
@@ -268,7 +268,7 @@ export class PageDataSource {
     return res;
   }
 
-  async searchPage(user, keywords) {
+  async searchPage(keywords) {
     const res = await fetch(this.API_URL + '/\search', {
       method: "POST",
       credentials: 'include', //クレデンシャルを含める指定
@@ -277,7 +277,7 @@ export class PageDataSource {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ user_id: user.id, keywords: keywords })
+      body: JSON.stringify({keywords: keywords })
       // body: JSON.stringify({ user_id: user.id, keywords: keywords, workspace_id: workspace_id })
     }).then(res => res.json());
     console.log(res.pages);

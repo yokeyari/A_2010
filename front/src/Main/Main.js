@@ -43,14 +43,16 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
+
+const N_SPLIT = 100;
+const POST_INTERVAL = 5000;
+
 const MemoAPI = new MemoDataSource();
 const PageApi = new PageDataSource();
 const BertApi = new BertDataSource();
 const workspaceApi = new WorkspaceDataSource();
 
 function Main(props) {
-  const N_SPLIT = 100;
-  const POST_INTERVAL = 5000;
   const classes = useStyles();
   const [memos, setMemos] = useState([]);
   const [reloader, setReloader] = useState(0);

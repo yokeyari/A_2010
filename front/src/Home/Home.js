@@ -29,16 +29,18 @@ function Home(props) {
   const user = userInfo;
   const pageAuther = new PageAuther(user);
   const dataSource = props.dataSource;
+  const s_pages = state.pages ? state.pages : null;
 
+  console.log(s_pages)
   const tags = Array.from((pages => {
     let tags = new Set();
     (pages).forEach(page => {
       (page.tags).forEach(tag => tags.add(tag.text))
     })
     return tags
-  })(state.pages));
+  })(s_pages));
 
-  const pages = state.pages.map(page => {
+  const pages = s_pages.map(page => {
     page.auth = pageAuther.makeAuth(page);
     return page
   }).filter(p => p.auth.canRead);
@@ -48,7 +50,7 @@ function Home(props) {
   const loadPages = () => {
     if (props.search_word == "") {
       dataSource.getPageIndex().then(pages => {
-        console.log("get pages",pages)
+        console.log("get pages", pages)
         if (pages === undefined) {
 
         } else {
@@ -60,7 +62,7 @@ function Home(props) {
       dataSource.searchPage(props.search_word.split(' '))
         .then(pages => {
           // console.log(props.search_word)
-          console.log("load page");
+          console.log("load page".pages);
           setState({ ...state, pages: pages });
         })
     }
@@ -69,7 +71,7 @@ function Home(props) {
 
   useEffect(() => {
     loadPages();
-  }, [props.search_word,userInfo.workspace_id]);
+  }, [props.search_word, userInfo.workspace_id]);
 
   const withUpdate = (doSomething) => {
     doSomething.then(() => { loadPages() })
