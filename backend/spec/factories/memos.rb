@@ -6,5 +6,6 @@ FactoryBot.define do
     text {?a}
     time {0}
     # status
+    # account_id
   end
 end
