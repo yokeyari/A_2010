@@ -57,12 +57,12 @@ export default function GraphBarSentiment(props) {
       <h4>memo sentiment</h4>
       <ResponsiveContainer>
         <ScatterChart width={600} height={300}
-          margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+          margin={{ top: 5, right: 30, left: 20, bottom: 60 }}>
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey={"xValue"} type="number" domain={[props.xmin, props.xmax]} />
+          <XAxis dataKey={"xValue"} type="number" unit="s" domain={[props.xmin, props.xmax]} />
           <YAxis dataKey={"positiveness"} type="number" />
           <Tooltip content={<CustomTooltip/>}/>
-          <Legend verticalAlign="top" wrapperStyle={{ lineHeight: '40px' }} />
+          <Legend verticalAlign="top" wrapperStyle={{ lineHeight: '20px' }} />
           <ReferenceLine y={0} stroke='#000' />
           <Scatter name="positiveness" data={data} fill="#82ca9d" onClick={handleJump} >
           {
