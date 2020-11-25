@@ -12,6 +12,7 @@ class Api::V1::WorkspacesController < ApplicationController
 
   def create
     wspace = nil
+
     ActiveRecord::Base.transaction do 
       wspace = Workspace.create!(params.permit(:name))
       wspace_id = wspace.id

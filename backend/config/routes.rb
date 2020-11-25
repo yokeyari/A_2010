@@ -21,6 +21,7 @@ Rails.application.routes.draw do
       delete 'ws/:workspace_id/users', to: 'workspaces#quit_users'
       
       get 'users',             to: 'users#index'
+      get 'users/search',      to: 'users#username_search'
       get 'users/:user_id',    to: 'users#show'
       post 'users',            to: 'users#create'
       patch 'users/:user_id',  to: 'users#update'

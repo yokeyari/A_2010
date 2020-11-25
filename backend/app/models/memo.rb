@@ -6,6 +6,7 @@ class Memo < ApplicationRecord
   enum status: {pri: 0, pub: 1}
 
   validate :valid_parent_id
+  validates :account_id, presence: true
 
   def valid_parent_id
     return if parent_id.nil? || Memo.find_by(id: parent_id)
