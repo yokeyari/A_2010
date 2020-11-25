@@ -17,10 +17,11 @@ Rails.application.routes.draw do
       patch 'ws/:workspace_id/token',  to: 'workspaces#reset_token'
       patch 'ws/:workspace_id/owner',  to: 'workspaces#change_owner'
       delete 'ws/:workspace_id',       to: 'workspaces#destroy'
-      delete 'ws/:workspace_id/user',  to: 'workspace#quit'
+      delete 'ws/:workspace_id/user',  to: 'workspaces#quit'
       delete 'ws/:workspace_id/users', to: 'workspaces#quit_users'
       
       get 'users',             to: 'users#index'
+      get 'users/search',      to: 'users#username_search'
       get 'users/:user_id',    to: 'users#show'
       post 'users',            to: 'users#create'
       patch 'users/:user_id',  to: 'users#update'

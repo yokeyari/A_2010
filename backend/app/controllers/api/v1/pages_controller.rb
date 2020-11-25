@@ -13,7 +13,7 @@ class Api::V1::PagesController < ApplicationController
   end
 
   def create
-    page = Page.create!(params.permit(:user_id, :workspace_id, :url, :title))
+    page = Page.create!(params.permit(:workspace_id, :url, :title).merge(user_id: @user.id))
     res_ok page, inc: {} # まだ中身ないのでincしない
   end
 
@@ -37,9 +37,12 @@ class Api::V1::PagesController < ApplicationController
     else
       pages = @user.pages
     end
-    
-    re = internal_search(pages, params[:keywords])
-    res_ok re
+
+    keywords = params[:keywords]
+    keywords.map! {|e| Regexp.new(e, Regexp::IGNORECASE)}
+
+    search_result = internal_search(pages, keywords)
+    render json: search_result, each_serializer: nil
   end
 
   # トークン再生成
@@ -64,21 +67,24 @@ private
   end
 
   def internal_search(pages, keywords)
-    re = []
+    search_result = []
+
     pages.each do |page|
-      a = page.memos.filter do |memo| 
-        keywords.any? {|keyword| memo.text.include?(keyword)}
+      memos = page.memos.filter do |memo| 
+        keywords.any? {|key| key.match?(memo.text)}
       end
 
-      b = page.tags.filter do |tag|
-        keywords.any? {|keyword| tag.text.include?(keyword)}
+      tag_bool = page.tags.any? do |tag|
+        keywords.any? {|key| key.match?(tag.text)}
       end
 
-      c = keywords.any? {|keyword| page.title.include?(keyword)}
+      title_bool = keywords.any? {|key| key.match?(page.title)}
 
-      next if a.empty? && b.empty? && !c
-      re << page.attributes.merge(memos: a, tags: page.tags)
+      next if memos.empty? && !tag_bool && !title_bool
+      memos.map! {|memo| MemoSerializer.new(memo).as_json}
+      search_result << SearchPageSerializer.new(page).as_json.merge(memos: memos)
     end
-    re
+
+    search_result
   end
 end

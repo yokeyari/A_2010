@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_23_073522) do
+ActiveRecord::Schema.define(version: 2020_11_25_063722) do
 
   create_table "browse_days", force: :cascade do |t|
     t.integer "user_id", null: false
@@ -45,6 +45,7 @@ ActiveRecord::Schema.define(version: 2020_11_23_073522) do
     t.integer "status", default: 0, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "account_id"
     t.index ["user_id", "page_id"], name: "index_memos_on_user_id_and_page_id"
   end
 
@@ -85,8 +86,8 @@ ActiveRecord::Schema.define(version: 2020_11_23_073522) do
     t.string "password_digest"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.string "username"
-    t.index ["email", "provider", "external_id", "username"], name: "index_users_on_email_and_provider_and_external_id_and_username", unique: true
+    t.string "account_id"
+    t.index ["email", "provider", "external_id", "account_id"], name: "email_provider_external_id_account_id_index", unique: true
   end
 
   create_table "workspaces", force: :cascade do |t|

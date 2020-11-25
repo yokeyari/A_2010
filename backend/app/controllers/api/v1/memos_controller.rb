@@ -9,7 +9,7 @@ class Api::V1::MemosController < ApplicationController
 
   # メモを作成する．
   def create
-    memo = Memo.create!(params.permit(:user_id, :page_id, :parent_id, :text, :time, :status))
+    memo = Memo.create!(params.permit(:page_id, :parent_id, :text, :time, :status).merge(user_id: @user.id, account_id: @user.account_id))
     res_ok memo
   end
 

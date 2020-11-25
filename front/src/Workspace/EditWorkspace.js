@@ -13,6 +13,7 @@ import { WorkspaceDataSource } from "../Main/ProductionApi";
 import UserInfoContext from "../context";
 import Transition from "../Transition";
 import InviteUserForm from "./InviteUserForm";
+import SelectNewOwner from "./SelectNewOwner"
 
 const workspaceDataSource = new WorkspaceDataSource();
 
@@ -48,15 +49,19 @@ export default function EditWorkspace(props) {
 		to: "",
 		isLoaded: false
 	})
-	const [fields, setFields] = useState([{ user_id: null, permission: null }]);
+	// const [fields, setFields] = useState(props.initFields.users);
+	const [fields, setFields] = useState( props.initFields.users.filter(user => user.permission!="owner") ); //owner以外のusersを入力欄の初期値にする
 	const { userInfo } = useContext(UserInfoContext);
-  const classes = useStyles();
-  
+	const [newOwnerId, setNewOwnerId] = useState("")
+	const classes = useStyles();
 
-	const handleClick = () => {
+	const owner_id = props.initFields.users.find(user_p => user_p.permission == "owner").user_id;
+
+	const handleSubmit = () => {
+		// console.log("aaaaaa", newOwnerId);
 
 		trackPromise(
-			workspaceDataSource.updateWorkspace({ name: state.name, users: fields })
+			workspaceDataSource.updateWorkspace({name: state.name, users: fields, id: userInfo.workspace_id})
 				.then(res => {
 					if (res.statusText == "OK") {
 						res.json()
@@ -67,7 +72,16 @@ export default function EditWorkspace(props) {
 					} else {
 						
 					}
-				}));
+				})
+				// .then(() => {
+				// 	// console.log("new ownerId", newOwnerId);
+				// 	// console.log("workspace_id", userInfo.workspace_id);
+				// 	// workspaceDataSource.updateOwner({user_id: newOwnerId, workspace_id: userInfo.workspace_id})
+				// })
+		);
+		console.log("new ownerId", newOwnerId);
+		console.log("workspace_id", userInfo.workspace_id);
+		workspaceDataSource.updateOwner(newOwnerId, userInfo.workspace_id)
 	}
 
 
@@ -85,7 +99,7 @@ export default function EditWorkspace(props) {
 
 	const handleAdd = () => {
 		const values = [...fields];
-		values.push({ value: null, permission: null });
+		values.push({ user_id: null, permission: null });
 		setFields(values);
 	}
 
@@ -97,34 +111,46 @@ export default function EditWorkspace(props) {
 
 	const handleCloseWs = () => {
 		workspaceDataSource.deleteWorkspace(userInfo.workspace_id)
-		.then(() => {
-			setState({ ...state, to: `/${userInfo.id}/`, isLoaded: true });
-		})
+			.then(() => {
+				setState({ ...state, to: `/${userInfo.id}/`, isLoaded: true });
+			})
 	}
 
-  console.log(fields);
+	const handleChangeOwner = (event) => {
+		const selected_ownerId = event.target.value;
+		setNewOwnerId(selected_ownerId);
+		console.log("selected new ownerId", selected_ownerId);
+	}
+
+	console.log(fields);
 
 	return (
 		<div>
 			<Card>
 				<h2 id="">Edit Workspace</h2>
 				<div>
+					{/* <h1>workspace token: {props.workspace.token}</h1> */}
+
 					<TextField type="text" id="ws-input" className={classes.root}
 						label="Workspace Name"
 						multiline
 						onChange={e => { setState({ ...state, name: e.target.value }) }} value={state.name} />
 
-					<InviteUserForm users={props.initFields.users} handleChangeUserId={handleChangeUserId} handleChangePermission={handleChangePermission} handleAdd={handleAdd} handleRemove={handleRemove} />
+					<div>owner: {owner_id}</div>
+
+					<InviteUserForm users={fields} handleChangeUserId={handleChangeUserId} handleChangePermission={handleChangePermission} handleAdd={handleAdd} handleRemove={handleRemove} />
+
+					{userInfo.permission == "owner" ? <SelectNewOwner users={props.initFields.users} handleChangeOwner={handleChangeOwner} /> : <></>}
 
 					<Transition to={state.to} ok={state.isLoaded}>
 						<Button className={classes.button} id="submit"
 							variant="contained" color="primary" endIcon={<CreateIcon />}
-							onClick={handleClick}>
+							onClick={handleSubmit}>
 							change
 						</Button>
 					</Transition>
 
-					<Button onClick={handleCloseWs}>close this workspace</Button>
+					{userInfo.permission == "owner" ? <Button onClick={handleCloseWs}>close this workspace</Button> : <></>}
 				</div>
 			</Card>
 		</div>

@@ -16,7 +16,7 @@ import BrightnessAutoIcon from '@material-ui/icons/BrightnessAuto';
 import Tooltip from '@material-ui/core/Tooltip';
 const useStyles = makeStyles((theme) => ({
   root: {
-    // minWidth: "100%",
+    minWidth: "60%",
     //flexGrow: 1,
     maxHeight: 500,
     overflow: 'auto',
