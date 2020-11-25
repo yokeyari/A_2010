@@ -120,7 +120,7 @@ export default function Header(props) {
 
   const handleLogout = () => {
     // document.cookie = "_session_id=0";
-    UserApi.logoutUser(userInfo.id);
+    UserApi.logoutUser();
   }
 
   const Hamburger = (
@@ -149,6 +149,14 @@ export default function Header(props) {
             <ListItemText primary="動画メモページ" />
           </MenuItem>
         </Link> */}
+        <Link to={`/${userInfo.id}/profile`} >
+          <MenuItem button onClick={handleClose}>
+            <ListItemIcon>
+              {/* <PersonIcon /> */}
+            </ListItemIcon>
+            <ListItemText primary="プローフィール" />
+          </MenuItem>
+        </Link>
         <SelectWorkspace onClose={handleClose}/>
       </StyledMenu>
     </>)

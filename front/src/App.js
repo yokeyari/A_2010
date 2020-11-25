@@ -18,6 +18,7 @@ import WSAuth from "./Auth/WSAuth";
 import Main from './Main/Main';
 
 import Analytics from "./Main/Analytics/Analytics";
+import Profile from "./User/Profile"
 
 function App() {
   const [userInfo, setUserInfo] = useState({
@@ -61,11 +62,14 @@ function App() {
               <Route path='/:user_id'>
                 <UserAuth>
                   <Switch>
-                  
+
                     <Route exact path='/:user_id/'>
                       <WSAuth>
                         <UserHome search_word={search_word} />
                       </WSAuth>
+                    </Route>
+                    <Route exact path='/:user_id/profile'>
+                        <Profile />
                     </Route>
 
                     <Route path='/:user_id/ws/:workspace_id'>
