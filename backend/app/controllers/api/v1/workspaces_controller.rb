@@ -61,7 +61,7 @@ class Api::V1::WorkspacesController < ApplicationController
   def join
     wspace = Workspace.find(params[:workspace_id])
     raise MyOwnerChangeError if params[:perm] == 'owner'
-    rel.create!(user_id: @user.id, workspace_id: wspace.id, permission: params[:perm])
+    Rel_UAW.create!(user_id: @user.id, workspace_id: wspace.id, permission: params[:perm])
     res_ok wspace, inc: {users: :user, pages: [:tags, :memos]}
   end
 
