@@ -1,5 +1,5 @@
 class Api::V1::UsersController < ApplicationController
-  before_action :current_user, except: [:index, :create, :username_search]
+  before_action :current_user, except: [:index, :create, :account_search]
   before_action :set_bug_bug_bug
 
   def index
@@ -31,7 +31,7 @@ class Api::V1::UsersController < ApplicationController
     res_ok
   end
 
-  def username_search
-    res_ok User.where("username LIKE :prefix", prefix: "#{params[:account_id]}%"), inc: {}
+  def account_search
+    res_ok User.where("account_id LIKE :prefix", prefix: "#{params[:account_id]}%"), inc: {}
   end
 end
