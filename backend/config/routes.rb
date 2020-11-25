@@ -7,6 +7,7 @@ Rails.application.routes.draw do
       delete 'authes/logout',     to: 'authes#logout'
 
       get 'ws',                        to: 'workspaces#index'
+      get 'ws/token',                  to: 'workspaces#token'
       get 'ws/:workspace_id',          to: 'workspaces#show'
       get 'ws/:workspace_id/users',    to: 'workspaces#all_users'
       get 'ws/:workspace_id/pages',    to: 'workspaces#all_pages'

@@ -117,6 +117,15 @@ class Api::V1::WorkspacesController < ApplicationController
     res_ok @wspace, inc: {users: :user, pages: [:tags, :memos]}
   end
 
+  def token
+    wspace = Workspace.find_by(token: params[:workspace_token])
+    if wspace.nil?
+      res_not_found
+    else
+      res_ok wspace, inc: {}
+    end
+  end
+
 private
   def find_workspace
     @wspace = Workspace.find(params[:workspace_id])
