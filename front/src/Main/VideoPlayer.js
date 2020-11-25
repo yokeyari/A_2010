@@ -30,8 +30,10 @@ const useStyles = ((theme) => ({
     //backgroundColor:"#ff3fff",
     position: 'relative',
     //margin: theme.spacing(1),
-    width: '720px',
+    //width: '720px',
     height: '405px',
+    width:'100%',
+    //height:'100%'
   },
 }
 ));
@@ -59,8 +61,24 @@ class VideoPlayer extends React.Component {
 
 
   // width を変数にして scale と tarnslate を計算すればいい感じにできそう
-  reactplayerSize = (size=1.5) => {
-    //console.log(this.props.width)
+  reactplayerSize = () => {
+    //console.log("WIDTH:",this.props.width)
+    //console.log("screen size:",window.innerWidth)
+   
+   let size=1.0
+    if (['md','lg','xl'].includes(this.props.width)){
+      //console.log("md~xl")
+      const screen_size =window.innerWidth
+      size= screen_size/2/490
+    }
+    if (['sm','xs'].includes(this.props.width)){
+      //console.log("sm~xs")
+      const screen_size =window.innerWidth
+      size= screen_size*10/12/550
+      //ここ480じゃないのはちょっと余裕を持たせるため
+    }
+    //console.log("倍率：",size)
+    //console.log("動画サイズ:",480*size)
     // let size = this.props.width / 480
     return {
       transform:`scale(${size})`,

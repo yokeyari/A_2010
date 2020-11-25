@@ -7,11 +7,40 @@ import CancelOutlinedIcon from '@material-ui/icons/CancelOutlined';
 import DoneIcon from '@material-ui/icons/Done';
 import RemoveCircleOutlineOutlinedIcon from '@material-ui/icons/RemoveCircleOutlineOutlined';
 import Alert from '@material-ui/lab/Alert';
-
-
+import { makeStyles } from '@material-ui/core/styles';
+import Card from '@material-ui/core/Card';
+import Modal from '@material-ui/core/Modal';
+import Fade from '@material-ui/core/Fade';
+import MenuBookIcon from '@material-ui/icons/MenuBook';
 const UserApi = new UserDataSource();
 const WorkspaceApi = new WorkspaceDataSource();
-
+const useStyles = makeStyles((theme) => ({
+	root: {
+		flex: 1,
+    backgroundColor: "#e7ecec",
+    padding:theme.spacing(2)
+  },
+  card: {
+		//maxWidth: 600,
+		//maxHeight: 500,
+		overflow: 'auto',
+		margin: theme.spacing(1),
+		padding: theme.spacing(1),
+		//backgroundColor:"#D2B48C",
+  },
+  modal: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  paper: {
+    backgroundColor: theme.palette.background.paper,
+    border: '2px solid #000',
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
+  },
+}
+));
 export default function Profile(props) {
 
   const [user, setUser] = useState({ name: "", username: "", email: "", pages: [], workspaces: [] });
@@ -21,7 +50,15 @@ export default function Profile(props) {
   const [successMessage, setSuccessMessage] = useState("")
   const [isOpenAccountCloseBody, setIsOpenAccountCloseBody] = useState(null);
   const [reloader, setReloader] = useState(0);
-
+  const classes=useStyles();
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => {
+		setOpen(true);
+	};
+	const handleClose = () => {
+    setOpen(false);
+    setIsOpenAccountCloseBody(false) 
+	};
 
   useEffect(() => {
     UserApi.getUser().then((res) => {
@@ -53,6 +90,7 @@ export default function Profile(props) {
   }
 
   const handleOpenBody = () => {
+    setOpen(true);
     isOpenAccountCloseBody ? setIsOpenAccountCloseBody(false) : setIsOpenAccountCloseBody(true)
   }
 
@@ -64,18 +102,35 @@ export default function Profile(props) {
     const workspace_id = event.currentTarget.getAttribute("workspace_id")
     withUpdate(WorkspaceApi.quitWorkspace(workspace_id));
   }
-
-
   const accountCloseBody =
     isOpenAccountCloseBody ?
-      <Link to="/" >
-        <p><Button onClick={handleDeleteAccount}>confirm</Button></p>
-      </Link> :
+      
+        
+        <Modal
+          open={open}
+          className={classes.modal}
+					onClose={handleClose}
+					aria-labelledby="simple-modal-title"
+					aria-describedby="simple-modal-description"
+				>
+					<Fade in={open}>
+          <div className={classes.paper}>
+            
+              <h2>本当に削除しますか？</h2>
+              <div></div>
+          <Button color="secondary" variant="contained" onClick={handleDeleteAccount}>削除</Button>
+       
+          </div>
+					</Fade>
+				</Modal>
+      :
       null
-
+{/*<Link to="/" >*/}
+{/*</Link>  これいる？*/ }
   return (
-    <div>
+    <div className={classes.root}>
       <h2>プロフィールページ</h2>
+      <Card className={classes.card}>
       <h3>basic profile
         {!editMode
           ? <Button onClick={handleChangeEditMode} startIcon={<EditIcon />}>edit</Button>
@@ -103,7 +158,8 @@ export default function Profile(props) {
           <p>{user.email}</p>
         </div>
       }
-
+      </Card>
+      <Card className={classes.card}>
       <h3>your pages</h3>
       <ul>
         {user.pages.map(page =>
@@ -118,7 +174,8 @@ export default function Profile(props) {
           </li>
         )}
       </ul>
-
+      </Card>
+      <Card className={classes.card}>
       <h3>your workspaces</h3>
       <ul>
         {user.workspaces.map(workspace_p =>
@@ -132,8 +189,8 @@ export default function Profile(props) {
           </li>
         )}
       </ul>
-
-      <Button onClick={handleOpenBody} startIcon={<CancelOutlinedIcon />}> close your account ...</Button>
+      </Card>
+      <Button onClick={handleOpenBody} startIcon={<CancelOutlinedIcon />}> Delete your account ...</Button>
       {accountCloseBody}
     </div>
   )
