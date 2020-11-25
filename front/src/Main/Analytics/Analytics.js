@@ -1,5 +1,5 @@
 import Graph2D from "./Graph2D";
-import GraphBarSentiment from "./GraphBarSentiment"
+import GraphSentimentScatter from "./GraphSentimentScatter"
 import { Button, FormControl, InputLabel, MenuItem, Grid, Select } from '@material-ui/core';
 import React, { useState, useEffect } from 'react';
 import Card from '@material-ui/core/Card';
@@ -90,55 +90,55 @@ export default function Analytics(props) {
   useEffect(() => {
     // ダミーデータ
     // 本番では下の本番用コードをコメントアウトして、このコードは消す
-    const browseTimes = dummy_browseTimes;
-    const browseDays = dummy_browseDays;
-    const memos = dummy_memos;
-    const [user_ids, data_time] = createData(browseTimes, "time");
-    const [_, data_day] = createData(browseDays, "day");
-    setDataList({ ...dataList, browse_times: data_time, browse_dates: data_day });
-    setUserIds(user_ids);
-    setData(dataList["browse_times"]);
-    const text_list = memos.map(memo => memo.text)
-    BertApi.getSentment(text_list).then(res => {
-      setMemoSentiment(res.map((score, i) => {
-        return { user_id: memos[i].user_id, time: memos[i].time, text: memos[i].text, positiveness: score.positiveness, negativeness: score.negativeness }
-      }))
-    })
+    // const browseTimes = dummy_browseTimes;
+    // const browseDays = dummy_browseDays;
+    // const memos = dummy_memos;
+    // const [user_ids, data_time] = createData(browseTimes, "time");
+    // const [_, data_day] = createData(browseDays, "day");
+    // setDataList({ ...dataList, browse_times: data_time, browse_dates: data_day });
+    // setUserIds(user_ids);
+    // setData(dataList["browse_times"]);
+    // const text_list = memos.map(memo => memo.text)
+    // BertApi.getSentment(text_list).then(res => {
+    //   setMemoSentiment(res.map((score, i) => {
+    //     return { user_id: memos[i].user_id, time: memos[i].time, text: memos[i].text, positiveness: score.positiveness, negativeness: score.negativeness }
+    //   }))
+    // })
     // ここまでダミー
 
 
     // 本番用
-    // let browseTimes = [];
-    // let browseDays = [];
-    // PageApi.getBrowseState(page.id).then(res => {
-    //   res.json().then(json => {
-    //     console.log(json)
-    //     browseTimes = json.browse_times
-    //     browseDays = json.browse_days
+    let browseTimes = [];
+    let browseDays = [];
+    PageApi.getBrowseState(page.id).then(res => {
+      res.json().then(json => {
+        console.log(json)
+        browseTimes = json.browse_times
+        browseDays = json.browse_days
 
-    //     if (browseTimes.length && browseDays.length) {
-    //       console.log(browseTimes, browseDays)
-    //       const [user_ids, data_time] = createData(browseTimes, "time");
-    //       const [_, data_day] = createData(browseDays, "day");
+        if (browseTimes.length && browseDays.length) {
+          console.log(browseTimes, browseDays)
+          const [user_ids, data_time] = createData(browseTimes, "time");
+          const [_, data_day] = createData(browseDays, "day");
 
-    //       setDataList({ ...dataList, browse_times: data_time, browse_dates: data_day });
-    //       setUserIds(user_ids);
-    //       setData(dataList["browse_times"]);
-    //     }
-    //   })
-    // })
+          setDataList({ ...dataList, browse_times: data_time, browse_dates: data_day });
+          setUserIds(user_ids);
+          setData(dataList["browse_times"]);
+        }
+      })
+    })
 
-    // console.log(memos)
-    // if (memos.length) {
-    //   const text_list = memos.map(memo => memo.text)
-    //   BertApi.getSentment(text_list).then(res => {
-    //     setMemoSentiment(res.map((score, i) => {
-    //       return { user_id: memos[i].user_id, time: memos[i].time, text: memos[i].text, positiveness: score.positiveness, negativeness: score.negativeness }
-    //     }))
-    //   })
-    // } else {
-    //   setMemoSentiment([{ user_id: null, text: null, time: null, positiveness: null, negativeness: null }])
-    // }
+    console.log(memos)
+    if (memos.length) {
+      const text_list = memos.map(memo => memo.text)
+      BertApi.getSentment(text_list).then(res => {
+        setMemoSentiment(res.map((score, i) => {
+          return { user_id: memos[i].user_id, time: memos[i].time, text: memos[i].text, positiveness: score.positiveness, negativeness: score.negativeness }
+        }))
+      })
+    } else {
+      setMemoSentiment([{ user_id: null, text: null, time: null, positiveness: null, negativeness: null }])
+    }
     // ここまで本番用
 
   }, [])
@@ -162,7 +162,7 @@ export default function Analytics(props) {
 
   const body =
     graphName == "memoSentiment"
-      ? <GraphBarSentiment data={memoSentiment} vis_user={visUser} onClick={props.onClick} player={player} xmin={0} xmax={player.duration} />
+      ? <GraphSentimentScatter data={memoSentiment} vis_user={visUser} onClick={props.onClick} player={player} xmin={0} xmax={player.duration} />
       : data ? <Graph2D X={data.X} Y_list={data.Y_list} vis_state={visState} vis_user={visUser} onClick={props.onClick} player={player} xmin={0} xmax={player.duration} /> : null
 
   return (
@@ -186,7 +186,7 @@ export default function Analytics(props) {
                 <MenuItem value={"none"} key={0} >none</MenuItem>
                 <MenuItem value={"browse_times"} key={1} >browse time</MenuItem>
                 <MenuItem value={"browse_dates"} key={2} >browse date</MenuItem>
-                <MenuItem value={"memoSentiment"} key={4} >memo sentiment bar plot</MenuItem>
+                <MenuItem value={"memoSentiment"} key={4} >memo sentiment scatter</MenuItem>
               </Select>
             </FormControl>
           </Grid>

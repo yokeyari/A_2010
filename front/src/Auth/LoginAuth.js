@@ -101,7 +101,10 @@ function LoginAuth(props) {
     <div>
       { renderAuthButton()}
       {(!userInfo.endCheck ? null :
-        !isLogin ? <Redirect to={'/login'} /> : null)}
+        !isLogin ? 
+        // <Redirect to={'/login'} /> 
+        null
+        : null)}
     </div>
   );
 

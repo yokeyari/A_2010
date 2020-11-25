@@ -16,11 +16,12 @@ import Hidden from '@material-ui/core/Hidden';
 import GoogleLogin from "../Auth/GoogleLogin";
 import {
   BrowserRouter as Router,
-  useRouteMatch,
+  useLocation,
   Redirect,
   Route,
   Switch
 } from "react-router-dom";
+import queryString from 'query-string';
 
 
 import Login from './Login';
@@ -74,6 +75,10 @@ function Top() {
   const classes = useStyles();
   // console.log(useRouteMatch());
   const { userInfo } = useContext(UserInfoContext);
+  const location = useLocation();
+  // const redirectURL=location.state ? location.state.redirectURL : null;
+  const qs = queryString.parse(location.search);
+  const redirectURL =  qs ? "/ws/"+qs.token : null; 
 
 
   // UserAPI.loginUser(user)
@@ -104,13 +109,13 @@ function Top() {
 
             <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
                 <Box textAlign='center'>
-                  <GoogleLogin/>
+                  <GoogleLogin redirectURl={redirectURL} />
                 </Box>
                 <Switch>
                   <Route exact path='/'></Route>
 
                   <Route exact path='/login'>
-                      <Login />
+                      <Login redirectURl={redirectURL}/>
                   </Route>
 
                   <Route exact path='/signup'>

@@ -1,7 +1,5 @@
 // import './App.css';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-
-
 import Top from './Top/Top';
 import UserHome from './User/UserHome';
 import Footer from './Footer';
@@ -19,6 +17,7 @@ import Main from './Main/Main';
 
 import Analytics from "./Main/Analytics/Analytics";
 import Profile from "./User/Profile"
+import InviteWS from "./InviteWS"
 
 function App() {
   const [userInfo, setUserInfo] = useState({
@@ -57,7 +56,11 @@ function App() {
               <Route exact path='/page/:token'>
                 <PageAuth mode="token" />
               </Route>
+              <Route exact path='/ws/:token' component={InviteWS}/>
               <Route exact path='/analytics' component={Analytics} />
+
+
+
 
               <Route path='/:user_id'>
                 <UserAuth>
@@ -71,6 +74,9 @@ function App() {
                     <Route exact path='/:user_id/profile'>
                         <Profile />
                     </Route>
+
+
+
 
                     <Route path='/:user_id/ws/:workspace_id'>
                       <WSAuth>
