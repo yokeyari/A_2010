@@ -1,5 +1,6 @@
 class Api::V1::PagesController < ApplicationController
   before_action :current_user, except: [:share]
+  before_action :set_bug_bug_bug
   before_action :find_page, only: [:show, :update, :destroy, :reset_token]
 
   # メモページ一覧とメモ一覧を返す

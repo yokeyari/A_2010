@@ -34,10 +34,18 @@ class ApplicationController < ActionController::API
     res
   end
 
+  # bug 
+  # おそらく render で serialize するときに before_action が呼ばれてしまう．onlyでも呼ばれる．なぜか.
   def current_user
+    return if @bug_bug_bug
+    @bug_bug_bug = 0
     @user ||= User.find(session[:user_id])
   rescue ActiveRecord::RecordNotFound # ユーザーが見つからない，またはsessionが保存されていない時
     render status: 600
+  end
+
+  def set_bug_bug_bug
+    @bug_bug_bug = 0
   end
 
   def join_ws?(user, ws)

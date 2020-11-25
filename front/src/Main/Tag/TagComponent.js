@@ -60,12 +60,11 @@ function TagComponent(props){
       #{body}
       {/*</CardActions>*/}
       {/*<CardActions>  */}
-        {tag.is_automated==false ?
+        {tag.is_automated==false &&
           (isEditMode ? 
-            <Button className="edit" startIcon={<DoneIcon />}onClick={() => {endEditMode()} }>done</Button>:
-            <Button className="edit" color="primary" startIcon={<EditIcon />} onClick={() => { setEditMode(true) }}>edit</Button>)
+            <Button className="edit" startIcon={<DoneIcon />}onClick={() => {endEditMode()} }>done</Button>
           :
-          (<></>)
+          <Button className="edit" color="primary" startIcon={<EditIcon />} onClick={() => { setEditMode(true) }}>edit</Button>)
         }
       <IconButton className="delete" style={{marginLeft:'auto'}} color="secondary" onClick={() => { props.onDelete(tag) }}>
         <DeleteIcon />

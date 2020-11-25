@@ -25,37 +25,37 @@ function InviteUserForm(props) {
       </Grid>
 
       {props.users.map((user, idx) => {
-        return (
-          <div>
-            <Grid key={`${user}-${idx}`}>
-              <Grid container direction="row">
+          return (
+            <div>
+              <Grid key={`${user}-${idx}`}>
+                <Grid container direction="row">
 
-                <Grid item>
-                  <FormControl>
-                    <Select onChange={e => props.handleChangePermission(idx, e)}
-                      defaultValue={user.permission ? user.permission : "general"}
-                      inputProps={{ "aria-label": "Without label" }}>
-                      <MenuItem value="guest" key={0}>guest</MenuItem>
-                      <MenuItem value="general" key={1}>general</MenuItem>
-                      <MenuItem value="owner" key={2}>owner</MenuItem>
-                    </Select>
-                  </FormControl>
+                  <Grid item>
+                    <FormControl>
+                      <Select onChange={e => props.handleChangePermission(idx, e)}
+                        defaultValue={user.permission ? user.permission : "general"}
+                        inputProps={{ "aria-label": "Without label" }}>
+                        <MenuItem value="guest" key={0}>guest</MenuItem>
+                        <MenuItem value="general" key={1}>general</MenuItem>
+                        <MenuItem value="sup" key={2}>super</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Grid>
+
+                  <Grid item>
+                    <TextField
+                      type="text"
+                      placeholder="Enter user_id"
+                      defaultValue={user.user_id}
+                      onChange={e => props.handleChangeUserId(idx, e)}
+                    />
+                    <Button type="button" startIcon={<DeleteIcon />} onClick={() => props.handleRemove(idx)} />
+                  </Grid>
+
                 </Grid>
-
-                <Grid item>
-                  <TextField
-                    type="text"
-                    placeholder="Enter user_id"
-                    defaultValue={user.user_id}
-                    onChange={e => props.handleChangeUserId(idx, e)}
-                  />
-                  <Button type="button" startIcon={<DeleteIcon />} onClick={() => props.handleRemove(idx)} />
-                </Grid>
-
               </Grid>
-            </Grid>
-          </div>
-        );
+            </div>
+          );
       })}
 
     </Grid>

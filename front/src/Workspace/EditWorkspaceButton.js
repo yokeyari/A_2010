@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import Modal from '@material-ui/core/Modal';
 import CreateIcon from '@material-ui/icons/Create';
 import { makeStyles } from '@material-ui/core/styles';
@@ -34,33 +34,23 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-function EditWorkspaceButton() {
+function EditWorkspaceButton(props) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
-  const [initFields, setInitFields] = useState({name: null, users: [{user_id: null, permission: null}]})
+  const [initFields, setInitFields] = useState({name: "", users: [{user_id: null, permission: null}]})
   const {userInfo, setUserInfo} = useContext(UserInfoContext);
 
 
   const getInitFields = () => {
-    // 本番用 要API確認
-    workspaceDataSource.getWorkspace(userInfo.workspace_id).then(res => {
-      res.json().then(workspace => {
-		console.log("get workspace", workspace);
-		const name = workspace.name
-		setInitFields({...initFields, name: name});
-      })
-    })
-    workspaceDataSource.getWorkspaceUsers(userInfo.workspace_id).then(res => {
-      res.json().then(user_p_list => {
-		console.log("get workspace user and permission", user_p_list);
-		const id_p_list = user_p_list.map((user_p) => { return {user_id: user_p.user.id, permission: user_p.permission} })
-        setInitFields({...initFields, users: id_p_list});
-      })
-    })
+	if (props.workspace && props.user_p_list) {
+		let id_p_list = props.user_p_list.map((user_p) => { return { user_id: user_p.user.id, permission: user_p.permission } });
+		// owner権限のユーザーをリストから抜く
+		// id_p_list = id_p_list.filter(id_p => id_p.permission!="owner");
+        setInitFields({ ...initFields, name: props.workspace.name, users: id_p_list });
+	}
 
-    // // テスト用
-	// setInitFields({users: [{user_id: "test", permission: "general"}]});
-	// console.log("aaaaaa", initFields);
+	console.log("initFields", initFields);
+	console.log(props.workspace);
   }
 
 	const handleOpen = () => {
@@ -93,7 +83,7 @@ function EditWorkspaceButton() {
 			>
 				<Fade in={open}>
 					<div style={modalStyle}>
-						<EditWorkspace onClose={handleClose} initFields={initFields} />
+						<EditWorkspace onClose={handleClose} initFields={initFields} workspace={props.workspace} />
 					</div>
 				</Fade>
 			</Modal>

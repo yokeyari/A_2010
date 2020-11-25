@@ -166,9 +166,9 @@ export class UserDataSource {
   }
 
   //userの新規作成
-  async createUser(user_name, access_token) {
+  async createUser(user, access_token) {
     const res = await createData(
-      user_name,
+      user,
       this.API_URL,
       access_token
     );
@@ -287,6 +287,29 @@ export class PageDataSource {
     //res.json 成功{"pages" (page とmemoの配列)の配列}
     //res.status 成功200, 失敗400
   }
+
+  // 誰か書いておいてください
+  
+  // async AnalysticPage(user, page, ) {
+  //   const res = await fetch(this.API_URL + '/'+ page.id + '/' + 'browse_state', {
+  //     method: "POST",
+  //     credentials: 'include', //クレデンシャルを含める指定
+  //     mode: 'cors',
+  //     headers: {
+  //       'Accept': 'application/json',
+  //       'Content-Type': 'application/json'
+  //     },
+  //     body: JSON.stringify({user_id: user.id, page_id: page.id, state:state, time, daytime})
+  //     // body: JSON.stringify({ user_id: user.id, keywords: keywords, workspace_id: workspace_id })
+  //   })
+  //     // .then(res => console.log(res))
+  //     .then(res => res.json());
+  //   console.log(res.pages);
+  //   return res;
+  //   //res.json 成功{"pages" (page とmemoの配列)の配列}
+  //   //res.status 成功200, 
+  // }
+
 }
 
 //tagのapiクラス
@@ -378,16 +401,15 @@ export class WorkspaceDataSource {
   }
 
   async createWorkspace(workspace) {
-    // const res = createData({ name: workspace.name, users: workspace.users }, this.API_URL );
     const users = workspace.users.map((user_p) => { return( [user_p.user_id, user_p.permission] ) })
     const res = createData({ name: workspace.name, users: users }, this.API_URL );
-    // const res = createData({ name: "test2", users: [[1, "owner"]] }, this.API_URL );
-    // const res = createData({ name: workspace.name }, this.API_URL );
     return res;
   }
 
-  async updateWorkspace(name, users) {
-    const res = createData({ name: name, users: users }, this.API_URL);
+  async updateWorkspace(workspace) {
+    const users = workspace.users.map((user_p) => { return( [user_p.user_id, user_p.permission] ) })
+    console.log(users)
+    const res = updateData({ name: workspace.name, users: users }, this.API_URL + `/${workspace.id}`);
     return res;
   }
 
@@ -400,6 +422,20 @@ export class WorkspaceDataSource {
     const res = await fetch(this.API_URL + `/${workspace_id}/users`, this.init);
     return res;
   }
+
+  async getWorkspaceByToken(token) {
+    const res = await fetch(this.API_URL + `/${token}`, {
+      method: "POST",
+      credentials: 'include',
+      mode: 'cors',
+    });
+    return res;
+  }
+
+  async updateOwner(user_id, workspace_id) {
+    const res = updateData({ user_id: user_id }, this.API_URL + `/${workspace_id}/owner`);
+    return res;
+  }
 }
 
 
@@ -407,13 +443,13 @@ export class BertDataSource {
   async getSentment(text_list) {
     let np_scores = [];
     for (let text of text_list) {
-      console.log("before", text)
+      // console.log("before", text)
       const res = await fetch(BERT_URL + `?text=${text}`, {
         mode: 'cors',
       });
-      console.log("after,", res)
+      // console.log("after,", res)
       const json = await res.json();
-      console.log(json)
+      // console.log(json)
       np_scores.push(json.body)
     }
     return np_scores;

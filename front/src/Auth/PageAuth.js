@@ -10,7 +10,7 @@ import { PageDataSource } from '../Main/ProductionApi';
 const pageDataSource = new PageDataSource();
 
 export default function PageAuth(props) {
-  const [isLoading, segtIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const { token, user_id, page_id } = useParams();
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
 
@@ -21,7 +21,7 @@ export default function PageAuth(props) {
   useEffect(() => {
     if (mode == "user") {
       setUserInfo({ ...userInfo, id: user_id });
-      segtIsLoading(false);
+      setIsLoading(false);
     } else {
       pageDataSource.getPageByToken(token)
         .then(res => {
@@ -30,7 +30,7 @@ export default function PageAuth(props) {
             res.json()
               .then(page => {
                 console.log("getPage", page.page);
-                segtIsLoading(false);
+                setIsLoading(false);
                 // setState({ ...state, to: `/${userInfo.id}/${page.page.id}`, isLoaded: true });
               })
           } else {

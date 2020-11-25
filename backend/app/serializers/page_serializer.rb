@@ -5,4 +5,6 @@ class PageSerializer < ActiveModel::Serializer
   belongs_to :user
   has_many :memos
   has_many :tags
+  has_many :browse_times
+  has_many :browse_days
 end

@@ -1,8 +1,9 @@
 class Api::V1::UsersController < ApplicationController
   before_action :current_user, except: [:index, :create]
+  before_action :set_bug_bug_bug
 
   def index
-    res_ok User.all, inc: {}
+    res_ok User.all, inc: {} 
   end
 
   def show

@@ -84,8 +84,8 @@ export default function Login() {
               .then(user => {
                 console.log(user);
                 // console.log("getPage", page.page);
-                setUserInfo({ ...userInfo, endCheck: true, id: user.user.id, name: user.user.name, isLogin: true });
-                setState({ to: `/${user.user.id}/`, isLoaded: true, isLoading: false });
+                setUserInfo({ ...userInfo, endCheck: true, id: user.id, name: user.name, isLogin: true });
+                setState({ to: `/${user.id}/`, isLoaded: true, isLoading: false });
 
                 // localStorage.setItem('user', JSON.stringify(user.user));
                 // props.onClose();
