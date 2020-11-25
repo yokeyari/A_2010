@@ -1,5 +1,5 @@
 class Api::V1::UsersController < ApplicationController
-  before_action :current_user, except: [:index, :create]
+  before_action :current_user, except: [:index, :create, :username_search]
   before_action :set_bug_bug_bug
 
   def index
@@ -29,5 +29,9 @@ class Api::V1::UsersController < ApplicationController
     @user.destroy
     reset_session
     res_ok
+  end
+
+  def username_search
+    res_ok User.where("username LIKE :prefix", prefix: "#{params[:username]}%"), inc: {}
   end
 end

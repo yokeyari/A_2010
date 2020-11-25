@@ -12,15 +12,21 @@ class Api::V1::WorkspacesController < ApplicationController
 
   def create
     wspace = nil
+    params[:users].map! do |username, perm| 
+      user = User.find_by(username: username)
+      raise ActiveRecord::RecordNotFound if user.nil?
+      [user, perm]
+    end
+
     ActiveRecord::Base.transaction do 
       wspace = Workspace.create!(params.permit(:name))
       wspace_id = wspace.id
 
       Rel_UAW.create!(user_id: @user.id, workspace_id: wspace_id, permission: :owner)
 
-      params[:users].each do |user_id, perm| 
+      params[:users].each do |user, perm| 
         raise MyOwnerChangeError if perm == 'owner'
-        Rel_UAW.create!(user_id: user_id, workspace_id: wspace_id, permission: perm)
+        Rel_UAW.create!(user_id: user.id, workspace_id: wspace_id, permission: perm)
       end
     end
 

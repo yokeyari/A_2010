@@ -13,7 +13,7 @@ class Api::V1::PagesController < ApplicationController
   end
 
   def create
-    page = Page.create!(params.permit(:user_id, :workspace_id, :url, :title))
+    page = Page.create!(params.permit(:workspace_id, :url, :title).merge(user_id: @user.id))
     res_ok page, inc: {} # まだ中身ないのでincしない
   end
 
