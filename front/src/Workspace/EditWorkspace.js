@@ -45,20 +45,19 @@ const useStyles = makeStyles((theme) => ({
 
 export default function EditWorkspace(props) {
 	const [state, setState] = useState({
-		name: props.initFields.name,
+		name: props.workspace.name,
 		to: "",
 		isLoaded: false
 	})
-	// const [fields, setFields] = useState(props.initFields.users);
-	const [fields, setFields] = useState( props.initFields.users.filter(user => user.permission!="owner") ); //owner以外のusersを入力欄の初期値にする
+	// const [fields, setFields] = useState(props.workspace.users);
+	const [fields, setFields] = useState( props.workspace.users.filter(user => user.permission!="owner") ); //owner以外のusersを入力欄の初期値にする
 	const { userInfo } = useContext(UserInfoContext);
 	const [newOwnerId, setNewOwnerId] = useState("")
 	const classes = useStyles();
 
-	const owner_id = props.initFields.users.find(user_p => user_p.permission == "owner").user_id;
+	const owner_id = props.workspace.users.find(user_p => user_p.permission == "owner").user.id;
 
 	const handleSubmit = () => {
-
 		trackPromise(
 			workspaceDataSource.updateWorkspace({name: state.name, users: fields, id: userInfo.workspace_id})
 				.then(res => {
@@ -139,7 +138,7 @@ export default function EditWorkspace(props) {
 
 					<InviteUserForm users={fields} handleChangeUserId={handleChangeUserId} handleChangePermission={handleChangePermission} handleAdd={handleAdd} handleRemove={handleRemove} />
 
-					{userInfo.permission == "owner" ? <SelectNewOwner users={props.initFields.users} handleChangeOwner={handleChangeOwner} /> : <></>}
+					{userInfo.permission == "owner" ? <SelectNewOwner users={props.workspace.users} handleChangeOwner={handleChangeOwner} /> : <></>}
 
 					<Transition to={state.to} ok={state.isLoaded}>
 						<Button className={classes.button} id="submit"

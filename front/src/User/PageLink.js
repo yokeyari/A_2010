@@ -12,7 +12,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import Button from '@material-ui/core/Button';
 
 
-import {UserInfoContext} from "../context";
+import { UserInfoContext } from "../context";
 import Transition from "../Transition";
 import { PageDataSource } from "../Main/ProductionApi";
 import { PageAuther } from '../Auth/Authers';
@@ -126,13 +126,26 @@ export default function PageLink(props) {
   // }
 
 
+  const renderMemos = () => (
+    page.memos.slice(0, PREVIEW_MEMO_NUM).map((memo, i) => (
+      <div key={(i).toString()}>
+        {memo.text.slice(0, PREVIEW_MEMO_MAX)}
+        <br />
+      </div>
+    ))
+  )
 
+  const renderTags = () => (
+    page.tags.slice(0, PREVIEW_TAG_NUM).map(tag => (
+      "#" + tag.text + ' '
+    ))
+  )
 
   return (
     <>
       <Transition to={state.to} ok={state.isLoaded} isLoading={state.isLoading}>
-
       </Transition>
+
       <Card className={classes.card}>
         <CardActionArea onClick={handleClick}>
           <CardMedia
@@ -145,27 +158,14 @@ export default function PageLink(props) {
             <Typography gutterBottom variant="h5" component="h2">
               {page.title}
             </Typography>
-            <Typography variant="body2" color="textSecondary" component="p">
-              {/* {page.url} */}
-              {
-
-                  page.memos.slice(0, PREVIEW_MEMO_NUM).map((memo, i) => (
-                    <>
-                      {memo.text.slice(0, PREVIEW_MEMO_MAX)}
-                      <br/>
-                    </>
-                  ))
-
-              }
-              {
-                page.tags.slice(0,PREVIEW_TAG_NUM).map(tag=>(
-                  "#"+tag.text+' '
-                ))
-              }
+            <Typography variant="body2" color="textSecondary" component="div">
+                {/* {page.url} */}
+                {renderMemos()}
+                {renderTags()}
             </Typography>
           </CardContent>
         </CardActionArea>
-        {pageAuther.canDelete(page)  ? <Button className={classes.button} color="secondary" startIcon={<DeleteIcon />} onClick={() => { handleDelete(page) }}></Button> : <></>}
+        {pageAuther.canDelete(page) ? <Button className={classes.button} color="secondary" startIcon={<DeleteIcon />} onClick={() => { handleDelete(page) }}></Button> : <></>}
       </Card>
     </>
   )

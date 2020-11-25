@@ -36,18 +36,23 @@ function LoginAuth(props) {
 
   const isLogin = (userInfo.isLogin == true) ? true : false;
 
-  useEffect(() => {
-    const setWS = ((user) => {
-      workspacesDataSource.getWorkspaceIndex().then(res => {
-        res.json().then(json => {
-          const home = { permission: "owner", workspace: { id: "home", name: user.name, token: null } };
-          const workspaces = [home, ...json.workspaces];
-          console.log('load workspace list', workspaces);
-          setWSInfo({ ...WSInfo, workspaces });
-        })
+
+  const setWS = ((user) => {
+    workspacesDataSource.getWorkspaceIndex().then(res => {
+      res.json().then(json => {
+        const home = { permission: "owner", workspace: { id: "home", name: user.name, token: null } };
+        const workspaces = [home, ...json.workspaces];
+        console.log('load workspace list', workspaces);
+        setWSInfo({ ...WSInfo, workspaces });
       })
     })
-    
+  })
+
+  // useEffect(()=>{
+  //   setWS(userInfo);
+  // },[userInfo])
+
+  useEffect(() => {
     userDataSource.isLogIn().then(res => {
       console.log("first login check", res);
       if (res.statusText == "OK") {

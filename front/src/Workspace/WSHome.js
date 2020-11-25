@@ -15,25 +15,23 @@ const workspaceDataSource = new WorkspaceDataSource();
 function WSHome(props) {
   const { userInfo } = useContext(UserInfoContext);
   const [workspace, setWorkspace] = useState({ name: "" })
-  const [userPermissionList, setUserPermissionList] = useState([]);
   const user = userInfo;
   const workspace_id = userInfo.workspace_id;
   const pageDataSource = new WSPageDataSource(workspace_id);
-  // const pageAuther = userInfo.pageAuther
-
 
   useEffect(() => {
     workspaceDataSource.getWorkspace(workspace_id).then(res => {
       res.json().then(workspace => {
+        console.log("ws",workspace)
         setWorkspace(workspace);
       })
     })
-  }, [workspace_id])
+  }, [workspace_id,userInfo])
 
   const top = (
     <div>
       <h2>{workspace.name} ({userInfo.permission})</h2>
-      <EditWorkspaceButton workspace={workspace} user_p_list={userPermissionList} />
+      <EditWorkspaceButton workspace={workspace}/>
     </div>
   )
 
