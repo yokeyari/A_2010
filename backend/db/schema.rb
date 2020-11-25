@@ -45,7 +45,7 @@ ActiveRecord::Schema.define(version: 2020_11_25_063722) do
     t.integer "status", default: 0, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.string "account_id", null: false
+    t.string "account_id"
     t.index ["user_id", "page_id"], name: "index_memos_on_user_id_and_page_id"
   end
 
