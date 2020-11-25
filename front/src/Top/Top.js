@@ -78,8 +78,7 @@ function Top() {
   const location = useLocation();
   // const redirectURL=location.state ? location.state.redirectURL : null;
   const qs = queryString.parse(location.search);
-  const redirectURL =  qs ? "/ws/"+qs.token : null; 
-
+  const redirectURL =  Object.keys(qs).length ? "/ws/"+qs.token : null; 
 
   // UserAPI.loginUser(user)
   // UserAPI.createUser(user)
@@ -109,13 +108,13 @@ function Top() {
 
             <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
                 <Box textAlign='center'>
-                  <GoogleLogin redirectURl={redirectURL} />
+                  <GoogleLogin redirectURL={redirectURL} />
                 </Box>
                 <Switch>
                   <Route exact path='/'></Route>
 
                   <Route exact path='/login'>
-                      <Login redirectURl={redirectURL}/>
+                      <Login redirectURL={redirectURL}/>
                   </Route>
 
                   <Route exact path='/signup'>

@@ -429,16 +429,17 @@ export class WorkspaceDataSource {
   }
 
   async getWorkspaceByToken(token) {
-    const res = await fetch(this.API_URL + `/${token}`, {
-      method: "POST",
-      credentials: 'include',
-      mode: 'cors',
-    });
+    const res = await fetch(this.API_URL + `/token?workspace_token=${token}`, this.init);
     return res;
   }
 
   async updateOwner(user_id, workspace_id) {
     const res = updateData({ user_id: user_id }, this.API_URL + `/${workspace_id}/owner`);
+    return res;
+  }
+
+  async addUser(workspace_id, users) {
+    const res = createData(users, this.API_URL + `/${workspace_id}/users`);
     return res;
   }
 }

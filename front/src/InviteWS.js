@@ -4,48 +4,30 @@ import { BrowserRouter as Router, Route, Link, Redirect, useParams } from 'react
 import { Button, Input, TextField, FilledInput, OutlinedInput, InputLabel, FormControl } from "@material-ui/core";
 
 import { UserInfoContext } from './context';
-import { UserDataSource } from "./Main/ProductionApi";
+import { UserDataSource, WorkspaceDataSource } from "./Main/ProductionApi";
 
 const userDataSource = new UserDataSource();
-const useStyles = makeStyles((theme) => ({
-  root: {
-    height: '100vh',
-  },
-  image: {
-    backgroundImage: 'url(https://source.unsplash.com/random)',
-    backgroundRepeat: 'no-repeat',
-    backgroundColor:
-      theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
+const workspaceDataSource = new WorkspaceDataSource();
 
-  },
-  paper: {
-    margin: theme.spacing(8, 4),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
-  form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(1),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-}));
+
 export default function InviteWS(props) {
-  const classes = useStyles();
   const { userInfo } = useContext(UserInfoContext);
   const { token } = useParams();
 
   if (userInfo.endCheck) {
     if (userInfo.isLogin) {
-      return null
+      workspaceDataSource.getWorkspaceByToken(token).then(res => {
+        if (res.statusText == 'OK') {
+          res.json().then(workspace => {
+            console.log(workspace)
+            workspaceDataSource.addUser(workspace.id, {users: [ [userInfo.id, "general"] ]})
+            props.history.push(`/${userInfo.id}/ws/${workspace.id}`);
+          })
+        } else {
+          
+        }
+      })
+      return <h1>Not Found</h1>
     } else {
       return (
         <Redirect
