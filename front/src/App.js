@@ -69,7 +69,7 @@ function App() {
                       </WSAuth>
                     </Route>
                     <Route exact path='/:user_id/profile'>
-                        <Profile />
+                      <Profile />
                     </Route>
 
                     <Route path='/:user_id/ws/:workspace_id'>

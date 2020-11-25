@@ -10,7 +10,7 @@ const workspaceDataSource = new WorkspaceDataSource();
 
 
 export default function WSAuth(props) {
-  let { workspace_id} = useParams();
+  let { workspace_id } = useParams();
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
   const { WSInfo } = useContext(WSInfoContext)
 
@@ -26,7 +26,8 @@ export default function WSAuth(props) {
       // const pageAuther = new PageAuther(user);
       // const wsAuther = new WSAuther(user);
       // const memoAuther = new MemoAuther(user);
-      setUserInfo({ ...user})
+      const homeLink = workspace_id == "home" ? `/${user.id}` : `/${user.id}/ws/${workspace_id}`;
+      setUserInfo({ ...user,homeLink})
     }
   }, [workspace_id, WSInfo])
 

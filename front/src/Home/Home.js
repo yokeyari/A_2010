@@ -1,13 +1,15 @@
 import Button from '@material-ui/core/Button';
 import React, { useContext, useEffect, useState } from 'react';
+import { BrowserRouter as Router, Route, useLocation } from "react-router-dom";
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import { makeStyles } from '@material-ui/core/styles';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import PageList from '../User/PageList';
-import { UserInfoContext } from '../context'
+import { UserInfoContext } from '../context';
 import { PageAuther } from '../Auth/Authers';
+import queryString from 'query-string';
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -26,12 +28,18 @@ function Home(props) {
   const classes = useStyles();
   const [searchTag, setSearchTag] = useState('all');
 
+  const location = useLocation();
+  const qs = queryString.parse(location.search);
   const user = userInfo;
   const pageAuther = new PageAuther(user);
   const dataSource = props.dataSource;
   const s_pages = state.pages ? state.pages : null;
 
-  console.log(s_pages)
+  const q_seach_word = (qs.search != null ? qs.search : "");
+  const search_word = props.search_word ? props.search_word : q_seach_word
+  // console.log(q_seach_word,search_word)
+
+  // console.log(s_pages)
   const tags = Array.from((pages => {
     let tags = new Set();
     (pages).forEach(page => {
@@ -48,7 +56,7 @@ function Home(props) {
 
 
   const loadPages = () => {
-    if (props.search_word == "") {
+    if (search_word == "") {
       dataSource.getPageIndex().then(pages => {
         console.log("get pages", pages)
         if (pages === undefined) {
@@ -59,10 +67,10 @@ function Home(props) {
       })
 
     } else {
-      dataSource.searchPage(props.search_word.split(' '))
+      dataSource.searchPage(search_word.split(' '))
         .then(pages => {
           // console.log(props.search_word)
-          console.log("load page".pages);
+          // console.log("load page".pages);
           setState({ ...state, pages: pages });
         })
     }
@@ -71,7 +79,7 @@ function Home(props) {
 
   useEffect(() => {
     loadPages();
-  }, [props.search_word, userInfo.workspace_id]);
+  }, [search_word, userInfo.workspace_id]);
 
   const withUpdate = (doSomething) => {
     doSomething.then(() => { loadPages() })
@@ -80,6 +88,10 @@ function Home(props) {
   const handleTagChange = (event) => {
     setSearchTag(event.target.value);
   };
+
+  // if (q_seach_word && (search_word == "")) {
+  //   props.onSearchChange(q_seach_word);
+  // }
 
 
   if (isTagMode) {
