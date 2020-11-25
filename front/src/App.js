@@ -28,7 +28,8 @@ function App() {
     isLogin: false,
     workspace_id: "home",
     permission: "owner",
-    endCheck: false
+    endCheck: false,
+    homeLink: "/"
   })
   const [WSInfo, setWSInfo] = useState({
     active_ws_id: "",
