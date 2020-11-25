@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState, useRef } from 'react'
 import { Redirect, useParams, withRouter } from 'react-router-dom'
-import UserInfoContext from '../context';
+import {UserInfoContext} from '../context';
 import { UserDataSource } from '../Main/ProductionApi';
 
 import Button from '@material-ui/core/Button';

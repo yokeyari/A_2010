@@ -12,7 +12,7 @@ import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import EditWorkspace from './EditWorkspace';
 import { WorkspaceDataSource } from '../Main/ProductionApi'
-import UserInfoContext from '../context';
+import {UserInfoContext} from '../context';
 
 const workspaceDataSource = new WorkspaceDataSource();
 

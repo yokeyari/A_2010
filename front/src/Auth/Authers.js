@@ -20,7 +20,7 @@ class BaseAuther {
     switch (user.level) {
       case "owner":
         this.default = {
-          read: PERM.ALL, create: PERM.ALL, edit: PERM.ALL, delete: PERM.ALL
+          read: PERM.ALL, create: PERM.ALL, edit: PERM.OWN, delete: PERM.ALL
         }
         break;
       case "sup":
@@ -34,9 +34,13 @@ class BaseAuther {
         }
         break;
       case "guest":
-      default:
         this.default = {
           read: PERM.ALL, create: PERM.NO, edit: PERM.NO, delete: PERM.NO
+        }
+        break;
+      default:
+        this.default = {
+          read: PERM.NO, create: PERM.NO, edit: PERM.NO, delete: PERM.NO
         }
     }
   }
@@ -56,7 +60,7 @@ class BaseAuther {
     return this.calcAuth(target, 'read')
   }
   canCreate = (target) => {
-    return this.calcAuth(target,'create')
+    return this.calcAuth(target, 'create')
   }
   canEdit = (target) => {
     return this.calcAuth(target, 'edit')
@@ -81,15 +85,15 @@ class MemoAuther extends BaseAuther {
     super(user);
   }
   canCreate = (page) => {
-    return this.calcAuth(page,'create')
+    return this.calcAuth(page, 'create')
   }
 
   canRead = (target) => {
-    //console.log(target)
-    if(target.status=="pri"){
+    console.log(target)
+    if (target.status == "pri") {
       // console.log("is pri",target.user_id.toString(),this.user,target.user_id.toString() == this.user.id)
       return (target.user_id.toString() == this.user.id)
-    }else if(target.status=="pub"){
+    } else if (target.status == "pub") {
       return true
     }
   }
@@ -98,15 +102,19 @@ class MemoAuther extends BaseAuther {
 class PageAuther extends BaseAuther {
   constructor(user) {
     super(user);
-    if(user.level=="general"){
-      this.default = {...this.default,create:PERM.NO}
+    if (user.level == "general") {
+      this.default = { ...this.default, create: PERM.NO }
     }
   }
   canRead = (target) => {
-    if(this.user.workspace_id=="home"){
-      return (target.workspace_id==null);
-    }else{
-      return this.calcAuth(target, 'read')
+    if (this.user.workspace_id == "home") {
+      return (target.workspace_id == null);
+    } else {
+      if (target.workspace_id == this.user.workspace_id) {
+        return this.calcAuth(target, 'read');
+      } else {
+        return false
+      }
     }
   }
 

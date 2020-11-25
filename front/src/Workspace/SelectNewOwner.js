@@ -9,7 +9,7 @@ import { FormControl, InputLabel, MenuItem, Button, Grid } from '@material-ui/co
 
 export default function SelectNewOwner(props) {
 
-  const owner_id = props.users.find(user_p => user_p.permission=="owner").user_id;
+  const owner_id = props.users.find(user_p => user_p.permission == "owner").user.id;
 
   return (
     <Grid className="invite-user-form">
@@ -25,7 +25,15 @@ export default function SelectNewOwner(props) {
           <Select onChange={e => props.handleChangeOwner(e)}
             defaultValue={owner_id}
             inputProps={{ "aria-label": "Without label" }}>
-            {props.users.map((user, idx) => { return (<MenuItem value={user.user_id} key={user.user_id}>{user.user_id} {user.user_id==owner_id ? <>(you)</> : <></>}</MenuItem>) })}
+            {props.users.map((user, idx) => {
+              return (
+                <MenuItem value={user.user.id} key={user.user.id}>
+                  <div>
+                    {user.user.name} (ID:{user.user.id})
+                    {user.user.id == owner_id ? "(you)" : null}
+                  </div>
+                </MenuItem>)
+            })}
           </Select>
         </FormControl>
       </Grid>

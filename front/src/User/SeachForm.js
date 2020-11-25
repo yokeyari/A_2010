@@ -19,7 +19,7 @@ import {
 
 import NewPage from './../NewPage/NewPage'
 
-import UserInfoContext from '../context'
+import {UserInfoContext} from '../context'
 
 const useStyles = makeStyles((theme) => ({
   root: {

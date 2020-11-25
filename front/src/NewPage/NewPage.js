@@ -11,7 +11,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 
-import UserInfoContext from "../context";
+import {UserInfoContext} from "../context";
 import { PageAuther } from "../Auth/Authers"
 
 const useStyles = makeStyles((theme) => ({

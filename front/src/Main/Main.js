@@ -27,7 +27,7 @@ import TagForm from './Tag/TagForm';
 //import * as MemoAPI from './LocalApi';
 import { MemoDataSource, PageDataSource, BertDataSource, WorkspaceDataSource } from './ProductionApi';
 
-import UserInfoContext from '../context'
+import {UserInfoContext} from '../context'
 import { MemoAuther } from '../Auth/Authers';
 import Analytics from './Analytics/Analytics';
 import useInterval from 'use-interval';
@@ -151,8 +151,7 @@ function Main(props) {
   }
 
   function handleChangeTitle(title) {
-    // post server
-    // withUpdate(PageApi.updatePage({ url: page.url, title: title, id: page_id }));
+    withUpdate(PageApi.updatePage({ url: page.url, title: title, id: page_id }));
   }
 
   function handleWriting() {

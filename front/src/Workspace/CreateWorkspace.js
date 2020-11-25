@@ -10,7 +10,7 @@ import { CardActions } from "@material-ui/core";
 import { trackPromise } from "react-promise-tracker";
 
 import { WorkspaceDataSource } from "../Main/ProductionApi";
-import UserInfoContext from "../context";
+import {UserInfoContext} from "../context";
 import Transition from "../Transition";
 import InviteUserForm from "./InviteUserForm";
 
@@ -49,7 +49,7 @@ export default function CreateWorkspace(props) {
 		isLoaded: false
   })
 	const { userInfo } = useContext(UserInfoContext);
-	const [users, setUsers] = useState([{ user_id: "", permission: "" }]);
+	const [users, setUsers] = useState([]);
 	const classes = useStyles();
 
 

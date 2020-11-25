@@ -11,7 +11,7 @@ import { trackPromise } from "react-promise-tracker";
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 
 import { PageDataSource } from "./../Main/ProductionApi";
-import UserInfoContext from "../context";
+import {UserInfoContext} from "../context";
 import Transition from "../Transition";
 
 const pageDataSource = new PageDataSource();
