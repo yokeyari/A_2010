@@ -144,7 +144,7 @@ export class UserDataSource {
     //失敗 
   }
 
-  async logoutUser(user_id) {
+  async logoutUser() {
     const res = await fetch(SERVER_URL + `authes/logout`, {
       credentials: 'include', //クレデンシャルを含める指定
       mode: 'cors',
@@ -154,11 +154,10 @@ export class UserDataSource {
     //成功 200
   }
 
-  async getUser(access_token) {
-    const res = await fetch(this.API_URL + '/', {
+  async getUser(user_id) {
+    const res = await fetch(this.API_URL + `/${user_id}`, {
       credentials: 'include', //クレデンシャルを含める指定
       mode: 'cors',
-      headers: { 'Authorization': 'Basic ' + access_token }
     });
     return res;
     //成功 200 {"user":user}
@@ -178,14 +177,14 @@ export class UserDataSource {
 
   //userの更新
   async updateUser(user) {
-    const res = updateData({ name: user.name, email: user.email },
+    const res = updateData({ name: user.name, email: user.email, username: user.username },
       this.API_URL + '/' + user.id);
     return res;
   }
 
   //userの削除
-  async deleteUser(user) {
-    const res = deleteData(this.API_URL + '/' + user.id);
+  async deleteUser(user_id) {
+    const res = deleteData(this.API_URL + '/' + user_id);
     return res;
   }
 }
@@ -406,6 +405,11 @@ export class WorkspaceDataSource {
 
   async deleteWorkspace(workspace_id) {
     const res = deleteData(this.API_URL + `/${workspace_id}`);
+    return res;
+  }
+
+  async quitWorkspace(workspace_id) {
+    const res = deleteData(this.API_URL + `/${workspace_id}/user`);
     return res;
   }
 

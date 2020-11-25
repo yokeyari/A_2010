@@ -13,6 +13,7 @@ import Signup from './Top/Signup';
 import Auth from './Auth/Auth';
 import PageAuth from "./Auth/PageAuth";
 import Analytics from "./Main/Analytics/Analytics";
+import Profile from "./User/Profile"
 
 function App() {
   const [userInfo, setUserInfo] = useState({
@@ -50,6 +51,11 @@ function App() {
               <Route exact path='/:user_id'>
                 <Auth>
                   <Home search_word={search_word} />
+                </Auth>
+              </Route>
+              <Route exact path='/:user_id/profile'>
+                <Auth>
+                  <Profile />
                 </Auth>
               </Route>
               <Route exact path='/:user_id/ws/:workspace_id'>
