@@ -12,6 +12,7 @@ class Api::V1::AuthesController < ApplicationController
     if user.nil? # ユーザーがいない
       res_not_found
     elsif user.authenticate(params[:password])
+      reset_session
       session[:user_id] = user.id
       res_ok user, inc: {workspaces: :workspace, pages: [:tags, :memos]}
     else # パスワードが違う
@@ -24,13 +25,14 @@ class Api::V1::AuthesController < ApplicationController
     tokeninfo = GoogleApis::Oauth2V2::Oauth2Service.new.tokeninfo(id_token: params[:id_token])
     google_user_id = tokeninfo.user_id
     google_email = /\A.*@/.match(tokeninfo.email)[0][0 .. -2]
-    google_username = google_email + google_user_id
-    
-    user = User.find_by(provider: 'google', external_id: google_user_id)
-    
-    # userが無い場合は新規作成
-    user ||= User.create!(name: params[:name], provider: 'google', external_id: google_user_id, username: google_username)
+    google_account_id = google_email + google_user_id
 
+    user = User.find_or_create_by!(provider: 'google', external_id: google_user_id) do |u|
+      u.name = params[:name]
+      u.account_id = google_account_id
+    end
+
+    reset_session
     session[:user_id] = user.id
     res_ok user, inc: {workspaces: :workspace, pages: [:tags, :memos]}
   rescue GoogleApis::ServerError => e # tokeninfoの失敗例外，リトライ推奨
