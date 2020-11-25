@@ -57,7 +57,6 @@ function App() {
                 <PageAuth mode="token" />
               </Route>
               <Route exact path='/ws/:token' component={InviteWS}/>
-              <Route exact path='/analytics' component={Analytics} />
 
 
 
