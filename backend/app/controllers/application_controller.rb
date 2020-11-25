@@ -5,6 +5,7 @@ class ApplicationController < ActionController::API
   include TypicalRes
 
   GOO_LAB_URL = "https://labs.goo.ne.jp/api/keyword"
+  WorkSpace = Workspace
   Rel_UAW = RelUserAndWorkspace
 
   # オリジナルエラー
@@ -18,6 +19,7 @@ class ApplicationController < ActionController::API
   rescue_from MyForbidden,                  with: :res_forbidden
   rescue_from MyUnauthorized,               with: :res_unauthorized
   rescue_from MyOwnerChangeError,           with: :res_bad_request
+  # rescue_from ArgumentError,                with: :bad_request      # enumに無い物を指定すると発生
 
   # api に何かを投げつける
   def post_api(post_hash, url = GOO_LAB_URL)
@@ -29,9 +31,7 @@ class ApplicationController < ActionController::API
     http.use_ssl = true
     http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 
-    res = nil
-    http.start {|h| res = h.request(req)}
-    res
+    http.request(req)
   end
 
   # bug 

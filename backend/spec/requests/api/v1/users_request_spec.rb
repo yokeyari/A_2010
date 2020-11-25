@@ -17,7 +17,7 @@ RSpec.describe "Api::V1::Users", type: :request do
         email: "hoge@example.com",
         password: "qwerty",
         password_confirmation: "qwerty",
-        username: "hoge"
+        account_id: "hoge"
       }
 
       expect {post '/api/v1/users', params: valid_params}.to change(User, :count).by(+1)
@@ -42,7 +42,7 @@ RSpec.describe "Api::V1::Users", type: :request do
     end
 
     it 'update user data' do
-      valid_params = {name: 'huga', email: 'huga@example.com', username: 'huga'}
+      valid_params = {name: 'huga', email: 'huga@example.com', account_id: 'huga'}
       patch "/api/v1/users/#{@user.id}", params: valid_params
       json = JSON.parse(response.body)
 
