@@ -1,4 +1,4 @@
-import { useState } from "react"
+import React , { useState } from "react"
 import Modal from "react-modal";
 import Button from '@material-ui/core/Button';
 
@@ -59,7 +59,7 @@ function Dialog(props) {
   )
 }
 
-function DialogDone(props) {
+function DoneDialog(props) {
   return (
     <Dialog
       actionMessage="送信しますか?"
@@ -69,14 +69,14 @@ function DialogDone(props) {
   )
 }
 
-function DialogDelete(props) {
+function DeleteDialog(props) {
   return (
     <Dialog
-      actionMessage={ props.actionMessage ? props.actionMessage : "削除しますか?" }
+      actionMessage={props.actionMessage ? props.actionMessage : "削除しますか?"}
       yesCallback={props.yesCallback}
-      yesMessage={ props.yesMessage ? props.yesMessage : "削除" }
+      yesMessage={props.yesMessage ? props.yesMessage : "削除"}
       noMessage="キャンセル" />
   )
 }
 
-export { DialogDone, DialogDelete }
+export { Dialog, DeleteDialog, DoneDialog }

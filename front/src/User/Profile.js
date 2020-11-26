@@ -13,7 +13,7 @@ import Modal from '@material-ui/core/Modal';
 import Fade from '@material-ui/core/Fade';
 import MenuBookIcon from '@material-ui/icons/MenuBook';
 import { CommentSharp } from "@material-ui/icons";
-import { DialogDone, DialogDelete } from "../Dialogs"
+import { DeleteDialog, DoneDialog } from "../Dialogs"
 const UserApi = new UserDataSource();
 const WorkspaceApi = new WorkspaceDataSource();
 const useStyles = makeStyles((theme) => ({
@@ -109,7 +109,7 @@ export default function Profile(props) {
   const ActivateQuitWsModal = (event) => {
     const workspace = event.currentTarget.getAttribute("workspace");
     return (
-      <DialogDelete
+      <DeleteDialog
         yesCallback={() => { withUpdate(WorkspaceApi.quitWorkspace(workspace.id)) }}
         actionMessage={`${workspace.name}から退出しますか?`}
         yesMessage="退出する" />
@@ -200,7 +200,7 @@ export default function Profile(props) {
               {workspace_p.permission != "owner"
                 // ? <Button onClick={handleQuitWorkspace} workspace_id={workspace_p.workspace.id} startIcon={<RemoveCircleOutlineOutlinedIcon />}></Button>
                 ? <Button onClick={ActivateQuitWsModal} workspace={workspace_p.workspace} startIcon={<RemoveCircleOutlineOutlinedIcon />}></Button>
-                // ? <DialogDelete 
+                // ? <DeleteDialog 
                 //     yesCallback={() => { withUpdate(WorkspaceApi.quitWorkspace(workspace_p.workspace.id)) }} 
                 //     actionMessage={`${workspace_p.workspace.name}から退出しますか?`}
                 //     yesMessage="退出する" />
