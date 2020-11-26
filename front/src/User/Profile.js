@@ -11,6 +11,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import Modal from '@material-ui/core/Modal';
 import Fade from '@material-ui/core/Fade';
+import Grid from '@material-ui/core/Grid';
 import MenuBookIcon from '@material-ui/icons/MenuBook';
 import { CommentSharp } from "@material-ui/icons";
 import { DialogDone, DialogDelete } from "../Dialogs"
@@ -106,16 +107,6 @@ export default function Profile(props) {
     withUpdate(WorkspaceApi.quitWorkspace(workspace_id));
   }
 
-  const ActivateQuitWsModal = (event) => {
-    const workspace = event.currentTarget.getAttribute("workspace");
-    return (
-      <DialogDelete
-        yesCallback={() => { withUpdate(WorkspaceApi.quitWorkspace(workspace.id)) }}
-        actionMessage={`${workspace.name}から退出しますか?`}
-        yesMessage="退出する" />
-    )
-  }
-
   const accountCloseBody =
     isOpenAccountCloseBody ?
 
@@ -194,17 +185,22 @@ export default function Profile(props) {
         <ul>
           {user.workspaces.map(workspace_p =>
             <li key={workspace_p.workspace.id}>
-              <Link to={`/${user.id}/ws/${workspace_p.workspace.id}`}>
-                {workspace_p.workspace.name} ({workspace_p.permission})
-            </Link>
-              {workspace_p.permission != "owner"
-                // ? <Button onClick={handleQuitWorkspace} workspace_id={workspace_p.workspace.id} startIcon={<RemoveCircleOutlineOutlinedIcon />}></Button>
-                ? <Button onClick={ActivateQuitWsModal} workspace={workspace_p.workspace} startIcon={<RemoveCircleOutlineOutlinedIcon />}></Button>
-                // ? <DialogDelete 
-                //     yesCallback={() => { withUpdate(WorkspaceApi.quitWorkspace(workspace_p.workspace.id)) }} 
-                //     actionMessage={`${workspace_p.workspace.name}から退出しますか?`}
-                //     yesMessage="退出する" />
-                : null}
+              <Grid container className={classes.grid} direction="row">
+                <Grid item>
+                  <Link to={`/${user.id}/ws/${workspace_p.workspace.id}`}>
+                    {workspace_p.workspace.name} ({workspace_p.permission})
+                  </Link>
+                </Grid>
+                <Grid item>
+                  {workspace_p.permission != "owner"
+                    ? <DialogDelete
+                      yesCallback={() => { withUpdate(WorkspaceApi.quitWorkspace(workspace_p.workspace.id)) }}
+                      modalMessage={`「 ${workspace_p.workspace.name} 」から退出しますか?`}
+                      actionMessage="退出"
+                      yesMessage="退出" />
+                    : null}
+                </Grid>
+              </Grid>
             </li>
           )}
         </ul>
