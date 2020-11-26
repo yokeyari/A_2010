@@ -6,4 +6,11 @@ FactoryBot.define do
     password_confirmation {'qwerty'}
     account_id {'hoge'}
   end
+
+  factory :google_user do
+    name {"google"}
+    provider {"google"}
+    external_id {"1"}
+    account_id {"google"}
+  end
 end

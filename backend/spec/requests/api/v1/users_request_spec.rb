@@ -54,5 +54,13 @@ RSpec.describe "Api::V1::Users", type: :request do
       expect {delete "/api/v1/users/#{@user.id}"}.to change(User, :count).by(-1)
       expect(response.status).to eq 200
     end
+
+    it 'search user account_id' do
+      get "/api/v1/users/search", params: {account_id: "ho"}
+      json = JSON.parse(response.body)
+      
+      expect(response.status).to eq 200
+      expect(json.size).to be 1
+    end
   end
 end
