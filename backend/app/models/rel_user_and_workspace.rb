@@ -9,6 +9,6 @@ class RelUserAndWorkspace < ApplicationRecord
 private
   def destroy_owner
     return if destroyed_by_association.present? && destroyed_by_association.active_record.name == "Workspace"
-    workspace.destroy if permission == 2
+    workspace.destroy if permission == "owner"
   end
 end
