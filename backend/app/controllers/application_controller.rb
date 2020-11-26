@@ -14,12 +14,13 @@ class ApplicationController < ActionController::API
   class MyOwnerChangeError < Exception; end
 
   # 例外処理
-  rescue_from ActiveRecord::RecordNotFound, with: :res_not_found
-  rescue_from ActiveRecord::RecordInvalid,  with: :res_errors_record
-  rescue_from MyForbidden,                  with: :res_forbidden
-  rescue_from MyUnauthorized,               with: :res_unauthorized
-  rescue_from MyOwnerChangeError,           with: :res_bad_request
-  # rescue_from ArgumentError,                with: :bad_request      # enumに無い物を指定すると発生
+  rescue_from ActiveRecord::RecordNotFound,   with: :res_not_found
+  rescue_from ActiveRecord::RecordInvalid,    with: :res_errors_record
+  rescue_from ActiveRecord::NotNullViolation, with: :res_bad
+  rescue_from MyForbidden,                    with: :res_forbidden
+  rescue_from MyUnauthorized,                 with: :res_unauthorized
+  rescue_from MyOwnerChangeError,             with: :res_bad
+  # rescue_from ArgumentError,                with: :res_bad      # enumに無い物を指定すると発生
 
   # api に何かを投げつける
   def post_api(post_hash, url = GOO_LAB_URL)

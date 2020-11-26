@@ -28,4 +28,8 @@ module TypicalRes
   def res_errors_record(e)
     res_errors e.record
   end
+
+  def res_bad
+    render status: :bad_request
+  end
 end
