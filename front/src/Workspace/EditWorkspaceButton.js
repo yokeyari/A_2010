@@ -55,7 +55,8 @@ function EditWorkspaceButton(props) {
 
 	const handleOpen = () => {
     setOpen(true);
-    getInitFields();
+	getInitFields();
+	console.log(initFields);
   };
   
 	const handleClose = () => {

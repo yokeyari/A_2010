@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
 ));
 
 
-function Dialog(props) {
+export default function EditWsConfigModal(props) {
   const [isOpen, setIsOpen] = useState(false);
   const classes = useStyles();
 
@@ -46,15 +46,10 @@ function Dialog(props) {
     setIsOpen(false)
   }
 
-  const handleClickYes = () => {
-    props.yesCallback();
-    setIsOpen(false);
-  }
-
   return (
     <div>
       <Button onClick={handleOpenModal}>
-        {props.component}
+        {props.buttonComponent}
       </Button>
 
       <Modal
@@ -63,50 +58,14 @@ function Dialog(props) {
         onClose={handleCloseModal}
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
+        
       >
-        <Fade in={isOpen}>
+        <Fade in={isOpen} >
           <div className={classes.paper}>
-            <h2>{props.modalMessage}</h2>
-            <Button onClick={handleClickYes} > {props.yesMessage} </Button>
-            <Button onClick={handleCloseModal} > {props.noMessage} </Button>
+            {props.mainComponent}
           </div>
         </Fade>
       </Modal>
     </div>
   )
 }
-
-function DoneDialog(props) {
-  return (
-    <Dialog
-      component={props.component}
-      modalMessage={ props.modalMessage ? props.modalMessage : "送信しますか?" }
-      yesCallback={props.yesCallback}
-      yesMessage={props.yesMessage ? props.yesMessage : "送信"}
-      noMessage="キャンセル" />
-  )
-}
-
-function DeleteDialog(props) {
-  return (
-    <Dialog
-      component={props.component}
-      modalMessage={ props.modalMessage ? props.modalMessage : "削除しますか?" }
-      yesCallback={props.yesCallback}
-      yesMessage={props.yesMessage ? props.yesMessage : "削除"}
-      noMessage="キャンセル" />
-  )
-}
-
-function QuitDialog(props) {
-  return (
-    <Dialog
-      component={props.component}
-      modalMessage={ props.modalMessage ? props.modalMessage : "退出しますか?" }
-      yesCallback={props.yesCallback}
-      yesMessage={props.yesMessage ? props.yesMessage : "退出"}
-      noMessage="キャンセル" />
-  )
-}
-
-export { Dialog, DeleteDialog, DoneDialog, QuitDialog }

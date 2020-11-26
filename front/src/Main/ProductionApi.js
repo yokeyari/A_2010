@@ -407,9 +407,9 @@ export class WorkspaceDataSource {
   }
 
   async updateWorkspace(workspace) {
-    const users = workspace.users.map((user_p) => { return ([user_p.user_id, user_p.permission]) })
-    console.log(users)
-    const res = updateData({ name: workspace.name, users: users }, this.API_URL + `/${workspace.id}`);
+    // const users = workspace.users.map((user_p) => { return ([user_p.user_id, user_p.permission]) })
+    console.log(workspace.users)
+    const res = updateData({ name: workspace.name, users: workspace.users }, this.API_URL + `/${workspace.id}`);
     return res;
   }
 
@@ -433,13 +433,14 @@ export class WorkspaceDataSource {
     return res;
   }
 
-  async updateOwner(user_id, workspace_id) {
+  async updateOwner(workspace_id, user_id) {
     const res = updateData({ user_id: user_id }, this.API_URL + `/${workspace_id}/owner`);
     return res;
   }
 
-  async addUser(workspace_id, users) {
-    const res = createData(users, this.API_URL + `/${workspace_id}/users`);
+  async addUser(workspace_id, user_id) {
+    console.log(user_id);
+    const res = createData({user_id: user_id}, this.API_URL + `/${workspace_id}/users`);
     return res;
   }
 

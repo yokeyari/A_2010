@@ -7,9 +7,32 @@ import Add from '@material-ui/icons/Add'
 import Select from "@material-ui/core/Select";
 import { FormControl, InputLabel, MenuItem, Button, Grid } from '@material-ui/core';
 
+import { DoneDialog } from "../Dialogs"
+import { WorkspaceDataSource } from '../Main/ProductionApi';
+
+const workspaceDataSource = new WorkspaceDataSource();
+
 export default function SelectNewOwner(props) {
 
+  const [newOwnerId, setNewOwnerId] = useState("")
   const owner_id = props.users.find(user_p => user_p.permission == "owner").user.id;
+  const workspace = props.workspace;
+
+  const handleChangeOwner = (event) => {
+		const selected_ownerId = event.target.value;
+		setNewOwnerId(selected_ownerId);
+		console.log("selected new ownerId", selected_ownerId);
+  }
+  
+  const sendNewOwner = () => {
+    workspaceDataSource.updateOwner(workspace.id, newOwnerId).then(res => {
+      if (res.statusText == "OK") {
+        window.location.reload();
+      } else {
+
+      }
+    })
+  }
 
   return (
     <Grid className="invite-user-form">
@@ -22,7 +45,7 @@ export default function SelectNewOwner(props) {
 
       <Grid item>
         <FormControl>
-          <Select onChange={e => props.handleChangeOwner(e)}
+          <Select onChange={handleChangeOwner}
             defaultValue={owner_id}
             inputProps={{ "aria-label": "Without label" }}>
             {props.users.map((user, idx) => {
@@ -37,6 +60,10 @@ export default function SelectNewOwner(props) {
           </Select>
         </FormControl>
       </Grid>
+
+      <DoneDialog 
+        component={<Button>送信</Button>}
+        yesCallback={sendNewOwner}  />
 
     </Grid>
   );
