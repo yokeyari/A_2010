@@ -8,4 +8,12 @@ FactoryBot.define do
     # status
     # account_id
   end
+
+  factory :auto_memo, class: Memo do
+    association :page, factory: :user_page
+    user_id {page.user.id}
+    text {"test"}
+    time {0}
+    account_id {page.user.account_id}
+  end
 end
