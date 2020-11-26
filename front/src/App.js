@@ -27,7 +27,8 @@ function App() {
     isLogin: false,
     workspace_id: "home",
     permission: "owner",
-    endCheck: false
+    endCheck: false,
+    homeLink: "/"
   })
   const [WSInfo, setWSInfo] = useState({
     active_ws_id: "",
@@ -71,7 +72,7 @@ function App() {
                       </WSAuth>
                     </Route>
                     <Route exact path='/:user_id/profile'>
-                        <Profile />
+                      <Profile />
                     </Route>
 
 

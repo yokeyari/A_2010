@@ -174,7 +174,7 @@ export class UserDataSource {
 
   //userの更新
   async updateUser(user) {
-    const res = updateData({ name: user.name, email: user.email, username: user.username },
+    const res = updateData(user,
       this.API_URL + '/' + user.id);
     return res;
   }

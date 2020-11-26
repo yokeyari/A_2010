@@ -28,18 +28,20 @@ const useStyles = makeStyles((theme) => ({
 
 	},
 	card: {
-		maxWidth: 600,
-		maxHeight: 500,
+		//maxWidth: 600,
+		//maxHeight: 500,
 		overflow: 'auto',
-		margin: theme.spacing(2),
+		//margin: theme.spacing(2),
 		padding: theme.spacing(2),
 		//backgroundColor:"#D2B48C",
 	},
 	button: {
 		marginLeft: 'auto',
+		margin: theme.spacing(1),
 	},
 	input: {
 		display: 'none',
+		padding: theme.spacing(2),
 	},
 }
 ));
@@ -105,8 +107,8 @@ export default function NewPageForm(props) {
 	}
 	return (
 		<div>
-			<Card>
-				<h2 id="">Create New memo</h2>
+			<Card className={classes.card}>
+				<h2 id="">新規メモ作成</h2>
 				<div>
 					<TextField type="text" id="memo-input" className={classes.root}
 						label="URL"
@@ -118,6 +120,7 @@ export default function NewPageForm(props) {
 						placeholder="Introduction of memotube"
 						multiline
 						onChange={e => { setState({ ...state, title: e.target.value }) }} value={state.title} />
+					<div></div>
 					<input
 						className={classes.input}
 						id="contained-button-file"
@@ -126,7 +129,7 @@ export default function NewPageForm(props) {
 						type="file"
 					/>
 					<label htmlFor="contained-button-file">
-						<Button variant="contained" color="default" startIcon={<CloudUploadIcon />} component="span">
+						<Button className={classes.button} variant="contained" color="default" startIcon={<CloudUploadIcon />} component="span">
 							Upload
 						</Button>
 					</label>

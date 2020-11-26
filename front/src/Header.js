@@ -94,15 +94,15 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Header(props) {
   const [anchorEl, setAnchorEl] = React.useState(false);
-  const [state, setState] = useState({ search_word: "", pages: [] });
-  const { userInfo, setUserInfo } = useContext(UserInfoContext);
+  // const [state, setState] = useState({ search_word: "" });
+  const { userInfo } = useContext(UserInfoContext);
   const [isSearchMode, setSearchMode] = useState(false);
   const UserApi = new UserDataSource();
   const classes = useStyles();
 
   const handleChangeSeachForm = (text) => {
     props.onChange(text);
-    setState({ ...state, search_word: text })
+    // setState({ ...state, search_word: text })
   }
 
   const handleSeach = () => {
@@ -133,7 +133,7 @@ export default function Header(props) {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <Link to={`/${userInfo.id}/`} >
+        <Link to={`/${userInfo.id}`} >
           <MenuItem button onClick={handleClose}>
             <ListItemIcon>
               <PersonIcon />
@@ -170,12 +170,12 @@ export default function Header(props) {
 
 
           {Hamburger}
-          <Button component={Link} to={`/${userInfo.id}`}>
+          <Button component={Link} to={userInfo.homeLink}>
             <img src={logo} className={classes.logo} alt="memotube" />
           </Button>
 
           <Hidden smDown>
-            <SearchForm onChange={handleChangeSeachForm} search_word={state.search_word} onClick={handleSeach} />
+            <SearchForm onChange={handleChangeSeachForm} search_word={props.search_word} onClick={handleSeach} />
           </Hidden>
 
 
@@ -214,7 +214,7 @@ export default function Header(props) {
       <Hidden mdUp>
         {isSearchMode ?
           <>
-            <SearchForm className={classes.search_make} onChange={handleChangeSeachForm} search_word={state.search_word} onClick={handleSeach} />
+            <SearchForm className={classes.search_make} onChange={handleChangeSeachForm} search_word={props.search_word} onClick={handleSeach} />
           </>
           :
           <></>
