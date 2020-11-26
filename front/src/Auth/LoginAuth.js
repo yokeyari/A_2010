@@ -3,7 +3,7 @@ import { Redirect, useParams, withRouter, Link } from 'react-router-dom'
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 
-import { UserInfoContext, WSInfoContext } from '../context';
+import { UserInfoContext, WSInfoContext,ReloaderContext } from '../context';
 import { UserDataSource, WorkspaceDataSource } from '../Main/ProductionApi';
 
 const userDataSource = new UserDataSource();
@@ -31,6 +31,7 @@ const workspacesDataSource = new WorkspaceDataSource();
 function LoginAuth(props) {
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
   const { WSInfo, setWSInfo } = useContext(WSInfoContext);
+  const {reloader,setReload} = useContext(ReloaderContext);
 
   const classes = useStyles();
 
@@ -60,12 +61,15 @@ function LoginAuth(props) {
           console.log("logged in user", user);
           setUserInfo({ ...userInfo, endCheck: true, id: user.id, name: user.name, isLogin: true });
           setWS(user);
+          if(reloader){
+            setReload(false);
+          }
         })
       } else {
         setUserInfo({ ...userInfo, endCheck: true, isLogin: false });
       }
     })
-  }, []);
+  }, [reloader]);
 
 
   // 正確には、クリックしただけでサインインはできていないので、アクションの名前にClickをつける
