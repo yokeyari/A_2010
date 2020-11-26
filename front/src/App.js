@@ -4,8 +4,8 @@ import Top from './Top/Top';
 import UserHome from './User/UserHome';
 import Footer from './Footer';
 import Header from './Header';
-import { useState } from 'react';
-import { UserInfoContext, WSInfoContext } from './context';
+import { useContext, useState } from 'react';
+import { UserInfoContext, WSInfoContext, ReloaderContext } from './context';
 import WSHome from "./Workspace/WSHome";
 import Signup from './Top/Signup';
 import Auth from './Auth/Auth';
@@ -36,6 +36,7 @@ function App() {
     invite_token: "",
     workspaces: [],
   })
+  const [reloader,setReload] = useState(false)
   const [search_word, setSearch_word] = useState("");
 
   const handleSearchChange = (value) => {
@@ -44,74 +45,75 @@ function App() {
 
   return (
     <div>
-      {console.log("userInfo", userInfo, "---------------")}
-      <UserInfoContext.Provider value={{ userInfo, setUserInfo }}>
-        <WSInfoContext.Provider value={{ WSInfo, setWSInfo }}>
-          <Router>
-            <Header onChange={(value) => { handleSearchChange(value) }} />
+      <ReloaderContext.Provider value={{ reloader, setReload }} >
+        <UserInfoContext.Provider value={{ userInfo, setUserInfo }}>
+          <WSInfoContext.Provider value={{ WSInfo, setWSInfo }}>
+            <Router>
+              <Header onChange={(value) => { handleSearchChange(value) }} />
 
-            <Switch>
-              <Route exact path='/' component={Top} />
-              <Route exact path='/login' component={Top} />
-              <Route exact path='/signup' component={Top} />
-              <Route exact path='/page/:token'>
-                <PageAuth mode="token" />
-              </Route>
-              <Route exact path='/ws/:token' component={InviteWS}/>
-
-
-
-
-              <Route path='/:user_id'>
-                <UserAuth>
-                  <Switch>
-
-                    <Route exact path='/:user_id/'>
-                      <WSAuth>
-                        <UserHome search_word={search_word} />
-                      </WSAuth>
-                    </Route>
-                    <Route exact path='/:user_id/profile'>
-                      <Profile />
-                    </Route>
+              <Switch>
+                <Route exact path='/' component={Top} />
+                <Route exact path='/login' component={Top} />
+                <Route exact path='/signup' component={Top} />
+                <Route exact path='/page/:token'>
+                  <PageAuth mode="token" />
+                </Route>
+                <Route exact path='/ws/:token' component={InviteWS} />
 
 
 
 
-                    <Route path='/:user_id/ws/:workspace_id'>
-                      <WSAuth>
-                        <>
-                          <Route exact path='/:user_id/ws/:workspace_id'>
-                            <WSHome search_word={search_word} />
-                          </Route>
+                <Route path='/:user_id'>
+                  <UserAuth>
+                    <Switch>
 
-                          <Route exact path='/:user_id/ws/:workspace_id/:page_id'>
-                            <PageAuth mode="user">
-                              <Main />
-                            </PageAuth>
-                          </Route>
-                        </>
-                      </WSAuth>
-                    </Route>
-
-                    <Route exact path='/:user_id/:page_id'>
-                      <PageAuth mode="user" >
-                        <Main />
-                      </PageAuth>
-                    </Route>
-                  </Switch>
-                </UserAuth>
+                      <Route exact path='/:user_id/'>
+                        <WSAuth>
+                          <UserHome search_word={search_word} />
+                        </WSAuth>
+                      </Route>
+                      <Route exact path='/:user_id/profile'>
+                        <Profile />
+                      </Route>
 
 
-              </Route>
 
-            </Switch>
 
-            <Footer />
-          </Router>
-        </WSInfoContext.Provider>
-      </UserInfoContext.Provider>
-    </div>
+                      <Route path='/:user_id/ws/:workspace_id'>
+                        <WSAuth>
+                          <>
+                            <Route exact path='/:user_id/ws/:workspace_id'>
+                              <WSHome search_word={search_word} />
+                            </Route>
+
+                            <Route exact path='/:user_id/ws/:workspace_id/:page_id'>
+                              <PageAuth mode="user">
+                                <Main />
+                              </PageAuth>
+                            </Route>
+                          </>
+                        </WSAuth>
+                      </Route>
+
+                      <Route exact path='/:user_id/:page_id'>
+                        <PageAuth mode="user" >
+                          <Main />
+                        </PageAuth>
+                      </Route>
+                    </Switch>
+                  </UserAuth>
+
+
+                </Route>
+
+              </Switch>
+
+              <Footer />
+            </Router>
+          </WSInfoContext.Provider>
+        </UserInfoContext.Provider>
+      </ReloaderContext.Provider>
+    </div >
   )
 }
 
