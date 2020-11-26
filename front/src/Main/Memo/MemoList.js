@@ -37,7 +37,7 @@ function MemoList(props) {
     return a.time - b.time
   })
 
-  const memoAuther = new MemoAuther(userInfo);
+  const memoAuther = props.memoAuther ? props.memoAuther : new MemoAuther(userInfo)
 
   // const TextArea = (
   //   <TextField value={props.title}></TextField>

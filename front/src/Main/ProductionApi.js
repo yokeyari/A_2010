@@ -235,8 +235,8 @@ export class PageDataSource {
   }
 
   async getPageByToken(page_token) {
-    const res = await fetch(this.API_URL + '/' + page_token, {
-      method: "POST",
+    const res = await fetch(this.API_URL + '/share?page_token=' + page_token, {
+      method: "GET",
       // credentials: 'include', //クレデンシャルを含める指定
       mode: 'cors',
     });
@@ -276,7 +276,7 @@ export class PageDataSource {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({keywords: keywords })
+      body: JSON.stringify({ keywords: keywords })
       // body: JSON.stringify({ user_id: user.id, keywords: keywords, workspace_id: workspace_id })
     }).then(res => res.json());
     console.log(res.pages);

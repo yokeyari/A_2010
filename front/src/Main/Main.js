@@ -27,7 +27,7 @@ import TagForm from './Tag/TagForm';
 //import * as MemoAPI from './LocalApi';
 import { MemoDataSource, PageDataSource, BertDataSource, WorkspaceDataSource } from './ProductionApi';
 
-import {UserInfoContext} from '../context'
+import { UserInfoContext } from '../context'
 import { MemoAuther } from '../Auth/Authers';
 import Analytics from './Analytics/Analytics';
 import useInterval from 'use-interval';
@@ -50,7 +50,7 @@ const POST_INTERVAL = 5000;
 const MemoAPI = new MemoDataSource();
 const PageApi = new PageDataSource();
 const BertApi = new BertDataSource();
-const workspaceApi = new WorkspaceDataSource();
+// const workspaceApi = new WorkspaceDataSource();
 
 function Main(props) {
   const classes = useStyles();
@@ -69,14 +69,31 @@ function Main(props) {
   const [memoMode, setMemoMode] = useState('all');
   const [isWriting, setIsWriting] = useState(0);
   const [isAnalyticsMode, setAnalyticsMode] = useState(false);
+  const [colorMode, setColorMode] = useState("None");
   const { workspace_id } = useParams();
 
-  const memoAuther = new MemoAuther(userInfo);
+
   const page_id = props.page_id;
 
-  const endAnalyticsMode = () => {
-    setAnalyticsMode(false);
+  if (props.mode == "user") {
+    var user = userInfo;
+    var identifer = page_id;
+    var loadPage = () => {
+      return PageApi.getPage(identifer).then(res =>
+        res.json()
+      )
+    }
+  } else if (props.mode == "token") {
+    var user = { id: "", token: true }
+    var identifer = props.token;
+    var loadPage = () => {
+      return PageApi.getPageByToken(identifer).then(res =>
+        res.json()
+      )
+    }
   }
+
+  const memoAuther = new MemoAuther(user);
 
   // For Analytics
   useInterval(() => {
@@ -87,54 +104,77 @@ function Main(props) {
       else if (isWriting == 1) { nowState = 'write_memo' }
       else { nowState = 'else' }
       let fixed_time = null
-      for (let i=0; i<N_SPLIT; i++) {
-        fixed_time = parseInt(i*player.duration/N_SPLIT);
+      for (let i = 0; i < N_SPLIT; i++) {
+        fixed_time = parseInt(i * player.duration / N_SPLIT);
         if (fixed_time >= player.time) break
       }
       const day = dayTime.getFullYear() + '/' + (dayTime.getMonth() + 1) + '/' + dayTime.getDate()
-      
+
       PageApi.postBrowseState(page_id, {
-        state: nowState, 
-        time: fixed_time, 
+        state: nowState,
+        time: fixed_time,
         day: day
       });
     }
   }, POST_INTERVAL);
 
   useEffect(() => {
-    PageApi.getPage(page_id).then(res => {
-      res.json().then(page => {
-        console.log(page)
-        setPage({ ...page });
-        setMemos(page.memos)
-        setIsLoading(false);
-      }
-      )
+    setIsLoading(true);
+    loadPage().then((page) => {
+      setPage({ ...page });
+      setMemos(page.memos)
+      setIsLoading(false);
     })
-  }, [reloader, page_id])
+  }, [identifer])
 
   useEffect(() => {
-    // 本番用 要API確認
-    if (workspace_id) {
-      workspaceApi.getWorkspace(workspace_id).then(res => {
-        res.json().then(workspace => {
-          console.log("get workspace and permission", workspace);
-          // 後でログインユーザーのワークスペースの権限だけもらうAPIを用意する
-          const permission = workspace.users.filter(user_p => user_p.user.id == userInfo.id ? true : false)[0].permission;
-          setUserInfo({ ...userInfo, workspace_id: (workspace_id ? workspace_id : "home"), permission: permission });
-        })
-      })
-    }
-    // ここでタイトルなどの読み込み
-    setIsLoading(true);
-    PageApi.getPage(page_id).then(res => {
-      res.json().then(json => {
-        setIsLoading(false);
-        setPage({ ...json });
-      }
-      )
+    // setIsLoading(true);
+    loadPage().then((page) => {
+      setPage({ ...page });
+      setMemos(page.memos)
+      if (isLoading) setIsLoading(false);
     })
-  }, [])
+  }, [reloader])
+
+  useEffect(() => {
+    const mode = colorMode;
+    const text_list = memos.map(t => t.text);
+    if (mode == "None") {
+      var new_memos = memos.map(memo => {
+        return {
+          ...memo,
+          color: null
+        }
+      });
+      setMemos(new_memos);
+    } else {
+      BertApi.getSentment(text_list).then(res => {
+        console.log(res);
+        const calcColorFromSentiment = (mode, np) => {
+          if (mode === "positive") {
+            if (np.positiveness > 1.0) {
+              return "#FFB300";
+            } else if (np.positiveness > 0.5) {
+              return "#FFD54F"
+            }
+          } else if (mode === "negative") {
+            if (np.negativeness > 1.0) {
+              return "#33C7FF";
+            } else if (np.negativeness > 0.5) {
+              return "#33F2FF";
+            }
+          }
+        }
+        var new_memos = memos.map((memo, i) => {
+          return {
+            ...memo,
+            color: calcColorFromSentiment(mode, res[i])
+          }
+        })
+        setMemos(new_memos);
+      });
+    }
+  }, [colorMode]);
 
   function withUpdate(fun) {
     fun.then(() => setReloader(reloader + 1));
@@ -170,36 +210,7 @@ function Main(props) {
 
   function changeMemoColor(event) {
     const mode = event.target.value;
-    const text_list = memos.map(t => t.text);
-    BertApi.getSentment(text_list).then(res => {
-      console.log(res);
-
-      const calcColorFromSentiment = (mode, np) => {
-        if (mode === "positive") {
-          if (np.positiveness > 1.0) {
-            return "#FFB300";
-          } else if (np.positiveness > 0.5) {
-            return "#FFD54F"
-          }
-        } else if (mode === "negative") {
-          if (np.negativeness > 1.0) {
-            return "#33C7FF";
-          } else if (np.negativeness > 0.5) {
-            return "#33F2FF";
-          }
-        }
-      }
-
-      var new_memos = memos.map((memo, i) => {
-        return {
-          ...memo,
-          color: calcColorFromSentiment(mode, res[i])
-        }
-      })
-      setMemos(new_memos);
-    }
-
-    );
+    setColorMode(mode);
   }
 
   function handleWriteEnd() {
@@ -207,6 +218,10 @@ function Main(props) {
       setIsWriting(0)
       setPlayer({ ...player, playing: true })
     }
+  }
+
+  const endAnalyticsMode = () => {
+    setAnalyticsMode(false);
   }
 
   const mymemos = memos.filter(memo => memo.user_id == userInfo.id);
@@ -255,7 +270,7 @@ function Main(props) {
 
       {isAnalyticsMode ?
         <Grid item xs={12}>
-          <Analytics page={page} player={player} memos={memos} onClick={endAnalyticsMode} />
+          <Analytics page={page} memos={memos} onClick={endAnalyticsMode} />
         </Grid>
         :
 
@@ -314,6 +329,7 @@ function Main(props) {
 
                 <Grid item>
                   <MemoList
+                    memoAuther={memoAuther}
                     memos={visMemos}
                     onChange={handleChange}
                     onDelete={handleDelete}
