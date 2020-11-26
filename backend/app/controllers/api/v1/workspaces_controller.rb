@@ -85,7 +85,7 @@ class Api::V1::WorkspacesController < ApplicationController
 
   def quit_users
     Rel_UAW.transaction do
-      params[:user].each do |user_id|
+      params[:users].each do |user_id|
         rel = Rel_UAW.find_by(user_id: user_id, workspace_id: @wspace.id)
         raise ActiveRecord::RecordNotFound if rel.nil?
         raise MyOwnerChangeError if rel.permission == 'owner'
