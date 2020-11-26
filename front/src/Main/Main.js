@@ -96,7 +96,7 @@ function Main(props) {
   const memoAuther = new MemoAuther(user);
 
   const autoReload = useInterval(() => {
-    if (true) {
+    if (!isAnalyticsMode) {
       setReloader(reloader+1);
     }
   }, GET_INTERVAL);
