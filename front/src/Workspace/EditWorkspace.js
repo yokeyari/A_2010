@@ -10,7 +10,7 @@ import { CardActions } from "@material-ui/core";
 import { trackPromise } from "react-promise-tracker";
 
 import { WorkspaceDataSource } from "../Main/ProductionApi";
-import {UserInfoContext} from "../context";
+import { UserInfoContext, ReloaderContext } from "../context";
 import Transition from "../Transition";
 import InviteUserForm from "./InviteUserForm";
 import SelectNewOwner from "./SelectNewOwner"
@@ -50,16 +50,17 @@ export default function EditWorkspace(props) {
 		isLoaded: false
 	})
 	// const [fields, setFields] = useState(props.workspace.users);
-	const [fields, setFields] = useState( props.workspace.users.filter(user => user.permission!="owner") ); //owner以外のusersを入力欄の初期値にする
+	const [fields, setFields] = useState(props.workspace.users.filter(user => user.permission != "owner")); //owner以外のusersを入力欄の初期値にする
 	const { userInfo } = useContext(UserInfoContext);
 	const [newOwnerId, setNewOwnerId] = useState("")
 	const classes = useStyles();
+	const { setRealod } = useContext(ReloaderContext);
 
 	const owner_id = props.workspace.users.find(user_p => user_p.permission == "owner").user.id;
 
 	const handleSubmit = () => {
 		trackPromise(
-			workspaceDataSource.updateWorkspace({name: state.name, users: fields, id: userInfo.workspace_id})
+			workspaceDataSource.updateWorkspace({ name: state.name, users: fields, id: userInfo.workspace_id })
 				.then(res => {
 					if (res.statusText == "OK") {
 						res.json()
@@ -68,14 +69,14 @@ export default function EditWorkspace(props) {
 								props.onClose();
 							})
 					} else {
-						
+
 					}
 				})
-				// .then(() => {
-				// 	// console.log("new ownerId", newOwnerId);
-				// 	// console.log("workspace_id", userInfo.workspace_id);
-				// 	// workspaceDataSource.updateOwner({user_id: newOwnerId, workspace_id: userInfo.workspace_id})
-				// })
+			// .then(() => {
+			// 	// console.log("new ownerId", newOwnerId);
+			// 	// console.log("workspace_id", userInfo.workspace_id);
+			// 	// workspaceDataSource.updateOwner({user_id: newOwnerId, workspace_id: userInfo.workspace_id})
+			// })
 		);
 		console.log("new ownerId", newOwnerId);
 		console.log("workspace_id", userInfo.workspace_id);
@@ -111,6 +112,7 @@ export default function EditWorkspace(props) {
 		workspaceDataSource.deleteWorkspace(userInfo.workspace_id)
 			.then(() => {
 				setState({ ...state, to: `/${userInfo.id}/`, isLoaded: true });
+				setRealod(true);
 			})
 	}
 
