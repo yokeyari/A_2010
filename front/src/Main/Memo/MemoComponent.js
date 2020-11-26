@@ -12,8 +12,9 @@ import WriteThread from './WriteThread';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import Select from "@material-ui/core/Select";
 import { CardActions, FormControl, MenuItem } from "@material-ui/core";
-
+ 
 import {UserInfoContext} from "../../context";
+import { DeleteDialog } from "../../Dialogs";
 // class Memo{
 //   body = '';
 //   time = 0;
@@ -111,7 +112,10 @@ function MemoComponent(props) {
               : null)
           }
           {(auth.canDelete) ?
-            <Button className="delete" color="secondary" startIcon={<DeleteIcon />} onClick={() => { props.onDelete(memo) }}>delete</Button> : null}
+            <DeleteDialog 
+              yesCallback={() => { props.onDelete(memo) }}
+              component={<Button className="delete" color="secondary" startIcon={<DeleteIcon />}>delete</Button>} />
+            : null}
 
           {selectStatus}
 

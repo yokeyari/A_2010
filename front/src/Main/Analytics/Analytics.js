@@ -50,12 +50,18 @@ export default function Analytics(props) {
   const [graphName, setGraphName] = useState("");
   const [visState, setVisState] = useState("any");
   const [visUser, setVisUser] = useState("any");
+  const [reloader, setReloader] = useState(0);
   const classes = useStyles();
 
-  const states = ["total_play", "total_write_memo", "total_else"]
+  // テーブルのカラム名とグラフでの表示名
+  const states = {total_play: "play", total_write_memo: "memo", total_else: "pause"}
   const memos = props.memos;
   const page = props.page;
 
+
+  function withUpdate(fun) {
+    fun.then(() => setReloader(reloader + 1));
+  }
 
   function createData(table, xlabel) {
     const user_ids = [...new Set(table.map(record => record.user_id))];
@@ -63,13 +69,13 @@ export default function Analytics(props) {
     X.sort((a, b) => a - b);
     const Y_all = Object.fromEntries(
       Array.prototype.concat.apply([],
-        states.map(state => {
+        Object.keys(states).map(state => {
           const state_count_each_id = user_ids.map(user_id => {
             const count_each_id = X.map(x => {
               const value = table.find(record => (record.user_id == user_id && record[xlabel] == x))
               return value ? value[state] : 0
             })
-            return [state + ` (${user_id})`, count_each_id]
+            return [states[state] + ` (${user_id})`, count_each_id]
           })
           const state_count_all_id = []
           for (let i = 0; i < state_count_each_id[0][1].length; i++) {
@@ -78,7 +84,7 @@ export default function Analytics(props) {
             state_count_all_id.push(count)
           }
 
-          return state_count_each_id.concat([[state + " (sum)", state_count_all_id]])
+          return state_count_each_id.concat([[states[state] + " (sum)", state_count_all_id]])
         })
       )
     )
@@ -88,26 +94,6 @@ export default function Analytics(props) {
 
 
   useEffect(() => {
-    // ダミーデータ
-    // 本番では下の本番用コードをコメントアウトして、このコードは消す
-    // const browseTimes = dummy_browseTimes;
-    // const browseDays = dummy_browseDays;
-    // const memos = dummy_memos;
-    // const [user_ids, data_time] = createData(browseTimes, "time");
-    // const [_, data_day] = createData(browseDays, "day");
-    // setDataList({ ...dataList, browse_times: data_time, browse_dates: data_day });
-    // setUserIds(user_ids);
-    // setData(dataList["browse_times"]);
-    // const text_list = memos.map(memo => memo.text)
-    // BertApi.getSentment(text_list).then(res => {
-    //   setMemoSentiment(res.map((score, i) => {
-    //     return { user_id: memos[i].user_id, time: memos[i].time, text: memos[i].text, positiveness: score.positiveness, negativeness: score.negativeness }
-    //   }))
-    // })
-    // ここまでダミー
-
-
-    // 本番用
     let browseTimes = [];
     let browseDays = [];
     PageApi.getBrowseState(page.id).then(res => {
@@ -139,8 +125,6 @@ export default function Analytics(props) {
     } else {
       setMemoSentiment([{ user_id: null, text: null, time: null, positiveness: null, negativeness: null }])
     }
-    // ここまで本番用
-
   }, [])
 
   const handleChangeGraph = (event) => {
@@ -179,14 +163,14 @@ export default function Analytics(props) {
             <FormControl className={classes.form}>
               <InputLabel id="demo-simple-select-label">graph type</InputLabel>
               <Select onChange={handleChangeGraph}
-                defaultValue={"none"}
+                defaultValue={"browse_times"}
                 className={""}
                 inputProps={{ "aria-label": "Without label" }}
               >
                 <MenuItem value={"none"} key={0} >none</MenuItem>
-                <MenuItem value={"browse_times"} key={1} >browse time</MenuItem>
-                <MenuItem value={"browse_dates"} key={2} >browse date</MenuItem>
-                <MenuItem value={"memoSentiment"} key={4} >memo sentiment scatter</MenuItem>
+                <MenuItem value={"browse_times"} key={1} >再生時間 vs 視聴状況</MenuItem>
+                <MenuItem value={"browse_dates"} key={2} >日 vs 視聴状況</MenuItem>
+                <MenuItem value={"memoSentiment"} key={4} >再生時間 vs メモ内容</MenuItem>
               </Select>
             </FormControl>
           </Grid>
@@ -200,9 +184,9 @@ export default function Analytics(props) {
                   inputProps={{ "aria-label": "Without label" }}
                 >
                   <MenuItem value={"any"} key={0} >すべて表示</MenuItem>
-                  <MenuItem value={"total_play"} key={1} >total play</MenuItem>
-                  <MenuItem value={"total_write_memo"} key={2} >total write memo</MenuItem>
-                  <MenuItem value={"total_else"} key={3} >total else</MenuItem>
+                  <MenuItem value={"play"} key={1} >再生中 (play)</MenuItem>
+                  <MenuItem value={"memo"} key={2} >メモ記入中 (memo)</MenuItem>
+                  <MenuItem value={"pause"} key={3} >ポーズ中 (pause)</MenuItem>
                 </Select>
               </FormControl>
               : null
@@ -220,7 +204,7 @@ export default function Analytics(props) {
                 {
                   userIds.map(user_id => <MenuItem value={user_id} key={user_id} >{user_id}</MenuItem>)
                 }
-                {graphName != "memoSentiment" ? <MenuItem value={"sum"} key={-1} >sum</MenuItem> : null}
+                {graphName != "memoSentiment" ? <MenuItem value={"sum"} key={-1} >全員</MenuItem> : null}
               </Select>
             </FormControl>
           </Grid>

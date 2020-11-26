@@ -64,7 +64,7 @@ export default function GraphBarSentiment(props) {
           <Tooltip content={<CustomTooltip/>}/>
           <Legend verticalAlign="top" wrapperStyle={{ lineHeight: '20px' }} />
           <ReferenceLine y={0} stroke='#000' />
-          <Scatter name="positiveness" data={data} fill="#82ca9d" onClick={handleJump} >
+          <Scatter name="positiveness" data={data} onClick={handleJump} >
           {
 						data.map((entry, index) => <Cell key={`cell-${index}`} fill={changeDotColor(entry)} />)
 					}

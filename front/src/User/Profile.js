@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { UserDataSource, WorkspaceDataSource } from "../Main/ProductionApi"
+import React, { useEffect, useState, useContext } from "react";
+import { useHistory } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { Button, TextField } from "@material-ui/core";
+import { Button, TextField, Box } from "@material-ui/core";
 import EditIcon from '@material-ui/icons/Edit';
 import CancelOutlinedIcon from '@material-ui/icons/CancelOutlined';
 import DoneIcon from '@material-ui/icons/Done';
@@ -11,8 +11,14 @@ import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import Modal from '@material-ui/core/Modal';
 import Fade from '@material-ui/core/Fade';
+import Grid from '@material-ui/core/Grid';
 import MenuBookIcon from '@material-ui/icons/MenuBook';
 import { CommentSharp } from "@material-ui/icons";
+import { QuitDialog, DoneDialog } from "../Dialogs";
+
+import { UserDataSource, WorkspaceDataSource } from "../Main/ProductionApi"
+import { ReloaderContext } from "../context";
+
 const UserApi = new UserDataSource();
 const WorkspaceApi = new WorkspaceDataSource();
 const useStyles = makeStyles((theme) => ({
@@ -40,17 +46,22 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
   },
+  quitCard: {
+    backgroundColor: "#04A4AC",
+  }
 }
 ));
 export default function Profile(props) {
 
+  const history = useHistory();
+  const {reloader, setReload} = useContext(ReloaderContext);
   const [user, setUser] = useState({ name: "", account_id: "", email: "", pages: [], workspaces: [] });
   const [editMode, setEditMode] = useState(false);
   const [profileForm, setProfileForm] = useState({ name: "", account_id: "", email: "" })
   const [errorMessage, setErrorMessage] = useState({ name: "", account_id: "", email: "" })
   const [successMessage, setSuccessMessage] = useState("")
   const [isOpenAccountCloseBody, setIsOpenAccountCloseBody] = useState(null);
-  const [reloader, setReloader] = useState(0);
+  const [counter, setCounter] = useState(0);
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => {
@@ -68,10 +79,10 @@ export default function Profile(props) {
         console.log(user)
       })
     })
-  }, [reloader])
+  }, [counter])
 
   function withUpdate(fun) {
-    fun.then(() => setReloader(reloader + 1));
+    fun.then(() => setCounter(counter + 1));
   }
 
   const handleChangeEditMode = () => {
@@ -97,13 +108,16 @@ export default function Profile(props) {
   }
 
   const handleDeleteAccount = () => {
-    withUpdate(UserApi.deleteUser(user.id));
+    withUpdate(UserApi.deleteUser(user.id))
+    history.push("/");
+    setReload(true);
   }
 
-  const handleQuitWorkspace = (event) => {
-    const workspace_id = event.currentTarget.getAttribute("workspace_id")
+  const handleQuitWorkspace = (workspace_id) => {
     withUpdate(WorkspaceApi.quitWorkspace(workspace_id));
   }
+
+
   const accountCloseBody =
     isOpenAccountCloseBody ?
 
@@ -182,12 +196,21 @@ export default function Profile(props) {
         <ul>
           {user.workspaces.map(workspace_p =>
             <li key={workspace_p.workspace.id}>
-              <Link to={`/${user.id}/ws/${workspace_p.workspace.id}`}>
-                {workspace_p.workspace.name} ({workspace_p.permission})
-            </Link>
-              {workspace_p.permission != "owner"
-                ? <Button onClick={handleQuitWorkspace} workspace_id={workspace_p.workspace.id} startIcon={<RemoveCircleOutlineOutlinedIcon />}></Button>
-                : null}
+              <Grid container className={classes.grid} direction="row">
+                <Grid item>
+                  <Link to={`/${user.id}/ws/${workspace_p.workspace.id}`}>
+                    {workspace_p.workspace.name} ({workspace_p.permission})
+                  </Link>
+                </Grid>
+                <Grid item>
+                  {workspace_p.permission != "owner"
+                    ? <QuitDialog
+                      component={<Card className={classes.quitCard}>退出</Card>}
+                      yesCallback={() => { handleQuitWorkspace(workspace_p.workspace.id) }}
+                      modalMessage={`「 ${workspace_p.workspace.name} 」から退出しますか?`} />
+                    : null}
+                </Grid>
+              </Grid>
             </li>
           )}
         </ul>

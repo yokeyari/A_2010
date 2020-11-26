@@ -15,7 +15,7 @@ import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import { Button, Input, TextField } from "@material-ui/core";
 
 import { UserDataSource } from "../Main/ProductionApi";
-import {UserInfoContext} from "../context";
+import {UserInfoContext, ReloaderContext} from "../context";
 import Transition from "../Transition";
 import transitions from "@material-ui/core/styles/transitions";
 const useStyles = makeStyles((theme) => ({
@@ -53,6 +53,7 @@ export default function Signup() {
     isLoading: false
   })
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
+  const {reloader, setReload} = useContext(ReloaderContext);
 
 
   // const { userInfo } = useContext(UserInfoContext);
@@ -71,6 +72,7 @@ export default function Signup() {
                 // console.log("getPage", page.page);
                 // setUserInfo(user);
                 setState({ to: `/${user.id}/`, isLoaded: true, isLoading: false });
+                setReload(true);
                 // props.onClose();
               })
           } else {
