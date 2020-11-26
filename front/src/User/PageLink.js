@@ -16,6 +16,7 @@ import { UserInfoContext } from "../context";
 import Transition from "../Transition";
 import { PageDataSource } from "../Main/ProductionApi";
 import { PageAuther } from '../Auth/Authers';
+import { DeleteDialog } from '../Dialogs';
 
 const pageDataSource = new PageDataSource();
 
@@ -141,6 +142,14 @@ export default function PageLink(props) {
     ))
   )
 
+  const deleteButton = 
+    <div className={classes.button} color="secondary">
+        <DeleteDialog
+          yesCallback={() => handleDelete(page)}
+        />
+    </div>
+
+
   return (
     <>
       <Transition to={state.to} ok={state.isLoaded} isLoading={state.isLoading}>
@@ -159,13 +168,13 @@ export default function PageLink(props) {
               {page.title}
             </Typography>
             <Typography variant="body2" color="textSecondary" component="div">
-                {/* {page.url} */}
-                {renderMemos()}
-                {renderTags()}
+              {/* {page.url} */}
+              {renderMemos()}
+              {renderTags()}
             </Typography>
           </CardContent>
         </CardActionArea>
-        {pageAuther.canDelete(page) ? <Button className={classes.button} color="secondary" startIcon={<DeleteIcon />} onClick={() => { handleDelete(page) }}></Button> : <></>}
+        {pageAuther.canDelete(page) ? deleteButton : null}
       </Card>
     </>
   )

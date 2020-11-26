@@ -11,8 +11,10 @@ import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import Modal from '@material-ui/core/Modal';
 import Fade from '@material-ui/core/Fade';
+import Grid from '@material-ui/core/Grid';
 import MenuBookIcon from '@material-ui/icons/MenuBook';
 import { CommentSharp } from "@material-ui/icons";
+import { QuitDialog, DoneDialog } from "../Dialogs";
 const UserApi = new UserDataSource();
 const WorkspaceApi = new WorkspaceDataSource();
 const useStyles = makeStyles((theme) => ({
@@ -104,6 +106,8 @@ export default function Profile(props) {
     const workspace_id = event.currentTarget.getAttribute("workspace_id")
     withUpdate(WorkspaceApi.quitWorkspace(workspace_id));
   }
+
+
   const accountCloseBody =
     isOpenAccountCloseBody ?
 
@@ -182,12 +186,20 @@ export default function Profile(props) {
         <ul>
           {user.workspaces.map(workspace_p =>
             <li key={workspace_p.workspace.id}>
-              <Link to={`/${user.id}/ws/${workspace_p.workspace.id}`}>
-                {workspace_p.workspace.name} ({workspace_p.permission})
-            </Link>
-              {workspace_p.permission != "owner"
-                ? <Button onClick={handleQuitWorkspace} workspace_id={workspace_p.workspace.id} startIcon={<RemoveCircleOutlineOutlinedIcon />}></Button>
-                : null}
+              <Grid container className={classes.grid} direction="row">
+                <Grid item>
+                  <Link to={`/${user.id}/ws/${workspace_p.workspace.id}`}>
+                    {workspace_p.workspace.name} ({workspace_p.permission})
+                  </Link>
+                </Grid>
+                <Grid item>
+                  {workspace_p.permission != "owner"
+                    ? <QuitDialog
+                      yesCallback={() => { withUpdate(WorkspaceApi.quitWorkspace(workspace_p.workspace.id)) }}
+                      modalMessage={`「 ${workspace_p.workspace.name} 」から退出しますか?`} />
+                    : null}
+                </Grid>
+              </Grid>
             </li>
           )}
         </ul>
