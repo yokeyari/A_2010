@@ -26,9 +26,11 @@ export default function SelectNewOwner(props) {
   
   const sendNewOwner = () => {
     workspaceDataSource.updateOwner(workspace.id, newOwnerId).then(res => {
-      res.json().then(json => {
-        console.log(json);
-      })
+      if (res.statusText == "OK") {
+        window.location.reload();
+      } else {
+
+      }
     })
   }
 

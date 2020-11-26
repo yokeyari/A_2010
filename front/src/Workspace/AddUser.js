@@ -20,13 +20,20 @@ const userDataSource = new UserDataSource();
 
 
 export default function CreateWorkspace(props) {
+
   const [users, setUsers] = useState([]);
   const workspace_id = props.workspace_id;
 
 
   const sendNewUser = () => {
     const user_p_list = users.map(user => [user.user_id, user.permission])
-    workspaceDataSource.addUser(workspace_id, user_p_list);
+    workspaceDataSource.addUser(workspace_id, user_p_list).then(res => {
+      if (res.statusText == "OK") {
+        window.location.reload();
+      } else {
+
+      }
+    })
   }
 
 

@@ -33,7 +33,13 @@ function ChangeUserPermission(props) {
 
   const sendNewPermissions = () => {
     const user_p_list = users.map(user => [user.user.id, user.permission]).filter(user_p => user_p[1]!="owner");
-    workspaceDataSource.updateWorkspace({id: workspace_id, name: name, users: user_p_list})
+    workspaceDataSource.updateWorkspace({id: workspace_id, name: name, users: user_p_list}).then(res => {
+      if (res.statusText == "OK") {
+        window.location.reload();
+      } else {
+
+      }
+    })
   }
 
 
