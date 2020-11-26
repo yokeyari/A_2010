@@ -7,7 +7,7 @@ FactoryBot.define do
     account_id {'hoge'}
   end
 
-  factory :google_user do
+  factory :google_user, class: User do
     name {"google"}
     provider {"google"}
     external_id {"1"}
