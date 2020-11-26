@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
 ));
 function WriteThread(props) {
 	const [text, setText] = useState("");
-	const parent_memo = props.memo;
+	const parent_memo = props.parent_memo;
 	//const { userInfo, setUserInfo } = useContext(UserInfoContext);
 	const classes = useStyles();
 	let thread_text;

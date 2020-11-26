@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useContext } from 'react'
+import React, { useState, useEffect,useContext, memo } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import MemoComponent from './MemoComponent'
 import Thread from './ThreadList'
