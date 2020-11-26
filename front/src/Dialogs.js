@@ -1,5 +1,5 @@
-import { useState } from "react"
-// import Modal from "react-modal";
+import React , { useState } from "react"
+import Modal from "react-modal";
 import EditIcon from '@material-ui/icons/Edit';
 import CancelOutlinedIcon from '@material-ui/icons/CancelOutlined';
 import DoneIcon from '@material-ui/icons/Done';
@@ -68,7 +68,7 @@ function Dialog(props) {
   )
 }
 
-function DialogDone(props) {
+function DoneDialog(props) {
   return (
     <Dialog
       modalMessage="送信しますか?"
@@ -79,15 +79,15 @@ function DialogDone(props) {
   )
 }
 
-function DialogDelete(props) {
+function DeleteDialog(props) {
   return (
     <Dialog
       modalMessage={ props.modalMessage ? props.modalMessage : "削除しますか?" }
       actionMessage={ props.actionMessage ? props.actionMessage : "削除" }
       yesCallback={props.yesCallback}
-      yesMessage={ props.yesMessage ? props.yesMessage : "削除" }
+      yesMessage={props.yesMessage ? props.yesMessage : "削除"}
       noMessage="キャンセル" />
   )
 }
 
-export { DialogDone, DialogDelete }
+export { Dialog, DeleteDialog, DoneDialog }

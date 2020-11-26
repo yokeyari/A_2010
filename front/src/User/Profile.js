@@ -14,7 +14,7 @@ import Fade from '@material-ui/core/Fade';
 import Grid from '@material-ui/core/Grid';
 import MenuBookIcon from '@material-ui/icons/MenuBook';
 import { CommentSharp } from "@material-ui/icons";
-import { DialogDone, DialogDelete } from "../Dialogs"
+import { DeleteDialog, DoneDialog } from "../Dialogs"
 const UserApi = new UserDataSource();
 const WorkspaceApi = new WorkspaceDataSource();
 const useStyles = makeStyles((theme) => ({
@@ -106,6 +106,7 @@ export default function Profile(props) {
     const workspace_id = event.currentTarget.getAttribute("workspace_id")
     withUpdate(WorkspaceApi.quitWorkspace(workspace_id));
   }
+
 
   const accountCloseBody =
     isOpenAccountCloseBody ?
