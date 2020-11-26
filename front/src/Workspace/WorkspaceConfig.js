@@ -20,6 +20,9 @@ import { DeleteDialog } from "../Dialogs"
 
 const workspaceDataSource = new WorkspaceDataSource();
 
+const higherSuper = { "guest": false, "general": false, "sup": true, "owner": true };
+const onlyOwner = { "guest": false, "general": false, "sup": false, "owner": true };
+
 export default function WorkspaceConfig(props) {
 
   const { reloader, setReload } = useContext(ReloaderContext);
@@ -33,12 +36,12 @@ export default function WorkspaceConfig(props) {
   console.log(users)
 
   const handleDeleteWs = () => {
-		workspaceDataSource.deleteWorkspace(workspace.id)
-			.then(() => {
-				history.push(`/${userInfo.id}/`);
-				setReload(true);
-			})
-	}
+    workspaceDataSource.deleteWorkspace(workspace.id)
+      .then(() => {
+        history.push(`/${userInfo.id}/`);
+        setReload(true);
+      })
+  }
 
   const user_list =
     <div>
@@ -66,27 +69,38 @@ export default function WorkspaceConfig(props) {
         mainComponent={user_list}
       />
 
-      <EditWsConfigModal
-        buttonComponent={<Button>権限変更</Button>}
-        mainComponent={<ChangeUserPermission users={users} workspace={workspace} />}
-      />
+      {higherSuper[userInfo.permission] ?
+        <EditWsConfigModal
+          buttonComponent={<Button>ユーザー追加</Button>}
+          mainComponent={<AddUser workspace_id={workspace.id} />} />
+        : null}
 
-      <EditWsConfigModal
-        buttonComponent={<Button>ユーザー追加</Button>}
-        mainComponent={<AddUser workspace_id={workspace.id} />} />
+      {onlyOwner[userInfo.permission] ?
+        <EditWsConfigModal
+          buttonComponent={<Button>権限変更</Button>}
+          mainComponent={<ChangeUserPermission users={users} workspace={workspace} />}
+        />
+        : null}
 
-      <EditWsConfigModal
+      {onlyOwner[userInfo.permission] ?
+        <EditWsConfigModal
         buttonComponent={<Button>オーナー変更</Button>}
         mainComponent={<SelectNewOwner users={users} workspace={workspace} />} />
+        : null}
+
 
       {/* 改行がしたかった... */}
-      <br/><br/><br/>
+      <br /><br /><br />
 
-      <DeleteDialog
-        modalMessage={`「${props.workspace.name}」を削除しますか?`}
-        component={<Card style={{ color: "white", backgroundColor: "#EF501F" }} >ワークスペースを削除</Card>}
-        yesCallback={handleDeleteWs}
-      />
+
+      {onlyOwner[userInfo.permission] ?
+          <DeleteDialog
+          modalMessage={`「${props.workspace.name}」を削除しますか?`}
+          component={<Card style={{ color: "white", backgroundColor: "#EF501F" }} >ワークスペースを削除</Card>}
+          yesCallback={handleDeleteWs}
+        />
+        : null}
+      
 
     </div>
   )
