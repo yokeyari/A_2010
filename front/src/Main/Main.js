@@ -44,9 +44,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const N_SPLIT = 100;
-const POST_INTERVAL = 5000;
-
 const MemoAPI = new MemoDataSource();
 const PageApi = new PageDataSource();
 const BertApi = new BertDataSource();
@@ -72,6 +69,9 @@ function Main(props) {
   const [colorMode, setColorMode] = useState("None");
   const { workspace_id } = useParams();
 
+  const N_SPLIT = 100;
+  const POST_INTERVAL = 5000;
+  const GET_INTERVAL = 1000;
 
   const page_id = props.page_id;
 
@@ -94,6 +94,12 @@ function Main(props) {
   }
 
   const memoAuther = new MemoAuther(user);
+
+  const autoReload = useInterval(() => {
+    if (true) {
+      setReloader(reloader+1);
+    }
+  }, GET_INTERVAL);
 
   // For Analytics
   useInterval(() => {

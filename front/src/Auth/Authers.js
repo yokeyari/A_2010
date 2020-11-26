@@ -17,7 +17,7 @@ class BaseAuther {
     this.user = user
     this.target = target
     this.setDefault(user);
-    console.log(user)
+    // console.log(user)
   }
 
   setDefault = (user) => {
