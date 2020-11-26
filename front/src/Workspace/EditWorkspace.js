@@ -15,6 +15,8 @@ import Transition from "../Transition";
 import InviteUserForm from "./InviteUserForm";
 import SelectNewOwner from "./SelectNewOwner";
 import { DeleteDialog } from "../Dialogs";
+import ChangeUserPermission from "./ChangeUserPermission"
+import AddUser from "./AddUser";
 
 const workspaceDataSource = new WorkspaceDataSource();
 
@@ -139,7 +141,9 @@ export default function EditWorkspace(props) {
 
 					<div>owner: {owner_id}</div>
 
-					<InviteUserForm users={fields} handleChangeUserId={handleChangeUserId} handleChangePermission={handleChangePermission} handleAdd={handleAdd} handleRemove={handleRemove} />
+					<AddUser fields={fields} handleChangeUserId={handleChangeUserId} handleChangePermission={handleChangePermission} handleAdd={handleAdd} handleRemove={handleRemove} />
+					{/* <InviteUserForm users={fields} handleChangeUserId={handleChangeUserId} handleChangePermission={handleChangePermission} handleAdd={handleAdd} handleRemove={handleRemove} /> */}
+					<ChangeUserPermission users={props.workspace.users} handleChangeUserId={handleChangeUserId} handleChangePermission={handleChangePermission} handleAdd={handleAdd} handleRemove={handleRemove} />
 
 					{userInfo.permission == "owner" ? <SelectNewOwner users={props.workspace.users} handleChangeOwner={handleChangeOwner} /> : <></>}
 
