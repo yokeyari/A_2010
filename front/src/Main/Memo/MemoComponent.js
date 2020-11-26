@@ -46,8 +46,6 @@ function MemoComponent(props) {
   
   const displayMemo = memo.text
 
-
-
   const endEditMode = () => {
     props.onChange({ ...memo, text: text });
     setEditMode(false);

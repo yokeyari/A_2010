@@ -1,12 +1,15 @@
 const PERM = {
   ALL: 4,
+  PUBLIC: 3,
   OWN: 2,
   NO: 0,
 }
 
 class BaseAuther {
   constructor(user, target = null) {
-    if (user.workspace_id == "home") {
+    if (user.token && user.id == "") {
+      user.level = "guest"
+    } else if (user.workspace_id == "home") {
       user.level = "owner"
     } else {
       user.level = user.permission
@@ -14,6 +17,7 @@ class BaseAuther {
     this.user = user
     this.target = target
     this.setDefault(user);
+    console.log(user)
   }
 
   setDefault = (user) => {
@@ -83,13 +87,18 @@ class BaseAuther {
 class MemoAuther extends BaseAuther {
   constructor(user) {
     super(user);
+    if (true) {
+      this.default = { ...this.default, read: PERM.ALL }
+    }
   }
   canCreate = (page) => {
     return this.calcAuth(page, 'create')
   }
 
   canRead = (target) => {
-    // console.log(target)
+    if (this.user.level == "guest") {
+      return true
+    }
     if (target.status == "pri") {
       // console.log("is pri",target.user_id.toString(),this.user,target.user_id.toString() == this.user.id)
       return (target.user_id.toString() == this.user.id)
