@@ -50,9 +50,45 @@ RSpec.describe "Api::V1::Users", type: :request do
       expect(json['name']).to eq 'huga'
     end
 
-    it 'destroy user data' do
-      expect {delete "/api/v1/users/#{@user.id}"}.to change(User, :count).by(-1)
+    it 'destroy user data (expect without workspace)' do
+      page = create(:page, user_id: @user.id)
+      memo = create(:memo, page_id: page.id, user_id: @user.id, account_id: @user.account_id)
+      tag = create(:tag, page_id: page.id)
+      browse_time = create(:browse_time, user_id: @user.id, page_id: page.id)
+      browse_day = create(:browse_day, user_id: @user.id, page_id: page.id)
+
+      expect {delete "/api/v1/users/#{@user.id}"}.
+        to change(User, :count).by(-1).
+        and change(Page, :count).by(-1).
+        and change(Memo, :count).by(-1).
+        and change(Tag, :count).by(-1).
+        and change(BrowseTime, :count).by(-1).
+        and change(BrowseDay, :count).by(-1)
       expect(response.status).to eq 200
+    end
+
+    context 'destroy user data (expect only workspace)' do
+      it "user is not owner" do
+        wspace = create(:workspace)
+        rel = create(:rel_uaws, user_id: @user.id, workspace_id: wspace.id)
+
+        expect {delete "/api/v1/users/#{@user.id}"}.
+          to change(User, :count).by(-1).
+          and change(Workspace, :count).by(0).
+          and change(RelUserAndWorkspace, :count).by(-1)
+        expect(response.status).to eq 200
+      end
+
+      it "user is owner" do
+        wspace = create(:workspace)
+        rel = create(:rel_uaws, user_id: @user.id, workspace_id: wspace.id, permission: :owner)
+
+        expect {delete "/api/v1/users/#{@user.id}"}.
+          to change(User, :count).by(-1).
+          and change(Workspace, :count).by(-1).
+          and change(RelUserAndWorkspace, :count).by(-1)
+        expect(response.status).to eq 200
+      end
     end
 
     it 'search user account_id' do
