@@ -16,7 +16,7 @@ import { UserInfoContext } from "../context";
 import Transition from "../Transition";
 import { PageDataSource } from "../Main/ProductionApi";
 import { PageAuther } from '../Auth/Authers';
-import { DeleteDialog } from '../Dialogs'
+import { DeleteDialog } from '../Dialogs';
 
 const pageDataSource = new PageDataSource();
 
@@ -142,14 +142,12 @@ export default function PageLink(props) {
     ))
   )
 
-  const deleteButton =
-    <Button
-      className={classes.button} color="secondary" startIcon={<DeleteIcon />}
-      onClick={() => (
+  const deleteButton = 
+    <div className={classes.button} color="secondary">
         <DeleteDialog
           yesCallback={() => handleDelete(page)}
-        />)}
-    />
+        />
+    </div>
 
 
   return (

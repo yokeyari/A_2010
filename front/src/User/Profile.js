@@ -14,7 +14,7 @@ import Fade from '@material-ui/core/Fade';
 import Grid from '@material-ui/core/Grid';
 import MenuBookIcon from '@material-ui/icons/MenuBook';
 import { CommentSharp } from "@material-ui/icons";
-import { DeleteDialog, DoneDialog } from "../Dialogs"
+import { QuitDialog, DoneDialog } from "../Dialogs";
 const UserApi = new UserDataSource();
 const WorkspaceApi = new WorkspaceDataSource();
 const useStyles = makeStyles((theme) => ({
@@ -194,11 +194,9 @@ export default function Profile(props) {
                 </Grid>
                 <Grid item>
                   {workspace_p.permission != "owner"
-                    ? <DialogDelete
+                    ? <QuitDialog
                       yesCallback={() => { withUpdate(WorkspaceApi.quitWorkspace(workspace_p.workspace.id)) }}
-                      modalMessage={`「 ${workspace_p.workspace.name} 」から退出しますか?`}
-                      actionMessage="退出"
-                      yesMessage="退出" />
+                      modalMessage={`「 ${workspace_p.workspace.name} 」から退出しますか?`} />
                     : null}
                 </Grid>
               </Grid>

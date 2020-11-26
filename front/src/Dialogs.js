@@ -1,13 +1,14 @@
 import React , { useState } from "react"
-import Modal from "react-modal";
+import Modal from '@material-ui/core/Modal';
 import EditIcon from '@material-ui/icons/Edit';
 import CancelOutlinedIcon from '@material-ui/icons/CancelOutlined';
 import DoneIcon from '@material-ui/icons/Done';
+import DeleteIcon from '@material-ui/icons/Delete';
+import IconButton from '@material-ui/core/IconButton';
 import RemoveCircleOutlineOutlinedIcon from '@material-ui/icons/RemoveCircleOutlineOutlined';
 import Alert from '@material-ui/lab/Alert';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
-import Modal from '@material-ui/core/Modal';
 import Fade from '@material-ui/core/Fade';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
@@ -47,7 +48,10 @@ function Dialog(props) {
 
   return (
     <div>
-      <Button onClick={handleOpenModal}>{props.actionMessage}</Button>
+      <IconButton onClick={handleOpenModal}>
+        {props.icon}
+        {props.actionMessage}
+      </IconButton>
 
       <Modal
         open={isOpen}
@@ -86,8 +90,20 @@ function DeleteDialog(props) {
       actionMessage={ props.actionMessage ? props.actionMessage : "削除" }
       yesCallback={props.yesCallback}
       yesMessage={props.yesMessage ? props.yesMessage : "削除"}
+      noMessage="キャンセル"
+      icon={<DeleteIcon color="secondary" />} />
+  )
+}
+
+function QuitDialog(props) {
+  return (
+    <Dialog
+      modalMessage={ props.modalMessage ? props.modalMessage : "退出しますか?" }
+      actionMessage={ props.actionMessage ? props.actionMessage : "退出" }
+      yesCallback={props.yesCallback}
+      yesMessage={props.yesMessage ? props.yesMessage : "退出"}
       noMessage="キャンセル" />
   )
 }
 
-export { Dialog, DeleteDialog, DoneDialog }
+export { Dialog, DeleteDialog, DoneDialog, QuitDialog }
