@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { makeStyles } from '@material-ui/core/styles';
-import { BrowserRouter as Router, Route, Link, Redirect, useParams } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Link, Redirect, useParams, withRouter } from 'react-router-dom';
 import { Button, Input, TextField, FilledInput, OutlinedInput, InputLabel, FormControl } from "@material-ui/core";
 
 import { UserInfoContext } from './context';
@@ -19,9 +19,9 @@ export default function InviteWS(props) {
       workspaceDataSource.getWorkspaceByToken(token).then(res => {
         if (res.statusText == 'OK') {
           res.json().then(workspace => {
-            console.log(workspace)
-            workspaceDataSource.addUser(workspace.id, {users: [ [userInfo.id, "general"] ]})
-            props.history.push(`/${userInfo.id}/ws/${workspace.id}`);
+            workspaceDataSource.joinWorkspace({workspace_id: workspace.id, perm: "general"}).then(res => {
+              props.history.push(`/${userInfo.id}/ws/${workspace.id}`);
+            })
           })
         } else {
           

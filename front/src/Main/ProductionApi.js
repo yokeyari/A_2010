@@ -442,6 +442,11 @@ export class WorkspaceDataSource {
     const res = createData(users, this.API_URL + `/${workspace_id}/users`);
     return res;
   }
+
+  async joinWorkspace(post_data) {
+    const res = createData(post_data, this.API_URL + `/${post_data.workspace_id}`);
+    return res;
+  }
 }
 
 
