@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { UserDataSource, WorkspaceDataSource } from "../Main/ProductionApi"
+import React, { useEffect, useState, useContext } from "react";
+import { useHistory } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { Button, TextField, Box } from "@material-ui/core";
 import EditIcon from '@material-ui/icons/Edit';
@@ -15,6 +15,10 @@ import Grid from '@material-ui/core/Grid';
 import MenuBookIcon from '@material-ui/icons/MenuBook';
 import { CommentSharp } from "@material-ui/icons";
 import { QuitDialog, DoneDialog } from "../Dialogs";
+
+import { UserDataSource, WorkspaceDataSource } from "../Main/ProductionApi"
+import { ReloaderContext } from "../context";
+
 const UserApi = new UserDataSource();
 const WorkspaceApi = new WorkspaceDataSource();
 const useStyles = makeStyles((theme) => ({
@@ -49,13 +53,15 @@ const useStyles = makeStyles((theme) => ({
 ));
 export default function Profile(props) {
 
+  const history = useHistory();
+  const {reloader, setReload} = useContext(ReloaderContext);
   const [user, setUser] = useState({ name: "", account_id: "", email: "", pages: [], workspaces: [] });
   const [editMode, setEditMode] = useState(false);
   const [profileForm, setProfileForm] = useState({ name: "", account_id: "", email: "" })
   const [errorMessage, setErrorMessage] = useState({ name: "", account_id: "", email: "" })
   const [successMessage, setSuccessMessage] = useState("")
   const [isOpenAccountCloseBody, setIsOpenAccountCloseBody] = useState(null);
-  const [reloader, setReloader] = useState(0);
+  const [counter, setCounter] = useState(0);
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => {
@@ -73,10 +79,10 @@ export default function Profile(props) {
         console.log(user)
       })
     })
-  }, [reloader])
+  }, [counter])
 
   function withUpdate(fun) {
-    fun.then(() => setReloader(reloader + 1));
+    fun.then(() => setCounter(counter + 1));
   }
 
   const handleChangeEditMode = () => {
@@ -102,11 +108,12 @@ export default function Profile(props) {
   }
 
   const handleDeleteAccount = () => {
-    withUpdate(UserApi.deleteUser(user.id));
+    withUpdate(UserApi.deleteUser(user.id))
+    history.push("/");
+    setReload(true);
   }
 
-  const handleQuitWorkspace = (event) => {
-    const workspace_id = event.currentTarget.getAttribute("workspace_id")
+  const handleQuitWorkspace = (workspace_id) => {
     withUpdate(WorkspaceApi.quitWorkspace(workspace_id));
   }
 
@@ -199,7 +206,7 @@ export default function Profile(props) {
                   {workspace_p.permission != "owner"
                     ? <QuitDialog
                       component={<Card className={classes.quitCard}>退出</Card>}
-                      yesCallback={() => { withUpdate(WorkspaceApi.quitWorkspace(workspace_p.workspace.id)) }}
+                      yesCallback={() => { handleQuitWorkspace(workspace_p.workspace.id) }}
                       modalMessage={`「 ${workspace_p.workspace.name} 」から退出しますか?`} />
                     : null}
                 </Grid>
