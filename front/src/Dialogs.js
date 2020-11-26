@@ -75,9 +75,9 @@ function DoneDialog(props) {
   return (
     <Dialog
       component={props.component}
-      modalMessage="送信しますか?"
+      modalMessage={ props.modalMessage ? props.modalMessage : "送信しますか?" }
       yesCallback={props.yesCallback}
-      yesMessage="送信"
+      yesMessage={props.yesMessage ? props.yesMessage : "送信"}
       noMessage="キャンセル" />
   )
 }
@@ -85,8 +85,8 @@ function DoneDialog(props) {
 function DeleteDialog(props) {
   return (
     <Dialog
-      modalMessage={ props.modalMessage ? props.modalMessage : "削除しますか?" }
       component={props.component}
+      modalMessage={ props.modalMessage ? props.modalMessage : "削除しますか?" }
       yesCallback={props.yesCallback}
       yesMessage={props.yesMessage ? props.yesMessage : "削除"}
       noMessage="キャンセル" />
