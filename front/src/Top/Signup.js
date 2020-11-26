@@ -62,7 +62,7 @@ export default function Signup() {
       // 本当はここにバリデーションをつける？ 
       setState({ ...state, isLoading: true });
       // userDataSource.createUser({ name, email, password, passwordRetype })
-      userDataSource.createUser({ name, username, email, password, password_confirmation: passwordRetype })
+      userDataSource.createUser({ name: name, account_id: username, email: email, password: password, password_confirmation: passwordRetype })
         .then(res => {
           if (res.statusText == "OK") {
             res.json()

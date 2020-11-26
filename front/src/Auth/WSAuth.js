@@ -15,7 +15,9 @@ export default function WSAuth(props) {
   const { WSInfo } = useContext(WSInfoContext)
 
 
+  // console.log("useParams", workspace_id)
   workspace_id = workspace_id ? workspace_id : "home";
+  // console.log("WSAuth", workspace_id)
   const ws = WSInfo.workspaces.find(ws => ws.workspace.id == workspace_id);
 
   useEffect(() => {

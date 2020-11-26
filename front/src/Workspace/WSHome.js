@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Redirect } from 'react-router-dom';
 
 import { WSPageDataSource, WorkspaceDataSource } from '../Main/ProductionApi'
 import PageList from '../User/PageList';
@@ -7,6 +7,7 @@ import SelectWorkspace from './SelectWorkspace';
 import EditWorkspaceButton from './EditWorkspaceButton';
 import { UserInfoContext } from '../context'
 import Home from '../Home/Home'
+import { useHistory } from "react-router-dom"
 
 const workspaceDataSource = new WorkspaceDataSource();
 
@@ -18,6 +19,8 @@ function WSHome(props) {
   const user = userInfo;
   const workspace_id = userInfo.workspace_id;
   const pageDataSource = new WSPageDataSource(workspace_id);
+
+  const history = useHistory();
 
   useEffect(() => {
     workspaceDataSource.getWorkspace(workspace_id).then(res => {
@@ -35,6 +38,9 @@ function WSHome(props) {
     </div>
   )
 
+  if (!userInfo.workspace_id=="home") {
+    
+  }
 
   return (
     <Home top={top} dataSource={pageDataSource} {...props} />
