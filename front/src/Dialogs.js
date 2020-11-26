@@ -48,10 +48,9 @@ function Dialog(props) {
 
   return (
     <div>
-      <IconButton onClick={handleOpenModal}>
-        {props.icon}
-        {props.actionMessage}
-      </IconButton>
+      <Button onClick={handleOpenModal}>
+        {props.component}
+      </Button>
 
       <Modal
         open={isOpen}
@@ -75,12 +74,11 @@ function Dialog(props) {
 function DoneDialog(props) {
   return (
     <Dialog
+      component={props.component}
       modalMessage="送信しますか?"
-      actionMessage="送信"
       yesCallback={props.yesCallback}
       yesMessage="送信"
-      noMessage="キャンセル"
-      icon={props.icon} />
+      noMessage="キャンセル" />
   )
 }
 
@@ -88,23 +86,21 @@ function DeleteDialog(props) {
   return (
     <Dialog
       modalMessage={ props.modalMessage ? props.modalMessage : "削除しますか?" }
-      actionMessage={ props.actionMessage ? props.actionMessage : "削除" }
+      component={props.component}
       yesCallback={props.yesCallback}
       yesMessage={props.yesMessage ? props.yesMessage : "削除"}
-      noMessage="キャンセル"
-      icon={<DeleteIcon color="secondary" />} />
+      noMessage="キャンセル" />
   )
 }
 
 function QuitDialog(props) {
   return (
     <Dialog
+      component={props.component}
       modalMessage={ props.modalMessage ? props.modalMessage : "退出しますか?" }
-      actionMessage={ props.actionMessage ? props.actionMessage : "退出" }
       yesCallback={props.yesCallback}
       yesMessage={props.yesMessage ? props.yesMessage : "退出"}
-      noMessage="キャンセル"
-      icon={props.icon} />
+      noMessage="キャンセル" />
   )
 }
 

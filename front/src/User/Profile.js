@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { UserDataSource, WorkspaceDataSource } from "../Main/ProductionApi"
 import { Link } from "react-router-dom";
-import { Button, TextField } from "@material-ui/core";
+import { Button, TextField, Box } from "@material-ui/core";
 import EditIcon from '@material-ui/icons/Edit';
 import CancelOutlinedIcon from '@material-ui/icons/CancelOutlined';
 import DoneIcon from '@material-ui/icons/Done';
@@ -42,6 +42,9 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
   },
+  quitCard: {
+    backgroundColor: "#04A4AC",
+  }
 }
 ));
 export default function Profile(props) {
@@ -195,6 +198,7 @@ export default function Profile(props) {
                 <Grid item>
                   {workspace_p.permission != "owner"
                     ? <QuitDialog
+                      component={<Card className={classes.quitCard}>退出</Card>}
                       yesCallback={() => { withUpdate(WorkspaceApi.quitWorkspace(workspace_p.workspace.id)) }}
                       modalMessage={`「 ${workspace_p.workspace.name} 」から退出しますか?`} />
                     : null}

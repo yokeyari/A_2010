@@ -145,6 +145,7 @@ export default function PageLink(props) {
   const deleteButton = 
     <div className={classes.button} color="secondary">
         <DeleteDialog
+          component={<Button startIcon={<DeleteIcon />} color="secondary" ></Button>}
           yesCallback={() => handleDelete(page)}
         />
     </div>
