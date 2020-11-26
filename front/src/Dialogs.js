@@ -79,7 +79,8 @@ function DoneDialog(props) {
       actionMessage="送信"
       yesCallback={props.yesCallback}
       yesMessage="送信"
-      noMessage="キャンセル" />
+      noMessage="キャンセル"
+      icon={props.icon} />
   )
 }
 
@@ -102,7 +103,8 @@ function QuitDialog(props) {
       actionMessage={ props.actionMessage ? props.actionMessage : "退出" }
       yesCallback={props.yesCallback}
       yesMessage={props.yesMessage ? props.yesMessage : "退出"}
-      noMessage="キャンセル" />
+      noMessage="キャンセル"
+      icon={props.icon} />
   )
 }
 
