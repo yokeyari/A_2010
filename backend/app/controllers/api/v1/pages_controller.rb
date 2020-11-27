@@ -5,7 +5,8 @@ class Api::V1::PagesController < ApplicationController
 
   # メモページ一覧とメモ一覧を返す
   def index
-    res_ok @user.pages, inc: [:tags, :memos]
+    res_ok Page.preload(:tags, :memos).where(user_id: @user.id), inc: [:tags, :memos]
+    # res_ok @user.pages, inc: [:tags, :memos]
   end
 
   def show
@@ -32,10 +33,11 @@ class Api::V1::PagesController < ApplicationController
 
   # キーワード検索
   def search
+    page_table = Page.preload(:tags, :memos)
     if ws_id = params[:workspace_id]
-      pages = Workspace.find(ws_id).pages
+      pages = page_table.where(workspace_id: ws_id)
     else
-      pages = @user.pages
+      pages = page_table.where(user_id: @user.id)
     end
 
     keywords = params[:keywords]
