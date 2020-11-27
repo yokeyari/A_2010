@@ -71,7 +71,7 @@ const useStyles = makeStyles((theme) => ({
 
   },
 
-  menu:{
+  menu: {
 
   },
 
@@ -211,12 +211,11 @@ export default function PageLink(props) {
             </Typography>
           </CardContent>
         </CardActionArea>
-        <div>
-          {pageMenu}
-          {pageAuther.canDelete(page) ? shareButton : null}
-          {pageAuther.canDelete(page) ? deleteButton : null}
-        </div>
-
+        <Grid container direction="row" justify="flex-end">
+          {/* {pageMenu} */}
+          <Grid item>{pageAuther.canDelete(page) ? shareButton : null}</Grid>
+          <Grid item>{pageAuther.canDelete(page) ? deleteButton : null}</Grid>
+        </Grid>
       </Card>
     </>
   )
