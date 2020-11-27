@@ -159,7 +159,7 @@ export default function PageLink(props) {
     <div className={classes.button} color="secondary">
       <Dialog
         component={<Button startIcon={<ShareIcon />} color="action" ></Button>}
-        yesCallback={() => handleDelete(page)}
+        yesCallback={() => null}
         modalMessage={"公開用URL"}
         message={makeShareURL()}
       />
@@ -168,7 +168,7 @@ export default function PageLink(props) {
 
   const pageMenu = (
     <div>
-      <IconButton aria-controls="simple-menu" aria-haspopup="true" onClick={() => setAnchorEl(true)} color="inherit">
+      <IconButton aria-controls="simple-menu" aria-haspopup="true" onClick={(e) => setAnchorEl(e.currentTarget)} color="inherit">
         <MenuIcon />
       </IconButton>
       <Menu
@@ -179,7 +179,13 @@ export default function PageLink(props) {
         open={Boolean(anchorEl)}
         onClose={handleMenuClose}
       >
-        <MenuItem>aa</MenuItem>
+        <MenuItem>
+          {pageAuther.canDelete(page) ? shareButton : null}
+        </MenuItem>
+        <MenuItem>
+          {pageAuther.canDelete(page) ? deleteButton : null}
+        </MenuItem>
+
       </Menu>
     </div>)
 
@@ -211,11 +217,7 @@ export default function PageLink(props) {
             </Typography>
           </CardContent>
         </CardActionArea>
-        <Grid container direction="row" justify="flex-end">
-          {/* {pageMenu} */}
-          <Grid item>{pageAuther.canDelete(page) ? shareButton : null}</Grid>
-          <Grid item>{pageAuther.canDelete(page) ? deleteButton : null}</Grid>
-        </Grid>
+        {pageMenu}
       </Card>
     </>
   )
