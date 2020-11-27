@@ -16,7 +16,7 @@ import ChangeUserPermission from "./ChangeUserPermission";
 import EditWsConfigModal from "./Modals/EditWsConfigModal";
 import AddUser from "./AddUser";
 import SelectNewOwner from "./SelectNewOwner";
-import { DeleteDialog } from "../Dialogs"
+import { DeleteDialog, Dialog } from "../Dialogs"
 
 const workspaceDataSource = new WorkspaceDataSource();
 
@@ -32,8 +32,8 @@ export default function WorkspaceConfig(props) {
   const users = workspace.users.concat();
 
 
-  console.log(props.workspace)
-  console.log(users)
+  // console.log(props.workspace)
+  // console.log(users)
 
   const handleDeleteWs = () => {
     workspaceDataSource.deleteWorkspace(workspace.id)
@@ -59,6 +59,19 @@ export default function WorkspaceConfig(props) {
       })}
     </div>
 
+  const makeIngiteURL = () => "https://memotube.xyz/ws/" + workspace.token
+  const InviteURLDialog =
+    <div color="secondary">
+      <EditWsConfigModal
+        buttonComponent={<Button>招待URL発行</Button>}
+        mainComponent={
+          <div>
+            <h3>{"以下のURLを招待したいユーザーに送ってください"}</h3>
+            {makeIngiteURL()}
+          </div>}
+      />
+    </div>
+
 
   return (
     <div>
@@ -68,6 +81,10 @@ export default function WorkspaceConfig(props) {
         buttonComponent={<Button>ユーザー一覧</Button>}
         mainComponent={user_list}
       />
+
+      {higherSuper[userInfo.permission] ?
+        InviteURLDialog
+        : null}
 
       {higherSuper[userInfo.permission] ?
         <EditWsConfigModal
@@ -84,8 +101,8 @@ export default function WorkspaceConfig(props) {
 
       {onlyOwner[userInfo.permission] ?
         <EditWsConfigModal
-        buttonComponent={<Button>オーナー変更</Button>}
-        mainComponent={<SelectNewOwner users={users} workspace={workspace} />} />
+          buttonComponent={<Button>オーナー変更</Button>}
+          mainComponent={<SelectNewOwner users={users} workspace={workspace} />} />
         : null}
 
 
@@ -94,13 +111,13 @@ export default function WorkspaceConfig(props) {
 
 
       {onlyOwner[userInfo.permission] ?
-          <DeleteDialog
+        <DeleteDialog
           modalMessage={`「${props.workspace.name}」を削除しますか?`}
           component={<Card style={{ color: "white", backgroundColor: "#EF501F" }} >ワークスペースを削除</Card>}
           yesCallback={handleDeleteWs}
         />
         : null}
-      
+
 
     </div>
   )

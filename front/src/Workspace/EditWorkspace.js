@@ -8,13 +8,14 @@ import TextField from '@material-ui/core/TextField';
 import Card from '@material-ui/core/Card';
 import { CardActions, Box } from "@material-ui/core";
 import { trackPromise } from "react-promise-tracker";
+import ShareIcon from '@material-ui/icons/Share';
 
 import { WorkspaceDataSource } from "../Main/ProductionApi";
 import { UserInfoContext, ReloaderContext } from "../context";
 import Transition from "../Transition";
 import InviteUserForm from "./InviteUserForm";
 import SelectNewOwner from "./SelectNewOwner";
-import { DeleteDialog } from "../Dialogs";
+import { DeleteDialog, Dialog } from "../Dialogs";
 import ChangeUserPermission from "./ChangeUserPermission"
 import AddUser from "./AddUser";
 
@@ -125,6 +126,8 @@ export default function EditWorkspace(props) {
 		console.log("selected new ownerId", selected_ownerId);
 	}
 
+
+
 	console.log(fields);
 
 	return (
@@ -155,16 +158,16 @@ export default function EditWorkspace(props) {
 						</Button>
 					</Transition>
 
-          {userInfo.permission == "owner" ? 
-            <DeleteDialog
-              modalMessage={`「${props.workspace.name}」を削除しますか?`}
-              component={<Card style={{color: "white", backgroundColor: "#EF501F"}} >ワークスペースを削除</Card>}
-              yesCallback={handleCloseWs}
-            />
-            // <deleteDialog 
-            //   // dialogMessage={`「${props.workspace.name}」を削除しますか?`}
-            //   component={<h2>"delete this workspace"</h2>}
-            //   yesCallback={handleCloseWs} />
+					{userInfo.permission == "owner" ?
+						<DeleteDialog
+							modalMessage={`「${props.workspace.name}」を削除しますか?`}
+							component={<Card style={{ color: "white", backgroundColor: "#EF501F" }} >ワークスペースを削除</Card>}
+							yesCallback={handleCloseWs}
+						/>
+						// <deleteDialog 
+						//   // dialogMessage={`「${props.workspace.name}」を削除しますか?`}
+						//   component={<h2>"delete this workspace"</h2>}
+						//   yesCallback={handleCloseWs} />
 						: null}
 				</div>
 			</Card>

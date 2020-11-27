@@ -34,8 +34,6 @@ function WSHome(props) {
     })
   }, [workspace_id,userInfo])
 
-
-
   const top = (
     <div>
       <WsConfigModal 
