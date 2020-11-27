@@ -438,9 +438,9 @@ export class WorkspaceDataSource {
     return res;
   }
 
-  async addUser(workspace_id, user_id) {
-    console.log(user_id);
-    const res = createData({user_id: user_id}, this.API_URL + `/${workspace_id}/users`);
+  async addUser(workspace_id, users) {
+    console.log(users);
+    const res = createData({users: users}, this.API_URL + `/${workspace_id}/users`);
     return res;
   }
 

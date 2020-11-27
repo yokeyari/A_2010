@@ -147,7 +147,7 @@ export default function Header(props) {
             <ListItemIcon>
               {/* <PersonIcon /> */}
             </ListItemIcon>
-            <ListItemText primary="プローフィール" />
+            <ListItemText primary="プロフィール" />
           </MenuItem>
         </Link>
         <SelectWorkspace onClose={handleClose}/>

@@ -48,7 +48,7 @@ export default function GraphBarSentiment(props) {
   const changeDotColor = (entry) => {
     // console.log(positiveness);
     const positiveness = entry.positiveness
-    return (positiveness>=0) ? "#82ca9d" : "#8884d8";
+    return (positiveness>=0) ? "#FD8A04" : "#8884d8";
   }
 
 
