@@ -47,9 +47,9 @@ export default function Analytics(props) {
   const [data, setData] = useState({ X: { "": [] }, Y_list: { "  ( )": [] } });
   const [memoSentiment, setMemoSentiment] = useState([{ time: 0, positiveness: 0, negativeness: 0 }])
   const [userIds, setUserIds] = useState([]);
-  const [graphName, setGraphName] = useState("");
-  const [visState, setVisState] = useState("any");
-  const [visUser, setVisUser] = useState("any");
+  const [graphName, setGraphName] = useState("browse_dates");
+  const [visState, setVisState] = useState("play");
+  const [visUser, setVisUser] = useState("sum");
   const [reloader, setReloader] = useState(0);
   const classes = useStyles();
 
@@ -99,8 +99,9 @@ export default function Analytics(props) {
     PageApi.getBrowseState(page.id).then(res => {
       res.json().then(json => {
         console.log(json)
-        browseTimes = json.browse_times
-        browseDays = json.browse_days
+        browseTimes = json.browse_times;
+        // browseDays = json.browse_days
+        browseDays = dummy_browseDays;
 
         if (browseTimes.length && browseDays.length) {
           console.log(browseTimes, browseDays)
@@ -163,7 +164,7 @@ export default function Analytics(props) {
             <FormControl className={classes.form}>
               <InputLabel id="demo-simple-select-label">graph type</InputLabel>
               <Select onChange={handleChangeGraph}
-                defaultValue={"browse_times"}
+                defaultValue={"none"}
                 className={""}
                 inputProps={{ "aria-label": "Without label" }}
               >
@@ -179,7 +180,7 @@ export default function Analytics(props) {
               <FormControl className={classes.form}>
                 <InputLabel id="demo-simple-select-label">state</InputLabel>
                 <Select onChange={handleChangeState}
-                  defaultValue={"any"}
+                  defaultValue={"play"}
                   className={""}
                   inputProps={{ "aria-label": "Without label" }}
                 >
@@ -196,8 +197,8 @@ export default function Analytics(props) {
             <FormControl className={classes.form}>
               <InputLabel id="demo-simple-select-label">user_id</InputLabel>
               <Select onChange={handleChangeUser}
-                defaultValue={"any"}
-                className={""}
+                defaultValue={"sum"}
+                className={"sum"}
                 inputProps={{ "aria-label": "Without label" }}
               >
                 <MenuItem value={"any"} key={0} >すべて表示</MenuItem>
