@@ -74,12 +74,13 @@ function LoginAuth(props) {
 
   // 正確には、クリックしただけでサインインはできていないので、アクションの名前にClickをつける
   const onSignInClick = () => {
-
+    setReload(true);
   };
   const onSignOutClick = () => {
     userDataSource.logoutUser().then((res) => {
       console.log(res)
       setUserInfo({ endCheck: true, id: "", name: "", isLogin: false });
+      setReload(true);
       props.history.push('/login');
     });
   }
@@ -91,11 +92,11 @@ function LoginAuth(props) {
       return null;
     } else if (userInfo.isLogin) {
       return (
-        <Button color="inherit" onClick={onSignOutClick} className={classes.rightLink}>Logout</Button>
+        <Button color="inherit" onClick={()=>{onSignOutClick();}} className={classes.rightLink}>Logout</Button>
       );
     } else {
       return (
-        <Button color="inherit" component={Link} to='/login' className={classes.rightLink} onClick={onSignInClick} >Login</Button>
+        <Button color="inherit" component={Link} to='/login' className={classes.rightLink} onClick={()=>{onSignInClick()}} >Login</Button>
       );
     }
   }
