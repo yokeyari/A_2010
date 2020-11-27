@@ -3,6 +3,7 @@ class Api::V1::WorkspacesController < ApplicationController
   before_action :find_workspace, except: [:index, :create, :join, :token]
 
   def index
+    @user = User.where(id: @user.id).preload(rel_user_and_workspaces: [:workspace]).first
     res_ok @user, inc: {workspaces: [:workspace]}
   end
 
@@ -50,10 +51,12 @@ class Api::V1::WorkspacesController < ApplicationController
   end
 
   def all_users
+    @wspace = Workspace.where(id: @wspace.id).preload(rel_user_and_workspaces: [:user]).first
     res_ok @wspace.rel_uaws, inc: :user
   end
 
   def all_pages
+    @wspace = Workspace.where(id: @wspace.id).preload(pages: [:tags, :memos]).first
     render json: @wspace.pages, include: [:tags, :memos], each_serializer: FewMemoPageSerializer
   end
 
