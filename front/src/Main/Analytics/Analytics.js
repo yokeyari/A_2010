@@ -168,9 +168,9 @@ export default function Analytics(props) {
                 inputProps={{ "aria-label": "Without label" }}
               >
                 <MenuItem value={"none"} key={0} >none</MenuItem>
-                <MenuItem value={"browse_times"} key={1} >再生時間 vs 視聴状況</MenuItem>
-                <MenuItem value={"browse_dates"} key={2} >日 vs 視聴状況</MenuItem>
-                <MenuItem value={"memoSentiment"} key={4} >再生時間 vs メモ内容</MenuItem>
+                <MenuItem value={"browse_times"} key={1} >再生時間 / 視聴状況</MenuItem>
+                <MenuItem value={"browse_dates"} key={2} >日 / 視聴状況</MenuItem>
+                <MenuItem value={"memoSentiment"} key={4} >再生時間 / メモ内容</MenuItem>
               </Select>
             </FormControl>
           </Grid>
