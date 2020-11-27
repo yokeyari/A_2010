@@ -15,9 +15,9 @@ RSpec.describe "Api::V1::Tags", type: :request do
     create(:tag, page_id: @page.id)
     create(:tag, page_id: @page.id, is_automated: true)
     get "/api/v1/tags", params: {page_id: @page.id}
-    json = JSON.parse(response.body)
 
     expect(response.status).to eq 200
+    json = JSON.parse(response.body)
     expect(json.size).to eq 2
   end
 
@@ -37,17 +37,17 @@ RSpec.describe "Api::V1::Tags", type: :request do
     tag = create(:tag, page_id: @page.id)
     valid_params = {text: "test2"}
     patch "/api/v1/tags/#{tag.id}", params: valid_params
-    json = JSON.parse(response.body)
 
     expect(response.status).to eq 200
+    json = JSON.parse(response.body)
     expect(json['text']).to eq 'test2'
   end
 
   it "automaticary tags" do
     get "/api/v1/tags/automate", params: {page_id: @page.id}
-    json = JSON.parse(response.body)
 
     expect(response.status).to eq 200
+    json = JSON.parse(response.body)
     expect(json[0]['is_automated']).to eq true
   end
 end

@@ -12,18 +12,18 @@ RSpec.describe "Api::V1::Pages", type: :request do
     it "get all user's page" do
       5.times {create(:page, user_id: @user.id)}
       get "/api/v1/pages"
-      json = JSON.parse(response.body)
 
       expect(response.status).to eq 200
+      json = JSON.parse(response.body)
       expect(json.size).to eq 5
     end
 
     it "get a page" do
       page = create(:page, user_id: @user.id)
       get "/api/v1/pages/#{page.id}"
-      json = JSON.parse(response.body)
 
       expect(response.status).to eq 200
+      json = JSON.parse(response.body)
       expect(json['user_id']).to eq @user.id
     end
 
@@ -37,9 +37,9 @@ RSpec.describe "Api::V1::Pages", type: :request do
     it "update a page" do
       page = create(:page, user_id: @user.id)
       patch "/api/v1/pages/#{page.id}", params: {title: "foo", url: "bar"}
-      json = JSON.parse(response.body)
 
       expect(response.status).to eq 200
+      json = JSON.parse(response.body)
       expect(json['title']).to eq "foo"
       expect(json['url']).to eq "bar"
     end
@@ -51,12 +51,12 @@ RSpec.describe "Api::V1::Pages", type: :request do
       create(:browse_time, page_id: page.id, user_id: @user.id)
       create(:browse_day, page_id: page.id, user_id: @user.id)
 
-      expect {delete "/api/v1/pages/#{page.id}"}.
-        to change(Page, :count).by(-1).
-        and change(Memo, :count).by(-1).
-        and change(Tag, :count).by(-1).
-        and change(BrowseTime, :count).by(-1).
-        and change(BrowseDay, :count).by(-1)
+      expect {delete "/api/v1/pages/#{page.id}"}
+        .to change(Page, :count).by(-1)
+        .and change(Memo, :count).by(-1)
+        .and change(Tag, :count).by(-1)
+        .and change(BrowseTime, :count).by(-1)
+        .and change(BrowseDay, :count).by(-1)
       expect(response.status).to eq 200
     end
 
@@ -67,9 +67,9 @@ RSpec.describe "Api::V1::Pages", type: :request do
       page3 = create(:page, user_id: @user.id)
       create(:tag, text: "baz", page_id: page3.id)
       post "/api/v1/pages/search", params: {keywords: ["baz"]}
-      json = JSON.parse(response.body)
 
       expect(response.status).to eq 200
+      json = JSON.parse(response.body)
       expect(json.size).to eq 3
     end
 
@@ -77,9 +77,9 @@ RSpec.describe "Api::V1::Pages", type: :request do
       page = create(:page, user_id: @user.id)
       token = page.token
       patch "/api/v1/pages/#{page.id}/token"
-      json = JSON.parse(response.body)
 
       expect(response.status).to eq 200
+      json = JSON.parse(response.body)
       expect(json['token']).not_to eq token
     end
   end
@@ -88,9 +88,9 @@ RSpec.describe "Api::V1::Pages", type: :request do
     it "get a page by token" do
       page = create(:user_page)
       get "/api/v1/pages/share", params: {page_token: page.token}
-      json = JSON.parse(response.body)
 
       expect(response.status).to eq 200
+      json = JSON.parse(response.body)
       expect(json['id']).to eq page.id
     end
   end

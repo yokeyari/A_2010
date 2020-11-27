@@ -53,15 +53,15 @@ RSpec.describe "Api::V1::WorkspacesController,", type: :request do
       create(:browse_time, page_id: page.id, user_id: @user.id)
       create(:browse_day, page_id: page.id, user_id: @user.id)
       
-      expect {delete "/api/v1/ws/#{@wspace.id}"}.
-        to change(Workspace, :count).by(-1).
-        and change(User, :count).by(0).
-        and change(RelUserAndWorkspace, :count).by(-2).
-        and change(Page, :count).by(-1).
-        and change(Memo, :count).by(-1).
-        and change(Tag, :count).by(-1).
-        and change(BrowseTime, :count).by(-1).
-        and change(BrowseDay, :count).by(-1)
+      expect {delete "/api/v1/ws/#{@wspace.id}"}
+        .to change(Workspace, :count).by(-1)
+        .and change(User, :count).by(0)
+        .and change(RelUserAndWorkspace, :count).by(-2)
+        .and change(Page, :count).by(-1)
+        .and change(Memo, :count).by(-1)
+        .and change(Tag, :count).by(-1)
+        .and change(BrowseTime, :count).by(-1)
+        .and change(BrowseDay, :count).by(-1)
       expect(response.status).to eq 200
     end
 
@@ -132,9 +132,9 @@ RSpec.describe "Api::V1::WorkspacesController,", type: :request do
         users: [[user2.id, "sup"]]
       }
 
-      expect {post "/api/v1/ws", params: valid_params, as: :json}.
-        to change(Workspace, :count).by(+1).
-        and change(RelUserAndWorkspace, :count).by(+2)
+      expect {post "/api/v1/ws", params: valid_params, as: :json}
+        .to change(Workspace, :count).by(+1)
+        .and change(RelUserAndWorkspace, :count).by(+2)
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
       expect(json['name']).to eq "test"

@@ -18,17 +18,18 @@ RSpec.describe "Api::V1::Analytics", type: :request do
 
   it 'get browse data : get /api/v1/pages/:page_id/analytics' do
     get "/api/v1/pages/#{@page.id}/analytics"
-    json = JSON.parse(response.body)
+    
     expect(response.status).to eq 200
+    json = JSON.parse(response.body)
     expect(json['browse_times'][0]['id']).to eq @browse_time.id
     expect(json['browse_days'][0]['id']).to eq @browse_day.id
   end
 
   it 'change browse data : post /api/v1/pages/:page_id/analytics' do
     valid_params = {state: "play", time: 2, day: '2020/01/01'}
-    expect {post "/api/v1/pages/#{@page.id}/analytics", params: valid_params}.
-      to change(BrowseTime, :count).by(+1).
-      and change(BrowseDay, :count).by(0)
+    expect {post "/api/v1/pages/#{@page.id}/analytics", params: valid_params}
+      .to change(BrowseTime, :count).by(+1)
+      .and change(BrowseDay, :count).by(0)
     expect(response.status).to be 200
   end
 end

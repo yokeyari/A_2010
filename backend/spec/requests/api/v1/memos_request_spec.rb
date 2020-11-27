@@ -12,9 +12,9 @@ RSpec.describe "Api::V1::Memos", type: :request do
   it "get all page's memo" do
     5.times {create(:memo, page_id: @page.id, user_id: @user.id, account_id: @user.account_id)}
     get "/api/v1/memos", params: {page_id: @page.id}
-    json = JSON.parse(response.body)
     
     expect(response.status).to eq 200
+    json = JSON.parse(response.body)
     expect(json.size).to eq 5
   end
 
@@ -36,9 +36,9 @@ RSpec.describe "Api::V1::Memos", type: :request do
       status: "pub"
     }
     patch "/api/v1/memos/#{memo.id}", params: valid_params
-    json = JSON.parse(response.body)
 
     expect(response.status).to eq 200
+    json = JSON.parse(response.body)
     expect(json['text']).to eq "test2"
   end
 
