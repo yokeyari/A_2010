@@ -97,7 +97,7 @@ function Main(props) {
 
   const autoReload = useInterval(() => {
     if (!isAnalyticsMode) {
-      setReloader(reloader+1);
+      setReloader(reloader + 1);
     }
   }, GET_INTERVAL);
 
@@ -135,223 +135,228 @@ function Main(props) {
 
   useEffect(() => {
     // setIsLoading(true);
-    loadPage().then((page) => {
-      setPage({ ...page });
-      setMemos(page.memos)
-      if (isLoading) setIsLoading(false);
-    })
-  }, [reloader])
+    loadPage().then((new_page) => {
+      setPage({ ...new_page });
+      const new_memo = new_page.memos.map(m=> {
+        const stay = memos.find(old=>old.text==m.text);
+        if(stay) return stay
+        else return m
+      })
+    setMemos(new_memo)
+    if (isLoading) setIsLoading(false);
+  })
+}, [reloader])
 
-  useEffect(() => {
-    const mode = colorMode;
-    const text_list = memos.map(t => t.text);
-    if (mode == "None") {
-      var new_memos = memos.map(memo => {
+useEffect(() => {
+  const mode = colorMode;
+  const text_list = memos.map(t => t.text);
+  if (mode == "None") {
+    var new_memos = memos.map(memo => {
+      return {
+        ...memo,
+        color: null
+      }
+    });
+    setMemos(new_memos);
+  } else {
+    BertApi.getSentment(text_list).then(res => {
+      console.log(res);
+      const calcColorFromSentiment = (mode, np) => {
+        if (mode === "positive") {
+          if (np.positiveness > 1.0) {
+            return "#FFB300";
+          } else if (np.positiveness > 0.5) {
+            return "#FFD54F"
+          }
+        } else if (mode === "negative") {
+          if (np.negativeness > 1.0) {
+            return "#33C7FF";
+          } else if (np.negativeness > 0.5) {
+            return "#33F2FF";
+          }
+        }
+      }
+      var new_memos = memos.map((memo, i) => {
         return {
           ...memo,
-          color: null
+          color: calcColorFromSentiment(mode, res[i])
         }
-      });
+      })
       setMemos(new_memos);
-    } else {
-      BertApi.getSentment(text_list).then(res => {
-        console.log(res);
-        const calcColorFromSentiment = (mode, np) => {
-          if (mode === "positive") {
-            if (np.positiveness > 1.0) {
-              return "#FFB300";
-            } else if (np.positiveness > 0.5) {
-              return "#FFD54F"
-            }
-          } else if (mode === "negative") {
-            if (np.negativeness > 1.0) {
-              return "#33C7FF";
-            } else if (np.negativeness > 0.5) {
-              return "#33F2FF";
-            }
-          }
-        }
-        var new_memos = memos.map((memo, i) => {
-          return {
-            ...memo,
-            color: calcColorFromSentiment(mode, res[i])
-          }
-        })
-        setMemos(new_memos);
-      });
-    }
-  }, [colorMode]);
-
-  function withUpdate(fun) {
-    fun.then(() => setReloader(reloader + 1));
+    });
   }
+}, [colorMode]);
 
-  function handleDelete(memo) {
-    withUpdate(MemoAPI.deleteMemo(memo));
-  }
-  function handleChange(memo) {
-    withUpdate(MemoAPI.updateMemo(memo));
-  }
+function withUpdate(fun) {
+  fun.then(() => setReloader(reloader + 1));
+}
 
-  function handleSubmit(memo) {
-    console.log(memo);
-    withUpdate(MemoAPI.createMemo(memo, page_id));
-  }
+function handleDelete(memo) {
+  withUpdate(MemoAPI.deleteMemo(memo));
+}
+function handleChange(memo) {
+  withUpdate(MemoAPI.updateMemo(memo));
+}
 
-  function handleChangeTitle(title) {
-    withUpdate(PageApi.updatePage({ url: page.url, title: title, id: page_id }));
-  }
+function handleSubmit(memo) {
+  console.log(memo);
+  withUpdate(MemoAPI.createMemo(memo, page_id));
+}
 
-  function handleWriting() {
-    if (true) {
-      setIsWriting(1)
-      setPlayer({ ...player, playing: false })
-    }
-  }
+function handleChangeTitle(title) {
+  withUpdate(PageApi.updatePage({ url: page.url, title: title, id: page_id }));
+}
 
-  function changeMemoByStatus(event) {
-    const mode = event.target.value;
-    setMemoMode(mode);
+function handleWriting() {
+  if (true) {
+    setIsWriting(1)
+    setPlayer({ ...player, playing: false })
   }
+}
 
-  function changeMemoColor(event) {
-    const mode = event.target.value;
-    setColorMode(mode);
+function changeMemoByStatus(event) {
+  const mode = event.target.value;
+  setMemoMode(mode);
+}
+
+function changeMemoColor(event) {
+  const mode = event.target.value;
+  setColorMode(mode);
+}
+
+function handleWriteEnd() {
+  if (true) {
+    setIsWriting(0)
+    setPlayer({ ...player, playing: true })
   }
+}
 
-  function handleWriteEnd() {
-    if (true) {
-      setIsWriting(0)
-      setPlayer({ ...player, playing: true })
-    }
-  }
+const endAnalyticsMode = () => {
+  setAnalyticsMode(false);
+}
 
-  const endAnalyticsMode = () => {
-    setAnalyticsMode(false);
-  }
+const mymemos = memos.filter(memo => memo.user_id == userInfo.id);
+switch (memoMode) {
+  case 'onlyme':
+    var visMemos = mymemos;
+    break;
+  case 'pub':
+    var visMemos = mymemos.filter(memo => memo.status == "pub");
+    break;
+  case 'pri':
+    var visMemos = mymemos.filter(memo => memo.status == "pri");
+    break;
+  default:
+    var visMemos = memos;
+}
 
-  const mymemos = memos.filter(memo => memo.user_id == userInfo.id);
-  switch (memoMode) {
-    case 'onlyme':
-      var visMemos = mymemos;
-      break;
-    case 'pub':
-      var visMemos = mymemos.filter(memo => memo.status == "pub");
-      break;
-    case 'pri':
-      var visMemos = mymemos.filter(memo => memo.status == "pri");
-      break;
-    default:
-      var visMemos = memos;
-  }
-
-  const VisMemoHamburger =
-    (userInfo.workspace_id != "home") ?
-      <Grid container direction="row" justify="center" alignItems="center">
-        <Grid item>
-          <Box style={{ marginRight: "20px" }}>メモの表示切替</Box>
-        </Grid>
-        <Grid item>
-          <FormControl className={classes.formControl}>
-            <Select onChange={changeMemoByStatus}
-              defaultValue="all"
-              className={classes.selectEmpty}
-              inputProps={{ "aria-label": "Without label" }}>
-              <MenuItem value="all">全員</MenuItem>
-              <MenuItem value="onlyme">自分</MenuItem>
-              <MenuItem value="pub">public</MenuItem>
-              <MenuItem value="pri">private</MenuItem>
-            </Select>
-          </FormControl>
-        </Grid>
+const VisMemoHamburger =
+  (userInfo.workspace_id != "home") ?
+    <Grid container direction="row" justify="center" alignItems="center">
+      <Grid item>
+        <Box style={{ marginRight: "20px" }}>メモの表示切替</Box>
       </Grid>
-      : null
+      <Grid item>
+        <FormControl className={classes.formControl}>
+          <Select onChange={changeMemoByStatus}
+            defaultValue="all"
+            className={classes.selectEmpty}
+            inputProps={{ "aria-label": "Without label" }}>
+            <MenuItem value="all">全員</MenuItem>
+            <MenuItem value="onlyme">自分</MenuItem>
+            <MenuItem value="pub">public</MenuItem>
+            <MenuItem value="pri">private</MenuItem>
+          </Select>
+        </FormControl>
+      </Grid>
+    </Grid>
+    : null
 
 
-  return (
-    <div className="Main">
-      <Loading open={isLoading}>
-      </Loading>
+return (
+  <div className="Main">
+    <Loading open={isLoading}>
+    </Loading>
 
 
-      {isAnalyticsMode ?
-        <Grid item xs={12}>
-          <Analytics page={page} memos={memos} onClick={endAnalyticsMode} />
+    {isAnalyticsMode ?
+      <Grid item xs={12}>
+        <Analytics page={page} memos={memos} onClick={endAnalyticsMode} />
+      </Grid>
+      :
+
+      <main className={classes.root}>
+        {/* <timeContext.Provider value={{ time, setTime }}> */}
+        <Grid item>
+          <Title title={page.title} onChange={handleChangeTitle} />
         </Grid>
-        :
+        <Grid container className={classes.grid} direction="row">
+          <Grid item xs={10} md={6}>
+            <Grid container className={classes.grid} direction="column">
 
-        <main className={classes.root}>
-          {/* <timeContext.Provider value={{ time, setTime }}> */}
-          <Grid item>
-            <Title title={page.title} onChange={handleChangeTitle} />
-          </Grid>
-          <Grid container className={classes.grid} direction="row">
-            <Grid item xs={10} md={6}>
-              <Grid container className={classes.grid} direction="column">
-
-                <Grid item xs={10} md={12}>
-                  <TagList tags={page.tags} withUpdate={withUpdate} />
-                </Grid>
-              </Grid>
-              <Grid container className={classes.grid} direction="row">
-                <Grid item xs={12} md={12}>
-                  <TagForm page_id={page.id} withUpdate={withUpdate} />
-                </Grid>
-
-                <Grid item xs={12}>
-                  <VideoPlayer className="" url={page.url} players={{ player, setPlayer }} />
-                </Grid>
-                <Grid item xs={12}>
-                  {memoAuther.canCreate(page) ?
-                    <WriteMemoForm onSubmit={handleSubmit} player={player} user_id={userInfo.id} onWriting={handleWriting} onWriteEnd={handleWriteEnd} />
-                    :
-                    null
-                  }
-                </Grid>
+              <Grid item xs={10} md={12}>
+                <TagList tags={page.tags} withUpdate={withUpdate} />
               </Grid>
             </Grid>
+            <Grid container className={classes.grid} direction="row">
+              <Grid item xs={12} md={12}>
+                <TagForm page_id={page.id} withUpdate={withUpdate} />
+              </Grid>
 
-            <Grid item xs={10} md={6}>
-              <Grid container direction="column" >
-                <Grid container direction="row" justify="center" alignItems="center">
-                  <Grid item >
-                    <Button color="primary" onClick={() => { setAnalyticsMode(true) }}>Analytics Mode</Button>
-                    <Box style={{ marginRight: "20px" }}>AIによるハイライト</Box>
-                    <FormControl className={classes.formControl}>
-                      <Select onChange={changeMemoColor}
-                        defaultValue="None"
-                        className={classes.selectEmpty}
-                        inputProps={{ "aria-label": "Without label" }}>
-                        <MenuItem value="None">None</MenuItem>
-                        <MenuItem value="positive">ポジティブ</MenuItem>
-                        <MenuItem value="negative">ネガティブ</MenuItem>
-                      </Select>
-                    </FormControl>
-                  </Grid>
-
-                </Grid>
-
-                {VisMemoHamburger}
-
-                <Grid item>
-                  <MemoList
-                    memoAuther={memoAuther}
-                    memos={visMemos}
-                    onChange={handleChange}
-                    onDelete={handleDelete}
-                    onSubmit={handleSubmit}
-                    player={player}
-                    user_id={userInfo.id}
-                  />
-                </Grid>
+              <Grid item xs={12}>
+                <VideoPlayer className="" url={page.url} players={{ player, setPlayer }} />
+              </Grid>
+              <Grid item xs={12}>
+                {memoAuther.canCreate(page) ?
+                  <WriteMemoForm onSubmit={handleSubmit} player={player} user_id={userInfo.id} onWriting={handleWriting} onWriteEnd={handleWriteEnd} />
+                  :
+                  null
+                }
               </Grid>
             </Grid>
           </Grid>
-          {/* </timeContext.Provider> */}
-        </main>
-      }
-    </div>
-  );
+
+          <Grid item xs={10} md={6}>
+            <Grid container direction="column" >
+              <Grid container direction="row" justify="center" alignItems="center">
+                <Grid item >
+                  <Button color="primary" onClick={() => { setAnalyticsMode(true) }}>Analytics Mode</Button>
+                  <Box style={{ marginRight: "20px" }}>AIによるハイライト</Box>
+                  <FormControl className={classes.formControl}>
+                    <Select onChange={changeMemoColor}
+                      defaultValue="None"
+                      className={classes.selectEmpty}
+                      inputProps={{ "aria-label": "Without label" }}>
+                      <MenuItem value="None">None</MenuItem>
+                      <MenuItem value="positive">ポジティブ</MenuItem>
+                      <MenuItem value="negative">ネガティブ</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+
+              </Grid>
+
+              {VisMemoHamburger}
+
+              <Grid item>
+                <MemoList
+                  memoAuther={memoAuther}
+                  memos={visMemos}
+                  onChange={handleChange}
+                  onDelete={handleDelete}
+                  onSubmit={handleSubmit}
+                  player={player}
+                  user_id={userInfo.id}
+                />
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
+        {/* </timeContext.Provider> */}
+      </main>
+    }
+  </div>
+);
 }
 
 export default Main;
