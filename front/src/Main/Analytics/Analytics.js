@@ -100,8 +100,8 @@ export default function Analytics(props) {
       res.json().then(json => {
         console.log(json)
         browseTimes = json.browse_times;
-        // browseDays = json.browse_days
-        browseDays = dummy_browseDays;
+        browseDays = json.browse_days
+        // browseDays = dummy_browseDays;
 
         if (browseTimes.length && browseDays.length) {
           console.log(browseTimes, browseDays)
@@ -185,7 +185,7 @@ export default function Analytics(props) {
                   inputProps={{ "aria-label": "Without label" }}
                 >
                   <MenuItem value={"any"} key={0} >すべて表示</MenuItem>
-                  <MenuItem value={"play"} key={1} >再生中 (play)</MenuItem>
+                  <MenuItem value={"play"} key={1} >再生回数 (play)</MenuItem>
                   <MenuItem value={"memo"} key={2} >メモ記入中 (memo)</MenuItem>
                   <MenuItem value={"pause"} key={3} >ポーズ中 (pause)</MenuItem>
                 </Select>
