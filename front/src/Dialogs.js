@@ -1,4 +1,4 @@
-import React , { useState } from "react"
+import React, { useState } from "react"
 import Modal from '@material-ui/core/Modal';
 import EditIcon from '@material-ui/icons/Edit';
 import CancelOutlinedIcon from '@material-ui/icons/CancelOutlined';
@@ -67,6 +67,7 @@ function Dialog(props) {
         <Fade in={isOpen}>
           <div className={classes.paper}>
             <h2>{props.modalMessage}</h2>
+            <div>{props.message}</div>
             <Button onClick={handleClickYes} > {props.yesMessage} </Button>
             <Button onClick={handleCloseModal} > {props.noMessage} </Button>
           </div>
@@ -80,7 +81,7 @@ function DoneDialog(props) {
   return (
     <Dialog
       component={props.component}
-      modalMessage={ props.modalMessage ? props.modalMessage : "送信しますか?" }
+      modalMessage={props.modalMessage ? props.modalMessage : "送信しますか?"}
       yesCallback={props.yesCallback}
       yesMessage={props.yesMessage ? props.yesMessage : "送信"}
       noMessage="キャンセル" />
@@ -91,7 +92,7 @@ function DeleteDialog(props) {
   return (
     <Dialog
       component={props.component}
-      modalMessage={ props.modalMessage ? props.modalMessage : "削除しますか?" }
+      modalMessage={props.modalMessage ? props.modalMessage : "削除しますか?"}
       yesCallback={props.yesCallback}
       yesMessage={props.yesMessage ? props.yesMessage : "削除"}
       noMessage="キャンセル" />
@@ -102,7 +103,7 @@ function QuitDialog(props) {
   return (
     <Dialog
       component={props.component}
-      modalMessage={ props.modalMessage ? props.modalMessage : "退出しますか?" }
+      modalMessage={props.modalMessage ? props.modalMessage : "退出しますか?"}
       yesCallback={props.yesCallback}
       yesMessage={props.yesMessage ? props.yesMessage : "退出"}
       noMessage="キャンセル" />

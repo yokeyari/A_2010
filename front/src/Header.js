@@ -138,17 +138,10 @@ export default function Header(props) {
             <ListItemIcon>
               <PersonIcon />
             </ListItemIcon>
-            <ListItemText primary="ユーザーページ" />
+            <ListItemText primary="ユーザーホーム" />
           </MenuItem>
         </Link>
-        {/* <Link to={`/${userInfo.id}/main`}>
-          <MenuItem Button onClick={handleClose}>
-            <ListItemIcon>
-              <MovieIcon />
-            </ListItemIcon>
-            <ListItemText primary="動画メモページ" />
-          </MenuItem>
-        </Link> */}
+
         <Link to={`/${userInfo.id}/profile`} >
           <MenuItem button onClick={handleClose}>
             <ListItemIcon>

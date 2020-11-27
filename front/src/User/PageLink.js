@@ -1,5 +1,5 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import React, { useState } from 'react';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid'
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
@@ -10,13 +10,18 @@ import Typography from '@material-ui/core/Typography';
 import { trackPromise } from "react-promise-tracker"
 import DeleteIcon from '@material-ui/icons/Delete';
 import Button from '@material-ui/core/Button';
-
+import MenuIcon from '@material-ui/icons/Menu';
+import IconButton from '@material-ui/core/IconButton';
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem"
+import ShareIcon from '@material-ui/icons/Share';
 
 import { UserInfoContext } from "../context";
 import Transition from "../Transition";
 import { PageDataSource } from "../Main/ProductionApi";
-import { PageAuther } from '../Auth/Authers';
-import { DeleteDialog } from '../Dialogs';
+import { PageAuther, MemoAuther } from '../Auth/Authers';
+import { DeleteDialog, Dialog } from '../Dialogs';
+import { Container } from '@material-ui/core';
 
 const pageDataSource = new PageDataSource();
 
@@ -66,8 +71,12 @@ const useStyles = makeStyles((theme) => ({
 
   },
 
+  menu:{
+
+  },
+
   button: {
-    position: "absolute",
+    position: "relative",
     top: 'auto',
     right: 0,
     bottom: 2,
@@ -92,10 +101,13 @@ export default function PageLink(props) {
   // const [url, setUrl] = useState("");
   // const [title, setTitle] = useState("");
   const { userInfo } = React.useContext(UserInfoContext);
+  const [anchorEl, setAnchorEl] = React.useState(false);
   const pageAuther = new PageAuther(userInfo);
   const page = props.page;
   const img = props.img
   const classes = useStyles();
+
+  const memoAuther = new MemoAuther(userInfo);
 
 
   const handleClick = () => {
@@ -109,26 +121,9 @@ export default function PageLink(props) {
     props.withUpdate(PageApi.deletePage(page));
   }
 
-  // const handleClick = () => {
-  //   setState({...state,isLoading:true});
-  //   pageDataSource.getPage(page.id)
-  //     .then(res => {
-  //       if (res.statusText == "OK") {
-  //         res.json()
-  //           .then(page => {
-  //             // console.log("getPage", page.page);
-  //             setState({ to: `/${userInfo.id}/${page.page.id}`, isLoaded: true,isLoading:false });
-  //             // props.onClose();
-  //           })
-  //       } else {
-  //         // ここにページが読み込めなかったときの処理
-  //       }
-  //     });
-  // }
-
 
   const renderMemos = () => (
-    page.memos.slice(0, PREVIEW_MEMO_NUM).map((memo, i) => (
+    page.memos.filter(memo => memoAuther.canRead(memo)).slice(0, PREVIEW_MEMO_NUM).map((memo, i) => (
       <div key={(i).toString()}>
         {memo.text.slice(0, PREVIEW_MEMO_MAX)}
         <br />
@@ -142,13 +137,54 @@ export default function PageLink(props) {
     ))
   )
 
-  const deleteButton = 
+  const handleMenuClose = () => {
+    setAnchorEl(false);
+  }
+
+  // const handleShare = ()=>{
+
+  // }
+
+  const makeShareURL = () => "https://memotube.xyz/page/" + page.token;
+
+  const deleteButton =
     <div className={classes.button} color="secondary">
-        <DeleteDialog
-          component={<Button startIcon={<DeleteIcon />} color="secondary" ></Button>}
-          yesCallback={() => handleDelete(page)}
-        />
+      <DeleteDialog
+        component={<Button startIcon={<DeleteIcon />} color="secondary" ></Button>}
+        yesCallback={() => handleDelete(page)}
+      />
     </div>
+
+  const shareButton =
+    <div className={classes.button} color="secondary">
+      <Dialog
+        component={<Button startIcon={<ShareIcon />} color="action" ></Button>}
+        yesCallback={() => handleDelete(page)}
+        modalMessage={"公開用URL"}
+        message={makeShareURL()}
+      />
+    </div>
+
+
+  const pageMenu = (
+    <div>
+      <IconButton aria-controls="simple-menu" aria-haspopup="true" onClick={() => setAnchorEl(true)} color="inherit">
+        <MenuIcon />
+      </IconButton>
+      <Menu
+        className={classes.menu}
+        id="simple-menu"
+        aria-haspopup="true"
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleMenuClose}
+      >
+        <MenuItem>aa</MenuItem>
+      </Menu>
+    </div>)
+
+
+
 
 
   return (
@@ -175,7 +211,12 @@ export default function PageLink(props) {
             </Typography>
           </CardContent>
         </CardActionArea>
-        {pageAuther.canDelete(page) ? deleteButton : null}
+        <div>
+          {pageMenu}
+          {pageAuther.canDelete(page) ? shareButton : null}
+          {pageAuther.canDelete(page) ? deleteButton : null}
+        </div>
+
       </Card>
     </>
   )

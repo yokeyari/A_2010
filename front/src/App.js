@@ -45,6 +45,8 @@ function App() {
 
   return (
     <div>
+    {/* <iframe width="640" height="480" src="https://www.youtube.com/embed/fx3g93Ocz0M" allow="autoplay"></iframe> */}
+    {/* <iframe width="640" height="480" src="https://drive.google.com/file/d/1WZ65VSycurR3ClE6Z7GK_Rxr1s7qsm3h/preview" ></iframe> */}
       <ReloaderContext.Provider value={{ reloader, setReload }} >
         <UserInfoContext.Provider value={{ userInfo, setUserInfo }}>
           <WSInfoContext.Provider value={{ WSInfo, setWSInfo }}>
