@@ -1,13 +1,10 @@
 // import axios from 'axios';
 
-const SERVER_URL = "http://localhost:5000/api/v1/";
-// const SERVER_URL = "https://api.memotube.xyz/api/v1/";
-// const SERVER_URL = "https://movie-rails.herokuapp.com/api/v1/";
-const BERT_URL = "https://bert.memotube.xyz/sentiment";
-//const SERVER_URL = "https://movie-rails-cors-test.herokuapp.com/api/v1/"
+const BERT_URL = process.env.REACT_APP_BERT_URL
+const SERVER_URL = process.env.REACT_APP_SERVER_URL
 
 async function createData(body, url) {
-  console.log(JSON.stringify(body));
+  // console.log(JSON.stringify(body));
   const res = await fetch(url, {
     method: "POST",
     credentials: 'include', //クレデンシャルを含める指定
@@ -144,7 +141,7 @@ export class UserDataSource {
     //失敗 
   }
 
-  async logoutUser(user_id) {
+  async logoutUser() {
     const res = await fetch(SERVER_URL + `authes/logout`, {
       credentials: 'include', //クレデンシャルを含める指定
       mode: 'cors',
@@ -154,11 +151,10 @@ export class UserDataSource {
     //成功 200
   }
 
-  async getUser(access_token) {
-    const res = await fetch(this.API_URL + '/', {
+  async getUser(user_id) {
+    const res = await fetch(this.API_URL + `/${user_id}`, {
       credentials: 'include', //クレデンシャルを含める指定
       mode: 'cors',
-      headers: { 'Authorization': 'Basic ' + access_token }
     });
     return res;
     //成功 200 {"user":user}
@@ -178,14 +174,14 @@ export class UserDataSource {
 
   //userの更新
   async updateUser(user) {
-    const res = updateData({ name: user.name, email: user.email },
+    const res = updateData(user,
       this.API_URL + '/' + user.id);
     return res;
   }
 
   //userの削除
-  async deleteUser(user) {
-    const res = deleteData(this.API_URL + '/' + user.id);
+  async deleteUser(user_id) {
+    const res = deleteData(this.API_URL + '/' + user_id);
     return res;
   }
 }
@@ -193,11 +189,13 @@ export class UserDataSource {
 //pageのapiクラス
 export class PageDataSource {
   API_URL = SERVER_URL + "pages";
-  constructor() {
+  constructor(user) {
+    this.user = user
   }
 
   //userに対応するpageのindex
   async getPageIndex(user) {
+    if (!user) user = this.user
     const res = await fetch(this.API_URL + `?user_id=${user.id}`, {
       credentials: 'include', //クレデンシャルを含める指定
       mode: 'cors',
@@ -214,13 +212,14 @@ export class PageDataSource {
   }
 
   async getAllTagIndex(user) {
+    if (!user) user = this.user
     const pages = (await this.getPageIndex(user));
     console.log(pages)
     const tags = [];
     (pages).forEach(page => {
       tags.push(...(page.tags))
     });
-    console.log("all tag",tags)
+    console.log("all tag", tags)
     return tags
   }
 
@@ -236,8 +235,8 @@ export class PageDataSource {
   }
 
   async getPageByToken(page_token) {
-    const res = await fetch(this.API_URL + '/' + page_token, {
-      method: "POST",
+    const res = await fetch(this.API_URL + '/share?page_token=' + page_token, {
+      method: "GET",
       // credentials: 'include', //クレデンシャルを含める指定
       mode: 'cors',
     });
@@ -247,7 +246,7 @@ export class PageDataSource {
 
   async createPage(page) {
     let res;
-    if (page.workspace_id=="home") {
+    if (page.workspace_id == "home") {
       res = createData({ url: page.url, title: page.title }, this.API_URL + `?user_id=${page.user_id}`);
     } else {
       res = createData({ url: page.url, title: page.title, workspace_id: page.workspace_id }, this.API_URL + `?user_id=${page.user_id}`);
@@ -257,7 +256,7 @@ export class PageDataSource {
 
   //pageの更新
   async updatePage(page) {
-    const res = updateData({ url: page.url, title: page.url },
+    const res = updateData({ url: page.url, title: page.title },
       this.API_URL + '/' + page.id);
     return res;
   }
@@ -268,7 +267,7 @@ export class PageDataSource {
     return res;
   }
 
-  async searchPage(user, keywords, workspace_id) {
+  async searchPage(keywords) {
     const res = await fetch(this.API_URL + '/\search', {
       method: "POST",
       credentials: 'include', //クレデンシャルを含める指定
@@ -277,38 +276,27 @@ export class PageDataSource {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ user_id: user.id, keywords: keywords })
+      body: JSON.stringify({ keywords: keywords })
       // body: JSON.stringify({ user_id: user.id, keywords: keywords, workspace_id: workspace_id })
-    })
-      // .then(res => console.log(res))
-      .then(res => res.json());
+    }).then(res => res.json());
     console.log(res.pages);
     return res;
     //res.json 成功{"pages" (page とmemoの配列)の配列}
     //res.status 成功200, 失敗400
   }
 
-  // 誰か書いておいてください
-  
-  // async AnalysticPage(user, page, ) {
-  //   const res = await fetch(this.API_URL + '/'+ page.id + '/' + 'browse_state', {
-  //     method: "POST",
-  //     credentials: 'include', //クレデンシャルを含める指定
-  //     mode: 'cors',
-  //     headers: {
-  //       'Accept': 'application/json',
-  //       'Content-Type': 'application/json'
-  //     },
-  //     body: JSON.stringify({user_id: user.id, page_id: page.id, state:state, time, daytime})
-  //     // body: JSON.stringify({ user_id: user.id, keywords: keywords, workspace_id: workspace_id })
-  //   })
-  //     // .then(res => console.log(res))
-  //     .then(res => res.json());
-  //   console.log(res.pages);
-  //   return res;
-  //   //res.json 成功{"pages" (page とmemoの配列)の配列}
-  //   //res.status 成功200, 
-  // }
+  async postBrowseState(page_id, post_data) {
+    const res = createData(post_data, this.API_URL + `/${page_id}/analytics`);
+    return res;
+  }
+
+  async getBrowseState(page_id) {
+    const res = await fetch(this.API_URL + `/${page_id}/analytics`, {
+      credentials: 'include',
+      mode: 'cors',
+    });
+    return res;
+  }
 
 }
 
@@ -361,6 +349,40 @@ export class TagDataSource {
   }
 }
 
+export class WSPageDataSource {
+  API_URL = SERVER_URL + 'ws';
+  init = {
+    credentials: 'include',
+    mode: 'cors',
+  }
+
+  constructor(workspace_id) {
+    this.workspace_id = workspace_id;
+  }
+
+  async getPageIndex() {
+    const workspace_id = this.workspace_id
+    const res = await fetch(this.API_URL + `/${workspace_id}/pages`, this.init);
+    return await res.json();
+  }
+
+  async searchPage(keywords) {
+    const workspace_id = this.workspace_id
+    const res = await fetch(this.API_URL + '/search', {
+      method: "POST",
+      credentials: 'include',
+      mode: 'cors',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ workspace_id: workspace_id, keywords: keywords })
+    }).then(res => res.json());
+    console.log(res.pages);
+    return res;
+  }
+}
+
 export class WorkspaceDataSource {
   API_URL = SERVER_URL + 'ws';
   init = {
@@ -378,43 +400,26 @@ export class WorkspaceDataSource {
     return res;
   }
 
-  async getPageIndex(workspace_id) {
-    const res = await fetch(this.API_URL + `/${workspace_id}/pages`, this.init);
-    return res;
-  }
-
-  async searchPage(workspace_id, keywords) {
-    const res = await fetch(this.API_URL + '/search', {
-      method: "POST",
-      credentials: 'include',
-      mode: 'cors',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ workspace_id: workspace_id, keywords: keywords })
-    })
-      // .then(res => console.log(res))
-      .then(res => res.json());
-    console.log(res.pages);
-    return res;
-  }
-
   async createWorkspace(workspace) {
-    const users = workspace.users.map((user_p) => { return( [user_p.user_id, user_p.permission] ) })
-    const res = createData({ name: workspace.name, users: users }, this.API_URL );
+    const users = workspace.users.map((user_p) => { return ([user_p.user_id, user_p.permission]) })
+    const res = createData({ name: workspace.name, users: users }, this.API_URL);
     return res;
   }
 
   async updateWorkspace(workspace) {
-    const users = workspace.users.map((user_p) => { return( [user_p.user_id, user_p.permission] ) })
-    console.log(users)
-    const res = updateData({ name: workspace.name, users: users }, this.API_URL + `/${workspace.id}`);
+    // const users = workspace.users.map((user_p) => { return ([user_p.user_id, user_p.permission]) })
+    console.log(workspace.users)
+    const res = updateData({ name: workspace.name, users: workspace.users }, this.API_URL + `/${workspace.id}`);
     return res;
   }
 
   async deleteWorkspace(workspace_id) {
     const res = deleteData(this.API_URL + `/${workspace_id}`);
+    return res;
+  }
+
+  async quitWorkspace(workspace_id) {
+    const res = deleteData(this.API_URL + `/${workspace_id}/user`);
     return res;
   }
 
@@ -424,16 +429,23 @@ export class WorkspaceDataSource {
   }
 
   async getWorkspaceByToken(token) {
-    const res = await fetch(this.API_URL + `/${token}`, {
-      method: "POST",
-      credentials: 'include',
-      mode: 'cors',
-    });
+    const res = await fetch(this.API_URL + `/token?workspace_token=${token}`, this.init);
     return res;
   }
 
-  async updateOwner(user_id, workspace_id) {
+  async updateOwner(workspace_id, user_id) {
     const res = updateData({ user_id: user_id }, this.API_URL + `/${workspace_id}/owner`);
+    return res;
+  }
+
+  async addUser(workspace_id, users) {
+    console.log(users);
+    const res = createData({users: users}, this.API_URL + `/${workspace_id}/users`);
+    return res;
+  }
+
+  async joinWorkspace(post_data) {
+    const res = createData(post_data, this.API_URL + `/${post_data.workspace_id}`);
     return res;
   }
 }

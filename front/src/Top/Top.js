@@ -16,11 +16,12 @@ import Hidden from '@material-ui/core/Hidden';
 import GoogleLogin from "../Auth/GoogleLogin";
 import {
   BrowserRouter as Router,
-  useRouteMatch,
+  useLocation,
   Redirect,
   Route,
   Switch
 } from "react-router-dom";
+import queryString from 'query-string';
 
 
 import Login from './Login';
@@ -28,7 +29,7 @@ import Promotion from './Promotion';
 import "./Login.css";
 import { UserDataSource } from '../Main/ProductionApi';
 import Signup from "./Signup";
-import UserInfoContext from '../context';
+import {UserInfoContext} from '../context';
 import { Container } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
@@ -74,7 +75,10 @@ function Top() {
   const classes = useStyles();
   // console.log(useRouteMatch());
   const { userInfo } = useContext(UserInfoContext);
-
+  const location = useLocation();
+  // const redirectURL=location.state ? location.state.redirectURL : null;
+  const qs = queryString.parse(location.search);
+  const redirectURL =  Object.keys(qs).length ? "/ws/"+qs.token : null; 
 
   // UserAPI.loginUser(user)
   // UserAPI.createUser(user)
@@ -104,13 +108,13 @@ function Top() {
 
             <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
                 <Box textAlign='center'>
-                  <GoogleLogin/>
+                  <GoogleLogin redirectURL={redirectURL} />
                 </Box>
                 <Switch>
                   <Route exact path='/'></Route>
 
                   <Route exact path='/login'>
-                      <Login />
+                      <Login redirectURL={redirectURL}/>
                   </Route>
 
                   <Route exact path='/signup'>

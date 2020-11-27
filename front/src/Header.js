@@ -32,7 +32,7 @@ import { UserDataSource } from './Main/ProductionApi';
 import LoginAuth from './Auth/LoginAuth';
 import SelectWorkspace from "./Workspace/SelectWorkspace";
 
-import UserInfoContext from './context'
+import {UserInfoContext} from './context'
 
 
 
@@ -94,15 +94,15 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Header(props) {
   const [anchorEl, setAnchorEl] = React.useState(false);
-  const [state, setState] = useState({ search_word: "", pages: [] });
-  const { userInfo, setUserInfo } = useContext(UserInfoContext);
+  // const [state, setState] = useState({ search_word: "" });
+  const { userInfo } = useContext(UserInfoContext);
   const [isSearchMode, setSearchMode] = useState(false);
   const UserApi = new UserDataSource();
   const classes = useStyles();
 
   const handleChangeSeachForm = (text) => {
     props.onChange(text);
-    setState({ ...state, search_word: text })
+    // setState({ ...state, search_word: text })
   }
 
   const handleSeach = () => {
@@ -120,7 +120,7 @@ export default function Header(props) {
 
   const handleLogout = () => {
     // document.cookie = "_session_id=0";
-    UserApi.logoutUser(userInfo.id);
+    UserApi.logoutUser();
   }
 
   const Hamburger = (
@@ -133,22 +133,23 @@ export default function Header(props) {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <Link to={`/${userInfo.id}/`} >
+        <Link to={`/${userInfo.id}`} >
           <MenuItem button onClick={handleClose}>
             <ListItemIcon>
               <PersonIcon />
             </ListItemIcon>
-            <ListItemText primary="ユーザーページ" />
+            <ListItemText primary="ユーザーホーム" />
           </MenuItem>
         </Link>
-        {/* <Link to={`/${userInfo.id}/main`}>
-          <MenuItem Button onClick={handleClose}>
+
+        <Link to={`/${userInfo.id}/profile`} >
+          <MenuItem button onClick={handleClose}>
             <ListItemIcon>
-              <MovieIcon />
+              {/* <PersonIcon /> */}
             </ListItemIcon>
-            <ListItemText primary="動画メモページ" />
+            <ListItemText primary="プロフィール" />
           </MenuItem>
-        </Link> */}
+        </Link>
         <SelectWorkspace onClose={handleClose}/>
       </StyledMenu>
     </>)
@@ -162,12 +163,12 @@ export default function Header(props) {
 
 
           {Hamburger}
-          <Button component={Link} to={`/${userInfo.id}`}>
+          <Button component={Link} to={userInfo.homeLink}>
             <img src={logo} className={classes.logo} alt="memotube" />
           </Button>
 
           <Hidden smDown>
-            <SearchForm onChange={handleChangeSeachForm} search_word={state.search_word} onClick={handleSeach} />
+            <SearchForm onChange={handleChangeSeachForm} search_word={props.search_word} onClick={handleSeach} />
           </Hidden>
 
 
@@ -206,7 +207,7 @@ export default function Header(props) {
       <Hidden mdUp>
         {isSearchMode ?
           <>
-            <SearchForm className={classes.search_make} onChange={handleChangeSeachForm} search_word={state.search_word} onClick={handleSeach} />
+            <SearchForm className={classes.search_make} onChange={handleChangeSeachForm} search_word={props.search_word} onClick={handleSeach} />
           </>
           :
           <></>

@@ -18,7 +18,7 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import IconButton from '@material-ui/core/IconButton';
 
 import { UserDataSource } from "../Main/ProductionApi";
-import UserInfoContext from "../context";
+import {UserInfoContext} from "../context";
 import Transition from "../Transition";
 
 const userDataSource = new UserDataSource();
@@ -53,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(3, 0, 2),
   },
 }));
-export default function Login() {
+export default function Login(props) {
   const classes = useStyles();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -85,7 +85,11 @@ export default function Login() {
                 console.log(user);
                 // console.log("getPage", page.page);
                 setUserInfo({ ...userInfo, endCheck: true, id: user.id, name: user.name, isLogin: true });
-                setState({ to: `/${user.id}/`, isLoaded: true, isLoading: false });
+                if(props.redirectURL){
+                  setState({ to: props.redirectURL, isLoaded: true, isLoading: false });
+                }else{
+                  setState({ to: `/${user.id}/`, isLoaded: true, isLoading: false });
+                }
 
                 // localStorage.setItem('user', JSON.stringify(user.user));
                 // props.onClose();

@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { makeStyles } from '@material-ui/core/styles';
 import { formatSec2Str } from '../Duration';
 import Card from '@material-ui/core/Card'
@@ -9,7 +9,7 @@ import DescriptionIcon from '@material-ui/icons/Description';
 import DeleteIcon from '@material-ui/icons/Delete';
 import DoneIcon from '@material-ui/icons/Done';
 
-//import UserInfoContext from "../../context";
+//import {UserInfoContext} from "../../context";
 import { CardActions } from "@material-ui/core";
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -21,20 +21,22 @@ const useStyles = makeStyles((theme) => ({
 ));
 function WriteThread(props) {
 	const [text, setText] = useState("");
-	const parent_memo = props.memo;
+	const parent_memo = props.parent_memo;
 	//const { userInfo, setUserInfo } = useContext(UserInfoContext);
 	const classes = useStyles();
-	let thread_text;
-	if(props.isthread){
-		thread_text="@"+props.thread_memo.user_id+" "+text;
-		console.log("スレッドに返信")
-	}
+
 	const handleOnclick = () => {
-		if(props.isthread){
+		let thread_text;
+		if (props.isthread) {
+			thread_text = "@" + props.thread_memo.account_id + " " + text;
+			// console.log("スレッドに返信")
+		}
+
+		if (props.isthread) {
 			props.onSubmit({ text: thread_text, time: parent_memo.time, parent_id: parent_memo.id, user_id: props.user_id });
 		}
-		else{
-		props.onSubmit({ text: text, time: parent_memo.time, parent_id: parent_memo.id, user_id: props.user_id });
+		else {
+			props.onSubmit({ text: text, time: parent_memo.time, parent_id: parent_memo.id, user_id: props.user_id });
 		}
 		setText("");
 	}

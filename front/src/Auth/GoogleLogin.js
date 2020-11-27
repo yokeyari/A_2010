@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState, useRef } from 'react'
 import { Redirect, useParams, withRouter } from 'react-router-dom'
-import UserInfoContext from '../context';
+import {UserInfoContext} from '../context';
 import { UserDataSource } from '../Main/ProductionApi';
 
 import Button from '@material-ui/core/Button';
@@ -11,37 +11,46 @@ function GoogleLogin(props) {
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
   const auth = useRef(null);
 
+  const sendLoginState = (redirect_url="") => {
+    console.log('current user', auth.current.currentUser.get().getBasicProfile());
+    console.log('auth response', auth.current.currentUser.get().getAuthResponse());
+    const id_token = auth.current.currentUser.get().getAuthResponse().id_token;
+    const name = auth.current.currentUser.get().getBasicProfile().getName();
+    //login して返ってきたuserのidのページに移動する 
+    userDataSource.loginGoogleUser(id_token, name)
+      .then(res => {
+        auth.current.signOut();
+        if (res.statusText == "OK") {
+          res.json()
+            .then(user => {
+              console.log('response user', user);
+              setUserInfo({ ...userInfo, endCheck: true, id: user.id, name: user.name, isLogin: true });
+              if(redirect_url==""){
+                props.history.push(`/${user.id}/`);
+              }else{
+                props.history.push(redirect_url);
+              }
+            })
+        } else {
+          console.log(res);
+          // TODOここにログインできなかったときの処理
+        }
+      });
+    //  props.history.push('/1/');
+  }
+
+
   useEffect(() => {
     const initGAPI = () => {
-      const sendLoginState = () => {
-        console.log('current user', auth.current.currentUser.get().getBasicProfile());
-        console.log('auth response', auth.current.currentUser.get().getAuthResponse());
-        const id_token = auth.current.currentUser.get().getAuthResponse().id_token;
-        const name = auth.current.currentUser.get().getBasicProfile().getName();
-        //login して返ってきたuserのidのページに移動する 
-        userDataSource.loginGoogleUser(id_token, name)
-          .then(res => {
-            auth.current.signOut();
-            if (res.statusText == "OK") {
-              res.json()
-                .then(user => {
-                  console.log('response user', user);
-                  setUserInfo({ ...userInfo, endCheck: true, id: user.id, name: user.name, isLogin: true });
-                  props.history.push(`/${user.id}/`);
-                })
-            } else {
-              console.log(res);
-              // TODOここにログインできなかったときの処理
-            }
-
-          });
-        //  props.history.push('/1/');
-      }
 
       function onAuthChange(val) {
         console.log("google auth", val)
         if (val) {
-          sendLoginState();
+          if(props.redirectURL){
+            sendLoginState(props.redirectURL);
+          }else{
+            sendLoginState();
+          }
         } else {
           // setUserInfo({endCheck: true, id: "", name: "", isLogin: false });
           // props.history.push('/');
@@ -74,7 +83,7 @@ function GoogleLogin(props) {
 
     initGAPI();
 
-  }, []);
+  }, [props.redirectURL]);
 
 
 

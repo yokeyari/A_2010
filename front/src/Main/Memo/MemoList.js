@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useContext } from 'react'
+import React, { useState, useEffect,useContext, memo } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import MemoComponent from './MemoComponent'
 import Thread from './ThreadList'
@@ -6,7 +6,7 @@ import Card from '@material-ui/core/Card'
 import ThreadList from './ThreadList';
 
 import { MemoAuther } from '../../Auth/Authers';
-import UserInfoContext from "../../context";
+import {UserInfoContext} from "../../context";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -37,7 +37,7 @@ function MemoList(props) {
     return a.time - b.time
   })
 
-  const memoAuther = new MemoAuther(userInfo);
+  const memoAuther = props.memoAuther ? props.memoAuther : new MemoAuther(userInfo)
 
   // const TextArea = (
   //   <TextField value={props.title}></TextField>

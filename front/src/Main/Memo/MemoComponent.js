@@ -12,8 +12,9 @@ import WriteThread from './WriteThread';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import Select from "@material-ui/core/Select";
 import { CardActions, FormControl, MenuItem } from "@material-ui/core";
-
-import UserInfoContext from "../../context";
+ 
+import {UserInfoContext} from "../../context";
+import { DeleteDialog } from "../../Dialogs";
 // class Memo{
 //   body = '';
 //   time = 0;
@@ -41,8 +42,10 @@ function MemoComponent(props) {
   const memo = props.memo
   const player = props.player
   const auth = props.auth;
-
-
+  const showWriter = props.showWriter ? true : false;
+  const display_name  = memo.account_id ? memo.account_id : memo.user_id;
+  
+  const displayMemo = memo.text
 
   const endEditMode = () => {
     props.onChange({ ...memo, text: text });
@@ -99,7 +102,7 @@ function MemoComponent(props) {
     return (
       <Card className={classes.card} key={memo.id}>
         <CardActions >
-          {userInfo.workspace_id != "home" ? <p>[{memo.user_id}さん]</p> : null}
+          {userInfo.workspace_id != "home" ? <p>[{display_name}]</p> : null}
           <Button className="timeButton" startIcon={<AccessTimeIcon />} onClick={() => { handleJump() }} >{formatSec2Str(memo.time)}</Button>
           {isEditMode ?
             (<Button className="edit" startIcon={<DoneIcon />} onClick={() => { endEditMode() }}>done</Button>)
@@ -109,7 +112,10 @@ function MemoComponent(props) {
               : null)
           }
           {(auth.canDelete) ?
-            <Button className="delete" color="secondary" startIcon={<DeleteIcon />} onClick={() => { props.onDelete(memo) }}>delete</Button> : null}
+            <DeleteDialog 
+              yesCallback={() => { props.onDelete(memo) }}
+              component={<Button className="delete" color="secondary" startIcon={<DeleteIcon />}>delete</Button>} />
+            : null}
 
           {selectStatus}
 
@@ -127,7 +133,7 @@ function MemoComponent(props) {
         {isReplyMode ?
           <>
             <WriteThread
-              memo={memo}
+              parent_memo={memo}
               isthread={false}
               user_id={props.user_id}
               onSubmit={props.onSubmit}
