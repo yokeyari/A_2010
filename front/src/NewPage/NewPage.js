@@ -48,10 +48,10 @@ function NewPage() {
 		margin: '20vh 20vh',
 	};
 
-	console.log("before page auth",userInfo)
+	// console.log("before page auth",userInfo)
 	const pageAuther = new PageAuther(userInfo);
 
-	console.log("page auther ",userInfo,pageAuther.canCreate())
+	// console.log("page auther ",userInfo,pageAuther.canCreate())
 	if (pageAuther.canCreate() == false) {
 		return null;
 	} else {

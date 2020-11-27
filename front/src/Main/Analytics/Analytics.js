@@ -98,13 +98,13 @@ export default function Analytics(props) {
     let browseDays = [];
     PageApi.getBrowseState(page.id).then(res => {
       res.json().then(json => {
-        console.log(json)
+        // console.log(json)
         browseTimes = json.browse_times;
         browseDays = json.browse_days
         // browseDays = dummy_browseDays;
 
         if (browseTimes.length && browseDays.length) {
-          console.log(browseTimes, browseDays)
+          // console.log(browseTimes, browseDays)
           const [user_ids, data_time] = createData(browseTimes, "time");
           const [_, data_day] = createData(browseDays, "day");
 
@@ -115,7 +115,7 @@ export default function Analytics(props) {
       })
     })
 
-    console.log(memos)
+    // console.log(memos)
     if (memos.length) {
       const text_list = memos.map(memo => memo.text)
       BertApi.getSentment(text_list).then(res => {
@@ -130,7 +130,7 @@ export default function Analytics(props) {
 
   const handleChangeGraph = (event) => {
     const graph_name = event.target.value;
-    console.log(graph_name);
+    // console.log(graph_name);
     setData(dataList[graph_name]);
     setGraphName(graph_name);
   }

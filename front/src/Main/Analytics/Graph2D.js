@@ -11,7 +11,7 @@ export default function Graph2D(props) {
   const player = props.player;
   const X = props.X;
   const unit = Object.keys(X)[0]
-  console.log(X);
+  // console.log(X);
   const Y_list = Object.entries(props.Y_list).filter(Y => {
     const state = Y[0].split(" ")[0]
     const user_id = Y[0].split("(")[1].split(")")[0]

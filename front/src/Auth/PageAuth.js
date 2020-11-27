@@ -26,11 +26,11 @@ export default function PageAuth(props) {
       if (page_id) {
         pageDataSource.getPage(page_id)
           .then(res => {
-            console.log("page id  res", res)
+            // console.log("page id  res", res)
             if (res.statusText == "OK") {
               res.json()
                 .then(page => {
-                  console.log("getPage", page);
+                  // console.log("getPage", page);
                   setPage(page);
                 })
             } else {
@@ -42,11 +42,11 @@ export default function PageAuth(props) {
       if (token) {
         pageDataSource.getPageByToken(token)
           .then(res => {
-            console.log("token res", res)
+            // console.log("token res", res)
             if (res.statusText == "OK") {
               res.json()
                 .then(page => {
-                  console.log("getPage", page);
+                  // console.log("getPage", page);
                   setPage(page);
                 })
             } else {
