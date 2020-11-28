@@ -34,9 +34,9 @@ class Api::V1::AuthesController < ApplicationController
     end
 
     reset_session
-    session[:user_id] = user.id
+    session[:user_id] = @user.id
 
-    res_ok user, inc: {workspaces: :workspace, pages: [:tags, :memos]}
+    res_ok @user, inc: {workspaces: :workspace, pages: [:tags, :memos]}
   rescue GoogleApis::ServerError => e # tokeninfoの失敗例外，リトライ推奨
     res_bad_request
   rescue GoogleApis::ClientError => e # tokeninfoの失敗例外，リトライ非推奨，バグの存在？
