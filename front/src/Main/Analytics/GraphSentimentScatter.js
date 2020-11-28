@@ -10,8 +10,8 @@ export default function GraphBarSentiment(props) {
   const vis_user = props.vis_user;
   const data = props.data.map(memoSentiment => { 
     return (vis_user=="any" || vis_user==memoSentiment.user_id)
-      ? { xValue: memoSentiment.time, text: memoSentiment.text, positiveness: (memoSentiment.positiveness - memoSentiment.negativeness) } 
-      : {xValue: null, text: null, positiveness: null}
+      ? { xValue: memoSentiment.time, text: memoSentiment.text, id: memoSentiment.memo_id, positiveness: (memoSentiment.positiveness - memoSentiment.negativeness) } 
+      : {xValue: null, text: null, positiveness: null, id: null}
     });
   const player = props.player;
 
@@ -26,13 +26,15 @@ export default function GraphBarSentiment(props) {
     }
 
     if (active && payload && typeof(payload[0])!="undefined") {
+      console.log("payload", payload);
       const time = payload[0].value;
+      const memo_id = payload[0].payload.id;
       const positiveness = payload[1].value.toFixed(1)
       return (
         <div className="custom-tooltip" style={tooltip}>
           <p className="label">{`${time} (s)`}</p>
           <p className="label">{`positiveness : ${positiveness}`}</p>
-          <p className="desc">{data.find(record => record.xValue==time).text}</p>
+          <p className="desc">{data.find(record => record.id==memo_id).text}</p>
         </div>
       );
     }

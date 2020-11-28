@@ -120,11 +120,11 @@ export default function Analytics(props) {
       const text_list = memos.map(memo => memo.text)
       BertApi.getSentment(text_list).then(res => {
         setMemoSentiment(res.map((score, i) => {
-          return { user_id: memos[i].user_id, time: memos[i].time, text: memos[i].text, positiveness: score.positiveness, negativeness: score.negativeness }
+          return { memo_id: memos[i].id, user_id: memos[i].user_id, time: memos[i].time, text: memos[i].text, positiveness: score.positiveness, negativeness: score.negativeness }
         }))
       })
     } else {
-      setMemoSentiment([{ user_id: null, text: null, time: null, positiveness: null, negativeness: null }])
+      setMemoSentiment([{ memo_id: null, user_id: null, text: null, time: null, positiveness: null, negativeness: null }])
     }
   }, [])
 
