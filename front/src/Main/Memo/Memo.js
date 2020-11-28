@@ -76,6 +76,7 @@ class Memo extends React.Component {
                   { memo.body }
                   <button className="edit" onClick={ ()=>{}}>edit</button>
                   <button className="delete" onClick={ ()=>{ this.deleteMemo(memo.id) } }>delete</button>
+                  
                 </div>
               )
             })

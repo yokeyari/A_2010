@@ -6,14 +6,17 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Card from '@material-ui/core/Card';
-import { CardActions } from "@material-ui/core";
+import { CardActions, Box } from "@material-ui/core";
 import { trackPromise } from "react-promise-tracker";
 
 import { WorkspaceDataSource } from "../Main/ProductionApi";
-import UserInfoContext from "../context";
+import { UserInfoContext, ReloaderContext } from "../context";
 import Transition from "../Transition";
 import InviteUserForm from "./InviteUserForm";
-import SelectNewOwner from "./SelectNewOwner"
+import SelectNewOwner from "./SelectNewOwner";
+import { DeleteDialog } from "../Dialogs";
+import ChangeUserPermission from "./ChangeUserPermission"
+import AddUser from "./AddUser";
 
 const workspaceDataSource = new WorkspaceDataSource();
 
@@ -45,23 +48,22 @@ const useStyles = makeStyles((theme) => ({
 
 export default function EditWorkspace(props) {
 	const [state, setState] = useState({
-		name: props.initFields.name,
+		name: props.workspace.name,
 		to: "",
 		isLoaded: false
 	})
-	// const [fields, setFields] = useState(props.initFields.users);
-	const [fields, setFields] = useState( props.initFields.users.filter(user => user.permission!="owner") ); //owner以外のusersを入力欄の初期値にする
+	// const [fields, setFields] = useState(props.workspace.users);
+	const [fields, setFields] = useState(props.workspace.users.filter(user => user.permission != "owner")); //owner以外のusersを入力欄の初期値にする
 	const { userInfo } = useContext(UserInfoContext);
 	const [newOwnerId, setNewOwnerId] = useState("")
 	const classes = useStyles();
+	const { setRealod } = useContext(ReloaderContext);
 
-	const owner_id = props.initFields.users.find(user_p => user_p.permission == "owner").user_id;
+	const owner_id = props.workspace.users.find(user_p => user_p.permission == "owner").user.id;
 
 	const handleSubmit = () => {
-		// console.log("aaaaaa", newOwnerId);
-
 		trackPromise(
-			workspaceDataSource.updateWorkspace({name: state.name, users: fields, id: userInfo.workspace_id})
+			workspaceDataSource.updateWorkspace({ name: state.name, users: fields, id: userInfo.workspace_id })
 				.then(res => {
 					if (res.statusText == "OK") {
 						res.json()
@@ -70,14 +72,14 @@ export default function EditWorkspace(props) {
 								props.onClose();
 							})
 					} else {
-						
+
 					}
 				})
-				// .then(() => {
-				// 	// console.log("new ownerId", newOwnerId);
-				// 	// console.log("workspace_id", userInfo.workspace_id);
-				// 	// workspaceDataSource.updateOwner({user_id: newOwnerId, workspace_id: userInfo.workspace_id})
-				// })
+			// .then(() => {
+			// 	// console.log("new ownerId", newOwnerId);
+			// 	// console.log("workspace_id", userInfo.workspace_id);
+			// 	// workspaceDataSource.updateOwner({user_id: newOwnerId, workspace_id: userInfo.workspace_id})
+			// })
 		);
 		console.log("new ownerId", newOwnerId);
 		console.log("workspace_id", userInfo.workspace_id);
@@ -113,6 +115,7 @@ export default function EditWorkspace(props) {
 		workspaceDataSource.deleteWorkspace(userInfo.workspace_id)
 			.then(() => {
 				setState({ ...state, to: `/${userInfo.id}/`, isLoaded: true });
+				setRealod(true);
 			})
 	}
 
@@ -138,9 +141,11 @@ export default function EditWorkspace(props) {
 
 					<div>owner: {owner_id}</div>
 
-					<InviteUserForm users={fields} handleChangeUserId={handleChangeUserId} handleChangePermission={handleChangePermission} handleAdd={handleAdd} handleRemove={handleRemove} />
+					<AddUser fields={fields} handleChangeUserId={handleChangeUserId} handleChangePermission={handleChangePermission} handleAdd={handleAdd} handleRemove={handleRemove} />
+					{/* <InviteUserForm users={fields} handleChangeUserId={handleChangeUserId} handleChangePermission={handleChangePermission} handleAdd={handleAdd} handleRemove={handleRemove} /> */}
+					<ChangeUserPermission users={props.workspace.users} handleChangeUserId={handleChangeUserId} handleChangePermission={handleChangePermission} handleAdd={handleAdd} handleRemove={handleRemove} />
 
-					{userInfo.permission == "owner" ? <SelectNewOwner users={props.initFields.users} handleChangeOwner={handleChangeOwner} /> : <></>}
+					{userInfo.permission == "owner" ? <SelectNewOwner users={props.workspace.users} handleChangeOwner={handleChangeOwner} /> : <></>}
 
 					<Transition to={state.to} ok={state.isLoaded}>
 						<Button className={classes.button} id="submit"
@@ -150,7 +155,17 @@ export default function EditWorkspace(props) {
 						</Button>
 					</Transition>
 
-					{userInfo.permission == "owner" ? <Button onClick={handleCloseWs}>close this workspace</Button> : <></>}
+          {userInfo.permission == "owner" ? 
+            <DeleteDialog
+              modalMessage={`「${props.workspace.name}」を削除しますか?`}
+              component={<Card style={{color: "white", backgroundColor: "#EF501F"}} >ワークスペースを削除</Card>}
+              yesCallback={handleCloseWs}
+            />
+            // <deleteDialog 
+            //   // dialogMessage={`「${props.workspace.name}」を削除しますか?`}
+            //   component={<h2>"delete this workspace"</h2>}
+            //   yesCallback={handleCloseWs} />
+						: null}
 				</div>
 			</Card>
 		</div>

@@ -10,7 +10,7 @@ import { CardActions } from "@material-ui/core";
 import { trackPromise } from "react-promise-tracker";
 
 import { WorkspaceDataSource } from "../Main/ProductionApi";
-import UserInfoContext from "../context";
+import { UserInfoContext, ReloaderContext } from "../context";
 import Transition from "../Transition";
 import InviteUserForm from "./InviteUserForm";
 
@@ -47,9 +47,10 @@ export default function CreateWorkspace(props) {
 		name: "",
 		to: "",
 		isLoaded: false
-  })
+	})
 	const { userInfo } = useContext(UserInfoContext);
-	const [users, setUsers] = useState([{ user_id: "", permission: "" }]);
+	const { setReload } = useContext(ReloaderContext);
+	const [users, setUsers] = useState([]);
 	const classes = useStyles();
 
 
@@ -64,9 +65,10 @@ export default function CreateWorkspace(props) {
 							.then(workspace => {
 								console.log("create workspace", workspace);
 								setState({ ...state, to: `/${userInfo.id}/ws/${workspace.id}`, isLoaded: true });
+								setReload(true);
 								props.onClose();
 							})
-							
+
 					} else {
 						res.json()
 							.then(error => {
@@ -74,35 +76,35 @@ export default function CreateWorkspace(props) {
 							})
 					}
 				}));
-  }
-  
+	}
 
-  const handleChangeUserId = (i, event) => {
-    const values = [...users];
-	values[i].user_id = parseInt( event.target.value );
-	console.log(typeof(values[i].user_id));
-    setUsers(values);
-  }
 
-  const handleChangePermission = (i, event) => {
-    const values = [...users];
-    values[i].permission = event.target.value;
-    setUsers(values);
-  }
+	const handleChangeUserId = (i, event) => {
+		const values = [...users];
+		values[i].user_id = parseInt(event.target.value);
+		console.log(typeof (values[i].user_id));
+		setUsers(values);
+	}
 
-  const handleAdd = () => {
-    const values = [...users];
-    values.push({ value: null, permission: null });
-    setUsers(values);
-  }
+	const handleChangePermission = (i, event) => {
+		const values = [...users];
+		values[i].permission = event.target.value;
+		setUsers(values);
+	}
 
-  const handleRemove = (i) => {
-    const values = [...users];
-    values.splice(i, 1);
-    setUsers(values);
-  }
+	const handleAdd = () => {
+		const values = [...users];
+		values.push({ value: null, permission: null });
+		setUsers(values);
+	}
 
-  
+	const handleRemove = (i) => {
+		const values = [...users];
+		values.splice(i, 1);
+		setUsers(values);
+	}
+
+
 	return (
 		<div>
 			<Card>
@@ -113,7 +115,7 @@ export default function CreateWorkspace(props) {
 						multiline
 						onChange={e => { setState({ ...state, name: e.target.value }) }} value={state.name} />
 
-          <InviteUserForm users={users} handleChangeUserId={handleChangeUserId} handleChangePermission={handleChangePermission} handleAdd={handleAdd} handleRemove={handleRemove} />
+					<InviteUserForm users={users} handleChangeUserId={handleChangeUserId} handleChangePermission={handleChangePermission} handleAdd={handleAdd} handleRemove={handleRemove} />
 
 					<Transition to={state.to} ok={state.isLoaded}>
 						<Button className={classes.button} id="submit"

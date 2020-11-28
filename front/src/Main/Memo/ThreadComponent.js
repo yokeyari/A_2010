@@ -10,7 +10,7 @@ import DoneIcon from '@material-ui/icons/Done';
 import ReplyIcon from '@material-ui/icons/Reply';
 import { CardActions } from "@material-ui/core";
 import WriteThread from './WriteThread';
-import UserInfoContext from "../../context";
+import {UserInfoContext} from "../../context";
 
 function ThreadComponent(props) {
 	//const classes = useStyles();
@@ -18,13 +18,15 @@ function ThreadComponent(props) {
 	const memo = props.memo;
 	const { userInfo, setUserInfo } = useContext(UserInfoContext);
 	const [isReplyMode, setReplyMode] = useState(false);
+
+	const display_name = memo.account_id;
 	//console.log("memo", props.memo)
 	//console.log("parent_memo", props.parent)
 	// console.log("名前:",userInfo.name)
 	return (
 		<>
 			<Card>
-				<p> [{memo.user_id}]: {memo.text}</p>
+				<p> [{display_name}]: {memo.text}</p>
 				{/* todo ここを名前にする */}
 				<Button className="delete" color="secondary" startIcon={<DeleteIcon />} onClick={() => { props.onDelete(memo) }}>delete</Button>
 				{isReplyMode ?
@@ -38,7 +40,7 @@ function ThreadComponent(props) {
 						<WriteThread
 							thread_memo={memo}
 							isthread={true}
-							memo={props.parent}
+							parent_memo={props.parent}
 							user_id={props.user_id}
 							onSubmit={(e)=>{setReplyMode(false);props.onSubmit(e)}}
 						/>

@@ -3,35 +3,30 @@ import { useParams } from 'react-router-dom';
 
 import { PageDataSource, WorkspaceDataSource } from '../Main/ProductionApi'
 import PageList from '../User/PageList';
-import SelectWorkspace from '../Workspace/SelectWorkspace';
-import EditWorkspaceButton from '../Workspace/EditWorkspaceButton';
-import UserInfoContext from '../context'
-import {PageAuther} from '../Auth/Authers'
+import SelectWorkspace from './SelectWorkspace';
+import EditWorkspaceButton from './EditWorkspaceButton';
+import { UserInfoContext } from '../context'
 
 const pageDataSource = new PageDataSource();
 const workspaceDataSource = new WorkspaceDataSource();
 
 function Workspace(props) {
-  const { workspace_id } = useParams();
+  // const { workspace_id } = useParams();
   const [state, setState] = useState({ search_word: "", pages: [] });
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
   const [workspace, setWorkspace] = useState({ name: "" }) // ないと最初のrenderでworkspace.nameがエラー
   const [userPermissionList, setUserPermissionList] = useState([]);
   const user = userInfo;
+  const workspace_id = userInfo.workspace_id;
+  const pageAuther = userInfo.pageAuther
 
-  const pageAuther = new PageAuther(user);
-  // console.log("aa",userInfo.workspace_id);
 
-  // ユーザーの権限が必要なところで呼び出す
-  const checkUserPermission = () => {
-    // 権限を持っていたら何もしない
-    // 権限がなかったらエラー分を出すなどする
-  }
-
-  const pages = state.pages.map(page=>{
+  const pages = state.pages.map(page => {
     page.auth = pageAuther.makeAuth(page);
     return page
-  }).filter(p=>p.auth.canRead);
+  }).filter(p => p.auth.canRead);
+
+  console.log(userInfo)
 
   const loadPages = () => {
     if (props.search_word == "") {
@@ -54,20 +49,8 @@ function Workspace(props) {
   useEffect(() => {
     workspaceDataSource.getWorkspace(workspace_id).then(res => {
       res.json().then(workspace => {
-        console.log("get workspace and permission", workspace);
-        // 後でログインユーザーのワークスペースの権限だけもらうAPIを用意する
-        const permission = workspace.users.find(user_p => user_p.user.id==userInfo.id).permission;
-        setUserInfo({ ...userInfo, workspace_id: workspace_id, permission: permission });
         setWorkspace(workspace);
         loadPages();
-      })
-    })
-    workspaceDataSource.getWorkspaceUsers(userInfo.workspace_id).then(res => {
-      res.json().then(user_p_list => {
-        console.log("get workspace user and permission", user_p_list);
-        setUserPermissionList(user_p_list)
-        // const id_p_list = user_p_list.map((user_p) => { return { user_id: user_p.user.id, permission: user_p.permission } })
-        // setInitFields({ ...initFields, users: id_p_list });
       })
     })
   }, [workspace_id])

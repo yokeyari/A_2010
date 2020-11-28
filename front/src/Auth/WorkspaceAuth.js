@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Redirect, useParams } from 'react-router-dom'
 
-import UserInfoContext from '../context';
+import {UserInfoContext} from '../context';
 import Main from '../Main/Main';
 import Transition from "../Transition";
 import Loading from "../Loading";

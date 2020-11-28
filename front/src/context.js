@@ -1,4 +1,7 @@
 import { createContext } from 'react';
 
 const UserInfoContext = createContext();
-export default UserInfoContext;
+const WSInfoContext = createContext();
+const AutherContext = createContext();
+const ReloaderContext = createContext();
+export { UserInfoContext, WSInfoContext, AutherContext, ReloaderContext }

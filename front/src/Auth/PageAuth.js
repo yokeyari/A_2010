@@ -1,59 +1,76 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Redirect, useParams } from 'react-router-dom'
 
-import UserInfoContext from '../context';
+import { UserInfoContext } from '../context';
 import Main from '../Main/Main';
 import Transition from "../Transition";
 import Loading from "../Loading";
-import { PageDataSource } from '../Main/ProductionApi';
+import { PageDataSource, MemoDataSource, BertDataSource } from '../Main/ProductionApi';
+import { PinDrop } from '@material-ui/icons';
 
 const pageDataSource = new PageDataSource();
+const MemoAPI = new MemoDataSource();
+const PageApi = new PageDataSource();
+const BertApi = new BertDataSource();
 
 export default function PageAuth(props) {
-  const [isLoading, setIsLoading] = useState(true);
+  const [page, setPage] = useState({ id: "" });
   const { token, user_id, page_id } = useParams();
-  const { userInfo, setUserInfo } = useContext(UserInfoContext);
+  const { userInfo } = useContext(UserInfoContext);
 
 
   const mode = props.mode;
-  // 将来的には閲覧のみのトークンも発行してここでモードを切り替える
 
   useEffect(() => {
     if (mode == "user") {
-      setUserInfo({ ...userInfo, id: user_id });
-      setIsLoading(false);
+      if (page_id) {
+        pageDataSource.getPage(page_id)
+          .then(res => {
+            console.log("page id  res", res)
+            if (res.statusText == "OK") {
+              res.json()
+                .then(page => {
+                  console.log("getPage", page);
+                  setPage(page);
+                })
+            } else {
+
+            }
+          });
+      }
     } else {
-      pageDataSource.getPageByToken(token)
-        .then(res => {
-          console.log("not ok",res)
-          if (res.statusText == "OK") {
-            res.json()
-              .then(page => {
-                console.log("getPage", page.page);
-                setIsLoading(false);
-                // setState({ ...state, to: `/${userInfo.id}/${page.page.id}`, isLoaded: true });
-              })
-          } else {
-            // ここにページが作れなかったときの処理
-          }
-        });
+      if (token) {
+        pageDataSource.getPageByToken(token)
+          .then(res => {
+            console.log("token res", res)
+            if (res.statusText == "OK") {
+              res.json()
+                .then(page => {
+                  console.log("getPage", page);
+                  setPage(page);
+                })
+            } else {
+
+            }
+          });
+      }
     }
-  }, []);
+  }, [token, page_id, user_id]);
 
 
 
-  if (isLoading) {
-    return <Loading open={isLoading} />
-  }
-  if (mode == "user") {
-    return (
-
-      <Main mode="user" page_id={page_id} />
-    )
-  } else if (mode == "token") {
-    return (
-      <Main mode="token" page_id={page_id} />
-    )
+  if (page.id == "") {
+    return <Loading open={true} />
+  } else {
+    if (mode == "user") {
+      return (
+        <Main mode="user" page_id={page.id} />
+      )
+    } else if (mode == "token") {
+      return (
+        <Main mode="token" token={token} page_id={page.id} />
+      )
+    }
   }
 }
 

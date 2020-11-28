@@ -1,35 +1,15 @@
 import Button from '@material-ui/core/Button';
 import React, { useContext, useEffect, useState } from 'react';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  useRouteMatch,
-  useParams,
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, useLocation } from "react-router-dom";
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import { makeStyles } from '@material-ui/core/styles';
-import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import * as PageAPI from '../Main/LocalApi';
-import { PageDataSource, WorkspaceDataSource } from './../Main/ProductionApi'
-import User from './User';
-//import './User.css';
-import PageList from './PageList';
-import PageLink from './PageLink';
-import SearchForm from './SeachForm';
-import SelectWorkspace from '../Workspace/SelectWorkspace';
-import UserInfoContext from '../context'
-import NewPage from '../NewPage/NewPage';
-import {PageAuther} from '../Auth/Authers';
-
-const pageDataSource = new PageDataSource();
-const workspaceDataSource = new WorkspaceDataSource();
-
+import PageList from '../User/PageList';
+import { UserInfoContext } from '../context';
+import { PageAuther } from '../Auth/Authers';
+import queryString from 'query-string';
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -42,36 +22,43 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Home(props) {
-  const [state, setState] = useState({ search_word: "", pages: [] });
-  const { userInfo, setUserInfo } = useContext(UserInfoContext);
-  const user = userInfo;
+  const [state, setState] = useState({ pages: [] });
+  const { userInfo } = useContext(UserInfoContext);
   const [isTagMode, setTagMode] = useState(false);
   const classes = useStyles();
   const [searchTag, setSearchTag] = useState('all');
 
+  const location = useLocation();
+  const qs = queryString.parse(location.search);
+  const user = userInfo;
   const pageAuther = new PageAuther(user);
+  const dataSource = props.dataSource;
+  const s_pages = state.pages ? state.pages : null;
 
+  const q_seach_word = (qs.search != null ? qs.search : "");
+  const search_word = props.search_word ? props.search_word : q_seach_word
+  // console.log(q_seach_word,search_word)
+
+  // console.log(s_pages)
   const tags = Array.from((pages => {
     let tags = new Set();
     (pages).forEach(page => {
       (page.tags).forEach(tag => tags.add(tag.text))
     })
     return tags
-  })(state.pages));
+  })(s_pages));
 
-  const pages = state.pages.map(page=>{
+  const pages = s_pages.map(page => {
     page.auth = pageAuther.makeAuth(page);
     return page
-  }).filter(p=>p.auth.canRead);
+  }).filter(p => p.auth.canRead);
 
 
 
   const loadPages = () => {
-
-    if (props.search_word == "") {
-      // ws_id?"home"???????
-      pageDataSource.getPageIndex(user).then(pages => {
-        // workspaceDataSource.getPageIndex("home").then(res=>{
+    if (search_word == "") {
+      dataSource.getPageIndex().then(pages => {
+        console.log("get pages", pages)
         if (pages === undefined) {
 
         } else {
@@ -80,27 +67,19 @@ function Home(props) {
       })
 
     } else {
-      // ws_id?"home"???????
-      pageDataSource.searchPage(user, props.search_word.split(' '), userInfo.workspace_id)
-        // workspaceDataSource.searchPage("home", props.search_word.split(' '))
+      dataSource.searchPage(search_word.split(' '))
         .then(pages => {
           // console.log(props.search_word)
-          console.log("load page");
+          // console.log("load page".pages);
           setState({ ...state, pages: pages });
         })
     }
-    // PageAPI.fetchMemos().then(json => { setState({ ...state, pages: json }) })
   }
 
 
   useEffect(() => {
-    setUserInfo({ ...userInfo, workspace_id: "home", permission: "owner" });
-  }, [])
-
-  useEffect(() => {
-    // setUserInfo({...userInfo,...user});
     loadPages();
-  }, [props.search_word]);
+  }, [search_word, userInfo.workspace_id]);
 
   const withUpdate = (doSomething) => {
     doSomething.then(() => { loadPages() })
@@ -110,13 +89,10 @@ function Home(props) {
     setSearchTag(event.target.value);
   };
 
-  // const handleChangeSeachForm = (text) => {
-  //   setState({ ...state, search_word: text })
+  // if (q_seach_word && (search_word == "")) {
+  //   props.onSearchChange(q_seach_word);
   // }
 
-  // const handleSeach = () => {
-  //   loadPages();
-  // }
 
   if (isTagMode) {
     var tag_variant = "contained"
@@ -145,12 +121,8 @@ function Home(props) {
     )
   })
 
-
-  return (
-    <div className="User-Top">
-      {/*className="User-To"*/}
-      <h2 className="User-name">Welcome {userInfo.name}!</h2>
-      {/* <SearchForm onChange={handleChangeSeachForm} search_word={state.search_word}　onClick={() => {handleSeach(state.search_word)}} /> */}
+  const renderSelectTag = () => (
+    <div>
       <ButtonGroup color="primary" aria-label="outlined primary button group">
         <Button variant={normal_variant} onClick={() => { setTagMode(false); }}>all</Button>
         <Button variant={tag_variant} onClick={() => { setTagMode(true); }}>タグごと</Button>
@@ -175,29 +147,25 @@ function Home(props) {
         :
         <></>}
       {/* <SelectWorkspace /> */}
+    </div>
+  )
 
-      {isTagMode ?
-        pageListsWithTag
-        : <PageList pages={pages} withUpdate={withUpdate} />
-      }
+  const renderPageList = () => (
+    isTagMode ?
+      pageListsWithTag
+      : <PageList pages={pages} withUpdate={withUpdate} />
+  )
 
+  return (
+    <div className="User-Top">
+      {props.top}
+
+      {renderSelectTag()}
+
+      {renderPageList()}
 
     </div>
   );
 }
 
 export default Home
-{/**/ }
-
-{/*  const newPageButton =
-    <Button id="New">
-      <a href='/home'>New</a>
-      {/* newpage 用,TODO:routing 
-      </Button>;
-    */}
-{/*<div className="search-bar" >*/ }
-{/*<h2 className="User-name">Welcome {"user"}!</h2>
-        {newPageButton}*/}
-{/*</div>*/ }
-{/*{isTagMode ?*/ }
-{/*:<PageList pages={state.pages} withUpdate={withUpdate} />}*/ }
