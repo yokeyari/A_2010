@@ -43,7 +43,7 @@ function LoginAuth(props) {
       res.json().then(json => {
         const home = { permission: "owner", workspace: { id: "home", name: user.name, token: null } };
         const workspaces = [home, ...json.workspaces];
-        console.log('load workspace list', workspaces);
+        // console.log('load workspace list', workspaces);
         setWSInfo({ ...WSInfo, workspaces });
       })
     })
@@ -55,10 +55,10 @@ function LoginAuth(props) {
 
   useEffect(() => {
     userDataSource.isLogIn().then(res => {
-      console.log("first login check", res);
+      // console.log("first login check", res);
       if (res.statusText == "OK") {
         res.json().then(user => {
-          console.log("logged in user", user);
+          // console.log("logged in user", user);
           setUserInfo({ ...userInfo, endCheck: true, id: user.id, name: user.name, isLogin: true });
           setWS(user);
           if(reloader){
@@ -78,7 +78,7 @@ function LoginAuth(props) {
   };
   const onSignOutClick = () => {
     userDataSource.logoutUser().then((res) => {
-      console.log(res)
+      // console.log(res)
       setUserInfo({ endCheck: true, id: "", name: "", isLogin: false });
       setReload(true);
       props.history.push('/login');

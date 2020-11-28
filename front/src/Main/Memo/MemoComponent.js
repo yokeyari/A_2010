@@ -12,8 +12,8 @@ import WriteThread from './WriteThread';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import Select from "@material-ui/core/Select";
 import { CardActions, FormControl, MenuItem } from "@material-ui/core";
- 
-import {UserInfoContext} from "../../context";
+
+import { UserInfoContext } from "../../context";
 import { DeleteDialog } from "../../Dialogs";
 // class Memo{
 //   body = '';
@@ -43,8 +43,8 @@ function MemoComponent(props) {
   const player = props.player
   const auth = props.auth;
   const showWriter = props.showWriter ? true : false;
-  const display_name  = memo.account_id ? memo.account_id : memo.user_id;
-  
+  const display_name = memo.account_id ? memo.account_id : memo.user_id;
+
   const displayMemo = memo.text
 
   const endEditMode = () => {
@@ -58,6 +58,7 @@ function MemoComponent(props) {
   const handleChangeStatus = (event) => {
     const status = event.target.value;
     props.onChange({ ...memo, status: status });
+    // setEditMode(false)
   }
 
   const selectStatus =
@@ -72,7 +73,8 @@ function MemoComponent(props) {
             <MenuItem value={"pri"}>private</MenuItem>
             <MenuItem value={"pub"}>public</MenuItem>
           </Select>
-        </FormControl> :
+        </FormControl>
+        :
         <div>{memo.status == "pub" ? "public" : "private"}</div>
       ) :
       null
@@ -112,7 +114,7 @@ function MemoComponent(props) {
               : null)
           }
           {(auth.canDelete) ?
-            <DeleteDialog 
+            <DeleteDialog
               yesCallback={() => { props.onDelete(memo) }}
               component={<Button className="delete" color="secondary" startIcon={<DeleteIcon />}>delete</Button>} />
             : null}
@@ -120,11 +122,11 @@ function MemoComponent(props) {
           {selectStatus}
 
           {auth.canCreate ?
-          isReplyMode ?
-            <Button className="reply" startIcon={<ReplyIcon />} onClick={() => { setReplyMode(false) }}>返信</Button>
-            :
-            <Button className="reply" startIcon={<ReplyIcon />} onClick={() => { setReplyMode(true) }}>返信</Button>
-          :null}
+            isReplyMode ?
+              <Button className="reply" startIcon={<ReplyIcon />} onClick={() => { setReplyMode(false) }}>返信</Button>
+              :
+              <Button className="reply" startIcon={<ReplyIcon />} onClick={() => { setReplyMode(true) }}>返信</Button>
+            : null}
         </CardActions>
         <CardActions>
           {body}
