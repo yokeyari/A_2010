@@ -27,13 +27,15 @@ class Api::V1::AuthesController < ApplicationController
     google_email = /\A.*@/.match(tokeninfo.email)[0][0 .. -2]
     google_account_id = google_email + google_user_id
 
-    user = User.find_or_create_by!(provider: 'google', external_id: google_user_id) do |u|
-      u.name = params[:name]
-      u.account_id = google_account_id
+    @user = User.find_by(provider: 'google', external_id: google_user_id)
+    if @user.nil?
+      @user = User.create!(provider: 'google', external_id: google_user_id, name: params[:name], account_id: google_account_id)
+      set_tukaikata
     end
 
     reset_session
     session[:user_id] = user.id
+
     res_ok user, inc: {workspaces: :workspace, pages: [:tags, :memos]}
   rescue GoogleApis::ServerError => e # tokeninfoの失敗例外，リトライ推奨
     res_bad_request

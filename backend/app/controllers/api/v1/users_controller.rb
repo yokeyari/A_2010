@@ -12,10 +12,11 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def create
-    user = User.create!(params.permit(:name, :email, :password, :password_confirmation, :account_id))
+    @user = User.create!(params.permit(:name, :email, :password, :password_confirmation, :account_id))
     reset_session
-    session[:user_id] = user.id
-    res_ok user, inc: {} # 作成時は空っぽ
+    session[:user_id] = @user.id
+    set_tukaikata
+    res_ok @user, inc: {pages: [:memos, :tags]}
   end
 
   def update
