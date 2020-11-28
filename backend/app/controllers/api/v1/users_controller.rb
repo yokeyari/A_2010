@@ -7,7 +7,7 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def show
-    @user = User.where(id: @user.id).preload(pages: [:tags, :memos], rel_user_and_workspaces: [:workspace]).first
+    # @user = User.where(id: @user.id).preload(pages: [:tags, :memos], rel_user_and_workspaces: [:workspace]).first
     res_ok @user, inc: {workspaces: :workspace, pages: [:tags, :memos]}
   end
 
