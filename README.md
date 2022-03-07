@@ -1,6 +1,6 @@
 # MemoTube
 
-[![MemoTube](https://user-images.githubusercontent.com/28818747/98420702-13594700-20cb-11eb-9268-8c304fdb7cb2.png)](http://memotube.xyz/)<br/><br/>
+[![MemoTube](https://user-images.githubusercontent.com/28818747/98420702-13594700-20cb-11eb-9268-8c304fdb7cb2.png)](https://tohoku.memotube.xyz)<br/><br/>
 
 ## 製品概要
 ### オンライン授業 x Tech
@@ -77,7 +77,7 @@ ___
 <!--#### Web アプリケーション-->
 ___
 ブラウザから使えるので簡単に利用できます．  
-https://memotube.xyz/
+https://tohoku.memotube.xyz
 
 #### 個人的に利用する場合
 1. ログインまたは新規ユーザー登録します．
